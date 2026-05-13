@@ -78,7 +78,11 @@ body {
 
 
 /* ─── Typography ─── */
-h1, h2, .serif {
+h1, h2 {
+  font-family: 'Google Sans', sans-serif;
+}
+
+.serif {
   font-family: 'Source Serif 4', Georgia, serif;
 }
 
