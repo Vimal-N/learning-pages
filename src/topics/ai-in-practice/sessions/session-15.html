@@ -5,17 +5,18 @@ sessionNumber: "15"
 sessionTitle: "Opencode with GitHub Copilot"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-15/"
 sessionStyles: ""
 ---
 
   <!-- ─── SLIDE 01 — Title ─── -->
   <div class="slide active" data-title="Session Overview" data-notes="This session connects two tools the team already knows: GitHub Copilot (from Phase 2) and Opencode (from Session 10). The key insight is that Copilot is not just an IDE tool — it&apos;s also a model provider. Opencode can talk to Copilot&apos;s models directly, giving you full terminal agent capabilities without a separate Anthropic API key or billing account.&lt;br&gt;&lt;br&gt;By the end of this session, everyone will have a working Opencode setup that uses their existing Copilot subscription to power a terminal agent.">
     <div class="slide-inner" style="text-align:center;">
-      <div class="session-badge" style="margin-bottom:20px;">⚡ Session 15 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools</div>
+      <div class="session-badge" style="margin-bottom:20px;"> Session 15 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools</div>
       <h1 style="font-size:2.2rem;margin-bottom:16px;line-height:1.2;">Opencode <span style="color:var(--accent)">×</span> GitHub Copilot<br><span style="font-size:1.6rem;color:var(--text-secondary);">Terminal Agent, Copilot-Powered</span></h1>
       <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Your Copilot subscription already includes Claude, GPT-4o, and more. This session shows you how to unlock them as a full terminal agent — no extra API key required.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">45 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 10</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
       </div>
@@ -30,10 +31,10 @@ sessionStyles: ""
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">What you already have</div>
           <div style="display:grid;gap:8px;font-size:0.84rem;color:var(--text-secondary);">
-            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">✓</span> GitHub Copilot subscription (Individual or Business)</div>
-            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">✓</span> Access to Claude, GPT-4o, o1, Gemini via Copilot</div>
-            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">✓</span> Copilot completions + Chat + Agent Mode in VS Code</div>
-            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--text-dim);flex-shrink:0;">✗</span> <span style="color:var(--text-muted);">No terminal agent — you&apos;re limited to the IDE</span></div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;"></span> GitHub Copilot subscription (Individual or Business)</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;"></span> Access to Claude, GPT-4o, o1, Gemini via Copilot</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;"></span> Copilot completions + Chat + Agent Mode in VS Code</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--text-dim);flex-shrink:0;"></span> <span style="color:var(--text-muted);">No terminal agent — you&apos;re limited to the IDE</span></div>
           </div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid var(--accent);padding:20px;">
@@ -317,10 +318,10 @@ sessionStyles: ""
         <rect x="0" y="56" width="170" height="250" fill="#13111d"/>
         <rect x="0" y="56" width="170" height="20" fill="#1a1728"/>
         <text x="10" y="70" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a4570">CONTEXT</text>
-        <text x="8" y="90" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6fa3f7">📄 tests/login.spec.ts</text>
-        <text x="8" y="105" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6fa3f7">📄 tests/pages/loginPage.ts</text>
-        <text x="8" y="120" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a4570">📄 playwright.config.ts</text>
-        <text x="8" y="135" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a4570">📄 package.json</text>
+        <text x="8" y="90" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6fa3f7"> tests/login.spec.ts</text>
+        <text x="8" y="105" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6fa3f7"> tests/pages/loginPage.ts</text>
+        <text x="8" y="120" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a4570"> playwright.config.ts</text>
+        <text x="8" y="135" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a4570"> package.json</text>
         <rect x="170" y="56" width="1" height="250" fill="#2a2540"/>
         <!-- Left panel annotation -->
         <line x1="85" y1="56" x2="85" y2="42" stroke="#4ecdc4" stroke-width="1" stroke-dasharray="3,2"/>
@@ -333,7 +334,7 @@ sessionStyles: ""
         <text x="194" y="82" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5ec269">● claude-sonnet-4</text>
         <text x="194" y="97" font-family="IBM Plex Mono, monospace" font-size="9" fill="#c8c0e0">I found 8 instances of waitForTimeout() across your</text>
         <text x="194" y="111" font-family="IBM Plex Mono, monospace" font-size="9" fill="#c8c0e0">test suite. Replacing with proper network-idle waits...</text>
-        <text x="194" y="126" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5ec269">✓ tests/login.spec.ts  ✓ tests/checkout.spec.ts +6</text>
+        <text x="194" y="126" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5ec269"> tests/login.spec.ts   tests/checkout.spec.ts +6</text>
         <!-- User message bubble -->
         <rect x="182" y="154" width="428" height="36" rx="5" fill="#1e1a2e"/>
         <text x="194" y="169" font-family="IBM Plex Mono, monospace" font-size="9" fill="#e8a848">● you</text>
@@ -590,11 +591,12 @@ sessionStyles: ""
       <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;max-width:440px;margin:0 auto;text-align:left;">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">Your complete Phase 4 toolkit</div>
         <div style="display:grid;gap:8px;font-size:0.84rem;color:var(--text-secondary);">
-          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;">✓</span> Session 10 — Claude Code &amp; Opencode: introduction</div>
-          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;">✓</span> Session 11 — GCSV prompts, git checkpoints, context files</div>
-          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;">✓</span> Session 12 — Toolkit comparison &amp; decision framework</div>
-          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--accent);flex-shrink:0;">✓</span> Session 17 — Opencode powered by your Copilot subscription</div>
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;"></span> Session 10 — Claude Code &amp; Opencode: introduction</div>
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;"></span> Session 11 — GCSV prompts, git checkpoints, context files</div>
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;"></span> Session 12 — Toolkit comparison &amp; decision framework</div>
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--accent);flex-shrink:0;"></span> Session 17 — Opencode powered by your Copilot subscription</div>
         </div>
       </div>
+      <a href="/topics/ai-in-practice/references/session-15/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

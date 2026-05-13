@@ -5,17 +5,18 @@ sessionNumber: "19"
 sessionTitle: "Agents, Subagents & Building AI Workflows"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-19/"
 sessionStyles: ""
 ---
 
   <!-- ─── SLIDE 01 — Title ─── -->
   <div class="slide active" data-title="Session Overview" data-notes="The final session. 19 sessions, 5 phases, and we're here. This session is the capstone — it zooms out from individual tools to look at how AI can be orchestrated into workflows that run autonomously, with multiple agents working together.&lt;br&gt;&lt;br&gt;Be appropriately humble: this area is moving incredibly fast. What's described here is the current state, but the landscape will look different in 12 months. The conceptual foundation — how agents reason, communicate, and cooperate — will remain relevant even as the specific tools change.&lt;br&gt;&lt;br&gt;Take a moment to acknowledge what the team has covered. This has been a significant journey.">
     <div class="slide-inner" style="text-align:center;">
-      <div class="session-badge" style="margin-bottom:20px;">🤝 Session 19 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows</div>
+      <div class="session-badge" style="margin-bottom:20px;"> Session 19 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows</div>
       <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Agents, Subagents<br><span style="color:var(--accent)">&amp; AI Workflows</span></h1>
       <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">How multiple AI agents can work together on complex tasks — and what that means for the future of QA engineering.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">50 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Advanced</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 15</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
       </div>
@@ -88,28 +89,287 @@ sessionStyles: ""
       </svg>
       <div class="card-grid c2" style="gap:14px;margin-bottom:16px;">
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">🧠</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">A model</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">The AI that reasons and makes decisions — Claude, GPT-4o, Gemini</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">⚙️</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;">️</div>
           <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Tools</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">The capabilities to act — read files, run tests, call APIs, control browsers, create tickets</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">💾</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Memory</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">Context about the task, what's been done, what worked, what failed — the conversation history and state</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">🎯</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">A goal</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">A task to accomplish that requires multiple steps and decisions — not just a single question to answer</div>
         </div>
       </div>
       <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:12px 16px;font-size:0.85rem;color:var(--text-secondary);">
         Claude Code with MCP tools enabled is an agent. Copilot Chat by itself is not — it lacks tools that take real actions.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE — The Agent Loop ─── -->
+  <div class="slide" data-title="The Agent Loop" data-notes="The agent loop is the engine behind every agent. When you give an agent a goal, it doesn't execute once and stop — it cycles through five stages repeatedly until the task is complete.&lt;br&gt;&lt;br&gt;Perceive: the model reads everything available — the task, prior results, the tools it has. Think: it reasons about what to do next. Act: it calls a tool — reads a file, runs a test, creates a ticket. Observe: it receives the result and adds it to its context. Decide: it judges whether the goal is met (stop) or more work is needed (loop).&lt;br&gt;&lt;br&gt;Most tasks complete in 5–20 cycles. Complex multi-step analysis can reach 40–50. The model, not your code, decides when to stop.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">How an agent executes a task</h2>
+      <svg viewBox="0 0 700 178" style="width:100%;display:block;margin:8px auto;" xmlns="http://www.w3.org/2000/svg">
+        <rect width="700" height="178" rx="12" fill="#13111d"/>
+        <rect x="47" y="22" width="110" height="66" rx="10" fill="#1a2840" stroke="#6fa3f7" stroke-width="2"/>
+        <text x="102" y="50" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#6fa3f7" text-anchor="middle">Perceive</text>
+        <text x="102" y="66" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a7ab0" text-anchor="middle">Read context,</text>
+        <text x="102" y="77" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a7ab0" text-anchor="middle">tools &amp; state</text>
+        <line x1="158" y1="55" x2="170" y2="55" stroke="#4a4570" stroke-width="2"/>
+        <polygon points="167,50 173,55 167,60" fill="#4a4570"/>
+        <rect x="173" y="22" width="110" height="66" rx="10" fill="#2a1f0d" stroke="#e8a848" stroke-width="2"/>
+        <text x="228" y="50" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#e8a848" text-anchor="middle">Think</text>
+        <text x="228" y="66" font-family="IBM Plex Mono, monospace" font-size="9" fill="#a07030" text-anchor="middle">Reason about</text>
+        <text x="228" y="77" font-family="IBM Plex Mono, monospace" font-size="9" fill="#a07030" text-anchor="middle">next action</text>
+        <line x1="284" y1="55" x2="296" y2="55" stroke="#4a4570" stroke-width="2"/>
+        <polygon points="293,50 299,55 293,60" fill="#4a4570"/>
+        <rect x="299" y="22" width="102" height="66" rx="10" fill="#0d2010" stroke="#5ec269" stroke-width="2"/>
+        <text x="350" y="50" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#5ec269" text-anchor="middle">Act</text>
+        <text x="350" y="66" font-family="IBM Plex Mono, monospace" font-size="9" fill="#2a6030" text-anchor="middle">Call a tool or</text>
+        <text x="350" y="77" font-family="IBM Plex Mono, monospace" font-size="9" fill="#2a6030" text-anchor="middle">return output</text>
+        <line x1="402" y1="55" x2="414" y2="55" stroke="#4a4570" stroke-width="2"/>
+        <polygon points="411,50 417,55 411,60" fill="#4a4570"/>
+        <rect x="417" y="22" width="110" height="66" rx="10" fill="#1e1433" stroke="#b08cf5" stroke-width="2"/>
+        <text x="472" y="50" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#b08cf5" text-anchor="middle">Observe</text>
+        <text x="472" y="66" font-family="IBM Plex Mono, monospace" font-size="9" fill="#7050b0" text-anchor="middle">See tool result,</text>
+        <text x="472" y="77" font-family="IBM Plex Mono, monospace" font-size="9" fill="#7050b0" text-anchor="middle">update context</text>
+        <line x1="528" y1="55" x2="540" y2="55" stroke="#4a4570" stroke-width="2"/>
+        <polygon points="537,50 543,55 537,60" fill="#4a4570"/>
+        <rect x="543" y="22" width="110" height="66" rx="10" fill="#0d2828" stroke="#4ecdc4" stroke-width="2"/>
+        <text x="598" y="50" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#4ecdc4" text-anchor="middle">Decide</text>
+        <text x="598" y="66" font-family="IBM Plex Mono, monospace" font-size="9" fill="#2a8080" text-anchor="middle">Done? Stop.</text>
+        <text x="598" y="77" font-family="IBM Plex Mono, monospace" font-size="9" fill="#2a8080" text-anchor="middle">More to do? Loop.</text>
+        <line x1="598" y1="88" x2="598" y2="136" stroke="#4a4570" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <line x1="598" y1="136" x2="102" y2="136" stroke="#4a4570" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <line x1="102" y1="136" x2="102" y2="90" stroke="#4a4570" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="97,93 102,87 107,93" fill="#4a4570"/>
+        <text x="350" y="156" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6a6090" text-anchor="middle">← loop continues until goal is met →</text>
+      </svg>
+      <div class="card-grid c3" style="gap:12px;margin-top:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:#6fa3f7;margin-bottom:6px;">Accumulates context</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);">Each cycle adds to what the agent knows — files read, errors seen, results returned by tools</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:#e8a848;margin-bottom:6px;">Typically 5–20 cycles</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);">Most tasks complete in under 20 tool calls. Complex multi-file work can reach 40–50</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:#4ecdc4;margin-bottom:6px;">Model decides when done</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);">The model, not your code, judges when to stop — based on whether the goal is met</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE — How to Build an Agent ─── -->
+  <div class="slide" data-title="How to Build an Agent" data-notes="The practical question: if you wanted to build an agent today, what do you actually need? Just three things — a model, tools, and a system prompt.&lt;br&gt;&lt;br&gt;The model does the reasoning. The tools give it the ability to take real actions. The system prompt sets the scope and constraints — this is where you tell it what it's allowed and not allowed to do.&lt;br&gt;&lt;br&gt;You don't write the loop. The model manages its own execution cycle. Your role as the builder is to choose the right tools, write a tight system prompt, and test the agent on representative tasks before deploying it.&lt;br&gt;&lt;br&gt;The code example uses the Claude Anthropic SDK in Python — the same pattern applies to any model API.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Three ingredients — that's all it takes</h2>
+      <div class="card-grid c3" style="gap:12px;margin-bottom:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid #6fa3f7;padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#6fa3f7;margin-bottom:8px;">1 — Model</div>
+          <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:5px;">The brain</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Choose a model capable of multi-step reasoning. Claude Opus 4, GPT-4o, Gemini 1.5 Pro. Bigger models handle longer task chains more reliably.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid #5ec269;padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#5ec269;margin-bottom:8px;">2 — Tools</div>
+          <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:5px;">The hands</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Functions the model can call: read_file, run_tests, create_issue. Each needs a name, description, and parameter schema the model can read.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid #e8a848;padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#e8a848;margin-bottom:8px;">3 — System Prompt</div>
+          <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:5px;">The boundaries</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Defines role, goal, and constraints. "Only read from /reports/. Never modify source code." This is where safety and scope are enforced.</div>
+        </div>
+      </div>
+      <pre style="background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:15px 18px;font-family:'IBM Plex Mono',monospace;font-size:0.76rem;line-height:1.65;color:var(--text-secondary);overflow-x:auto;white-space:pre-wrap;margin:0;"><span style="color:#6fa3f7;">import</span> anthropic
+
+client  = anthropic.Anthropic()
+tools   = [{"name": "read_file", ...}, {"name": "create_issue", ...}]
+system  = <span style="color:#5ec269;">"You are a QA triage agent. Analyse CI failures, create bug tickets.\n"</span>
+          <span style="color:#5ec269;">"Read from /reports/ only. Never modify source code."</span>
+
+response = client.messages.create(
+    model=<span style="color:#5ec269;">"claude-opus-4-7"</span>, tools=tools, system=system,
+    messages=[{<span style="color:#5ec269;">"role"</span>: <span style="color:#5ec269;">"user"</span>, <span style="color:#5ec269;">"content"</span>: <span style="color:#5ec269;">"Triage today's CI failures."</span>}]
+)
+<span style="color:#6a6090;"># Claude runs the loop — perceive → think → act → observe → decide</span></pre>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:11px 14px;margin-top:12px;font-size:0.85rem;color:var(--text-secondary);">
+        You don't write the loop logic — the model runs it. Your job: choose tools wisely, write a clear system prompt, and test on real tasks before going live.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE — When to Use an Agent ─── -->
+  <div class="slide" data-title="When to Use an Agent" data-notes="This is the practical question after learning what agents are: when should I actually use one? Agents add latency, cost, and complexity — they are not always the right tool.&lt;br&gt;&lt;br&gt;The decision maps to task complexity and whether real-world actions are needed. A single question? Just prompt it. A multi-step task that needs to read files, run tests, or create tickets? Single agent. Many identical tasks running in parallel? Fan out. A complex workflow spanning distinct domains? Multi-agent hierarchy.&lt;br&gt;&lt;br&gt;The most common mistake is jumping to agents for tasks that a single well-written prompt handles fine. Agents are powerful but not free — start simple.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Agents add overhead — use them when they earn it</h2>
+      <div style="display:grid;gap:8px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:2fr 1fr 2fr;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+          <div style="padding:14px 18px;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-size:0.85rem;color:var(--text-secondary);">Single question or generation — no real-world action needed</span>
+          </div>
+          <div style="padding:12px 16px;background:var(--bg-secondary);border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">Direct prompt</span>
+          </div>
+          <div style="padding:14px 18px;display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">One API call — fast, cheap, no loop overhead</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 2fr;background:var(--bg-elevated);border-radius:10px;border:1px solid rgba(111,163,247,0.3);overflow:hidden;">
+          <div style="padding:14px 18px;border-right:1px solid rgba(111,163,247,0.15);display:flex;align-items:center;">
+            <span style="font-size:0.85rem;color:var(--text-secondary);">Multi-step task requiring real-world actions in sequence</span>
+          </div>
+          <div style="padding:12px 16px;background:#0d1a2e;border-right:1px solid rgba(111,163,247,0.15);display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:#6fa3f7;text-transform:uppercase;letter-spacing:1px;">Single agent</span>
+          </div>
+          <div style="padding:14px 18px;display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">The loop handles the steps — define the goal once</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 2fr;background:var(--bg-elevated);border-radius:10px;border:1px solid rgba(94,194,105,0.3);overflow:hidden;">
+          <div style="padding:14px 18px;border-right:1px solid rgba(94,194,105,0.15);display:flex;align-items:center;">
+            <span style="font-size:0.85rem;color:var(--text-secondary);">Same task repeated across many independent items in parallel</span>
+          </div>
+          <div style="padding:12px 16px;background:#0d2010;border-right:1px solid rgba(94,194,105,0.15);display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:#5ec269;text-transform:uppercase;letter-spacing:1px;">Parallel agents</span>
+          </div>
+          <div style="padding:14px 18px;display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Run simultaneously — much faster than waiting for each</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 2fr;background:var(--bg-elevated);border-radius:10px;border:1px solid rgba(176,112,32,0.3);overflow:hidden;">
+          <div style="padding:14px 18px;border-right:1px solid rgba(176,112,32,0.15);display:flex;align-items:center;">
+            <span style="font-size:0.85rem;color:var(--text-secondary);">Complex workflow spanning distinct specialised domains</span>
+          </div>
+          <div style="padding:12px 16px;background:var(--accent-soft);border-right:1px solid rgba(176,112,32,0.15);display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;">Multi-agent</span>
+          </div>
+          <div style="padding:14px 18px;display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Each agent has focused tools and a tight system prompt</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="background:var(--bg-elevated);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 16px;font-size:0.83rem;color:var(--text-secondary);">
+          <strong style="color:var(--text-primary);">Rule of thumb:</strong> If you're writing a long complex prompt to <em>simulate</em> what a tool could just <em>do</em> — you need an agent, not a better prompt.
+        </div>
+        <div style="background:rgba(232,72,72,0.06);border:1px solid rgba(232,72,72,0.18);border-radius:8px;padding:12px 16px;font-size:0.83rem;color:var(--text-secondary);">
+          <strong style="color:#e85c5c;">Don't over-engineer:</strong> Most day-to-day QA tasks still work fine with a direct prompt or copilot. Agents are for complexity, not novelty.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE — Agent Tool Types ─── -->
+  <div class="slide" data-title="Agent Tool Types" data-notes="Agents are only as capable as the tools you give them. There are five broad categories — each unlocks a different kind of real-world action.&lt;br&gt;&lt;br&gt;Filesystem tools are the most fundamental — reading reports, writing test files. Process tools let the agent actually run things — execute the test suite, run a linter. API connectors connect the agent to services — GitHub, Jira, Slack. Browser tools let the agent interact with web UIs directly. Search tools give it the ability to look things up — on the web, in your codebase, or in documentation.&lt;br&gt;&lt;br&gt;MCP servers (Sessions 17–18) are the standardised way to deliver most of these. You configure which tools an agent can see — it cannot use tools you haven't given it.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Agents are only as capable as their tools</h2>
+      <div style="display:grid;gap:8px;">
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+          <div style="padding:14px 16px;background:#0d1a2e;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6fa3f7;">Filesystem</span>
+          </div>
+          <div style="padding:12px 16px;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-secondary);">read_file · write_file · list_directory · search_file</span>
+          </div>
+          <div style="padding:12px 16px;display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Read test reports, write test files, explore the codebase</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+          <div style="padding:14px 16px;background:#0d2010;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#5ec269;">Process</span>
+          </div>
+          <div style="padding:12px 16px;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-secondary);">run_command · execute_tests · run_script · check_output</span>
+          </div>
+          <div style="padding:12px 16px;display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Run the test suite, execute build scripts, invoke CLI tools</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+          <div style="padding:14px 16px;background:#1e1433;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#b08cf5;">API Connectors</span>
+          </div>
+          <div style="padding:12px 16px;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-secondary);">github_create_issue · jira_ticket · slack_post · http_call</span>
+          </div>
+          <div style="padding:12px 16px;display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Create tickets, post updates, trigger deploys, call any REST API</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+          <div style="padding:14px 16px;background:#0d2828;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#4ecdc4;">Browser</span>
+          </div>
+          <div style="padding:12px 16px;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-secondary);">navigate · click · screenshot · fill_form · wait_for</span>
+          </div>
+          <div style="padding:12px 16px;display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Drive a real browser, take screenshots, perform UI actions</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+          <div style="padding:14px 16px;background:#2a1f0d;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#e8a848;">Search</span>
+          </div>
+          <div style="padding:12px 16px;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-secondary);">web_search · codebase_search · grep · docs_lookup</span>
+          </div>
+          <div style="padding:12px 16px;display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Find relevant code, look up docs, check for existing tickets</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:11px 14px;margin-top:12px;font-size:0.85rem;color:var(--text-secondary);">
+        MCP servers (Sessions 17–18) deliver most of these tools. You configure which tools an agent can see — it cannot use capabilities you haven't granted.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE — Live Demo ─── -->
+  <div class="slide" data-title="Live Demo — Try This Now" data-notes="Don't just explain the agent loop — show it. This prompt is designed to demonstrate the perceive-think-act-observe cycle visibly in a short session.&lt;br&gt;&lt;br&gt;Prerequisites: Claude Code installed. That's it. No MCP servers needed — the filesystem write and read tools are built in.&lt;br&gt;&lt;br&gt;What participants should watch for: the model creates the file (Act), reads it back (Observe), reasons about what it found (Think), writes a draft (Act), and reflects on what's missing (Think → Decide). The loop is right there in the output, visible step by step.&lt;br&gt;&lt;br&gt;Give the group 3–4 minutes to run this. Then ask: 'What did you see?' Most will notice the model reasoning out loud between actions — that's the agent loop in practice.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">See the agent loop live — paste this into Claude Code</h2>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.85rem;color:var(--text-secondary);">
+        Open your terminal, run <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 5px;border-radius:3px;">claude</code>, and paste the prompt below. No MCP setup needed — built-in file tools are enough.
+      </div>
+      <pre style="background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:15px 18px;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;line-height:1.65;color:var(--text-secondary);overflow-x:auto;white-space:pre-wrap;margin:0 0 12px;">Act as a QA triage agent. Work through these four steps one at a time:
+
+1. Create sample-failures.txt with 3 realistic Playwright test failures
+   (each failure: test name, error message, file path)
+2. Read the file back and analyse each failure — most likely root cause?
+3. Draft a GitHub issue title and body for the most critical failure
+4. Tell me what MCP tools would let you automate this completely
+
+Think out loud as you work through each step.</pre>
+      <div class="card-grid c2" style="gap:10px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:15px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:#6fa3f7;margin-bottom:8px;">What you'll watch happen</div>
+          <div style="display:grid;gap:5px;font-size:0.83rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;"><span style="color:#5ec269;flex-shrink:0;">Act</span> Model creates the file with realistic failures</div>
+            <div style="display:flex;gap:8px;"><span style="color:#b08cf5;flex-shrink:0;">Observe</span> Model reads it back, confirms content</div>
+            <div style="display:flex;gap:8px;"><span style="color:#e8a848;flex-shrink:0;">Think</span> Model reasons about each failure, forms hypotheses</div>
+            <div style="display:flex;gap:8px;"><span style="color:#5ec269;flex-shrink:0;">Act</span> Model drafts the issue with structured content</div>
+            <div style="display:flex;gap:8px;"><span style="color:#4ecdc4;flex-shrink:0;">Decide</span> Model reflects on what else it would need</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:15px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:#e8a848;margin-bottom:8px;">What the loop looks like</div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);line-height:1.6;">Between each action, the model <strong style="color:var(--text-primary);">shows its reasoning</strong> — what it found, what it thinks it means, what it's going to do next. That visible chain of thought is the perceive-think-act-observe cycle in real time.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -172,17 +432,108 @@ sessionStyles: ""
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:16px;">A multi-agent test pipeline</div>
         <div style="display:grid;gap:10px;">
           <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg-card);border-radius:8px;border:2px solid var(--accent);">
-            <div style="font-size:1.1rem;">🎯</div>
+            <div style="font-size:1.1rem;"></div>
             <div style="font-size:0.85rem;"><strong style="color:var(--accent);">Orchestrator agent</strong> — "CI tests just ran. Coordinate the failure response."</div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-left:24px;">
-            <div style="padding:10px 12px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border);font-size:0.78rem;text-align:center;"><span style="display:block;font-weight:600;color:var(--text-primary);margin-bottom:4px;">📊 Analyser</span><span style="color:var(--text-secondary);">reads report, categorises failures</span></div>
-            <div style="padding:10px 12px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border);font-size:0.78rem;text-align:center;"><span style="display:block;font-weight:600;color:var(--text-primary);margin-bottom:4px;">🔗 Ticket creator</span><span style="color:var(--text-secondary);">opens Jira tickets with context</span></div>
-            <div style="padding:10px 12px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border);font-size:0.78rem;text-align:center;"><span style="display:block;font-weight:600;color:var(--text-primary);margin-bottom:4px;">📣 Notifier</span><span style="color:var(--text-secondary);">posts summary to Slack channel</span></div>
+            <div style="padding:10px 12px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border);font-size:0.78rem;text-align:center;"><span style="display:block;font-weight:600;color:var(--text-primary);margin-bottom:4px;"> Analyser</span><span style="color:var(--text-secondary);">reads report, categorises failures</span></div>
+            <div style="padding:10px 12px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border);font-size:0.78rem;text-align:center;"><span style="display:block;font-weight:600;color:var(--text-primary);margin-bottom:4px;"> Ticket creator</span><span style="color:var(--text-secondary);">opens Jira tickets with context</span></div>
+            <div style="padding:10px 12px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border);font-size:0.78rem;text-align:center;"><span style="display:block;font-weight:600;color:var(--text-primary);margin-bottom:4px;"> Notifier</span><span style="color:var(--text-secondary);">posts summary to Slack channel</span></div>
           </div>
         </div>
       </div>
       <div style="font-size:0.82rem;color:var(--text-dim);text-align:center;">Each worker specialises. The orchestrator decides the sequence. You define the goal once.</div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE — Multi-Agent Patterns ─── -->
+  <div class="slide" data-title="Multi-Agent Patterns" data-notes="Once you understand the agent loop, you can compose agents together. There are three main patterns — and each is suited to different kinds of tasks.&lt;br&gt;&lt;br&gt;Sequential chain: each agent's output becomes the next agent's input. Use this when steps must happen in order and each depends on the previous result. Slowest, but most reliable — errors are caught at each stage.&lt;br&gt;&lt;br&gt;Parallel fan-out: the orchestrator delegates to multiple agents simultaneously, then collects all results. Use this when tasks are independent and you need speed. An orchestrator can run 3 analysis agents in parallel and merge their findings.&lt;br&gt;&lt;br&gt;Hierarchical orchestration: an orchestrator manages sub-orchestrators, which each manage their own workers. Use this for large, complex tasks that decompose into distinct problem domains — a test strategy agent directing a test-writer, a runner, and a reporter, each with their own tools.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Three ways to coordinate multiple agents</h2>
+      <div style="display:grid;gap:10px;">
+        <!-- Pattern 1: Sequential Chain -->
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;display:grid;grid-template-columns:180px 1fr;gap:20px;align-items:center;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#6fa3f7;margin-bottom:10px;">Sequential Chain</div>
+            <svg viewBox="0 0 180 44" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="6" width="44" height="32" rx="6" fill="#1a2840" stroke="#6fa3f7" stroke-width="1.5"/>
+              <text x="22" y="27" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#6fa3f7" text-anchor="middle">Agent A</text>
+              <line x1="44" y1="22" x2="60" y2="22" stroke="#4a4570" stroke-width="1.5"/>
+              <polygon points="57,18 63,22 57,26" fill="#4a4570"/>
+              <rect x="63" y="6" width="44" height="32" rx="6" fill="#1e1433" stroke="#b08cf5" stroke-width="1.5"/>
+              <text x="85" y="27" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#b08cf5" text-anchor="middle">Agent B</text>
+              <line x1="107" y1="22" x2="123" y2="22" stroke="#4a4570" stroke-width="1.5"/>
+              <polygon points="120,18 126,22 120,26" fill="#4a4570"/>
+              <rect x="126" y="6" width="44" height="32" rx="6" fill="#0d2010" stroke="#5ec269" stroke-width="1.5"/>
+              <text x="148" y="27" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#5ec269" text-anchor="middle">Agent C</text>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Each output feeds the next input</div>
+            <div style="font-size:0.82rem;color:var(--text-secondary);">Use when steps must happen in order and each agent depends on the previous result. A reader feeds an analyser feeds a writer. Reliable, predictable.</div>
+          </div>
+        </div>
+        <!-- Pattern 2: Parallel Fan-out -->
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;display:grid;grid-template-columns:180px 1fr;gap:20px;align-items:center;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#e8a848;margin-bottom:10px;">Parallel Fan-out</div>
+            <svg viewBox="0 0 180 80" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="24" width="52" height="32" rx="6" fill="#2a1f0d" stroke="#e8a848" stroke-width="1.5"/>
+              <text x="26" y="40" font-family="IBM Plex Mono, monospace" font-size="9" font-weight="700" fill="#e8a848" text-anchor="middle">Orchestrator</text>
+              <text x="26" y="51" font-family="IBM Plex Mono, monospace" font-size="8" fill="#a07030" text-anchor="middle">delegates</text>
+              <line x1="52" y1="30" x2="84" y2="12" stroke="#4a4570" stroke-width="1.2"/>
+              <polygon points="80,9 87,11 82,17" fill="#4a4570"/>
+              <line x1="52" y1="40" x2="84" y2="40" stroke="#4a4570" stroke-width="1.2"/>
+              <polygon points="81,36 87,40 81,44" fill="#4a4570"/>
+              <line x1="52" y1="50" x2="84" y2="68" stroke="#4a4570" stroke-width="1.2"/>
+              <polygon points="80,63 87,69 82,63" fill="#4a4570"/>
+              <rect x="87" y="4" width="40" height="24" rx="5" fill="#1a2840" stroke="#6fa3f7" stroke-width="1.2"/>
+              <text x="107" y="20" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6fa3f7" text-anchor="middle">Agent 1</text>
+              <rect x="87" y="32" width="40" height="24" rx="5" fill="#1e1433" stroke="#b08cf5" stroke-width="1.2"/>
+              <text x="107" y="48" font-family="IBM Plex Mono, monospace" font-size="9" fill="#b08cf5" text-anchor="middle">Agent 2</text>
+              <rect x="87" y="60" width="40" height="24" rx="5" fill="#0d2010" stroke="#5ec269" stroke-width="1.2"/>
+              <text x="107" y="76" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5ec269" text-anchor="middle">Agent 3</text>
+              <text x="148" y="44" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6a6090" text-anchor="middle">merge</text>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Multiple agents run simultaneously</div>
+            <div style="font-size:0.82rem;color:var(--text-secondary);">Use when tasks are independent. The orchestrator delegates to several agents in parallel and merges the results. Much faster than sequential for divisible work.</div>
+          </div>
+        </div>
+        <!-- Pattern 3: Hierarchical -->
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;display:grid;grid-template-columns:180px 1fr;gap:20px;align-items:center;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#4ecdc4;margin-bottom:10px;">Hierarchical</div>
+            <svg viewBox="0 0 180 80" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+              <rect x="60" y="0" width="60" height="24" rx="5" fill="#2a1f0d" stroke="#e8a848" stroke-width="1.5"/>
+              <text x="90" y="16" font-family="IBM Plex Mono, monospace" font-size="9" font-weight="700" fill="#e8a848" text-anchor="middle">Orchestrator</text>
+              <line x1="72" y1="24" x2="42" y2="38" stroke="#4a4570" stroke-width="1.2"/>
+              <line x1="108" y1="24" x2="138" y2="38" stroke="#4a4570" stroke-width="1.2"/>
+              <rect x="14" y="38" width="56" height="22" rx="5" fill="#0d2828" stroke="#4ecdc4" stroke-width="1.2"/>
+              <text x="42" y="53" font-family="IBM Plex Mono, monospace" font-size="8" fill="#4ecdc4" text-anchor="middle">Sub-orch A</text>
+              <rect x="110" y="38" width="56" height="22" rx="5" fill="#0d2828" stroke="#4ecdc4" stroke-width="1.2"/>
+              <text x="138" y="53" font-family="IBM Plex Mono, monospace" font-size="8" fill="#4ecdc4" text-anchor="middle">Sub-orch B</text>
+              <line x1="28" y1="60" x2="14" y2="74" stroke="#4a4570" stroke-width="1"/>
+              <line x1="56" y1="60" x2="70" y2="74" stroke="#4a4570" stroke-width="1"/>
+              <rect x="4" y="68" width="24" height="16" rx="3" fill="#1a2840" stroke="#6fa3f7" stroke-width="1"/>
+              <text x="16" y="80" font-family="IBM Plex Mono, monospace" font-size="7" fill="#6fa3f7" text-anchor="middle">W1</text>
+              <rect x="62" y="68" width="24" height="16" rx="3" fill="#1a2840" stroke="#6fa3f7" stroke-width="1"/>
+              <text x="74" y="80" font-family="IBM Plex Mono, monospace" font-size="7" fill="#6fa3f7" text-anchor="middle">W2</text>
+              <line x1="124" y1="60" x2="110" y2="74" stroke="#4a4570" stroke-width="1"/>
+              <line x1="152" y1="60" x2="166" y2="74" stroke="#4a4570" stroke-width="1"/>
+              <rect x="96" y="68" width="24" height="16" rx="3" fill="#0d2010" stroke="#5ec269" stroke-width="1"/>
+              <text x="108" y="80" font-family="IBM Plex Mono, monospace" font-size="7" fill="#5ec269" text-anchor="middle">W3</text>
+              <rect x="154" y="68" width="24" height="16" rx="3" fill="#0d2010" stroke="#5ec269" stroke-width="1"/>
+              <text x="166" y="80" font-family="IBM Plex Mono, monospace" font-size="7" fill="#5ec269" text-anchor="middle">W4</text>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Orchestrators manage sub-orchestrators</div>
+            <div style="font-size:0.82rem;color:var(--text-secondary);">Use for large complex tasks that break into distinct domains. Each sub-orchestrator manages its own team of specialist workers. Scales to very large workflows.</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -273,9 +624,111 @@ sessionStyles: ""
           <div style="font-size:0.85rem;color:var(--text-secondary);"><strong style="color:var(--text-primary);">Agent posts summary to Slack</strong> — "3 failures, tickets created, root cause identified"</div>
         </div>
         <div style="display:flex;gap:12px;padding:12px 14px;background:var(--green-soft);border-radius:8px;border:1px solid rgba(94,194,105,0.2);align-items:center;">
-          <div style="font-size:1.1rem;flex-shrink:0;">✅</div>
+          <div style="font-size:1.1rem;flex-shrink:0;"></div>
           <div style="font-size:0.85rem;color:var(--text-secondary);">Total time: ~2 minutes. You wake up in the morning with failures already investigated and triaged.</div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE — Failure Modes ─── -->
+  <div class="slide" data-title="Failure Modes" data-notes="QA engineers are trained to spot failure — so teach them what agent failure looks like specifically. These five patterns cover the vast majority of what goes wrong in practice.&lt;br&gt;&lt;br&gt;Looping: the most common early failure. The agent makes the same tool call repeatedly because the result isn't what it expected and it doesn't know how to move on. Stopping conditions catch this.&lt;br&gt;&lt;br&gt;Hallucinated outcomes: the model assumes a tool call succeeded or returned something useful when it didn't. It may even confirm it completed a task it couldn't actually do. Always have the agent verify its own output.&lt;br&gt;&lt;br&gt;Scope creep: the agent starts accessing files, APIs, or actions outside what you intended. Tight system prompt constraints are the primary prevention — but you also need to check logs.&lt;br&gt;&lt;br&gt;Context exhaustion: long-running agents fill the context window and start contradicting or repeating work from earlier in the session. Break complex tasks into phases with checkpoints.&lt;br&gt;&lt;br&gt;Overconfident completion: the agent declares success before the goal is actually met. Always have it read back what it produced and confirm it matches the objective.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Five ways agents fail — and how to catch them</h2>
+      <div style="display:grid;gap:7px;">
+        <div style="display:grid;grid-template-columns:170px 1fr 200px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+          <div style="padding:12px 16px;background:#200808;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:#e85c5c;text-transform:uppercase;letter-spacing:1px;">Looping</span>
+          </div>
+          <div style="padding:11px 16px;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Same tool call repeated with no forward progress — agent is stuck</span>
+          </div>
+          <div style="padding:11px 14px;display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--text-muted);">→ set max_iterations limit</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:170px 1fr 200px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+          <div style="padding:12px 16px;background:#200808;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:#e85c5c;text-transform:uppercase;letter-spacing:1px;">Hallucinated<br>outcomes</span>
+          </div>
+          <div style="padding:11px 16px;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Claims success before checking — assumes tool calls worked without verifying</span>
+          </div>
+          <div style="padding:11px 14px;display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--text-muted);">→ require re-read to verify</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:170px 1fr 200px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+          <div style="padding:12px 16px;background:#200808;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:#e85c5c;text-transform:uppercase;letter-spacing:1px;">Scope creep</span>
+          </div>
+          <div style="padding:11px 16px;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Accesses files, APIs, or takes actions outside what you intended</span>
+          </div>
+          <div style="padding:11px 14px;display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--text-muted);">→ explicit constraints in system prompt</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:170px 1fr 200px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+          <div style="padding:12px 16px;background:#200808;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:#e85c5c;text-transform:uppercase;letter-spacing:1px;">Context<br>exhaustion</span>
+          </div>
+          <div style="padding:11px 16px;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Long runs fill the context window — agent contradicts or repeats earlier work</span>
+          </div>
+          <div style="padding:11px 14px;display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--text-muted);">→ break into phases, add checkpoints</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:170px 1fr 200px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+          <div style="padding:12px 16px;background:#200808;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:#e85c5c;text-transform:uppercase;letter-spacing:1px;">Overconfident<br>completion</span>
+          </div>
+          <div style="padding:11px 16px;border-right:1px solid var(--border);display:flex;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Declares done before the goal is actually met — output doesn't match objective</span>
+          </div>
+          <div style="padding:11px 14px;display:flex;align-items:center;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--text-muted);">→ audit trail, human review gate</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:11px 14px;margin-top:11px;font-size:0.85rem;color:var(--text-secondary);">
+        QA engineers are trained to spot failure modes. Apply that same skill to reviewing agent output — trust but verify every time, especially early on.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE — Guardrails and Safety ─── -->
+  <div class="slide" data-title="Guardrails &amp; Safety" data-notes="Agents with tools can take real, irreversible actions — create tickets, send messages, write files. Before you deploy an agent, you need to think carefully about what happens when something goes wrong.&lt;br&gt;&lt;br&gt;Four categories of safeguard, in order of importance:&lt;br&gt;&lt;br&gt;Scope constraints in the system prompt: tell the agent explicitly what it is and is not allowed to access. 'Read from /reports/ only. Never write to production databases.' The model will generally respect these — they are your first and most important guardrail.&lt;br&gt;&lt;br&gt;Approval gates: before any irreversible action (deleting something, posting to a public channel, creating a ticket), have the agent surface a summary for human review. Claude Code does this — it pauses and asks before taking certain actions.&lt;br&gt;&lt;br&gt;Stopping conditions: define explicit halting criteria. Stop after N tool calls. Stop if cost exceeds threshold. Stop if an unexpected error category appears three times.&lt;br&gt;&lt;br&gt;Audit trail: log every action the agent takes. Not just what it decided, but what it actually did — what tools were called, with what arguments, and what the result was. Essential for debugging and for trust.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Before you deploy: four safeguards</h2>
+      <div class="card-grid c2" style="gap:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#6fa3f7;margin-bottom:8px;">Scope Constraints</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Limit what it can touch</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:10px;">Write explicit rules in the system prompt: allowed directories, allowed APIs, forbidden actions. The model respects these — they are your primary guardrail.</div>
+          <pre style="background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-secondary);margin:0;white-space:pre-wrap;">Read from /reports/ only.
+Never modify source code.
+Never delete any file.</pre>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#e8a848;margin-bottom:8px;">Approval Gates</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Pause before irreversible actions</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Before posting to Slack, creating tickets, or sending any external message — have the agent surface a summary for human review. Claude Code does this by design. Match the gate to the blast radius of the action.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#5ec269;margin-bottom:8px;">Stopping Conditions</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Define when to halt the loop</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Set explicit limits: maximum tool calls, time budget, cost ceiling. Stop if the same error appears three consecutive times. Prevents runaway agents from doing more damage trying to recover from a bad state.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#b08cf5;margin-bottom:8px;">Audit Trail</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Log everything the agent does</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Record every tool call: name, arguments, result, timestamp. Not just what the model decided — what it actually executed. Essential for debugging failures and for building the trust that lets you widen the scope over time.</div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:11px 14px;margin-top:12px;font-size:0.85rem;color:var(--text-secondary);">
+        Start narrow. Give the agent minimal permissions, watch it run, then expand scope gradually as you build confidence in its behaviour.
       </div>
     </div>
   </div>
@@ -288,21 +741,21 @@ sessionStyles: ""
         <div class="comp-col positive">
           <div class="comp-label">Agents handle well</div>
           <ul style="list-style:none;display:grid;gap:9px;font-size:0.85rem;color:var(--text-secondary);">
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Reading and summarising test reports</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Creating tickets with standard information</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Generating test code from specifications</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Updating tests after selector changes</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Posting routine status updates</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Reading and summarising test reports</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Creating tickets with standard information</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Generating test code from specifications</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Updating tests after selector changes</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Posting routine status updates</li>
           </ul>
         </div>
         <div class="comp-col neutral">
           <div class="comp-label">Humans still essential</div>
           <ul style="list-style:none;display:grid;gap:9px;font-size:0.85rem;color:var(--text-secondary);">
-            <li style="display:flex;gap:8px;"><span style="color:var(--accent);">✦</span> Deciding what to test and why</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--accent);">✦</span> Evaluating product quality and risk</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--accent);">✦</span> Investigating truly novel failures</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--accent);">✦</span> Working with teams on priorities</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--accent);">✦</span> Catching what tests can't catch</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--accent);"></span> Deciding what to test and why</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--accent);"></span> Evaluating product quality and risk</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--accent);"></span> Investigating truly novel failures</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--accent);"></span> Working with teams on priorities</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--accent);"></span> Catching what tests can't catch</li>
           </ul>
         </div>
       </div>
@@ -318,28 +771,28 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">The direction of travel</h2>
       <div style="display:grid;gap:12px;">
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">📈</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Models are getting significantly more capable</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">What requires careful prompting today will be more reliable and intuitive next year. The threshold for what agents can handle autonomously is rising.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🔌</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">MCP ecosystem is growing rapidly</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">More tools, more services, more integrations are becoming MCP-compatible. The network effects of a standard protocol are kicking in.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🤝</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Multi-agent coordination is becoming mainstream</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">What requires custom orchestration code today will become configurable workflows. Building pipelines will get progressively easier.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🧰</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">The skills you have now will compound</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Understanding how to direct agents, write good prompts, connect tools — these skills grow in value as the technology grows in capability.</div>
@@ -410,7 +863,7 @@ sessionStyles: ""
   <!-- ─── SLIDE 09 — Final Slide ─── -->
   <div class="slide" data-title="Series Complete" data-notes="End on something genuine. This series was built for the team, by someone on the team. It's not a vendor pitch or a corporate training deck — it's real experience, real tools, real patterns. The instructor has been on the same learning journey.&lt;br&gt;&lt;br&gt;Leave the team with energy and curiosity, not overwhelm. They've covered a huge amount. Even using 20% of what they've learned will make them meaningfully faster and more effective. The other 80% is there when they need it.&lt;br&gt;&lt;br&gt;Thank the team for showing up and engaging. That's rare, and it matters.">
     <div class="slide-inner" style="text-align:center;">
-      <div style="font-size:2.5rem;margin-bottom:20px;">🎉</div>
+      <div style="font-size:2.5rem;margin-bottom:20px;"></div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:16px;">19 Sessions · 5 Phases · Complete</div>
       <h2 style="font-size:2.2rem;margin-bottom:14px;">That's a wrap on <span style="color:var(--accent)">AI in Practice</span></h2>
       <p style="color:var(--text-secondary);font-size:0.95rem;max-width:520px;margin:0 auto 32px;line-height:1.8;">You came in knowing how to test software. You're leaving knowing how to work alongside AI to test it faster, more thoroughly, and with less toil. That's a real skill. Use it.</p>
@@ -429,5 +882,6 @@ sessionStyles: ""
         </div>
       </div>
       <div style="font-size:0.82rem;color:var(--text-dim);">Learning Hub — For curious minds</div>
+      <a href="/topics/ai-in-practice/references/session-19/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

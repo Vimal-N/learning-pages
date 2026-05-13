@@ -5,17 +5,18 @@ sessionNumber: "10"
 sessionTitle: "Introduction to Claude Code & Opencode"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-10/"
 sessionStyles: ""
 ---
 
   <!-- ─── SLIDE 01 — Title ─── -->
   <div class="slide active" data-title="Session Overview" data-notes="Phase 4 begins — and it's the phase that feels most different from everything before. We're leaving the IDE. We're going to the terminal. And we're meeting two tools the instructor uses every day: Claude Code and Opencode.&lt;br&gt;&lt;br&gt;Be upfront about the context switch: for some people, the terminal feels intimidating. That's fine. Both tools are actually quite conversational — you type natural language, they respond in natural language. The terminal is just the container they live in.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: it's like the difference between using a food ordering app (clicking menus) vs calling the restaurant and talking to someone. The terminal agents are the phone call — more flexible, more capable, more direct.&lt;/div&gt;">
     <div class="slide-inner" style="text-align:center;">
-      <div class="session-badge" style="margin-bottom:20px;">⚡ Session 10 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools</div>
+      <div class="session-badge" style="margin-bottom:20px;"> Session 10 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools</div>
       <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Introduction to<br><span style="color:var(--accent)">Claude Code &amp; Opencode</span></h1>
       <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Meet the terminal-native AI agents that can operate across your entire codebase — not just the file you have open.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">50 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 09</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
       </div>
@@ -72,21 +73,21 @@ sessionStyles: ""
         <text x="350" y="268" font-size="11" fill="#6a6a80" text-anchor="middle">Unlike chatbots, terminal agents take ACTIONS — they don't just answer, they do.</text>
       </svg>
       <div class="stat-callout">
-        <div class="stat-num" style="font-size:2.2rem;">🗂️</div>
+        <div class="stat-num" style="font-size:2.2rem;">️</div>
         <div class="stat-body">
           <div class="stat-title">Full codebase awareness</div>
           <div class="stat-desc">A terminal agent can explore your entire project — read any file, understand the directory structure, trace how modules connect — before it writes a single line.</div>
         </div>
       </div>
       <div class="stat-callout" style="margin-top:14px;">
-        <div class="stat-num" style="font-size:2.2rem;">⚡</div>
+        <div class="stat-num" style="font-size:2.2rem;"></div>
         <div class="stat-body">
           <div class="stat-title">Direct environment access</div>
           <div class="stat-desc">It can run your test suite, execute shell commands, interact with git, read build output, and act on the results — in a single conversation.</div>
         </div>
       </div>
       <div class="stat-callout" style="margin-top:14px;">
-        <div class="stat-num" style="font-size:2.2rem;">💬</div>
+        <div class="stat-num" style="font-size:2.2rem;"></div>
         <div class="stat-body">
           <div class="stat-title">Conversational and iterative</div>
           <div class="stat-desc">You direct it in plain English. It acts, shows what it did, and you continue the conversation to refine or redirect.</div>
@@ -317,7 +318,7 @@ sessionStyles: ""
           <br><br>
           Running <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">npx playwright test tests/checkout.spec.ts</code>...
           <br><br>
-          ✅ 3/3 tests passing. All fixes applied.
+           3/3 tests passing. All fixes applied.
         </div>
       </div>
     </div>
@@ -372,32 +373,32 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Where terminal agents excel</h2>
       <div class="card-grid c2" style="gap:14px;">
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">🔍</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Codebase exploration</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">"Where is the cart total calculated? Show me all the places it's referenced."</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">🔄</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Multi-file updates</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">"Update all API endpoint URLs from v1 to v2 across the test suite"</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">🧪</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Test + fix loops</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">"Run the suite, identify failing tests, and fix the failures one by one"</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">📦</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Scaffolding new structure</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">"Set up the folder structure and base files for testing our new Payments module"</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">📝</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Documentation generation</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">"Read all our Playwright tests and generate a test coverage summary document"</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">🔀</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Git-aware operations</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">"Show what changed in this branch and check if any test selectors need updating"</div>
         </div>
@@ -441,19 +442,19 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Using terminal agents safely</h2>
       <div style="display:grid;gap:10px;">
         <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🔖</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Commit before every session — always</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">If something goes wrong, <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">git restore .</code> returns you to a clean state in seconds. This is your undo button. Without a commit, a bad session means lost work.</div></div>
         </div>
         <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">👀</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Review all diffs before approving</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">The agent shows changes before applying them. Read them the same way you'd review a teammate's PR. Don't auto-approve everything — understand what's changing.</div></div>
         </div>
         <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🎯</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Give precise scope in your task description</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">"Only modify files in tests/checkout/" is more reliable than "update the checkout tests." Scope constraints prevent accidents in unrelated areas.</div></div>
         </div>
         <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🚫</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Never paste API keys or credentials into chat</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Use environment variables instead. Treat the chat log as potentially readable by others. Credentials belong in .env files, not prompts.</div></div>
         </div>
       </div>
@@ -514,5 +515,6 @@ sessionStyles: ""
           <li>· CLAUDE.md — the persistent project brief</li>
         </ul>
       </div>
+      <a href="/topics/ai-in-practice/references/session-10/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

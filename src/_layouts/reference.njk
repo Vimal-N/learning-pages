@@ -1,0 +1,111 @@
+---
+layout: base.njk
+---
+{% block head %}
+<style>
+@page {
+  size: A4;
+  margin: 2cm 2cm 2.5cm 2cm;
+}
+
+@media print {
+  .ref-topbar,
+  .ref-print-btn      { display: none !important; }
+  .ref-body           { padding: 0; max-width: 100%; }
+  body                { font-size: 11pt; line-height: 1.6; color: #111; background: #fff; }
+  h1, h2, h3, h4      { page-break-after: avoid; }
+  p                   { orphans: 3; widows: 3; }
+  pre,
+  blockquote,
+  table,
+  .ref-cheatsheet-block,
+  .ref-faq-item       { page-break-inside: avoid; }
+  pre                 { white-space: pre-wrap; word-break: break-word; }
+  .ref-full-content   { page-break-before: always; }
+  .ref-page-break     { display: block !important; page-break-before: always; }
+  thead               { display: table-header-group; }
+  tr                  { page-break-inside: avoid; }
+  a[href]::after      { content: none; }
+  *                   { box-shadow: none !important; transition: none !important; }
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="ref-topbar">
+  <a href="{{ topicUrl | default('/') }}" class="ref-back">← {{ topicName | default('Back') }}</a>
+  <span class="topbar-sep">/</span>
+  <div class="ref-topbar-title">{{ sessionTitle | default(title) }}</div>
+  <div class="ref-topbar-badge">Reference · Session {{ sessionNumber }}</div>
+  <button class="ref-print-btn" onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<div class="ref-body">
+  <div id="ref-content">
+    {{ content | safe }}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  var container = document.getElementById('ref-content');
+  if (!container) return;
+
+  var hr = container.querySelector('hr');
+  if (!hr) return;
+
+  /* Collect nodes before the first <hr> (cheat sheet) */
+  var cheatNodes = [];
+  var node = container.firstChild;
+  while (node && node !== hr) {
+    cheatNodes.push(node);
+    node = node.nextSibling;
+  }
+
+  /* Collect nodes after the first <hr> (full reference) */
+  var fullNodes = [];
+  node = hr.nextSibling;
+  while (node) {
+    fullNodes.push(node);
+    node = node.nextSibling;
+  }
+
+  /* Build cheat sheet zone */
+  var cheatZone = document.createElement('div');
+  cheatZone.className = 'ref-cheatsheet-zone';
+  cheatNodes.forEach(function (n) { cheatZone.appendChild(n); });
+
+  /* Build full reference zone */
+  var fullZone = document.createElement('div');
+  fullZone.className = 'ref-full-content';
+  fullNodes.forEach(function (n) { fullZone.appendChild(n); });
+
+  /* Replace container contents (removes the <hr> naturally) */
+  container.innerHTML = '';
+  container.appendChild(cheatZone);
+  container.appendChild(fullZone);
+
+  /* Wrap each h3 section in cheat sheet into a .ref-cheatsheet-block */
+  wrapH3Sections(cheatZone);
+
+  function wrapH3Sections(parent) {
+    var children = Array.from(parent.childNodes);
+    var currentBlock = null;
+
+    children.forEach(function (child) {
+      if (child.nodeName === 'H3') {
+        currentBlock = document.createElement('div');
+        currentBlock.className = 'ref-cheatsheet-block';
+        parent.insertBefore(currentBlock, child);
+        currentBlock.appendChild(child);
+      } else if (currentBlock) {
+        currentBlock.appendChild(child);
+      }
+      /* Nodes before the first h3 (e.g. the h2 title) stay at parent level */
+    });
+  }
+})();
+</script>
+{% endblock %}

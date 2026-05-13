@@ -5,17 +5,18 @@ sessionNumber: "02"
 sessionTitle: "The Evolution — From Chatbot to Coding Partner to Agent"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-02/"
 sessionStyles: ""
 ---
 
   <!-- ─── SLIDE 01 — Title ─── -->
   <div class="slide active" data-title="Session Overview" data-notes="Welcome back everyone. Last session we got the foundation — what AI actually is, what an LLM is, and why it matters. Today we&apos;re going to put that in historical context. We&apos;re going to trace how we got from the frustrating chatbots of the 2000s to GitHub Copilot to the agent tools some of us use every day. Understanding the evolution helps you understand WHY things work the way they do now.">
     <div class="slide-inner" style="text-align:center;">
-      <div class="session-badge" style="margin-bottom:20px;">🤖 Session 02 &nbsp;·&nbsp; Phase 1: AI Foundations</div>
+      <div class="session-badge" style="margin-bottom:20px;"> Session 02 &nbsp;·&nbsp; Phase 1: AI Foundations</div>
       <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">The Evolution<br><span style="color:var(--accent)">From Chatbot to Coding<br>Partner to Agent</span></h1>
       <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">How AI assistants went from scripted, brittle, and frustrating — to the tools rewriting how engineers work today.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">40 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Beginner</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 01</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
       </div>
@@ -53,7 +54,7 @@ sessionStyles: ""
     <div class="slide-inner">
       <div class="session-badge" style="margin-bottom:18px;">Today&apos;s Session</div>
       <h2 style="font-size:1.8rem;margin-bottom:24px;">What we&apos;re covering</h2>
-      <div style="display:grid;gap:12px;max-width:600px;">
+      <div style="display:grid;gap:12px;width:100%;">
         <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;min-width:28px;">01</div>
           <div style="font-size:0.9rem;">Era 1 — Rule-based chatbots (and why they failed)</div>
@@ -118,19 +119,19 @@ sessionStyles: ""
       <p style="color:var(--text-secondary);margin-bottom:20px;font-size:0.92rem;">A genuine step forward — but still a very long way from understanding you.</p>
       <div class="card-grid c3" style="gap:12px;margin-bottom:16px;">
         <div style="background:var(--bg-elevated);border-radius:8px;padding:14px;border:1px solid var(--border);text-align:center;">
-          <div style="font-size:1.6rem;margin-bottom:8px;">🍎</div>
+          <div style="font-size:1.6rem;margin-bottom:8px;"></div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-bottom:4px;">2011</div>
           <div style="font-size:0.88rem;font-weight:600;">Siri</div>
           <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">Apple — intent matching on device</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:8px;padding:14px;border:1px solid var(--border);text-align:center;">
-          <div style="font-size:1.6rem;margin-bottom:8px;">🛒</div>
+          <div style="font-size:1.6rem;margin-bottom:8px;"></div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-bottom:4px;">2014</div>
           <div style="font-size:0.88rem;font-weight:600;">Alexa</div>
           <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">Amazon — skills ecosystem</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:8px;padding:14px;border:1px solid var(--border);text-align:center;">
-          <div style="font-size:1.6rem;margin-bottom:8px;">🔍</div>
+          <div style="font-size:1.6rem;margin-bottom:8px;"></div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-bottom:4px;">2016</div>
           <div style="font-size:0.88rem;font-weight:600;">Google Assistant</div>
           <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">Google — knowledge graph backed</div>
@@ -139,41 +140,41 @@ sessionStyles: ""
       <div style="background:var(--bg-elevated);border-radius:8px;padding:14px;border:1px solid var(--border);">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--text-dim);margin-bottom:8px;">WHAT IMPROVED VS WHAT DIDN&apos;T</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.85rem;">
-          <div><div style="color:var(--green);margin-bottom:4px;">✓ Better</div><div style="color:var(--text-secondary);">No longer need exact keywords — natural phrasing works</div></div>
-          <div><div style="color:var(--red);margin-bottom:4px;">✗ Still broken</div><div style="color:var(--text-secondary);">Anything outside a pre-known intent → "I can&apos;t help with that"</div></div>
+          <div><div style="color:var(--green);margin-bottom:4px;"> Better</div><div style="color:var(--text-secondary);">No longer need exact keywords — natural phrasing works</div></div>
+          <div><div style="color:var(--red);margin-bottom:4px;"> Still broken</div><div style="color:var(--text-secondary);">Anything outside a pre-known intent → "I can&apos;t help with that"</div></div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- ─── SLIDE 06 — Why They Frustrated Us ─── -->
-  <div class="slide" data-title="The Fundamental Limit" data-notes="This slide explains WHY the old approach hit a wall. It wasn&apos;t that the engineers weren&apos;t smart. It&apos;s that the whole approach was fundamentally limited. You can&apos;t enumerate all the ways a human might ask a question — there are infinite variations. The only way to break this ceiling was to stop writing rules and start learning patterns from data.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;⚠️ Key insight to land: Both Era 1 and Era 2 were about PATTERN MATCHING. The system compared your input to a known set of patterns. LLMs are fundamentally different — they UNDERSTAND language, not just match it.&lt;/div&gt;">
+  <div class="slide" data-title="The Fundamental Limit" data-notes="This slide explains WHY the old approach hit a wall. It wasn&apos;t that the engineers weren&apos;t smart. It&apos;s that the whole approach was fundamentally limited. You can&apos;t enumerate all the ways a human might ask a question — there are infinite variations. The only way to break this ceiling was to stop writing rules and start learning patterns from data.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;️ Key insight to land: Both Era 1 and Era 2 were about PATTERN MATCHING. The system compared your input to a known set of patterns. LLMs are fundamentally different — they UNDERSTAND language, not just match it.&lt;/div&gt;">
     <div class="slide-inner">
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Why the old approach hit a wall</h2>
-      <div style="display:grid;gap:12px;max-width:660px;">
+      <div style="display:grid;gap:12px;width:100%;">
         <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg-elevated);border-radius:8px;">
-          <div style="font-size:1.4rem;flex-shrink:0;">🧱</div>
+          <div style="font-size:1.4rem;flex-shrink:0;"></div>
           <div>
             <div style="font-weight:600;margin-bottom:4px;font-size:0.92rem;">Humans are unpredictable</div>
             <div style="font-size:0.85rem;color:var(--text-secondary);">You can&apos;t pre-write a response for every possible question. Language is infinite. Rule lists are finite.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg-elevated);border-radius:8px;">
-          <div style="font-size:1.4rem;flex-shrink:0;">💸</div>
+          <div style="font-size:1.4rem;flex-shrink:0;"></div>
           <div>
             <div style="font-weight:600;margin-bottom:4px;font-size:0.92rem;">Maintenance cost grew exponentially</div>
             <div style="font-size:0.85rem;color:var(--text-secondary);">Every new capability required engineers to write more rules. Bots became unmaintainable nightmares.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg-elevated);border-radius:8px;">
-          <div style="font-size:1.4rem;flex-shrink:0;">🎭</div>
+          <div style="font-size:1.4rem;flex-shrink:0;"></div>
           <div>
             <div style="font-weight:600;margin-bottom:4px;font-size:0.92rem;">Context blindness</div>
             <div style="font-size:0.85rem;color:var(--text-secondary);">These systems had no memory. Every message was independent. They couldn&apos;t hold a real conversation.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg-elevated);border-radius:8px;">
-          <div style="font-size:1.4rem;flex-shrink:0;">📦</div>
+          <div style="font-size:1.4rem;flex-shrink:0;"></div>
           <div>
             <div style="font-weight:600;margin-bottom:4px;font-size:0.92rem;">Domain locked</div>
             <div style="font-size:0.85rem;color:var(--text-secondary);">A flight chatbot knew about flights. Ask it about the weather and it broke. Knowledge couldn&apos;t transfer.</div>
@@ -233,21 +234,21 @@ sessionStyles: ""
         <div class="comp-col negative">
           <div class="comp-label">Old approach: Scripted</div>
           <ul style="list-style:none;display:grid;gap:10px;">
-            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--red);flex-shrink:0;">✗</span> Response is pre-written by a human</li>
-            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--red);flex-shrink:0;">✗</span> Match input to a known pattern</li>
-            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--red);flex-shrink:0;">✗</span> Anything off-script = failure</li>
-            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--red);flex-shrink:0;">✗</span> No memory between turns</li>
-            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--red);flex-shrink:0;">✗</span> Domain-locked</li>
+            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--red);flex-shrink:0;"></span> Response is pre-written by a human</li>
+            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--red);flex-shrink:0;"></span> Match input to a known pattern</li>
+            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--red);flex-shrink:0;"></span> Anything off-script = failure</li>
+            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--red);flex-shrink:0;"></span> No memory between turns</li>
+            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--red);flex-shrink:0;"></span> Domain-locked</li>
           </ul>
         </div>
         <div class="comp-col positive">
           <div class="comp-label">New approach: Generative</div>
           <ul style="list-style:none;display:grid;gap:10px;">
-            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">✓</span> Response is generated fresh each time</li>
-            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">✓</span> Understands intent, not just keywords</li>
-            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">✓</span> Handles novel questions gracefully</li>
-            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">✓</span> Maintains context across the conversation</li>
-            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">✓</span> Generalises across domains</li>
+            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;"></span> Response is generated fresh each time</li>
+            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;"></span> Understands intent, not just keywords</li>
+            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;"></span> Handles novel questions gracefully</li>
+            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;"></span> Maintains context across the conversation</li>
+            <li style="font-size:0.88rem;display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;"></span> Generalises across domains</li>
           </ul>
         </div>
       </div>
@@ -290,23 +291,23 @@ sessionStyles: ""
     <div class="slide-inner">
       <div class="session-badge" style="margin-bottom:14px;">Era 4 &nbsp;·&nbsp; 2024 – present</div>
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Agents — AI that takes action</h2>
-      <div style="display:grid;gap:12px;max-width:700px;">
+      <div style="display:grid;gap:12px;width:100%;">
         <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg-elevated);border-radius:8px;">
-          <div style="font-size:1.3rem;flex-shrink:0;">💬</div>
+          <div style="font-size:1.3rem;flex-shrink:0;"></div>
           <div>
             <div style="font-weight:600;margin-bottom:3px;font-size:0.92rem;">Chatbot / Assistant</div>
             <div style="font-size:0.85rem;color:var(--text-secondary);">You ask → it answers. One exchange at a time. No persistent action.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg-elevated);border-radius:8px;">
-          <div style="font-size:1.3rem;flex-shrink:0;">⌨️</div>
+          <div style="font-size:1.3rem;flex-shrink:0;">️</div>
           <div>
             <div style="font-weight:600;margin-bottom:3px;font-size:0.92rem;">Coding Assistant (Copilot)</div>
             <div style="font-size:0.85rem;color:var(--text-secondary);">You type → it suggests. Real-time help inside your editor. Still one suggestion at a time.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
-          <div style="font-size:1.3rem;flex-shrink:0;">🤖</div>
+          <div style="font-size:1.3rem;flex-shrink:0;"></div>
           <div>
             <div style="font-weight:600;margin-bottom:3px;font-size:0.92rem;color:var(--accent);">Agent (Claude Code, Copilot Agent Mode)</div>
             <div style="font-size:0.85rem;color:var(--text-secondary);">You describe a goal → it plans, uses tools, reads files, writes code, runs tests, iterates. Autonomous multi-step execution.</div>
@@ -323,25 +324,25 @@ sessionStyles: ""
       <img src="/images/ai-in-practice/session2-slide11.svg" alt="The agentic loop diagram" style="width:100%;display:block;margin:12px auto 8px;border-radius:12px;"/>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
         <div style="text-align:center;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.5rem;margin-bottom:8px;">🎯</div>
+          <div style="font-size:1.5rem;margin-bottom:8px;"></div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--accent);margin-bottom:4px;">STEP 1</div>
           <div style="font-size:0.82rem;font-weight:600;">Receive goal</div>
           <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">User describes what they want done</div>
         </div>
         <div style="text-align:center;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.5rem;margin-bottom:8px;">🗺️</div>
+          <div style="font-size:1.5rem;margin-bottom:8px;">️</div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--accent);margin-bottom:4px;">STEP 2</div>
           <div style="font-size:0.82rem;font-weight:600;">Plan</div>
           <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">LLM decides which steps to take</div>
         </div>
         <div style="text-align:center;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.5rem;margin-bottom:8px;">⚙️</div>
+          <div style="font-size:1.5rem;margin-bottom:8px;">️</div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--accent);margin-bottom:4px;">STEP 3</div>
           <div style="font-size:0.82rem;font-weight:600;">Act &amp; observe</div>
           <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">Runs a tool, reads output, adjusts</div>
         </div>
         <div style="text-align:center;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.5rem;margin-bottom:8px;">🔁</div>
+          <div style="font-size:1.5rem;margin-bottom:8px;"></div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--accent);margin-bottom:4px;">STEP 4</div>
           <div style="font-size:0.82rem;font-weight:600;">Repeat or finish</div>
           <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">Loops until goal is achieved</div>
@@ -388,11 +389,11 @@ sessionStyles: ""
         <div style="background:var(--bg-elevated);border-radius:8px;padding:18px;border:1px solid var(--border);">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--green);font-weight:700;margin-bottom:10px;">STILL YOUR JOB</div>
           <ul style="list-style:none;display:grid;gap:8px;">
-            <li style="font-size:0.87rem;display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Deciding what to test and why</li>
-            <li style="font-size:0.87rem;display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Identifying edge cases and risk areas</li>
-            <li style="font-size:0.87rem;display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Verifying AI-generated code is correct</li>
-            <li style="font-size:0.87rem;display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Understanding the system under test</li>
-            <li style="font-size:0.87rem;display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Interpreting results with business context</li>
+            <li style="font-size:0.87rem;display:flex;gap:8px;"><span style="color:var(--green);"></span> Deciding what to test and why</li>
+            <li style="font-size:0.87rem;display:flex;gap:8px;"><span style="color:var(--green);"></span> Identifying edge cases and risk areas</li>
+            <li style="font-size:0.87rem;display:flex;gap:8px;"><span style="color:var(--green);"></span> Verifying AI-generated code is correct</li>
+            <li style="font-size:0.87rem;display:flex;gap:8px;"><span style="color:var(--green);"></span> Understanding the system under test</li>
+            <li style="font-size:0.87rem;display:flex;gap:8px;"><span style="color:var(--green);"></span> Interpreting results with business context</li>
           </ul>
         </div>
         <div style="background:var(--bg-elevated);border-radius:8px;padding:18px;border:1px solid var(--border);">
@@ -410,7 +411,7 @@ sessionStyles: ""
   </div>
 
   <!-- ─── SLIDE 14 — Myth: Agents are Fully Autonomous ─── -->
-  <div class="slide" data-title="Reality Check: Agents Aren't Magic" data-notes="This slide is important for grounding expectations. Agents are impressive but not infallible. They can go off track, make assumptions, take wrong turns. The best way to use an agent is: give it a clear scoped task, check its progress at key points, and review its output before accepting it.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;⚠️ Real risk: agents can delete files, break code, or make changes that are hard to undo. Always work with version control when using agents on real code.&lt;/div&gt;">
+  <div class="slide" data-title="Reality Check: Agents Aren't Magic" data-notes="This slide is important for grounding expectations. Agents are impressive but not infallible. They can go off track, make assumptions, take wrong turns. The best way to use an agent is: give it a clear scoped task, check its progress at key points, and review its output before accepting it.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;️ Real risk: agents can delete files, break code, or make changes that are hard to undo. Always work with version control when using agents on real code.&lt;/div&gt;">
     <div class="slide-inner">
       <div class="myth-card">
         <div style="display:flex;gap:12px;margin-bottom:14px;">
@@ -424,11 +425,11 @@ sessionStyles: ""
       </div>
       <div style="margin-top:16px;display:grid;gap:8px;">
         <div style="font-size:0.85rem;padding:10px 14px;background:var(--bg-elevated);border-radius:6px;display:flex;gap:10px;">
-          <span style="color:var(--green);flex-shrink:0;">✓</span>
+          <span style="color:var(--green);flex-shrink:0;"></span>
           <span><strong>Good use:</strong> "Write Playwright tests for the login page — here&apos;s the page URL and the acceptance criteria"</span>
         </div>
         <div style="font-size:0.85rem;padding:10px 14px;background:var(--bg-elevated);border-radius:6px;display:flex;gap:10px;">
-          <span style="color:var(--red);flex-shrink:0;">✗</span>
+          <span style="color:var(--red);flex-shrink:0;"></span>
           <span><strong>Risky use:</strong> "Fix all the bugs in our test suite" — too vague, too much scope, no checkpoints</span>
         </div>
       </div>
@@ -468,7 +469,7 @@ sessionStyles: ""
   <!-- ─── SLIDE 16 — Bridge to Session 03 ─── -->
   <div class="slide" data-title="Up Next: Session 03" data-notes="Close on a forward-looking note. We&apos;ve spent two sessions on foundations. Next session is the first one that&apos;s directly and immediately practical — how to write better prompts. That&apos;s the skill that will make everything else in this series click faster.">
     <div class="slide-inner" style="text-align:center;">
-      <div style="font-size:2.5rem;margin-bottom:20px;">💬</div>
+      <div style="font-size:2.5rem;margin-bottom:20px;"></div>
       <div class="session-badge" style="margin-bottom:16px;">Coming Next</div>
       <h2 style="font-size:1.8rem;margin-bottom:12px;">Session 03</h2>
       <h3 style="font-size:1.3rem;color:var(--accent);margin-bottom:16px;font-weight:500;">How to Talk to AI — Prompting That Actually Works</h3>
@@ -476,5 +477,6 @@ sessionStyles: ""
       <div style="display:inline-flex;gap:12px;flex-wrap:wrap;justify-content:center;">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;padding:6px 14px;border-radius:20px;background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-secondary);">Try: Ask an AI something from your actual work this week</div>
       </div>
+      <a href="/topics/ai-in-practice/references/session-02/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

@@ -5,17 +5,18 @@ sessionNumber: "01"
 sessionTitle: "What Is AI and Why Is Everyone Talking About It?"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-01/"
 sessionStyles: ""
 ---
 
   <!-- ─── SLIDE 01 — Title ─── -->
   <div class="slide active" data-title="Session Overview" data-notes="Welcome everyone — this is the very first session of the AI in Practice series. Before we dive in, I want to set the tone: there are no dumb questions here. If you&apos;ve felt confused, behind, or overwhelmed by all the AI noise — that&apos;s the right starting point. This session exists to make sense of it, starting from zero.">
     <div class="slide-inner" style="text-align:center;">
-      <div class="session-badge" style="margin-bottom:20px;">🤖 Session 01 &nbsp;·&nbsp; Phase 1: AI Foundations</div>
+      <div class="session-badge" style="margin-bottom:20px;"> Session 01 &nbsp;·&nbsp; Phase 1: AI Foundations</div>
       <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">What Is AI<br>and Why Is Everyone<br>Talking About It?</h1>
       <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">A no-jargon introduction to what AI actually is, how it works at a basic level, and why it matters for your work as a QA engineer.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">45 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Beginner</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">None</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisites</div></div>
       </div>
@@ -29,20 +30,16 @@ sessionStyles: ""
       <h2 style="font-size:1.9rem;margin-bottom:8px;">Sound familiar?</h2>
       <p style="color:var(--text-secondary);margin-bottom:24px;">Phrases you&apos;ve probably heard recently — and maybe nodded along to:</p>
       <div class="card-grid c2" style="gap:12px;margin-bottom:24px;">
-        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:16px 20px;">
-          <div style="font-size:1.2rem;margin-bottom:8px;">🗣️</div>
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;align-items:center;justify-content:center;text-align:center;">
           <div style="font-size:0.9rem;color:var(--text-primary);line-height:1.5;">"We need to add AI to the product."</div>
         </div>
-        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:16px 20px;">
-          <div style="font-size:1.2rem;margin-bottom:8px;">🗣️</div>
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;align-items:center;justify-content:center;text-align:center;">
           <div style="font-size:0.9rem;color:var(--text-primary);line-height:1.5;">"Just use AI to write your tests."</div>
         </div>
-        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:16px 20px;">
-          <div style="font-size:1.2rem;margin-bottom:8px;">🗣️</div>
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;align-items:center;justify-content:center;text-align:center;">
           <div style="font-size:0.9rem;color:var(--text-primary);line-height:1.5;">"AI is going to change everything."</div>
         </div>
-        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:16px 20px;">
-          <div style="font-size:1.2rem;margin-bottom:8px;">🗣️</div>
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;align-items:center;justify-content:center;text-align:center;">
           <div style="font-size:0.9rem;color:var(--text-primary);line-height:1.5;">"Did you try asking ChatGPT?"</div>
         </div>
       </div>
@@ -89,7 +86,7 @@ sessionStyles: ""
   </div>
 
   <!-- ─── SLIDE 04 — What AI Actually Means ─── -->
-  <div class="slide" data-title="What AI Actually Means" data-notes="This is where you strip away the baggage. Ask: &apos;When you hear AI, what image comes to mind?&apos; Someone will say a robot. Acknowledge it with a laugh, then redirect.&lt;br&gt;&lt;br&gt;The real definition: any computer system that can do something that would normally require human intelligence. That&apos;s it. No robots required.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;⚠️ Common misconception: Many people think &apos;AI&apos; means one specific technology. It&apos;s actually an umbrella term for a huge category of techniques.&lt;/div&gt;">
+  <div class="slide" data-title="What AI Actually Means" data-notes="This is where you strip away the baggage. Ask: &apos;When you hear AI, what image comes to mind?&apos; Someone will say a robot. Acknowledge it with a laugh, then redirect.&lt;br&gt;&lt;br&gt;The real definition: any computer system that can do something that would normally require human intelligence. That&apos;s it. No robots required.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;️ Common misconception: Many people think &apos;AI&apos; means one specific technology. It&apos;s actually an umbrella term for a huge category of techniques.&lt;/div&gt;">
     <div class="slide-inner">
       <div class="session-badge" style="margin-bottom:18px;">Concept 1</div>
       <h2 style="font-size:1.8rem;margin-bottom:18px;">What AI actually means</h2>
@@ -97,19 +94,19 @@ sessionStyles: ""
         <div class="comp-col negative">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;opacity:0.7;">What people imagine</div>
           <ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px;">
-            <li style="font-size:0.88rem;color:var(--text-secondary);">🤖 Robots with human-like consciousness</li>
-            <li style="font-size:0.88rem;color:var(--text-secondary);">🧠 A digital brain that "thinks" like us</li>
-            <li style="font-size:0.88rem;color:var(--text-secondary);">🎬 Skynet from the movies</li>
-            <li style="font-size:0.88rem;color:var(--text-secondary);">✨ Magic that just "knows" things</li>
+            <li style="font-size:0.88rem;color:var(--text-secondary);"> Robots with human-like consciousness</li>
+            <li style="font-size:0.88rem;color:var(--text-secondary);"> A digital brain that "thinks" like us</li>
+            <li style="font-size:0.88rem;color:var(--text-secondary);"> Skynet from the movies</li>
+            <li style="font-size:0.88rem;color:var(--text-secondary);"> Magic that just "knows" things</li>
           </ul>
         </div>
         <div class="comp-col positive">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;opacity:0.7;">What it actually is</div>
           <ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px;">
-            <li style="font-size:0.88rem;color:var(--text-secondary);">💻 Software trained to recognise patterns</li>
-            <li style="font-size:0.88rem;color:var(--text-secondary);">📊 Very good at tasks humans find tedious</li>
-            <li style="font-size:0.88rem;color:var(--text-secondary);">🔧 A tool — powerful but with real limits</li>
-            <li style="font-size:0.88rem;color:var(--text-secondary);">📚 Learned from human-generated data</li>
+            <li style="font-size:0.88rem;color:var(--text-secondary);"> Software trained to recognise patterns</li>
+            <li style="font-size:0.88rem;color:var(--text-secondary);"> Very good at tasks humans find tedious</li>
+            <li style="font-size:0.88rem;color:var(--text-secondary);"> A tool — powerful but with real limits</li>
+            <li style="font-size:0.88rem;color:var(--text-secondary);"> Learned from human-generated data</li>
           </ul>
         </div>
       </div>
@@ -164,7 +161,7 @@ sessionStyles: ""
         </div>
         <div style="display:flex;gap:14px;align-items:flex-start;">
           <div style="min-width:64px;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);padding-top:3px;">Nov 2022</div>
-          <div style="flex:1;padding:11px 14px;background:rgba(232,168,72,0.07);border-radius:8px;border:1px solid rgba(232,168,72,0.3);"><div style="font-size:0.87rem;font-weight:600;margin-bottom:2px;color:var(--accent);">ChatGPT launches 🚀</div><div style="font-size:0.8rem;color:var(--text-secondary);">100 million users in 2 months. AI became accessible to everyone overnight.</div></div>
+          <div style="flex:1;padding:11px 14px;background:rgba(232,168,72,0.07);border-radius:8px;border:1px solid rgba(232,168,72,0.3);"><div style="font-size:0.87rem;font-weight:600;margin-bottom:2px;color:var(--accent);">ChatGPT launches </div><div style="font-size:0.8rem;color:var(--text-secondary);">100 million users in 2 months. AI became accessible to everyone overnight.</div></div>
         </div>
       </div>
     </div>
@@ -199,21 +196,21 @@ sessionStyles: ""
   </div>
 
   <!-- ─── SLIDE 08 — What is an LLM? ─── -->
-  <div class="slide" data-title="What Is an LLM?" data-notes="This is the conceptual heart of the session. Take your time. The mental model: an LLM is not looking things up in a database. It learned patterns from enormous amounts of text, and uses those patterns to predict what should come next.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;analogy-note&apos;&gt;Analogy: Think about how you can finish someone&apos;s sentence. You don&apos;t look up the answer — you pattern-match from everything you&apos;ve ever read and heard. An LLM does this at a massive scale.&lt;/div&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;⚠️ Don&apos;t use the words &apos;transformer&apos; or &apos;attention mechanism&apos;. Stick to the mental model.&lt;/div&gt;">
+  <div class="slide" data-title="What Is an LLM?" data-notes="This is the conceptual heart of the session. Take your time. The mental model: an LLM is not looking things up in a database. It learned patterns from enormous amounts of text, and uses those patterns to predict what should come next.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;analogy-note&apos;&gt;Analogy: Think about how you can finish someone&apos;s sentence. You don&apos;t look up the answer — you pattern-match from everything you&apos;ve ever read and heard. An LLM does this at a massive scale.&lt;/div&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;️ Don&apos;t use the words &apos;transformer&apos; or &apos;attention mechanism&apos;. Stick to the mental model.&lt;/div&gt;">
     <div class="slide-inner">
       <div class="session-badge" style="margin-bottom:18px;">Concept 5</div>
       <h2 style="font-size:1.8rem;margin-bottom:18px;">What is an LLM?</h2>
       <div style="display:grid;gap:12px;">
         <div style="padding:15px 18px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);">
-          <div style="font-size:0.87rem;font-weight:600;margin-bottom:5px;">📚 Step 1: Read almost everything humans have ever written</div>
+          <div style="font-size:0.87rem;font-weight:600;margin-bottom:5px;"> Step 1: Read almost everything humans have ever written</div>
           <div style="font-size:0.82rem;color:var(--text-secondary);">Books, websites, code, articles, forums, documentation — billions of documents. This is called <strong style="color:var(--text-primary);">training</strong>.</div>
         </div>
         <div style="padding:15px 18px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);">
-          <div style="font-size:0.87rem;font-weight:600;margin-bottom:5px;">🔗 Step 2: Learn patterns in language</div>
+          <div style="font-size:0.87rem;font-weight:600;margin-bottom:5px;"> Step 2: Learn patterns in language</div>
           <div style="font-size:0.82rem;color:var(--text-secondary);">Not memorising text — learning which words, ideas, and structures tend to appear together. Like learning grammar by reading, not by memorising rules.</div>
         </div>
         <div style="padding:15px 18px;background:rgba(232,168,72,0.07);border-radius:10px;border:1px solid rgba(232,168,72,0.25);">
-          <div style="font-size:0.87rem;font-weight:600;margin-bottom:5px;color:var(--accent);">✨ Step 3: Predict what should come next — very, very well</div>
+          <div style="font-size:0.87rem;font-weight:600;margin-bottom:5px;color:var(--accent);"> Step 3: Predict what should come next — very, very well</div>
           <div style="font-size:0.82rem;color:var(--text-secondary);">When you send a message, the LLM uses those patterns to predict the most appropriate next word. Then the next. Then the next. That&apos;s a response.</div>
         </div>
       </div>
@@ -313,16 +310,16 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">What "training" means</h2>
       <div style="display:grid;gap:11px;">
         <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);font-size:0.88rem;color:var(--text-secondary);">
-          📖 <strong style="color:var(--text-primary);">Training data</strong> — The text an LLM learned from. Books, websites, code, Wikipedia, GitHub repos, forums. Hundreds of billions of words.
+           <strong style="color:var(--text-primary);">Training data</strong> — The text an LLM learned from. Books, websites, code, Wikipedia, GitHub repos, forums. Hundreds of billions of words.
         </div>
         <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);font-size:0.88rem;color:var(--text-secondary);">
-          📅 <strong style="color:var(--text-primary);">Knowledge cutoff</strong> — Training stops at a point in time. The model doesn&apos;t know about events after that date, unless you tell it.
+           <strong style="color:var(--text-primary);">Knowledge cutoff</strong> — Training stops at a point in time. The model doesn&apos;t know about events after that date, unless you tell it.
         </div>
         <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);font-size:0.88rem;color:var(--text-secondary);">
-          🚫 <strong style="color:var(--text-primary);">Not a search engine</strong> — By default, LLMs don&apos;t browse the internet. They work from what they already learned. (Some tools add search on top — more on that later.)
+           <strong style="color:var(--text-primary);">Not a search engine</strong> — By default, LLMs don&apos;t browse the internet. They work from what they already learned. (Some tools add search on top — more on that later.)
         </div>
         <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);font-size:0.88rem;color:var(--text-secondary);">
-          🔒 <strong style="color:var(--text-primary);">Not your data</strong> — The model was not trained on your company&apos;s private files. It only learned from public text.
+           <strong style="color:var(--text-primary);">Not your data</strong> — The model was not trained on your company&apos;s private files. It only learned from public text.
         </div>
       </div>
     </div>
@@ -350,7 +347,7 @@ sessionStyles: ""
   </div>
 
   <!-- ─── SLIDE 12 — Prompting in Practice ─── -->
-  <div class="slide" data-title="Prompting in Practice" data-notes="Live demo moment if possible. Open Claude or ChatGPT and show both prompts side by side, or at least show the output difference. The contrast is striking and makes the concept click instantly.&lt;br&gt;&lt;br&gt;Key message: prompting is a skill. You&apos;ll get better at it with practice. We have an entire session dedicated to it (Session 3). For now: the way you ask determines what you get.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;⚠️ Be careful not to make anyone feel bad for giving vague prompts — everyone starts there. Frame it as: &apos;this is something everyone learns.&apos;&lt;/div&gt;">
+  <div class="slide" data-title="Prompting in Practice" data-notes="Live demo moment if possible. Open Claude or ChatGPT and show both prompts side by side, or at least show the output difference. The contrast is striking and makes the concept click instantly.&lt;br&gt;&lt;br&gt;Key message: prompting is a skill. You&apos;ll get better at it with practice. We have an entire session dedicated to it (Session 3). For now: the way you ask determines what you get.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;️ Be careful not to make anyone feel bad for giving vague prompts — everyone starts there. Frame it as: &apos;this is something everyone learns.&apos;&lt;/div&gt;">
     <div class="slide-inner">
       <div class="session-badge" style="margin-bottom:18px;">Concept 9</div>
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Prompting: what it looks like</h2>
@@ -390,86 +387,36 @@ sessionStyles: ""
     </div>
   </div>
 
-  <!-- ─── SLIDE 14 — Misconception: AI is Sentient ─── -->
-  <div class="slide" data-title="Myth: AI Is Sentient" data-notes="These four slides clear up common misunderstandings — do them at a relaxed pace, invite the team to share ones they&apos;ve heard. Chance to get a laugh.&lt;br&gt;&lt;br&gt;For this one: stress that an LLM has no experiences, no feelings, no opinions. When it says &apos;I feel like...&apos; — that&apos;s a trained writing pattern, not an emotion.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;analogy-note&apos;&gt;Analogy: When a calculator shows &apos;ERROR&apos; it&apos;s not confused or upset. The LLM using the word &apos;I&apos; doesn&apos;t make it conscious.&lt;/div&gt;">
+  <!-- ─── SLIDE 14 — Common Misconceptions ─── -->
+  <div class="slide" data-title="Common Misconceptions" data-notes="Take these at a relaxed pace — invite the team to share myths they&apos;ve heard before revealing the reality. Good chance for a laugh and an honest conversation.&lt;br&gt;&lt;br&gt;Sentience: LLMs mimic human writing patterns — &apos;I think...&apos; is not an opinion, it&apos;s a pattern match. Always right: AI hallucinates confidently — never ship generated test code without running it. Context: it only sees what you type — no access to your codebase or previous chats unless you paste them. Replacement: AI is automating tedious tasks, not roles. QA engineers who use it well become more productive.">
     <div class="slide-inner">
-      <div class="session-badge" style="margin-bottom:18px;">Clearing the Air · 1 of 4</div>
-      <h2 style="font-size:1.8rem;margin-bottom:18px;">Myth: AI is sentient or conscious</h2>
-      <div class="myth-card" style="margin-bottom:14px;">
-        <div class="myth-tag">The myth</div>
-        <p>"AI has feelings. It can get bored, offended, or creative. It&apos;s basically digital consciousness."</p>
-      </div>
-      <div style="padding:18px;background:rgba(94,194,105,0.06);border:1px solid rgba(94,194,105,0.2);border-radius:10px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">The reality</div>
-        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:8px;">
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• LLMs predict text — they do not think, feel, or experience anything</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• When an LLM says "I think..." it&apos;s mimicking how humans write — not reporting an opinion</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• There is no "it" in the room with you — you&apos;re running a very sophisticated pattern-match</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• This matters for setting expectations — don&apos;t anthropomorphise the tool</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- ─── SLIDE 15 — Misconception: Always Right ─── -->
-  <div class="slide" data-title="Myth: AI Is Always Right" data-notes="Most important safety message of the session. AI can be confidently wrong. Give a concrete example: &apos;If you ask an LLM what a Playwright API method does, it might tell you about a method that doesn&apos;t exist — but sound completely confident about it. You need to verify.&apos;&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;⚠️ Key rule: NEVER ship LLM-generated test code without running it. Never trust a library or API reference from an LLM without checking the official docs. AI is a starting point, not a source of truth.&lt;/div&gt;">
-    <div class="slide-inner">
-      <div class="session-badge" style="margin-bottom:18px;">Clearing the Air · 2 of 4</div>
-      <h2 style="font-size:1.8rem;margin-bottom:18px;">Myth: AI is always right</h2>
-      <div class="myth-card" style="margin-bottom:14px;">
-        <div class="myth-tag">The myth</div>
-        <p>"If an AI says it with confidence, it must be correct. It has access to more information than me."</p>
-      </div>
-      <div style="padding:18px;background:rgba(94,194,105,0.06);border:1px solid rgba(94,194,105,0.2);border-radius:10px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">The reality</div>
-        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:8px;">
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• LLMs <strong style="color:var(--text-primary);">hallucinate</strong> — they generate confident-sounding wrong answers</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• They can invent library methods, cite non-existent docs, get logic wrong</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• They don&apos;t know they&apos;re wrong — there&apos;s no internal "confidence score"</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• <strong style="color:var(--accent);">Rule: always verify AI output before using it in real work</strong></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- ─── SLIDE 16 — Misconception: Reads Your Mind ─── -->
-  <div class="slide" data-title="Myth: AI Reads Your Mind" data-notes="The LLM only knows what you put in the prompt. It cannot infer your codebase, your team conventions, or your previous conversations (unless those are in the same session).&lt;br&gt;&lt;br&gt;&lt;div class=&apos;analogy-note&apos;&gt;Analogy: Imagine phoning a brilliant stranger. They know a lot. But they don&apos;t know YOUR situation, YOUR code, YOUR team. You have to explain it — every time.&lt;/div&gt;">
-    <div class="slide-inner">
-      <div class="session-badge" style="margin-bottom:18px;">Clearing the Air · 3 of 4</div>
-      <h2 style="font-size:1.8rem;margin-bottom:18px;">Myth: AI knows my context</h2>
-      <div class="myth-card" style="margin-bottom:14px;">
-        <div class="myth-tag">The myth</div>
-        <p>"The AI knows what project I&apos;m working on, what I meant last time, and what my team&apos;s conventions are."</p>
-      </div>
-      <div style="padding:18px;background:rgba(94,194,105,0.06);border:1px solid rgba(94,194,105,0.2);border-radius:10px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">The reality</div>
-        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:8px;">
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• The LLM only sees what you type in the current conversation</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• It has no access to your codebase, Jira, or previous chats unless you paste them</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• The more context you give, the better the output — always</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• Tools like Claude Code change this by reading your files — we cover that in Session 10</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- ─── SLIDE 17 — Misconception: Will Replace Us ─── -->
-  <div class="slide" data-title="Myth: AI Replaces Engineers" data-notes="Address this with care. Some people may have genuine anxiety about job security. Don&apos;t dismiss it — acknowledge it and reframe it honestly.&lt;br&gt;&lt;br&gt;The honest answer: AI is replacing TASKS, not roles. The tasks it replaces are the tedious, repetitive ones — which are the parts most people like least. What remains: judgment, critical thinking, understanding requirements.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;analogy-note&apos;&gt;Analogy: Calculators didn&apos;t replace mathematicians. Spell checkers didn&apos;t replace writers. Tools augment before they replace.&lt;/div&gt;">
-    <div class="slide-inner">
-      <div class="session-badge" style="margin-bottom:18px;">Clearing the Air · 4 of 4</div>
-      <h2 style="font-size:1.8rem;margin-bottom:18px;">Myth: AI will replace engineers</h2>
-      <div class="myth-card" style="margin-bottom:14px;">
-        <div class="myth-tag">The myth</div>
-        <p>"AI is going to automate QA engineering out of existence. Why learn this if it&apos;s taking our jobs?"</p>
-      </div>
-      <div style="padding:18px;background:rgba(94,194,105,0.06);border:1px solid rgba(94,194,105,0.2);border-radius:10px;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">The honest reality</div>
-        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:8px;">
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• AI is automating <strong style="color:var(--text-primary);">tasks</strong>, not roles — specifically the tedious, repetitive ones</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• What remains: judgment, critical thinking, understanding requirements, strategy</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• QA engineers who use AI tools effectively become significantly more productive</li>
-          <li style="font-size:0.88rem;color:var(--text-secondary);">• <strong style="color:var(--accent);">This series is about being the engineer who knows how to use the tools</strong></li>
-        </ul>
+      <div class="session-badge" style="margin-bottom:14px;">Clearing the Air</div>
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Four myths — and what&apos;s actually true</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="myth-card">
+          <div class="myth-tag">Myth</div>
+          <div style="font-size:0.88rem;font-weight:600;margin:6px 0 4px;">"AI is sentient — it thinks and feels."</div>
+          <div class="reality-tag" style="margin-top:8px;">Reality</div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);margin-top:4px;">LLMs predict text. There are no thoughts, feelings, or opinions. "I think..." is a trained writing pattern, not a view.</div>
+        </div>
+        <div class="myth-card">
+          <div class="myth-tag">Myth</div>
+          <div style="font-size:0.88rem;font-weight:600;margin:6px 0 4px;">"If it sounds confident, it must be right."</div>
+          <div class="reality-tag" style="margin-top:8px;">Reality</div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);margin-top:4px;">LLMs hallucinate — inventing methods, citations, and logic errors with full confidence. Always verify output before using it.</div>
+        </div>
+        <div class="myth-card">
+          <div class="myth-tag">Myth</div>
+          <div style="font-size:0.88rem;font-weight:600;margin:6px 0 4px;">"It knows my project and conventions."</div>
+          <div class="reality-tag" style="margin-top:8px;">Reality</div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);margin-top:4px;">It only sees what you type in the current conversation. No codebase, no Jira, no previous chats — unless you paste them in.</div>
+        </div>
+        <div class="myth-card">
+          <div class="myth-tag">Myth</div>
+          <div style="font-size:0.88rem;font-weight:600;margin:6px 0 4px;">"AI will replace QA engineers."</div>
+          <div class="reality-tag" style="margin-top:8px;">Reality</div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);margin-top:4px;">AI automates tasks — the tedious, repetitive ones. Judgment, critical thinking, and strategy remain yours. Use the tools; don&apos;t fear them.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -578,5 +525,6 @@ sessionStyles: ""
         <div style="font-size:0.82rem;color:var(--text-secondary);">Key milestones · Tool use · What an "agent" actually is · Why this trajectory matters for QA</div>
       </div>
       <p style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim);">Try this before next session: Ask an LLM one real question from your actual work this week.</p>
+      <a href="/topics/ai-in-practice/references/session-01/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

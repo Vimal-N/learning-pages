@@ -1,0 +1,655 @@
+---
+layout: base.njk
+title: Training Agenda — AI in Practice
+---
+<style>
+body { overflow-y: auto; }
+
+@page { size: A4; margin: 1.8cm 2cm 2.2cm 2cm; }
+
+/* ─── Topbar ─── */
+.agenda-topbar {
+  height: 48px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.agenda-back {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-elevated);
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+.agenda-back:hover { color: var(--accent); border-color: var(--accent); }
+.agenda-topbar-title {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.agenda-print-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+.agenda-print-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ─── Body ─── */
+.agenda-body {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 40px 24px 100px;
+}
+
+/* ─── Hero ─── */
+.agenda-hero {
+  margin-bottom: 36px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+.agenda-hero h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.agenda-hero h1 em { font-style: normal; color: var(--accent); }
+.agenda-hero p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 580px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.agenda-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.agenda-stat {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 18px;
+  text-align: center;
+  min-width: 90px;
+}
+.agenda-stat-num {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.agenda-stat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+
+/* ─── Level key ─── */
+.level-key {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.level-key-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+.level-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.level-dot.beginner     { background: var(--green); }
+.level-dot.intermediate { background: var(--accent); }
+.level-dot.advanced     { background: #9b59b6; }
+
+/* ─── Phase block ─── */
+.agenda-phase {
+  margin-bottom: 36px;
+}
+.agenda-phase-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 0 8px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 4px;
+}
+.agenda-phase-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 9px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.agenda-phase-name {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.agenda-phase-total {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ─── Session row ─── */
+.agenda-session {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  align-items: start;
+  gap: 12px;
+  padding: 13px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background 0.15s;
+}
+.agenda-session:hover { background: var(--bg-elevated); border-radius: 6px; }
+.agenda-session:last-child { border-bottom: none; }
+
+.s-num-col {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  padding-top: 2px;
+}
+
+.s-main { min-width: 0; }
+.s-title-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 3px; }
+.s-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  line-height: 1.4;
+}
+.s-title:hover { color: var(--accent); }
+.s-level {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.s-level.beginner     { color: var(--green); background: rgba(46,160,67,0.08); }
+.s-level.intermediate { color: var(--accent); background: var(--accent-soft); }
+.s-level.advanced     { color: #9b59b6; background: rgba(155,89,182,0.08); }
+.s-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+.s-links {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-end;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.s-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-dim);
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  white-space: nowrap;
+  background: var(--bg-elevated);
+  transition: color 0.15s, border-color 0.15s;
+}
+.s-link:hover { color: var(--accent); border-color: var(--accent); }
+.s-duration {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 600px) {
+  .agenda-session { grid-template-columns: 30px 1fr; }
+  .s-links { flex-direction: row; grid-column: 2; }
+  .agenda-topbar-title { display: none; }
+}
+
+/* ─── Print ─── */
+@media print {
+  .agenda-topbar, .agenda-print-btn, .s-links { display: none !important; }
+  .agenda-body { padding: 0; max-width: 100%; }
+  body { font-size: 10pt; background: #fff; color: #111; }
+  .agenda-hero h1 { font-size: 1.6rem; }
+  .agenda-phase { page-break-inside: avoid; }
+  .agenda-session { page-break-inside: avoid; border-bottom: 1px solid #ddd; }
+  .agenda-session:hover { background: none; }
+  h1, h2 { page-break-after: avoid; }
+  .s-level.beginner     { color: #2e9243; }
+  .s-level.intermediate { color: #b07020; }
+  .s-level.advanced     { color: #7d3c98; }
+}
+</style>
+
+<div class="agenda-topbar">
+  <a href="/topics/ai-in-practice/" class="agenda-back">← AI in Practice</a>
+  <span class="topbar-sep">/</span>
+  <div class="agenda-topbar-title">Training Agenda — All Sessions</div>
+  <button class="agenda-print-btn" onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<div class="agenda-body">
+
+  <div class="agenda-hero">
+    <div class="session-badge" style="margin-bottom:14px;"> AI in Practice — Training Series</div>
+    <h1>Training <em>Agenda</em></h1>
+    <p>19 sessions across 5 phases — from core AI concepts through to building your own AI-powered QA workflows. All sessions are practical and QA-focused, with no prerequisites beyond a willingness to experiment.</p>
+    <div class="agenda-stats">
+      <div class="agenda-stat">
+        <div class="agenda-stat-num">19</div>
+        <div class="agenda-stat-label">Sessions</div>
+      </div>
+      <div class="agenda-stat">
+        <div class="agenda-stat-num">5</div>
+        <div class="agenda-stat-label">Phases</div>
+      </div>
+      <div class="agenda-stat">
+        <div class="agenda-stat-num">~15 hrs</div>
+        <div class="agenda-stat-label">Total Duration</div>
+      </div>
+      <div class="agenda-stat">
+        <div class="agenda-stat-num">None</div>
+        <div class="agenda-stat-label">Prerequisites</div>
+      </div>
+    </div>
+    <div class="level-key">
+      <div class="level-key-item"><div class="level-dot beginner"></div> Beginner</div>
+      <div class="level-key-item"><div class="level-dot intermediate"></div> Intermediate</div>
+      <div class="level-key-item"><div class="level-dot advanced"></div> Advanced</div>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 1 ═══ -->
+  <div class="agenda-phase">
+    <div class="agenda-phase-header">
+      <span class="agenda-phase-num">Phase 1</span>
+      <span class="agenda-phase-name">AI Foundations</span>
+      <span class="agenda-phase-total">3 sessions</span>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">01</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-01/" class="s-title">What Is AI and Why Is Everyone Talking About It?</a>
+          <span class="s-level beginner">Beginner</span>
+        </div>
+        <div class="s-desc">Core AI vocabulary, how LLMs actually work (no maths), what prompting is, and why QA engineers are well-placed to use these tools effectively.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-01/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-01/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">02</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-02/" class="s-title">The Evolution — From Chatbot to Coding Partner to Agent</a>
+          <span class="s-level beginner">Beginner</span>
+        </div>
+        <div class="s-desc">The five eras of AI tools, what the transformer breakthrough changed, and what the word "agent" actually means in practical terms.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-02/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-02/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">03</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-03/" class="s-title">How to Talk to AI — Prompting That Actually Works</a>
+          <span class="s-level beginner">Beginner</span>
+        </div>
+        <div class="s-desc">A four-element prompt framework with QA-specific examples, plus how to iterate when the first result isn't what you needed.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-03/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-03/" class="s-link">Reference →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 2 ═══ -->
+  <div class="agenda-phase">
+    <div class="agenda-phase-header">
+      <span class="agenda-phase-num">Phase 2</span>
+      <span class="agenda-phase-name">GitHub Copilot Mastery</span>
+      <span class="agenda-phase-total">3 sessions</span>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">04</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-04/" class="s-title">Setting Up GitHub Copilot &amp; Understanding What It Can Do</a>
+          <span class="s-level beginner">Beginner</span>
+        </div>
+        <div class="s-desc">Install and configure Copilot, understand the two modes (completions and chat), keyboard shortcuts, and what Copilot can and cannot access.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-04/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-04/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">05</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-05/" class="s-title">Copilot in Your Daily Workflow</a>
+          <span class="s-level beginner">Beginner</span>
+        </div>
+        <div class="s-desc">Eight practical workflow patterns for QA engineers: writing tests, debugging failures, understanding unfamiliar code, and generating test fixtures.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-05/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-05/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">06</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-06/" class="s-title">Copilot Agent Mode — Your First Taste of Autonomous AI</a>
+          <span class="s-level intermediate">Intermediate</span>
+        </div>
+        <div class="s-desc">Enable Agent Mode, write effective goal-driven prompts, and learn the diff-review approval workflow that keeps you in control.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-06/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-06/" class="s-link">Reference →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 3 ═══ -->
+  <div class="agenda-phase">
+    <div class="agenda-phase-header">
+      <span class="agenda-phase-num">Phase 3</span>
+      <span class="agenda-phase-name">AI for Test Automation &amp; Debugging</span>
+      <span class="agenda-phase-total">3 sessions</span>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">07</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-07/" class="s-title">Writing Test Cases with AI — From Scratch to Suite</a>
+          <span class="s-level intermediate">Intermediate</span>
+        </div>
+        <div class="s-desc">Four strategies for AI-assisted test writing: from acceptance criteria, from existing code, edge-case generation, and realistic test data.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-07/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-07/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">08</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-08/" class="s-title">Debugging Tests with AI — Stop Guessing, Start Asking</a>
+          <span class="s-level intermediate">Intermediate</span>
+        </div>
+        <div class="s-desc">Build the debugging brief, diagnose common Playwright error types, handle flaky tests, and know when to push back on AI suggestions.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-08/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-08/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">09</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-09/" class="s-title">Refactoring &amp; Reviewing Your Test Suite with AI</a>
+          <span class="s-level intermediate">Intermediate</span>
+        </div>
+        <div class="s-desc">Identify test code smells, extract Page Objects, improve test naming, and use AI for structured code review and coverage gap analysis.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-09/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-09/" class="s-link">Reference →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 4 ═══ -->
+  <div class="agenda-phase">
+    <div class="agenda-phase-header">
+      <span class="agenda-phase-num">Phase 4</span>
+      <span class="agenda-phase-name">Terminal Agents &amp; Agentic Tools</span>
+      <span class="agenda-phase-total">6 sessions</span>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">10</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-10/" class="s-title">Introduction to Claude Code &amp; Opencode</a>
+          <span class="s-level intermediate">Intermediate</span>
+        </div>
+        <div class="s-desc">Install and run a terminal agent for the first time, understand how it reads your project, and use the approval workflow safely.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-10/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-10/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">11</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-11/" class="s-title">The Agent Evolution — From Inline Suggestion to Autonomous Agent</a>
+          <span class="s-level intermediate">Intermediate</span>
+        </div>
+        <div class="s-desc">The four stages of AI tooling and the three mental shifts required to work effectively with agents rather than just chat assistants.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-11/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-11/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">12</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-12/" class="s-title">Context Files — CLAUDE.md, copilot-instructions.md &amp; AGENTS.md</a>
+          <span class="s-level intermediate">Intermediate</span>
+        </div>
+        <div class="s-desc">Write context files that give terminal agents persistent, accurate knowledge of your project so you stop repeating yourself every session.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-12/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-12/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">13</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-13/" class="s-title">Working Effectively with Terminal Agents</a>
+          <span class="s-level intermediate">Intermediate</span>
+        </div>
+        <div class="s-desc">The GCSV task prompt formula (Goal, Context, Scope, Verification), managing the agent decision loop, and decomposing large tasks safely.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-13/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-13/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">14</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-14/" class="s-title">Comparing Your AI Toolkit</a>
+          <span class="s-level intermediate">Intermediate</span>
+        </div>
+        <div class="s-desc">Side-by-side comparison of all five tools (completions, chat, Agent Mode, Claude Code, Opencode) with a decision framework and real QA scenarios.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-14/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-14/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">15</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-15/" class="s-title">Opencode with GitHub Copilot — Terminal Agent, Copilot-Powered</a>
+          <span class="s-level intermediate">Intermediate</span>
+        </div>
+        <div class="s-desc">Connect Opencode to your existing Copilot subscription, choose your model, and run a terminal agent from any project directory.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-15/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-15/" class="s-link">Reference →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 5 ═══ -->
+  <div class="agenda-phase">
+    <div class="agenda-phase-header">
+      <span class="agenda-phase-num">Phase 5</span>
+      <span class="agenda-phase-name">MCP, Agents &amp; AI-Powered Workflows</span>
+      <span class="agenda-phase-total">4 sessions</span>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">16</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-16/" class="s-title">What Is MCP? Understanding the Model Context Protocol</a>
+          <span class="s-level advanced">Advanced</span>
+        </div>
+        <div class="s-desc">How MCP lets AI tools connect to external systems, the three-piece client-server architecture, and the four capability types (Tools, Resources, Prompts, Sampling).</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-16/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-16/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">17</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-17/" class="s-title">Using MCP Servers in Your Workflow</a>
+          <span class="s-level advanced">Advanced</span>
+        </div>
+        <div class="s-desc">Add filesystem, GitHub, and Playwright MCP servers to Claude and apply them to real QA workflows: post-CI triage, release readiness, exploratory testing.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-17/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-17/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">18</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-18/" class="s-title">Building Your First MCP Server</a>
+          <span class="s-level advanced">Advanced</span>
+        </div>
+        <div class="s-desc">Full walkthrough: project setup, the complete annotated server file, defining tools, and connecting your custom server to Claude Code.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-18/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-18/" class="s-link">Reference →</a>
+      </div>
+    </div>
+
+    <div class="agenda-session">
+      <div class="s-num-col">19</div>
+      <div class="s-main">
+        <div class="s-title-row">
+          <a href="/topics/ai-in-practice/sessions/session-19/" class="s-title">Agents, Subagents &amp; Building AI Workflows</a>
+          <span class="s-level advanced">Advanced</span>
+        </div>
+        <div class="s-desc">The orchestrator/worker pattern, multi-step automated workflows, human-in-the-loop checkpoints, and where AI-assisted QA is heading.</div>
+      </div>
+      <div class="s-links">
+        <a href="/topics/ai-in-practice/sessions/session-19/" class="s-link">Session →</a>
+        <a href="/topics/ai-in-practice/references/session-19/" class="s-link">Reference →</a>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="site-footer">
+  <p>Learning Hub — For curious minds</p>
+</div>

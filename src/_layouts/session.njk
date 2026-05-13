@@ -456,6 +456,7 @@ body.presenter-mode .slide-counter { color: #6a6090; }
     <span class="topbar-sep">/</span>
     <div class="session-topbar-title">{{ sessionTitle | default(title) }}</div>
     <div class="session-topbar-num">Session {{ sessionNumber | default('01') }}</div>
+    {% if referenceUrl %}<a href="{{ referenceUrl }}" target="_blank" class="session-ref-link">Reference Notes →</a>{% endif %}
     <button class="sidebar-toggle-btn" onclick="toggleSidebar()">☰ Slides</button>
   </div>
 

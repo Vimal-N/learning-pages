@@ -5,17 +5,18 @@ sessionNumber: "18"
 sessionTitle: "Building Your First MCP Server"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-18/"
 sessionStyles: ""
 ---
 
   <!-- ─── SLIDE 01 — Title ─── -->
   <div class="slide active" data-title="Session Overview" data-notes="This is the most hands-on session in Phase 5. We're building something real. A custom MCP server that gives Claude access to our test results in a structured, queryable way.&lt;br&gt;&lt;br&gt;Be honest upfront: this requires a little bit of Node.js/TypeScript comfort. It's not deep — the MCP SDK handles most of the complexity. If anyone is uncomfortable with code, they can follow along conceptually and use the finished server. Understanding HOW servers are built is the real goal here.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;You don't need to understand how a USB controller chip works to build a new USB device. But understanding the basic API — write data, read data, announce capabilities — is all you need. That's what we're learning today.&lt;/div&gt;">
     <div class="slide-inner" style="text-align:center;">
-      <div class="session-badge" style="margin-bottom:20px;">🔧 Session 18 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows</div>
+      <div class="session-badge" style="margin-bottom:20px;"> Session 18 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows</div>
       <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Building Your First<br><span style="color:var(--accent)">MCP Server</span></h1>
       <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Create a custom MCP server that gives your AI access to your team's specific tools and data — with every line of code explained.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">60 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Advanced</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 14</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
       </div>
@@ -72,22 +73,22 @@ sessionStyles: ""
       </svg>
       <div class="card-grid c2" style="gap:14px;margin-bottom:16px;">
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">🎯</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Your internal systems</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">Custom CI pipelines, internal test management, company-specific deployment tools — these don't have community servers. You build the bridge.</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">🔒</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Full data control</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">You decide exactly what data the AI can see and what actions it can take. No community code touching your systems.</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">⚡</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Team-specific tools</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">A "summarise today's test failures in our format" tool that knows your team's naming conventions, report structure, and ticket numbering.</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
-          <div style="font-size:1.3rem;margin-bottom:8px;">🔄</div>
+          <div style="font-size:1.3rem;margin-bottom:8px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Eliminate copy-paste friction</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">Any time you copy data from one system into an AI chat, that's a candidate for an MCP tool. Identify the friction, build the bridge.</div>
         </div>
@@ -464,19 +465,19 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">More custom QA tools worth building</h2>
       <div style="display:grid;gap:10px;">
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">📊</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Flakiness tracker</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Reads test history files, calculates a flakiness score per test (pass rate over last 20 runs), returns the worst offenders. Input: none. Output: ranked list of flaky tests.</div></div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🔗</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Ticket creator</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Takes test failure details (name, error, file, line) and creates a formatted Jira ticket via the Jira REST API. Input: failure object. Output: created ticket URL.</div></div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">📋</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Coverage reporter</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Reads your Istanbul/V8 coverage JSON and answers "which modules have less than 80% coverage?" Input: coverage threshold. Output: list of files below threshold.</div></div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🌐</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Environment health checker</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Pings your staging/UAT/dev environment URLs and checks HTTP status. Input: none (list hardcoded). Output: which environments are up, which are down. Run before starting a test session.</div></div>
         </div>
       </div>
@@ -536,5 +537,6 @@ sessionStyles: ""
           <li>· Series completion — your next steps</li>
         </ul>
       </div>
+      <a href="/topics/ai-in-practice/references/session-18/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

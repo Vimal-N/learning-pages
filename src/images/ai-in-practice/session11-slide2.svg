@@ -1,0 +1,73 @@
+<svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+  <rect width="700" height="220" rx="12" fill="#f8f7f4"/>
+
+  <!-- Timeline bar centered at y=110 -->
+  <rect x="60" y="108" width="520" height="4" rx="2" fill="#D3D1C7"/>
+  <!-- Amber segment -->
+  <rect x="60" y="108" width="130" height="4" rx="2" fill="#EF9F27" fill-opacity="0.5"/>
+  <!-- Blue segment -->
+  <rect x="190" y="108" width="130" height="4" fill="#185FA5" fill-opacity="0.5"/>
+  <!-- Purple segment -->
+  <rect x="320" y="108" width="130" height="4" fill="#534AB7" fill-opacity="0.5"/>
+  <!-- Green segment -->
+  <rect x="450" y="108" width="130" height="4" rx="2" fill="#3B6D11" fill-opacity="0.6"/>
+
+  <!-- Arrow between stages -->
+  <polygon points="192,106 184,102 184,110" fill="#888780"/>
+  <polygon points="322,106 314,102 314,110" fill="#888780"/>
+  <polygon points="452,106 444,102 444,110" fill="#3B6D11"/>
+
+  <!-- Stage 1 — Inline Suggestion (amber) -->
+  <circle cx="110" cy="110" r="18" fill="#FAEEDA" stroke="#BA7517" stroke-width="2"/>
+  <text x="110" y="115" text-anchor="middle" font-size="12" font-weight="700" fill="#633806">1</text>
+
+  <rect x="74" y="16" width="72" height="18" rx="4" fill="#FAEEDA" stroke="#EF9F27" stroke-width="0.5"/>
+  <text x="110" y="29" text-anchor="middle" font-size="9" fill="#854F0B">Stage 1</text>
+  <line x1="110" y1="34" x2="110" y2="92" stroke="#BA7517" stroke-width="1" stroke-dasharray="3 2" stroke-opacity="0.5"/>
+
+  <text x="110" y="146" text-anchor="middle" font-size="11" font-weight="700" fill="#633806">Inline</text>
+  <text x="110" y="160" text-anchor="middle" font-size="11" font-weight="700" fill="#633806">Suggestion</text>
+  <text x="110" y="178" text-anchor="middle" font-size="9" fill="#BA7517">AI guesses your</text>
+  <text x="110" y="190" text-anchor="middle" font-size="9" fill="#BA7517">next line</text>
+
+  <!-- Stage 2 — Conversation (blue) -->
+  <circle cx="255" cy="110" r="18" fill="#E6F1FB" stroke="#185FA5" stroke-width="2"/>
+  <text x="255" y="115" text-anchor="middle" font-size="12" font-weight="700" fill="#0C447C">2</text>
+
+  <rect x="219" y="16" width="72" height="18" rx="4" fill="#E6F1FB" stroke="#85B7EB" stroke-width="0.5"/>
+  <text x="255" y="29" text-anchor="middle" font-size="9" fill="#0C447C">Stage 2</text>
+  <line x1="255" y1="34" x2="255" y2="92" stroke="#185FA5" stroke-width="1" stroke-dasharray="3 2" stroke-opacity="0.5"/>
+
+  <text x="255" y="146" text-anchor="middle" font-size="11" font-weight="700" fill="#0C447C">Conversation</text>
+  <text x="255" y="178" text-anchor="middle" font-size="9" fill="#378ADD">AI answers your</text>
+  <text x="255" y="190" text-anchor="middle" font-size="9" fill="#378ADD">questions</text>
+
+  <!-- Stage 3 — AI Assistance (purple) -->
+  <circle cx="385" cy="110" r="18" fill="#EEEDFE" stroke="#534AB7" stroke-width="2"/>
+  <text x="385" y="115" text-anchor="middle" font-size="12" font-weight="700" fill="#3C3489">3</text>
+
+  <rect x="349" y="16" width="72" height="18" rx="4" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+  <text x="385" y="29" text-anchor="middle" font-size="9" fill="#3C3489">Stage 3</text>
+  <line x1="385" y1="34" x2="385" y2="92" stroke="#534AB7" stroke-width="1" stroke-dasharray="3 2" stroke-opacity="0.5"/>
+
+  <text x="385" y="146" text-anchor="middle" font-size="11" font-weight="700" fill="#3C3489">AI Assistance</text>
+  <text x="385" y="178" text-anchor="middle" font-size="9" fill="#7F77DD">AI understands</text>
+  <text x="385" y="190" text-anchor="middle" font-size="9" fill="#7F77DD">your workspace</text>
+
+  <!-- Stage 4 — Autonomous Agent (green, highlighted) -->
+  <circle cx="515" cy="110" r="20" fill="#EAF3DE" stroke="#3B6D11" stroke-width="2.5"/>
+  <text x="515" y="115" text-anchor="middle" font-size="13" font-weight="700" fill="#27500A">4</text>
+
+  <rect x="477" y="14" width="76" height="20" rx="4" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+  <text x="515" y="28" text-anchor="middle" font-size="9" fill="#27500A">Stage 4</text>
+  <line x1="515" y1="34" x2="515" y2="90" stroke="#3B6D11" stroke-width="1.5" stroke-dasharray="3 2" stroke-opacity="0.5"/>
+
+  <text x="515" y="148" text-anchor="middle" font-size="11" font-weight="700" fill="#27500A">Autonomous</text>
+  <text x="515" y="162" text-anchor="middle" font-size="11" font-weight="700" fill="#27500A">Agent</text>
+  <text x="515" y="180" text-anchor="middle" font-size="9" fill="#639922">AI acts on</text>
+  <text x="515" y="192" text-anchor="middle" font-size="9" fill="#639922">your behalf</text>
+
+  <!-- "We are here" label -->
+  <text x="612" y="104" text-anchor="middle" font-size="9" font-weight="700" fill="#3B6D11">We are</text>
+  <text x="612" y="116" text-anchor="middle" font-size="9" font-weight="700" fill="#3B6D11">here →</text>
+</svg>

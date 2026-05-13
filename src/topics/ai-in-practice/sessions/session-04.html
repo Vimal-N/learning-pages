@@ -5,17 +5,18 @@ sessionNumber: "04"
 sessionTitle: "Setting Up GitHub Copilot & Understanding What It Can Do"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-04/"
 sessionStyles: ""
 ---
 
   <!-- ─── SLIDE 01 — Title ─── -->
   <div class="slide active" data-title="Session Overview" data-notes="Welcome to Phase 2. This is where things get hands-on. Phase 1 was all context and theory — important, but abstract. From here, every session involves a real tool you can open and use alongside the training.&lt;br&gt;&lt;br&gt;Encourage everyone to have VS Code open if they can. This session is setup + orientation. By the end, everyone should have Copilot working and understand what it does.">
     <div class="slide-inner" style="text-align:center;">
-      <div class="session-badge" style="margin-bottom:20px;">⌨️ Session 04 &nbsp;·&nbsp; Phase 2: GitHub Copilot Mastery</div>
+      <div class="session-badge" style="margin-bottom:20px;">️ Session 04 &nbsp;·&nbsp; Phase 2: GitHub Copilot Mastery</div>
       <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Setting Up<br><span style="color:var(--accent)">GitHub Copilot</span><br><span style="font-size:1.8rem;">& Understanding What It Can Do</span></h1>
       <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Phase 2 begins. Get Copilot installed, understand how it works, and see what it can actually do for QA engineers in daily work.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">45 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Beginner</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">VS Code</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Required</div></div>
       </div>
@@ -26,7 +27,7 @@ sessionStyles: ""
   <div class="slide" data-title="What Is GitHub Copilot?" data-notes="Keep this simple — no jargon. Copilot is an AI coding assistant built by GitHub (Microsoft) and powered by OpenAI&apos;s models. It has two main capabilities: it watches what you type and suggests what comes next (completions), and it can answer questions about your code in a chat interface.&lt;br&gt;&lt;br&gt;Key point: it was trained on public code from GitHub, which makes it dramatically better at code tasks than a general LLM like ChatGPT.">
     <div class="slide-inner">
       <h2 style="font-size:1.8rem;margin-bottom:18px;">What is GitHub Copilot?</h2>
-      <div style="background:var(--bg-elevated);border-radius:10px;padding:22px;border:1px solid var(--border);margin-bottom:18px;max-width:640px;">
+      <div style="background:var(--bg-elevated);border-radius:10px;padding:22px;border:1px solid var(--border);margin-bottom:18px;width:100%;">
         <p style="font-size:1rem;line-height:1.75;">GitHub Copilot is an <strong>AI coding assistant</strong> that lives inside your editor. It watches what you&apos;re writing and suggests what comes next — in real time. It also has a chat interface where you can ask questions about your code, get explanations, and request changes.</p>
       </div>
       <div class="card-grid c2" style="gap:12px;">
@@ -47,7 +48,7 @@ sessionStyles: ""
     <div class="slide-inner">
       <div class="session-badge" style="margin-bottom:18px;">Today&apos;s Session</div>
       <h2 style="font-size:1.8rem;margin-bottom:24px;">What we&apos;re covering</h2>
-      <div style="display:grid;gap:12px;max-width:600px;">
+      <div style="display:grid;gap:12px;width:100%;">
         <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;min-width:28px;">01</div>
           <div style="font-size:0.9rem;">The two Copilot modes — completions and chat</div>
@@ -76,50 +77,6 @@ sessionStyles: ""
   <div class="slide" data-title="Two Modes: Completions & Chat" data-notes="This distinction matters because people often only discover one mode and miss the other. Completions are passive — Copilot watches and suggests. Chat is active — you ask and Copilot responds. Both are useful. For QA work, Chat is often more useful for complex tasks, Completions for speed when writing repetitive test patterns.">
     <div class="slide-inner">
       <h2 style="font-size:1.8rem;margin-bottom:18px;">GitHub Copilot has two modes</h2>
-      <svg viewBox="0 0 700 280" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
-        <!-- Background -->
-        <rect width="700" height="280" fill="#13111d" rx="12"/>
-        <!-- LEFT PANEL: Completions (amber) -->
-        <rect x="14" y="14" width="304" height="252" rx="8" fill="#e8a848" fill-opacity="0.08" stroke="#e8a848" stroke-width="1.5"/>
-        <text x="166" y="38" text-anchor="middle" fill="#e8a848" font-size="16" font-weight="700">Inline Completions</text>
-        <!-- Code editor mock -->
-        <rect x="28" y="48" width="276" height="110" rx="6" fill="#0d0b18" stroke="#e8a848" stroke-opacity="0.25" stroke-width="1"/>
-        <text x="40" y="68" fill="#c0c8e8" font-size="11.5">async function login(page) {</text>
-        <text x="40" y="84" fill="#c0c8e8" font-size="11.5">  await page.goto('/login');</text>
-        <!-- Ghost text lines suggested by Copilot -->
-        <text x="40" y="100" fill="#606880" font-size="11.5" font-style="italic">  await page.fill('#email', email);</text>
-        <text x="40" y="116" fill="#606880" font-size="11.5" font-style="italic">  await page.fill('#pass', pass);</text>
-        <text x="40" y="132" fill="#606880" font-size="11.5" font-style="italic">}</text>
-        <!-- Trigger info -->
-        <text x="166" y="178" text-anchor="middle" fill="#9099b8" font-size="12">Starts when you pause typing</text>
-        <!-- Accept/dismiss -->
-        <rect x="44" y="186" width="244" height="28" rx="6" fill="#e8a848" fill-opacity="0.1" stroke="#e8a848" stroke-opacity="0.25" stroke-width="1"/>
-        <text x="166" y="204" text-anchor="middle" fill="#c0c8e8" font-size="12">Tab to accept · Esc to dismiss</text>
-        <!-- OR divider -->
-        <text x="350" y="146" text-anchor="middle" fill="#ffffff" fill-opacity="0.25" font-size="18" font-weight="700">OR</text>
-        <line x1="350" y1="20" x2="350" y2="136" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
-        <line x1="350" y1="156" x2="350" y2="260" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
-        <!-- RIGHT PANEL: Chat (blue) -->
-        <rect x="382" y="14" width="304" height="252" rx="8" fill="#6fa3f7" fill-opacity="0.08" stroke="#6fa3f7" stroke-width="1.5"/>
-        <text x="534" y="38" text-anchor="middle" fill="#6fa3f7" font-size="16" font-weight="700">Copilot Chat</text>
-        <!-- Chat bubbles -->
-        <rect x="396" y="48" width="260" height="32" rx="6" fill="#e8a848" fill-opacity="0.18"/>
-        <text x="408" y="60" fill="#c0c8e8" font-size="11.5">You: Why is this test flaky?</text>
-        <text x="408" y="73" fill="#9099b8" font-size="10.5" font-style="italic">User message</text>
-        <rect x="396" y="88" width="270" height="44" rx="6" fill="#6fa3f7" fill-opacity="0.15"/>
-        <text x="408" y="103" fill="#c0c8e8" font-size="11.5">AI: The test fails when the</text>
-        <text x="408" y="117" fill="#c0c8e8" font-size="11.5">network is slow because...</text>
-        <text x="408" y="126" fill="#9099b8" font-size="10.5" font-style="italic"> </text>
-        <rect x="396" y="140" width="240" height="32" rx="6" fill="#e8a848" fill-opacity="0.18"/>
-        <text x="408" y="152" fill="#c0c8e8" font-size="11.5">You: How do I fix it?</text>
-        <text x="408" y="165" fill="#9099b8" font-size="10.5" font-style="italic">Follow-up</text>
-        <!-- Trigger info -->
-        <text x="534" y="196" text-anchor="middle" fill="#9099b8" font-size="12">You open the chat panel and type</text>
-        <rect x="410" y="204" width="248" height="28" rx="6" fill="#6fa3f7" fill-opacity="0.1" stroke="#6fa3f7" stroke-opacity="0.25" stroke-width="1"/>
-        <text x="534" y="222" text-anchor="middle" fill="#c0c8e8" font-size="12">You ask a question, AI answers</text>
-        <!-- Bottom note -->
-        <text x="350" y="276" text-anchor="middle" fill="#9099b8" font-size="12">Both modes are available after installation — learn to use each for the right task</text>
-      </svg>
       <div class="comparison">
         <div class="comp-col neutral">
           <div class="comp-label">Mode 1: Inline Completions</div>
@@ -185,7 +142,7 @@ sessionStyles: ""
     <div class="slide-inner">
       <div class="session-badge" style="margin-bottom:14px;">Setup Step 1 of 3</div>
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Install the VS Code extension</h2>
-      <div style="display:grid;gap:12px;max-width:640px;margin-bottom:18px;">
+      <div style="display:grid;gap:12px;width:100%;margin-bottom:18px;">
         <div style="display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700;">1</div>
           <div>
@@ -219,7 +176,7 @@ sessionStyles: ""
     <div class="slide-inner">
       <div class="session-badge" style="margin-bottom:14px;">Setup Step 2 of 3</div>
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Sign in &amp; activate</h2>
-      <div style="display:grid;gap:12px;max-width:640px;margin-bottom:18px;">
+      <div style="display:grid;gap:12px;width:100%;margin-bottom:18px;">
         <div style="display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700;">1</div>
           <div>
@@ -323,23 +280,23 @@ sessionStyles: ""
         <!-- Bottom caption -->
         <text x="350" y="216" text-anchor="middle" fill="#9099b8" font-size="12">The more context you give (good names, comments, patterns), the better the suggestion.</text>
       </svg>
-      <div style="display:grid;gap:12px;max-width:680px;margin-bottom:18px;">
+      <div style="display:grid;gap:12px;width:100%;margin-bottom:18px;">
         <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg-elevated);border-radius:8px;">
-          <div style="font-size:1.3rem;flex-shrink:0;">👁️</div>
+          <div style="font-size:1.3rem;flex-shrink:0;">️</div>
           <div>
             <div style="font-weight:600;margin-bottom:3px;font-size:0.9rem;">It reads your surrounding context</div>
             <div style="font-size:0.84rem;color:var(--text-secondary);">Copilot looks at the code above and around your cursor — your imports, function names, comments, and patterns already established in the file.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg-elevated);border-radius:8px;">
-          <div style="font-size:1.3rem;flex-shrink:0;">💭</div>
+          <div style="font-size:1.3rem;flex-shrink:0;"></div>
           <div>
             <div style="font-weight:600;margin-bottom:3px;font-size:0.9rem;">It predicts what comes next</div>
             <div style="font-size:0.84rem;color:var(--text-secondary);">Using patterns from its training data, it generates the most likely continuation of what you&apos;re writing. Shown in grey, dimmed text.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg-elevated);border-radius:8px;">
-          <div style="font-size:1.3rem;flex-shrink:0;">⌨️</div>
+          <div style="font-size:1.3rem;flex-shrink:0;">️</div>
           <div>
             <div style="font-weight:600;margin-bottom:3px;font-size:0.9rem;">You accept or dismiss</div>
             <div style="font-size:0.84rem;color:var(--text-secondary);"><strong>Tab</strong> — accept the full suggestion. <strong>Esc</strong> — dismiss. <strong>Alt+]</strong> / <strong>Option+]</strong> — see alternate suggestions. <strong>Ctrl+→</strong> — accept word by word.</div>
@@ -393,23 +350,23 @@ sessionStyles: ""
         <div style="padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--green);margin-bottom:8px;">FOR QA ENGINEERS</div>
           <ul style="list-style:none;display:grid;gap:7px;font-size:0.85rem;">
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Write test boilerplate from a description</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Generate test data (valid and invalid)</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Explain what a piece of code does</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Suggest fixes for failing tests</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Refactor repetitive test patterns</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Add or improve code comments</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Write test boilerplate from a description</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Generate test data (valid and invalid)</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Explain what a piece of code does</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Suggest fixes for failing tests</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Refactor repetitive test patterns</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Add or improve code comments</li>
           </ul>
         </div>
         <div style="padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--green);margin-bottom:8px;">GENERAL CAPABILITIES</div>
           <ul style="list-style:none;display:grid;gap:7px;font-size:0.85rem;">
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Complete any code pattern you start</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Answer questions about libraries and APIs</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Translate between code patterns</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Write utility functions and helpers</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Suggest regular expressions</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Help with Git commit messages and PR descriptions</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Complete any code pattern you start</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Answer questions about libraries and APIs</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Translate between code patterns</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Write utility functions and helpers</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Suggest regular expressions</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Help with Git commit messages and PR descriptions</li>
           </ul>
         </div>
       </div>
@@ -417,33 +374,33 @@ sessionStyles: ""
   </div>
 
   <!-- ─── SLIDE 12 — What Copilot Cannot Do ─── -->
-  <div class="slide" data-title="What Copilot Cannot Do" data-notes="Just as important as what it can do. Set accurate expectations. The most dangerous assumption: that Copilot knows your app. It doesn&apos;t. It can guess at selectors but those guesses are based on patterns, not your actual DOM. Always verify.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;⚠️ Never commit Copilot-generated test code without running it first. Copilot can write tests that look correct but assert the wrong things, use outdated APIs, or contain selectors that don&apos;t match your actual UI.&lt;/div&gt;">
+  <div class="slide" data-title="What Copilot Cannot Do" data-notes="Just as important as what it can do. Set accurate expectations. The most dangerous assumption: that Copilot knows your app. It doesn&apos;t. It can guess at selectors but those guesses are based on patterns, not your actual DOM. Always verify.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;️ Never commit Copilot-generated test code without running it first. Copilot can write tests that look correct but assert the wrong things, use outdated APIs, or contain selectors that don&apos;t match your actual UI.&lt;/div&gt;">
     <div class="slide-inner">
       <h2 style="font-size:1.8rem;margin-bottom:18px;">What Copilot cannot do</h2>
-      <div style="display:grid;gap:10px;max-width:680px;">
+      <div style="display:grid;gap:10px;width:100%;">
         <div style="display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--bg-elevated);border-radius:8px;">
-          <span style="color:var(--red);font-size:1rem;flex-shrink:0;margin-top:1px;">✗</span>
+          <span style="color:var(--red);font-size:1rem;flex-shrink:0;margin-top:1px;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:2px;">Know your actual application</div>
             <div style="font-size:0.82rem;color:var(--text-secondary);">It doesn&apos;t have access to your live app. Selectors, URLs, and data it generates are educated guesses — verify them.</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--bg-elevated);border-radius:8px;">
-          <span style="color:var(--red);font-size:1rem;flex-shrink:0;margin-top:1px;">✗</span>
+          <span style="color:var(--red);font-size:1rem;flex-shrink:0;margin-top:1px;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:2px;">Run or execute code</div>
             <div style="font-size:0.82rem;color:var(--text-secondary);">Copilot reasons — it doesn&apos;t run. It can suggest a fix but can&apos;t verify the fix works. You have to run the test.</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--bg-elevated);border-radius:8px;">
-          <span style="color:var(--red);font-size:1rem;flex-shrink:0;margin-top:1px;">✗</span>
+          <span style="color:var(--red);font-size:1rem;flex-shrink:0;margin-top:1px;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:2px;">Know your team&apos;s conventions</div>
             <div style="font-size:0.82rem;color:var(--text-secondary);">Unless you tell it (or it infers from surrounding code), it doesn&apos;t know your naming conventions, folder structure, or architectural decisions.</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--bg-elevated);border-radius:8px;">
-          <span style="color:var(--red);font-size:1rem;flex-shrink:0;margin-top:1px;">✗</span>
+          <span style="color:var(--red);font-size:1rem;flex-shrink:0;margin-top:1px;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:2px;">Be right about recent library versions</div>
             <div style="font-size:0.82rem;color:var(--text-secondary);">APIs change. Copilot&apos;s training data has a cutoff. For any Playwright or framework API it suggests, verify against the official docs.</div>
@@ -482,7 +439,7 @@ sessionStyles: ""
   <div class="slide" data-title="Keyboard Shortcuts Reference" data-notes="Tell the team: you don&apos;t need to memorise all of these. The most important ones are Tab (accept) and Escape (dismiss). The rest can be looked up. Consider keeping this slide open on a second monitor when first using Copilot.">
     <div class="slide-inner">
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Keyboard shortcuts reference</h2>
-      <div style="display:grid;gap:8px;max-width:680px;">
+      <div style="display:grid;gap:8px;width:100%;">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;background:var(--bg-elevated);border-radius:8px;overflow:hidden;border:1px solid var(--border);">
           <div style="padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--text-dim);font-weight:700;border-bottom:1px solid var(--border-subtle);">ACTION</div>
           <div style="padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--text-dim);font-weight:700;border-bottom:1px solid var(--border-subtle);">WINDOWS / LINUX</div>
@@ -557,7 +514,7 @@ sessionStyles: ""
   <!-- ─── SLIDE 16 — Bridge to Session 05 ─── -->
   <div class="slide" data-title="Up Next: Session 05" data-notes="Close with anticipation. Session 5 is where Copilot clicks for most people — they see how it fits into actual daily workflow. Encourage everyone to open VS Code this week, write a test with Copilot&apos;s help, and bring questions to the next session.">
     <div class="slide-inner" style="text-align:center;">
-      <div style="font-size:2.5rem;margin-bottom:20px;">🔄</div>
+      <div style="font-size:2.5rem;margin-bottom:20px;"></div>
       <div class="session-badge" style="margin-bottom:16px;">Coming Next</div>
       <h2 style="font-size:1.8rem;margin-bottom:12px;">Session 05</h2>
       <h3 style="font-size:1.3rem;color:var(--accent);margin-bottom:16px;font-weight:500;">Copilot in Your Daily Workflow</h3>
@@ -565,5 +522,6 @@ sessionStyles: ""
       <div style="display:inline-flex;gap:12px;flex-wrap:wrap;justify-content:center;">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;padding:6px 14px;border-radius:20px;background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-secondary);">This week: write one test with Copilot&apos;s help</div>
       </div>
+      <a href="/topics/ai-in-practice/references/session-04/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

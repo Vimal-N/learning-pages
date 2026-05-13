@@ -5,17 +5,18 @@ sessionNumber: "16"
 sessionTitle: "What Is MCP? Understanding the Model Context Protocol"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-16/"
 sessionStyles: ""
 ---
 
   <!-- ─── SLIDE 01 — Title ─── -->
   <div class="slide active" data-title="Session Overview" data-notes="Phase 5 begins. This is the frontier — MCP is a relatively new standard that is moving quickly. Be transparent with the team: the instructor is still learning this too. We're exploring together.&lt;br&gt;&lt;br&gt;MCP stands for Model Context Protocol. At first the name sounds intimidating. But the concept is actually quite intuitive once you have the right analogy. That's what this session is about — building the mental model before we touch any tools.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Framing for the session: MCP is to AI what USB is to your computer. USB lets you plug in any compatible device. MCP lets you connect any compatible data source or tool to your AI.&lt;/div&gt;">
     <div class="slide-inner" style="text-align:center;">
-      <div class="session-badge" style="margin-bottom:20px;">🔌 Session 16 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows</div>
+      <div class="session-badge" style="margin-bottom:20px;"> Session 16 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows</div>
       <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">What Is <span style="color:var(--accent)">MCP</span>?</h1>
       <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Understanding the Model Context Protocol — the standard that lets AI tools connect to external systems, data, and actions.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">45 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Advanced</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 12</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
       </div>
@@ -30,21 +31,21 @@ sessionStyles: ""
         <div class="comp-col negative">
           <div class="comp-label">Before MCP — fragmented</div>
           <ul style="list-style:none;display:grid;gap:10px;font-size:0.85rem;color:var(--text-secondary);">
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Every AI tool has its own custom integration format</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Integrations are one-off — can't be reused across tools</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> AI can only access data it was trained on or you paste in</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> No standard way to let AI take actions in external systems</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Building integrations requires deep AI platform knowledge</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Every AI tool has its own custom integration format</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Integrations are one-off — can't be reused across tools</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> AI can only access data it was trained on or you paste in</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> No standard way to let AI take actions in external systems</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Building integrations requires deep AI platform knowledge</li>
           </ul>
         </div>
         <div class="comp-col positive">
           <div class="comp-label">With MCP — standardised</div>
           <ul style="list-style:none;display:grid;gap:10px;font-size:0.85rem;color:var(--text-secondary);">
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> One standard protocol — any MCP server works with any MCP client</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Build once, reuse with Claude, Copilot, Cursor, any MCP-compatible tool</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> AI can read live data from your systems, not just its training data</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> AI can take structured actions — create tickets, query databases, run scripts</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Community ecosystem of ready-built servers to install and use</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> One standard protocol — any MCP server works with any MCP client</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Build once, reuse with Claude, Copilot, Cursor, any MCP-compatible tool</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> AI can read live data from your systems, not just its training data</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> AI can take structured actions — create tickets, query databases, run scripts</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Community ecosystem of ready-built servers to install and use</li>
           </ul>
         </div>
       </div>
@@ -57,26 +58,26 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">The analogy that makes MCP click</h2>
       <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-bottom:20px;">
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;text-align:center;">
-          <div style="font-size:2rem;margin-bottom:10px;">🖥️</div>
+          <div style="font-size:2rem;margin-bottom:10px;">️</div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Before USB</div>
           <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">Proprietary ports for every device. PS/2 for keyboard, serial for mouse, parallel for printer...</div>
         </div>
         <div style="text-align:center;color:var(--text-dim);font-size:1.4rem;">→</div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--green);padding:20px;text-align:center;">
-          <div style="font-size:2rem;margin-bottom:10px;">🔌</div>
+          <div style="font-size:2rem;margin-bottom:10px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">After USB</div>
           <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">One standard. Any device, any computer. Plug in and it works.</div>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;">
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;text-align:center;">
-          <div style="font-size:2rem;margin-bottom:10px;">🤖</div>
+          <div style="font-size:2rem;margin-bottom:10px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Before MCP</div>
           <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">Custom integration for every AI + data source combination. No reuse.</div>
         </div>
         <div style="text-align:center;color:var(--text-dim);font-size:1.4rem;">→</div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--green);padding:20px;text-align:center;">
-          <div style="font-size:2rem;margin-bottom:10px;">🔌</div>
+          <div style="font-size:2rem;margin-bottom:10px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">After MCP</div>
           <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">One MCP server works with any MCP-compatible AI tool. Build once, use everywhere.</div>
         </div>
@@ -90,22 +91,22 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">A second analogy — the restaurant</h2>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
         <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid var(--accent);padding:18px;text-align:center;">
-          <div style="font-size:1.8rem;margin-bottom:8px;">🧑‍💼</div>
+          <div style="font-size:1.8rem;margin-bottom:8px;">‍</div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:6px;">AI (Claude)</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">The diner. Knows what they want. Speaks in plain requests.</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;text-align:center;">
-          <div style="font-size:1.8rem;margin-bottom:8px;">🧾</div>
+          <div style="font-size:1.8rem;margin-bottom:8px;"></div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:6px;">MCP Protocol</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">The menu &amp; waiter. Standard format for ordering. Translates requests to the kitchen.</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;text-align:center;">
-          <div style="font-size:1.8rem;margin-bottom:8px;">👨‍🍳</div>
+          <div style="font-size:1.8rem;margin-bottom:8px;">‍</div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:6px;">MCP Server</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">The kitchen. Does the real work — reads files, queries databases, calls APIs.</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;text-align:center;">
-          <div style="font-size:1.8rem;margin-bottom:8px;">🍽️</div>
+          <div style="font-size:1.8rem;margin-bottom:8px;">️</div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:6px;">Result</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">Structured data back to the AI. The AI uses it to form its answer.</div>
         </div>
@@ -196,21 +197,21 @@ sessionStyles: ""
       <div style="background:var(--bg-elevated);border-radius:12px;border:1px solid var(--border);padding:22px;margin-bottom:16px;">
         <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:center;">
           <div style="text-align:center;padding:16px;background:var(--bg-card);border-radius:8px;border:2px solid var(--accent);">
-            <div style="font-size:1.4rem;margin-bottom:6px;">💻</div>
+            <div style="font-size:1.4rem;margin-bottom:6px;"></div>
             <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:4px;">Host</div>
             <div style="font-size:0.78rem;color:var(--text-secondary);">Claude Code, Claude Desktop, Cursor, Zed</div>
             <div style="font-size:0.7rem;color:var(--text-dim);margin-top:6px;">The AI app the user talks to</div>
           </div>
           <div style="text-align:center;font-size:1.2rem;color:var(--text-dim);">⟷</div>
           <div style="text-align:center;padding:16px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border);">
-            <div style="font-size:1.4rem;margin-bottom:6px;">🔄</div>
+            <div style="font-size:1.4rem;margin-bottom:6px;"></div>
             <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:4px;">MCP Protocol</div>
             <div style="font-size:0.78rem;color:var(--text-secondary);">Standardised JSON messages</div>
             <div style="font-size:0.7rem;color:var(--text-dim);margin-top:6px;">The shared language both sides speak</div>
           </div>
           <div style="text-align:center;font-size:1.2rem;color:var(--text-dim);">⟷</div>
           <div style="text-align:center;padding:16px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border);">
-            <div style="font-size:1.4rem;margin-bottom:6px;">🗄️</div>
+            <div style="font-size:1.4rem;margin-bottom:6px;">️</div>
             <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:4px;">MCP Server</div>
             <div style="font-size:0.78rem;color:var(--text-secondary);">GitHub, database, filesystem, custom</div>
             <div style="font-size:0.7rem;color:var(--text-dim);margin-top:6px;">The bridge to real-world systems</div>
@@ -412,7 +413,7 @@ sessionStyles: ""
       <div style="display:grid;gap:14px;">
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
           <div style="display:flex;gap:14px;align-items:flex-start;">
-            <div style="font-size:1.4rem;flex-shrink:0;">📄</div>
+            <div style="font-size:1.4rem;flex-shrink:0;"></div>
             <div>
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
                 <div style="font-size:0.92rem;font-weight:600;color:var(--text-primary);">Resources — data the AI can read</div>
@@ -425,7 +426,7 @@ sessionStyles: ""
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
           <div style="display:flex;gap:14px;align-items:flex-start;">
-            <div style="font-size:1.4rem;flex-shrink:0;">⚙️</div>
+            <div style="font-size:1.4rem;flex-shrink:0;">️</div>
             <div>
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
                 <div style="font-size:0.92rem;font-weight:600;color:var(--text-primary);">Tools — actions the AI can take</div>
@@ -438,7 +439,7 @@ sessionStyles: ""
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
           <div style="display:flex;gap:14px;align-items:flex-start;">
-            <div style="font-size:1.4rem;flex-shrink:0;">💬</div>
+            <div style="font-size:1.4rem;flex-shrink:0;"></div>
             <div>
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
                 <div style="font-size:0.92rem;font-weight:600;color:var(--text-primary);">Prompts — reusable templates</div>
@@ -460,7 +461,7 @@ sessionStyles: ""
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--blue);padding:20px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-            <div style="font-size:1.3rem;">📖</div>
+            <div style="font-size:1.3rem;"></div>
             <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--blue);">Resources (read-only)</div>
           </div>
           <div style="display:grid;gap:8px;font-size:0.82rem;color:var(--text-secondary);">
@@ -472,7 +473,7 @@ sessionStyles: ""
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--green);padding:20px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-            <div style="font-size:1.3rem;">⚡</div>
+            <div style="font-size:1.3rem;"></div>
             <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);">Tools (active)</div>
           </div>
           <div style="display:grid;gap:8px;font-size:0.82rem;color:var(--text-secondary);">
@@ -495,7 +496,7 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">What MCP messages actually look like</h2>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
         <div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">📤 Request (AI → Server)</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;"> Request (AI → Server)</div>
           <div class="code-block" style="font-size:0.76rem;line-height:1.8;">
             {{ '{' }}<br>
             &nbsp;&nbsp;<span class="str">"jsonrpc"</span>: <span class="str">"2.0"</span>,<br>
@@ -510,7 +511,7 @@ sessionStyles: ""
           </div>
         </div>
         <div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:10px;">📥 Response (Server → AI)</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:10px;"> Response (Server → AI)</div>
           <div class="code-block" style="font-size:0.76rem;line-height:1.8;">
             {{ '{' }}<br>
             &nbsp;&nbsp;<span class="str">"jsonrpc"</span>: <span class="str">"2.0"</span>,<br>
@@ -607,7 +608,7 @@ sessionStyles: ""
           <div style="font-size:0.78rem;color:var(--text-secondary);">Ask AI "what issues were opened this week?", "summarise PR comments", "which files changed in this release?"</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--accent);padding:18px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:6px;">@playwright/mcp ⭐ Great for QA</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:6px;">@playwright/mcp  Great for QA</div>
           <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Playwright — browser automation</div>
           <div style="font-size:0.78rem;color:var(--text-secondary);">AI can control a real browser — navigate pages, click elements, take screenshots, run exploratory tests.</div>
         </div>
@@ -749,19 +750,19 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Why MCP matters for QA engineers specifically</h2>
       <div style="display:grid;gap:12px;">
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.3rem;flex-shrink:0;">🧪</div>
+          <div style="font-size:1.3rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Test execution awareness</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">AI with a filesystem MCP server reads your latest test run results directly and suggests fixes — no copy-pasting output into chat</div></div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.3rem;flex-shrink:0;">🔗</div>
+          <div style="font-size:1.3rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Test-to-ticket linking</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">AI can automatically create Jira/Linear tickets for test failures with full context — test name, error message, affected file — without you typing it out</div></div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.3rem;flex-shrink:0;">📊</div>
+          <div style="font-size:1.3rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Live data for test generation</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Database MCP lets AI generate tests with realistic data pulled from your actual system — real product IDs, real edge cases, not invented fixtures</div></div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.3rem;flex-shrink:0;">🌐</div>
+          <div style="font-size:1.3rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">AI-powered exploratory testing</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Playwright MCP lets AI operate a real browser, navigate your app, and report UI and functional issues it finds — AI as a tireless exploratory tester</div></div>
         </div>
       </div>
@@ -855,5 +856,6 @@ sessionStyles: ""
           <li>· End-to-end QA workflow patterns</li>
         </ul>
       </div>
+      <a href="/topics/ai-in-practice/references/session-16/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

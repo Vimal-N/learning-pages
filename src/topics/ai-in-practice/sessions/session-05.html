@@ -5,17 +5,18 @@ sessionNumber: "05"
 sessionTitle: "Copilot in Your Daily Workflow"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-05/"
 sessionStyles: ""
 ---
 
   <!-- ─── SLIDE 01 — Title ─── -->
   <div class="slide active" data-title="Session Overview" data-notes="This is the session people remember. Not because it&apos;s the most technical, but because it&apos;s the most immediately practical. Last session was setup and orientation. This session is: here&apos;s how you actually use this thing on a Tuesday morning when you&apos;re writing tests and debugging failures.&lt;br&gt;&lt;br&gt;Tell the team: every pattern in this session comes from real-world QA workflows. These aren&apos;t toy examples.">
     <div class="slide-inner" style="text-align:center;">
-      <div class="session-badge" style="margin-bottom:20px;">⌨️ Session 05 &nbsp;·&nbsp; Phase 2: GitHub Copilot Mastery</div>
+      <div class="session-badge" style="margin-bottom:20px;">️ Session 05 &nbsp;·&nbsp; Phase 2: GitHub Copilot Mastery</div>
       <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Copilot in Your<br><span style="color:var(--accent)">Daily Workflow</span></h1>
       <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Eight practical patterns for QA engineers — from writing tests from scratch to debugging flaky failures. What to use, when to use it, and how to get the most out of it.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">50 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Beginner</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 04</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
       </div>
@@ -31,20 +32,20 @@ sessionStyles: ""
           <div class="comp-label">Wrong mental model</div>
           <div style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:14px;">"Copilot is smart autocomplete. I&apos;ll use it to save a few keystrokes."</div>
           <ul style="list-style:none;display:grid;gap:8px;font-size:0.84rem;">
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Only use completions, ignore Chat</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Accept first suggestion without reviewing</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Give it vague context and expect magic</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Use it only for typing speed, not thinking</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Only use completions, ignore Chat</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Accept first suggestion without reviewing</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Give it vague context and expect magic</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Use it only for typing speed, not thinking</li>
           </ul>
         </div>
         <div class="comp-col positive">
           <div class="comp-label">Right mental model</div>
           <div style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:14px;">"Copilot is a pair programmer. I set direction, it executes. I review, it refines."</div>
           <ul style="list-style:none;display:grid;gap:8px;font-size:0.84rem;">
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Use both Completions and Chat for different tasks</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Always review and test generated code</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Give it rich context — framework, pattern, constraints</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Use it to think through problems, not just type faster</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Use both Completions and Chat for different tasks</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Always review and test generated code</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Give it rich context — framework, pattern, constraints</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Use it to think through problems, not just type faster</li>
           </ul>
         </div>
       </div>
@@ -300,30 +301,30 @@ sessionStyles: ""
     <div class="slide-inner">
       <div class="session-badge" style="margin-bottom:14px;">Pattern 7</div>
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Inline completions — best practices</h2>
-      <div style="display:grid;gap:10px;max-width:700px;">
+      <div style="display:grid;gap:10px;width:100%;">
         <div style="display:flex;gap:12px;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;align-items:flex-start;">
-          <span style="color:var(--green);font-size:1.1rem;flex-shrink:0;">✓</span>
+          <span style="color:var(--green);font-size:1.1rem;flex-shrink:0;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:3px;">Write a comment before the function you want generated</div>
             <div style="font-size:0.83rem;color:var(--text-secondary);">A one-line comment like <code style="background:var(--code-bg);padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:0.82em;">// navigate to checkout and assert order total matches cart</code> is a direct brief to Copilot.</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;align-items:flex-start;">
-          <span style="color:var(--green);font-size:1.1rem;flex-shrink:0;">✓</span>
+          <span style="color:var(--green);font-size:1.1rem;flex-shrink:0;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:3px;">Use Alt+] / Option+] to cycle through alternatives</div>
             <div style="font-size:0.83rem;color:var(--text-secondary);">The first suggestion isn&apos;t always the best one. Check 2–3 alternatives before accepting. One of them often fits better.</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;align-items:flex-start;">
-          <span style="color:var(--green);font-size:1.1rem;flex-shrink:0;">✓</span>
+          <span style="color:var(--green);font-size:1.1rem;flex-shrink:0;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:3px;">Accept word-by-word when the full suggestion is mostly right</div>
             <div style="font-size:0.83rem;color:var(--text-secondary);">Use Ctrl+→ / Cmd+→ to accept one word at a time. Great when the first half is perfect but the ending needs adjustment.</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;align-items:flex-start;">
-          <span style="color:var(--green);font-size:1.1rem;flex-shrink:0;">✓</span>
+          <span style="color:var(--green);font-size:1.1rem;flex-shrink:0;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:3px;">Keep files focused — Copilot reads the whole open file</div>
             <div style="font-size:0.83rem;color:var(--text-secondary);">The more relevant context in the file, the better. A file full of unrelated code dilutes the signal Copilot gets.</div>
@@ -367,33 +368,33 @@ sessionStyles: ""
   </div>
 
   <!-- ─── SLIDE 12 — The Review Step ─── -->
-  <div class="slide" data-title="Always Review Before Keeping" data-notes="This is the safety slide. Reinforce this habit clearly and without judgment — it&apos;s not that Copilot is bad, it&apos;s that ALL generated code needs verification. Just like you wouldn&apos;t merge a PR without reading it.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;⚠️ Real example to share: Copilot can generate tests that PASS but assert the wrong thing — for instance, checking that text is visible on a page, when the text is hardcoded in the test HTML and not actually rendered by the app. A test that always passes regardless of the app behaviour is worse than no test at all.&lt;/div&gt;">
+  <div class="slide" data-title="Always Review Before Keeping" data-notes="This is the safety slide. Reinforce this habit clearly and without judgment — it&apos;s not that Copilot is bad, it&apos;s that ALL generated code needs verification. Just like you wouldn&apos;t merge a PR without reading it.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;️ Real example to share: Copilot can generate tests that PASS but assert the wrong thing — for instance, checking that text is visible on a page, when the text is hardcoded in the test HTML and not actually rendered by the app. A test that always passes regardless of the app behaviour is worse than no test at all.&lt;/div&gt;">
     <div class="slide-inner">
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Always review before keeping</h2>
-      <div style="display:grid;gap:10px;max-width:680px;margin-bottom:16px;">
+      <div style="display:grid;gap:10px;width:100%;margin-bottom:16px;">
         <div style="display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--bg-elevated);border-radius:8px;">
-          <span style="color:var(--accent);font-size:1rem;flex-shrink:0;margin-top:1px;">✓</span>
+          <span style="color:var(--accent);font-size:1rem;flex-shrink:0;margin-top:1px;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:2px;">Run the test</div>
             <div style="font-size:0.82rem;color:var(--text-secondary);">Does it pass? Does it fail when you expect it to fail (make it fail intentionally to verify the assertion is real)?</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--bg-elevated);border-radius:8px;">
-          <span style="color:var(--accent);font-size:1rem;flex-shrink:0;margin-top:1px;">✓</span>
+          <span style="color:var(--accent);font-size:1rem;flex-shrink:0;margin-top:1px;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:2px;">Check the selectors against your real app</div>
             <div style="font-size:0.82rem;color:var(--text-secondary);">Does <code style="background:var(--code-bg);padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:0.82em;">getByRole('button', {name: 'Save'})</code> actually match your button? Open the app and check.</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--bg-elevated);border-radius:8px;">
-          <span style="color:var(--accent);font-size:1rem;flex-shrink:0;margin-top:1px;">✓</span>
+          <span style="color:var(--accent);font-size:1rem;flex-shrink:0;margin-top:1px;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:2px;">Verify the assertions are meaningful</div>
             <div style="font-size:0.82rem;color:var(--text-secondary);">Is the assertion actually testing what the feature should do, or is it just checking that a page loaded?</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;align-items:flex-start;padding:13px;background:var(--bg-elevated);border-radius:8px;">
-          <span style="color:var(--accent);font-size:1rem;flex-shrink:0;margin-top:1px;">✓</span>
+          <span style="color:var(--accent);font-size:1rem;flex-shrink:0;margin-top:1px;"></span>
           <div>
             <div style="font-size:0.88rem;font-weight:600;margin-bottom:2px;">Check for library/API currency</div>
             <div style="font-size:0.82rem;color:var(--text-secondary);">If Copilot uses an API method you don&apos;t recognise, check the Playwright docs. Training data has a cutoff date.</div>
@@ -407,7 +408,7 @@ sessionStyles: ""
   <div class="slide" data-title="Building Good Daily Habits" data-notes="Close the patterns with habits. The difference between people who get a lot from Copilot and people who don&apos;t is mostly habit. These habits take 2–3 weeks to form. After that, they become automatic.">
     <div class="slide-inner">
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Building good daily habits</h2>
-      <div style="display:grid;gap:10px;max-width:700px;">
+      <div style="display:grid;gap:10px;width:100%;">
         <div style="display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:flex-start;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700;">AM</div>
           <div style="font-size:0.86rem;color:var(--text-secondary);">When starting a new test file, open Chat and describe the feature you&apos;re testing. Ask for a skeleton of test cases before writing any code.</div>
@@ -461,7 +462,7 @@ sessionStyles: ""
   <!-- ─── SLIDE 15 — Bridge to Session 06 ─── -->
   <div class="slide" data-title="Up Next: Session 06" data-notes="Close with a forward look. Session 6 covers Copilot Agent Mode — the mode where Copilot can autonomously make multiple edits across files to complete a task you describe. It&apos;s a big step up from individual suggestions.">
     <div class="slide-inner" style="text-align:center;">
-      <div style="font-size:2.5rem;margin-bottom:20px;">🤖</div>
+      <div style="font-size:2.5rem;margin-bottom:20px;"></div>
       <div class="session-badge" style="margin-bottom:16px;">Coming Next</div>
       <h2 style="font-size:1.8rem;margin-bottom:12px;">Session 06</h2>
       <h3 style="font-size:1.3rem;color:var(--accent);margin-bottom:16px;font-weight:500;">Copilot Agent Mode — Your First Taste of Autonomous AI</h3>
@@ -469,5 +470,6 @@ sessionStyles: ""
       <div style="display:inline-flex;gap:12px;flex-wrap:wrap;justify-content:center;">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;padding:6px 14px;border-radius:20px;background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-secondary);">This week: use Copilot on a real test you&apos;re writing</div>
       </div>
+      <a href="/topics/ai-in-practice/references/session-05/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

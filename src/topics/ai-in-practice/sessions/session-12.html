@@ -5,6 +5,7 @@ sessionNumber: "12"
 sessionTitle: "Context Files"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-12/"
 sessionStyles: ""
 ---
 
@@ -15,7 +16,7 @@ sessionStyles: ""
       <h1 style="font-size:2rem;margin-bottom:16px;line-height:1.25;">Context Files<br><span style="color:var(--accent);font-size:1.55rem;">CLAUDE.md, copilot-instructions.md &amp; AGENTS.md</span></h1>
       <p style="color:var(--text-secondary);font-size:0.95rem;max-width:540px;margin:0 auto 32px;line-height:1.7;">One file changes everything. Teach your agent about your project once &mdash; and it remembers forever.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">50 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 11</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
       </div>
@@ -148,19 +149,19 @@ sessionStyles: ""
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin-bottom:10px;">Effect on completions</div>
           <div style="display:grid;gap:7px;font-size:0.82rem;color:var(--text-secondary);">
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Completions now follow your patterns</div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Copilot learns your variable naming conventions</div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Suggestions use your existing helper functions</div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Won&apos;t suggest deprecated patterns you&apos;ve explicitly banned</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> Completions now follow your patterns</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> Copilot learns your variable naming conventions</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> Suggestions use your existing helper functions</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> Won&apos;t suggest deprecated patterns you&apos;ve explicitly banned</div>
           </div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--purple);margin-bottom:10px;">Effect on Copilot Chat &amp; Agent Mode</div>
           <div style="display:grid;gap:7px;font-size:0.82rem;color:var(--text-secondary);">
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> @workspace answers filtered by your instructions</div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Chat references your actual tech stack</div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Agent Mode follows your architectural decisions</div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Consistent suggestions across all team members</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> @workspace answers filtered by your instructions</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> Chat references your actual tech stack</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> Agent Mode follows your architectural decisions</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> Consistent suggestions across all team members</div>
           </div>
         </div>
       </div>
@@ -497,19 +498,19 @@ sessionStyles: ""
         <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid rgba(232,92,92,0.4);padding:14px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--red);margin-bottom:10px;">Without CLAUDE.md</div>
           <div style="display:grid;gap:6px;font-size:0.8rem;color:var(--text-secondary);">
-            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;">✗</span> Uses <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">page.waitForTimeout(2000)</code> &larr; forbidden pattern</div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;">✗</span> Creates test in root folder &larr; wrong location</div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;">✗</span> Uses CSS selectors like <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">.pay-button</code> &larr; wrong style</div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;">✗</span> No page object pattern</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;"></span> Uses <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">page.waitForTimeout(2000)</code> &larr; forbidden pattern</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;"></span> Creates test in root folder &larr; wrong location</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;"></span> Uses CSS selectors like <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">.pay-button</code> &larr; wrong style</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;"></span> No page object pattern</div>
           </div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid rgba(94,194,105,0.4);padding:14px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:10px;">With CLAUDE.md</div>
           <div style="display:grid;gap:6px;font-size:0.8rem;color:var(--text-secondary);">
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Uses <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">waitForLoadState(&apos;networkidle&apos;)</code> &larr; correct</div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Creates test in <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">/tests/e2e/checkout.spec.ts</code></div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Uses <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">data-testid="pay-button"</code> &larr; correct</div>
-            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Follows page object pattern correctly</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> Uses <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">waitForLoadState(&apos;networkidle&apos;)</code> &larr; correct</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> Creates test in <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">/tests/e2e/checkout.spec.ts</code></div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> Uses <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">data-testid="pay-button"</code> &larr; correct</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;"></span> Follows page object pattern correctly</div>
           </div>
         </div>
       </div>
@@ -742,11 +743,12 @@ sessionStyles: ""
       <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px;">This completes Phase 4 &mdash; Terminal Agents &amp; Agentic Tools. You now have:</div>
         <div style="display:grid;gap:7px;font-size:0.82rem;color:var(--text-secondary);margin-bottom:12px;">
-          <div style="display:flex;gap:10px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Knowledge of the full agent evolution (Session 11)</div>
-          <div style="display:flex;gap:10px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Hands-on experience with Claude Code and Opencode (Sessions 10-12, 17)</div>
-          <div style="display:flex;gap:10px;"><span style="color:var(--accent);flex-shrink:0;">✓</span> The tools to configure agents to know your project (this session)</div>
+          <div style="display:flex;gap:10px;"><span style="color:var(--green);flex-shrink:0;"></span> Knowledge of the full agent evolution (Session 11)</div>
+          <div style="display:flex;gap:10px;"><span style="color:var(--green);flex-shrink:0;"></span> Hands-on experience with Claude Code and Opencode (Sessions 10-12, 17)</div>
+          <div style="display:flex;gap:10px;"><span style="color:var(--accent);flex-shrink:0;"></span> The tools to configure agents to know your project (this session)</div>
         </div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--accent);">Coming up: Phase 5 &mdash; MCP, Agents &amp; AI-Powered Workflows</div>
       </div>
+      <a href="/topics/ai-in-practice/references/session-12/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

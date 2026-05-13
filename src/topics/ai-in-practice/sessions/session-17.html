@@ -5,17 +5,18 @@ sessionNumber: "17"
 sessionTitle: "Using MCP Servers in Your Workflow"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-17/"
 sessionStyles: ""
 ---
 
   <!-- ─── SLIDE 01 — Title ─── -->
   <div class="slide active" data-title="Session Overview" data-notes="Last session was the concept. This session is the doing. We're configuring real MCP servers, connecting them to Claude Code, and seeing what changes when your AI has access to live data and real tools.&lt;br&gt;&lt;br&gt;Note to presenter: this session works best with a live demo if possible. The before/after difference — asking an AI a question with and without an MCP server — is more impactful when seen than described. If you can, have Claude Code open with the filesystem MCP server connected and show it live.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Goal for this session: everyone leaves knowing how to install, configure, and use at least one real MCP server.&lt;/div&gt;">
     <div class="slide-inner" style="text-align:center;">
-      <div class="session-badge" style="margin-bottom:20px;">🔌 Session 17 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows</div>
+      <div class="session-badge" style="margin-bottom:20px;"> Session 17 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows</div>
       <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Using MCP Servers<br><span style="color:var(--accent)">in Your Workflow</span></h1>
       <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Hands-on with real MCP servers — configure, connect, and use them to give your AI access to your actual systems.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">50 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Advanced</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 13</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
       </div>
@@ -273,12 +274,12 @@ sessionStyles: ""
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">What it gives Claude access to</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.8rem;color:var(--text-secondary);">
-            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Navigate to URLs</div>
-            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Click elements</div>
-            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Fill in forms</div>
-            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Take screenshots</div>
-            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Read page content</div>
-            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Execute JavaScript</div>
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);"></span> Navigate to URLs</div>
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);"></span> Click elements</div>
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);"></span> Fill in forms</div>
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);"></span> Take screenshots</div>
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);"></span> Read page content</div>
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);"></span> Execute JavaScript</div>
           </div>
         </div>
         <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
@@ -465,28 +466,28 @@ sessionStyles: ""
       </svg>
       <div style="display:grid;gap:10px;">
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🔄</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Post-CI triage</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">After a CI run: AI reads results (filesystem MCP) → checks what changed (GitHub MCP) → creates Jira tickets for new failures (Jira MCP) → posts summary to Slack (Slack MCP). One prompt, four systems.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">📋</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Release readiness check</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">AI reads all merged PRs for this release (GitHub), checks open bugs assigned to this sprint (Jira), reads test coverage summary (filesystem) — returns a "ready to release?" report.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🔍</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Exploratory testing sessions</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Point Playwright MCP at a new feature, ask AI to explore it with a test charter. AI navigates, clicks, screenshots, and reports issues — faster first-pass than manual testing alone.</div>
           </div>
         </div>
         <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">📊</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Realistic test data generation</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Database MCP gives AI access to real production-like records — generate tests using actual product IDs, real user edge cases, and valid data combinations from your system.</div>
@@ -502,35 +503,35 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">When MCP connections fail — what to check</h2>
       <div style="display:grid;gap:10px;">
         <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🔄</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Server not appearing — check restart first</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Always restart Claude Code after adding a server. Run <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">claude mcp list</code> to confirm it's registered. This fixes 80% of connection problems.</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🔑</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Authentication errors</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Check environment variables are set correctly. Run <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">echo $GITHUB_TOKEN</code> to verify. The token may have expired — generate a new one.</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">📦</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">npx can't find the package</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Always use the <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">-y</code> flag with npx. Or pre-install: <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">npm install -g @modelcontextprotocol/server-filesystem</code></div>
           </div>
         </div>
         <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">📝</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">JSON syntax error in config</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Open <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">~/.claude.json</code> in VS Code — it highlights JSON errors. A missing comma or bracket will silently break all servers.</div>
           </div>
         </div>
         <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🛡️</div>
+          <div style="font-size:1.2rem;flex-shrink:0;">️</div>
           <div>
             <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Permission denied errors</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Filesystem server needs access to the paths you specified. Check the path exists and you have read permissions: <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">ls -la ./tests</code></div>
@@ -593,5 +594,6 @@ sessionStyles: ""
           <li>· Connect the finished server to Claude Code and verify it</li>
         </ul>
       </div>
+      <a href="/topics/ai-in-practice/references/session-17/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

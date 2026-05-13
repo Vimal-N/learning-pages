@@ -5,17 +5,18 @@ sessionNumber: "06"
 sessionTitle: "Copilot Agent Mode — Your First Taste of Autonomous AI"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
+referenceUrl: "/topics/ai-in-practice/references/session-06/"
 sessionStyles: ""
 ---
 
   <!-- ─── SLIDE 01 — Title ─── -->
   <div class="slide active" data-title="Session Overview" data-notes="This is the session where things get a little more exciting. Up to now Copilot has been responding to you — you ask, it answers. Agent Mode flips that slightly. You give it a goal and it figures out the steps. Think of it as the difference between a taxi (you direct every turn) and a rideshare app (you give the destination and it navigates).&lt;br&gt;&lt;br&gt;Some people find this session a bit mind-bending because the AI starts doing things you didn't explicitly ask for. That's the point — and we'll also talk about where to be careful.">
     <div class="slide-inner" style="text-align:center;">
-      <div class="session-badge" style="margin-bottom:20px;">🤖 Session 06 &nbsp;·&nbsp; Phase 2: GitHub Copilot Mastery</div>
+      <div class="session-badge" style="margin-bottom:20px;"> Session 06 &nbsp;·&nbsp; Phase 2: GitHub Copilot Mastery</div>
       <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Copilot Agent Mode —<br><span style="color:var(--accent)">Your First Taste of Autonomous AI</span></h1>
       <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">What happens when Copilot can plan, edit multiple files, run commands, and iterate — all from a single goal you give it.</p>
       <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">45 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
         <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 05</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
       </div>
@@ -59,7 +60,7 @@ sessionStyles: ""
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Step 1</div>
           <div style="font-size:0.9rem;color:var(--text-primary);font-weight:600;margin-bottom:6px;">Open Copilot Chat</div>
-          <div style="font-size:0.82rem;color:var(--text-secondary);">Click the chat icon in the VS Code sidebar, or press <code style="background:var(--code-bg);padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;">Ctrl+Alt+I</code> / <code style="background:var(--code-bg);padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;">⌃⌥I</code></div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Click the chat icon in the VS Code sidebar, or press <code style="background:var(--code-bg);padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;">Ctrl+Alt+I</code> / <code style="background:var(--code-bg);padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;">I</code></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Step 2</div>
@@ -78,7 +79,7 @@ sessionStyles: ""
         </div>
       </div>
       <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
-        ⚠️ <strong>Requires paid Copilot plan.</strong> Not available on the free tier.
+        ️ <strong>Requires paid Copilot plan.</strong> Not available on the free tier.
       </div>
     </div>
   </div>
@@ -89,32 +90,32 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">What Agent Mode can actually do</h2>
       <div class="card-grid c3" style="gap:14px;">
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.4rem;margin-bottom:10px;">📁</div>
+          <div style="font-size:1.4rem;margin-bottom:10px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Read your codebase</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">Explores your project structure, reads existing tests and code to understand patterns before generating anything</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.4rem;margin-bottom:10px;">✏️</div>
+          <div style="font-size:1.4rem;margin-bottom:10px;">️</div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Edit multiple files</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">Can create new files and modify existing ones across your project in a single task run</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.4rem;margin-bottom:10px;">⚡</div>
+          <div style="font-size:1.4rem;margin-bottom:10px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Run terminal commands</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">Can execute npm commands, run tests, and check their output to verify changes work correctly</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.4rem;margin-bottom:10px;">🔄</div>
+          <div style="font-size:1.4rem;margin-bottom:10px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Self-correct on errors</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">If a test fails or a command errors, it reads the output and adjusts its approach without you prompting it</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.4rem;margin-bottom:10px;">🧠</div>
+          <div style="font-size:1.4rem;margin-bottom:10px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Plan multi-step tasks</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">Breaks a large goal into logical steps, shows you the plan, then executes them in order</div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
-          <div style="font-size:1.4rem;margin-bottom:10px;">✅</div>
+          <div style="font-size:1.4rem;margin-bottom:10px;"></div>
           <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Show its work</div>
           <div style="font-size:0.8rem;color:var(--text-secondary);">Logs what it's doing at each step — you can follow along, pause, or redirect at any point</div>
         </div>
@@ -203,7 +204,7 @@ sessionStyles: ""
         </div>
       </div>
       <div style="background:var(--green-soft);border:1px solid rgba(94,194,105,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
-        ✓ Notice: it reads your project first, creates a Page Object, generates tests, then runs them to verify. All from one prompt.
+         Notice: it reads your project first, creates a Page Object, generates tests, then runs them to verify. All from one prompt.
       </div>
     </div>
   </div>
@@ -216,21 +217,21 @@ sessionStyles: ""
         <div class="comp-col positive">
           <div class="comp-label">Good candidates for Agent Mode</div>
           <ul style="list-style:none;display:grid;gap:10px;font-size:0.85rem;color:var(--text-secondary);">
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Build a whole test file from scratch</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Refactor a test suite to use Page Objects</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Add tests across multiple spec files for a new feature</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Set up a new test framework from zero</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Fix multiple failing tests after an API change</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Build a whole test file from scratch</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Refactor a test suite to use Page Objects</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Add tests across multiple spec files for a new feature</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Set up a new test framework from zero</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);"></span> Fix multiple failing tests after an API change</li>
           </ul>
         </div>
         <div class="comp-col negative">
           <div class="comp-label">Stick with Chat or Completions</div>
           <ul style="list-style:none;display:grid;gap:10px;font-size:0.85rem;color:var(--text-secondary);">
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Explaining what a piece of code does</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Fixing a single assertion in a single test</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Generating a quick snippet you'll paste manually</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Answering a question about a framework or API</li>
-            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Adding one test case to an existing file</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Explaining what a piece of code does</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Fixing a single assertion in a single test</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Generating a quick snippet you'll paste manually</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Answering a question about a framework or API</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);"></span> Adding one test case to an existing file</li>
           </ul>
         </div>
       </div>
@@ -299,19 +300,19 @@ sessionStyles: ""
       <h2 style="font-size:1.8rem;margin-bottom:18px;">Mistakes people make with Agent Mode</h2>
       <div style="display:grid;gap:10px;">
         <div style="display:flex;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🎯</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Giving it a vague goal and expecting precision</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">Vague prompt = unpredictable output. Be specific about scope, pattern, and constraints.</div></div>
         </div>
         <div style="display:flex;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🔍</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Approving file changes without reading them</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">The diffs are there for a reason. Always read them. Agents can be confidently wrong.</div></div>
         </div>
         <div style="display:flex;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">🛡️</div>
+          <div style="font-size:1.2rem;flex-shrink:0;">️</div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Trusting passing tests as proof of correctness</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">A test that always passes regardless of app behavior is worse than no test. Check assertions, not just exit codes.</div></div>
         </div>
         <div style="display:flex;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
-          <div style="font-size:1.2rem;flex-shrink:0;">📦</div>
+          <div style="font-size:1.2rem;flex-shrink:0;"></div>
           <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Letting it run without scope constraints</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">Without explicit constraints, it might helpfully "fix" other files it decides need improving. Always set boundaries.</div></div>
         </div>
       </div>
@@ -376,5 +377,6 @@ sessionStyles: ""
         <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;color:var(--text-muted);">Session 08 — Debugging Tests with AI</div>
         <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;color:var(--text-muted);">Session 09 — Refactoring Your Test Suite with AI</div>
       </div>
+      <a href="/topics/ai-in-practice/references/session-06/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
     </div>
   </div>

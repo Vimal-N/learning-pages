@@ -1,0 +1,76 @@
+<svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+  <rect width="700" height="260" fill="#f8f7f4" rx="12"/>
+
+  <!-- Tile 1: Context (teal) -->
+  <rect x="14" y="14" width="155" height="185" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/>
+  <rect x="68" y="22" width="48" height="22" rx="6" fill="#5DCAA5" fill-opacity="0.4"/>
+  <text x="92" y="37" text-anchor="middle" fill="#085041" font-size="13" font-weight="700">1</text>
+  <text x="92" y="60" text-anchor="middle" fill="#085041" font-size="16" font-weight="700">Context</text>
+  <!-- house icon -->
+  <polyline points="72,82 92,68 112,82" fill="none" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="79" y="82" width="26" height="16" rx="1" fill="none" stroke="#0F6E56" stroke-width="1.5"/>
+  <rect x="88" y="89" width="8" height="9" rx="1" fill="#5DCAA5" fill-opacity="0.5"/>
+  <text x="92" y="117" text-anchor="middle" fill="#444441" font-size="12">Who you are</text>
+  <text x="92" y="131" text-anchor="middle" fill="#444441" font-size="12">What project</text>
+  <text x="92" y="145" text-anchor="middle" fill="#444441" font-size="12">What tech stack</text>
+  <text x="92" y="159" text-anchor="middle" fill="#444441" font-size="12">What you tried</text>
+  <text x="92" y="180" text-anchor="middle" fill="#1D9E75" font-size="11" font-style="italic">I'm a QA eng using</text>
+  <text x="92" y="192" text-anchor="middle" fill="#1D9E75" font-size="11" font-style="italic">Playwright + TS...</text>
+
+  <!-- Tile 2: Task (amber) -->
+  <rect x="183" y="14" width="155" height="185" rx="8" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.5"/>
+  <rect x="237" y="22" width="48" height="22" rx="6" fill="#FAC775" fill-opacity="0.5"/>
+  <text x="261" y="37" text-anchor="middle" fill="#633806" font-size="13" font-weight="700">2</text>
+  <text x="261" y="60" text-anchor="middle" fill="#633806" font-size="16" font-weight="700">Task</text>
+  <!-- checkbox icon -->
+  <rect x="249" y="68" width="24" height="20" rx="3" fill="none" stroke="#BA7517" stroke-width="1.5"/>
+  <polyline points="253,78 259,84 271,72" fill="none" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="261" y="108" text-anchor="middle" fill="#444441" font-size="12">What you want</text>
+  <text x="261" y="122" text-anchor="middle" fill="#444441" font-size="12">Specific &amp; actionable</text>
+  <text x="261" y="136" text-anchor="middle" fill="#444441" font-size="12">Verb-first</text>
+  <text x="261" y="150" text-anchor="middle" fill="#444441" font-size="12">instructions</text>
+  <text x="261" y="172" text-anchor="middle" fill="#BA7517" font-size="11" font-style="italic">Write a test that</text>
+  <text x="261" y="184" text-anchor="middle" fill="#BA7517" font-size="11" font-style="italic">verifies login...</text>
+
+  <!-- Tile 3: Format (blue) -->
+  <rect x="352" y="14" width="155" height="185" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <rect x="406" y="22" width="48" height="22" rx="6" fill="#85B7EB" fill-opacity="0.5"/>
+  <text x="430" y="37" text-anchor="middle" fill="#0C447C" font-size="13" font-weight="700">3</text>
+  <text x="430" y="60" text-anchor="middle" fill="#0C447C" font-size="16" font-weight="700">Format</text>
+  <!-- lines icon -->
+  <line x1="415" y1="70" x2="445" y2="70" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+  <line x1="415" y1="77" x2="440" y2="77" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+  <line x1="415" y1="84" x2="445" y2="84" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+  <line x1="415" y1="91" x2="437" y2="91" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+  <text x="430" y="115" text-anchor="middle" fill="#444441" font-size="12">How the answer</text>
+  <text x="430" y="129" text-anchor="middle" fill="#444441" font-size="12">should look</text>
+  <text x="430" y="143" text-anchor="middle" fill="#444441" font-size="12">Code block</text>
+  <text x="430" y="157" text-anchor="middle" fill="#444441" font-size="12">Step list</text>
+  <text x="430" y="179" text-anchor="middle" fill="#378ADD" font-size="11" font-style="italic">Return only the TS</text>
+  <text x="430" y="191" text-anchor="middle" fill="#378ADD" font-size="11" font-style="italic">code, no explanation</text>
+
+  <!-- Tile 4: Constraints (purple) -->
+  <rect x="521" y="14" width="155" height="185" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="1.5"/>
+  <rect x="575" y="22" width="48" height="22" rx="6" fill="#AFA9EC" fill-opacity="0.5"/>
+  <text x="599" y="37" text-anchor="middle" fill="#3C3489" font-size="13" font-weight="700">4</text>
+  <text x="599" y="60" text-anchor="middle" fill="#3C3489" font-size="16" font-weight="700">Constraints</text>
+  <!-- fence icon -->
+  <line x1="578" y1="68" x2="578" y2="90" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="589" y1="68" x2="589" y2="90" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="600" y1="68" x2="600" y2="90" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="611" y1="68" x2="611" y2="90" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="622" y1="68" x2="622" y2="90" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="574" y1="74" x2="626" y2="74" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="574" y1="84" x2="626" y2="84" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="599" y="112" text-anchor="middle" fill="#444441" font-size="12">What to avoid</text>
+  <text x="599" y="126" text-anchor="middle" fill="#444441" font-size="12">Scope limits</text>
+  <text x="599" y="140" text-anchor="middle" fill="#444441" font-size="12">What NOT to</text>
+  <text x="599" y="154" text-anchor="middle" fill="#444441" font-size="12">include</text>
+  <text x="599" y="176" text-anchor="middle" fill="#7F77DD" font-size="11" font-style="italic">Don't use</text>
+  <text x="599" y="188" text-anchor="middle" fill="#7F77DD" font-size="11" font-style="italic">waitForTimeout</text>
+  <text x="599" y="200" text-anchor="middle" fill="#7F77DD" font-size="11" font-style="italic">Max 30 lines</text>
+
+  <!-- Bottom banner -->
+  <rect x="14" y="210" width="672" height="36" rx="8" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1"/>
+  <text x="350" y="232" text-anchor="middle" fill="#633806" font-size="14" font-weight="600">All 4 together = a prompt the AI can act on precisely</text>
+</svg>
