@@ -1,12 +1,19 @@
 module.exports = function (eleventyConfig) {
-  // Pass styles.css straight through without processing
   eleventyConfig.addPassthroughCopy("src/styles.css");
-
-  // Pass any future assets (images, fonts, etc.) through unchanged
   eleventyConfig.addPassthroughCopy("src/assets");
-
-  // Pass images through unchanged
   eleventyConfig.addPassthroughCopy("src/images");
+
+  // When deploying to a subdirectory (e.g. GitHub Pages /learning-pages/),
+  // set ELEVENTY_PATH_PREFIX=/learning-pages/ to rewrite all absolute paths.
+  const prefix = (process.env.ELEVENTY_PATH_PREFIX || "").replace(/\/$/, "");
+  if (prefix) {
+    eleventyConfig.addTransform("prefix-abs-urls", function (content, outputPath) {
+      if (!outputPath || !outputPath.endsWith(".html")) return content;
+      return content.replace(/(href|src)="(\/[^"]*?)"/g, (_, attr, path) => {
+        return `${attr}="${prefix}${path}"`;
+      });
+    });
+  }
 
   return {
     dir: {
@@ -14,7 +21,6 @@ module.exports = function (eleventyConfig) {
       output: "_site",
       layouts: "_layouts",
     },
-    // Allow HTML files to use Nunjucks templating
     htmlTemplateEngine: "njk",
   };
 };
