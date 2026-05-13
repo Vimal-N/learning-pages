@@ -1,0 +1,380 @@
+---
+layout: session.njk
+title: Session 06 — Copilot Agent Mode — Your First Taste of Autonomous AI
+sessionNumber: "06"
+sessionTitle: "Copilot Agent Mode — Your First Taste of Autonomous AI"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="This is the session where things get a little more exciting. Up to now Copilot has been responding to you — you ask, it answers. Agent Mode flips that slightly. You give it a goal and it figures out the steps. Think of it as the difference between a taxi (you direct every turn) and a rideshare app (you give the destination and it navigates).&lt;br&gt;&lt;br&gt;Some people find this session a bit mind-bending because the AI starts doing things you didn't explicitly ask for. That's the point — and we'll also talk about where to be careful.">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">🤖 Session 06 &nbsp;·&nbsp; Phase 2: GitHub Copilot Mastery</div>
+      <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Copilot Agent Mode —<br><span style="color:var(--accent)">Your First Taste of Autonomous AI</span></h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">What happens when Copilot can plan, edit multiple files, run commands, and iterate — all from a single goal you give it.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">45 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 05</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — What Changed ─── -->
+  <div class="slide" data-title="What Changed" data-notes="The key shift to explain: Copilot Chat in normal mode is reactive. You ask something, it answers. Agent Mode is proactive. It can read your project, decide what files need changing, make those changes, run commands to verify, then loop back if something failed.&lt;br&gt;&lt;br&gt;This feels quite different in practice. The AI isn't waiting for your next message — it's working through a task like a developer would.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">From assistant to agent</h2>
+      <div class="comparison">
+        <div class="comp-col neutral">
+          <div class="comp-label">Copilot Chat (normal mode)</div>
+          <ul style="list-style:none;display:grid;gap:10px;font-size:0.88rem;color:var(--text-secondary);">
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">→</span> You ask a question</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">→</span> Copilot responds with an answer or code snippet</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">→</span> You copy, paste, and apply manually</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">→</span> You ask the next question</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">→</span> You're always in the driver's seat</li>
+          </ul>
+        </div>
+        <div class="comp-col positive">
+          <div class="comp-label">Copilot Agent Mode</div>
+          <ul style="list-style:none;display:grid;gap:10px;font-size:0.88rem;color:var(--text-secondary);">
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">→</span> You give a goal ("add login tests for these user stories")</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">→</span> Copilot reads your codebase to understand patterns</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">→</span> Edits multiple files, runs tests, checks for errors</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">→</span> Loops and self-corrects without you prompting each step</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">→</span> Shows you what it did and asks for confirmation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — Enabling Agent Mode ─── -->
+  <div class="slide" data-title="Enabling Agent Mode" data-notes="Walk through this slowly. Agent Mode is a VS Code Copilot Chat feature — it shows up in the chat mode dropdown. Make sure everyone can see it on their screen. If someone doesn't have it, they may need to update VS Code or their Copilot extension.&lt;br&gt;&lt;br&gt;Agent mode requires Copilot Individual, Business, or Enterprise — it is NOT available on the free tier as of early 2025.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">How to enable Agent Mode</h2>
+      <div class="card-grid c2" style="gap:16px;margin-bottom:20px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Step 1</div>
+          <div style="font-size:0.9rem;color:var(--text-primary);font-weight:600;margin-bottom:6px;">Open Copilot Chat</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Click the chat icon in the VS Code sidebar, or press <code style="background:var(--code-bg);padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;">Ctrl+Alt+I</code> / <code style="background:var(--code-bg);padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;">⌃⌥I</code></div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Step 2</div>
+          <div style="font-size:0.9rem;color:var(--text-primary);font-weight:600;margin-bottom:6px;">Switch to Agent Mode</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Click the mode dropdown at the top of the chat panel and select <strong>Agent</strong></div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Step 3</div>
+          <div style="font-size:0.9rem;color:var(--text-primary);font-weight:600;margin-bottom:6px;">Give it a goal</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Type your task as a complete goal, not a question. "Add Playwright tests for the login flow" not "how do I write a login test?"</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Step 4</div>
+          <div style="font-size:0.9rem;color:var(--text-primary);font-weight:600;margin-bottom:6px;">Review and approve</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Copilot will show you each change before applying. You stay in control — it won't modify files without your approval.</div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
+        ⚠️ <strong>Requires paid Copilot plan.</strong> Not available on the free tier.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — What Agent Mode Can Do ─── -->
+  <div class="slide" data-title="What Agent Mode Can Do" data-notes="This is where people's eyes light up. Agent Mode has actual tools it can use — not just text generation. It can read files, write files, run terminal commands, and check the results. This is why it feels fundamentally different from normal chat.&lt;br&gt;&lt;br&gt;Pause here and ask: what's a task you do regularly that involves multiple files or multiple steps? That's a candidate for agent mode.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">What Agent Mode can actually do</h2>
+      <div class="card-grid c3" style="gap:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.4rem;margin-bottom:10px;">📁</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Read your codebase</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Explores your project structure, reads existing tests and code to understand patterns before generating anything</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.4rem;margin-bottom:10px;">✏️</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Edit multiple files</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Can create new files and modify existing ones across your project in a single task run</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.4rem;margin-bottom:10px;">⚡</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Run terminal commands</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Can execute npm commands, run tests, and check their output to verify changes work correctly</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.4rem;margin-bottom:10px;">🔄</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Self-correct on errors</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">If a test fails or a command errors, it reads the output and adjusts its approach without you prompting it</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.4rem;margin-bottom:10px;">🧠</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Plan multi-step tasks</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Breaks a large goal into logical steps, shows you the plan, then executes them in order</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.4rem;margin-bottom:10px;">✅</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Show its work</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Logs what it's doing at each step — you can follow along, pause, or redirect at any point</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — What Agent Mode Cannot Do ─── -->
+  <div class="slide" data-title="What Agent Mode Cannot Do" data-notes="This is just as important as the previous slide. Agent Mode isn't magic — it has real limits. The most important one for QA engineers: it can write tests that look correct but have logic errors. It can generate something that passes a smoke test but misses edge cases. Always review what it produces.&lt;br&gt;&lt;br&gt;&lt;div class='warning-note'&gt;Watch out: Agent Mode sometimes goes further than intended. If your prompt is vague, it might refactor code you didn't ask it to touch. Be specific about scope.&lt;/div&gt;">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">What it cannot do</h2>
+      <div style="display:grid;gap:12px;">
+        <div class="myth-card">
+          <div class="myth-tag">Myth</div>
+          <div style="font-size:0.9rem;font-weight:600;margin:8px 0 4px;">"Agent Mode tests are always correct"</div>
+          <div class="reality-tag" style="margin-top:8px;">Reality</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:4px;">It generates plausible tests. They may have logic errors, incorrect assertions, or miss edge cases. You must review and run them.</div>
+        </div>
+        <div class="myth-card">
+          <div class="myth-tag">Myth</div>
+          <div style="font-size:0.9rem;font-weight:600;margin:8px 0 4px;">"It knows your app's business rules"</div>
+          <div class="reality-tag" style="margin-top:8px;">Reality</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:4px;">It can infer patterns from your code, but it doesn't know your requirements documents, user stories, or acceptance criteria unless you provide them.</div>
+        </div>
+        <div class="myth-card">
+          <div class="myth-tag">Myth</div>
+          <div style="font-size:0.9rem;font-weight:600;margin:8px 0 4px;">"It stays within scope automatically"</div>
+          <div class="reality-tag" style="margin-top:8px;">Reality</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:4px;">With a vague prompt it may touch files you didn't expect. Be explicit: "only modify files in /tests/login/" to constrain its scope.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — The Approval Workflow ─── -->
+  <div class="slide" data-title="The Approval Workflow" data-notes="This slide is reassuring for people who are nervous about the AI making changes they didn't ask for. Copilot Agent Mode shows a diff for every file change before applying it. You can reject individual changes. You can stop the whole run at any time.&lt;br&gt;&lt;br&gt;Think of it like a pull request from the AI — you review, you approve, it merges. You never lose control.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">You stay in control</h2>
+      <img src="/images/ai-in-practice/session6-slide6.svg" alt="Agent mode approve/reject workflow diagram" style="width:100%;display:block;margin:12px auto 8px;border-radius:12px;"/>
+        <!-- Caption -->
+        <text x="350" y="300" text-anchor="middle" fill="#9099b8" font-size="11">You're always in control. Agent Mode never applies changes without your approval.</text>
+      </svg>
+      <div style="background:var(--bg-elevated);border-radius:12px;border:1px solid var(--border);padding:24px;margin-bottom:16px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:16px;">How the approval flow works</div>
+        <div style="display:grid;gap:14px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);flex-shrink:0;">1</div>
+            <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Agent shows its plan</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">Before touching anything, it describes what it intends to do. You can stop here.</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);flex-shrink:0;">2</div>
+            <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Each file change is shown as a diff</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">Green = added, red = removed. You see exactly what changes before they're applied.</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);flex-shrink:0;">3</div>
+            <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">You approve, reject, or redirect</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">Accept the change, reject it, or type a correction ("don't use page.goto here, use the loginHelper instead").</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);flex-shrink:0;">4</div>
+            <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Agent runs verification (if needed)</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">It can run <code style="font-family:'IBM Plex Mono',monospace;font-size:0.82em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">npx playwright test</code> itself to check if the generated tests pass.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — Demo: Writing a Full Test File ─── -->
+  <div class="slide" data-title="Demo: Full Test File from Goal" data-notes="Walk through this demo live. If you have a Playwright project open, demonstrate it directly. If not, narrate the steps using this slide.&lt;br&gt;&lt;br&gt;The key thing to show: you write one goal statement and the agent explores your project, finds your existing test patterns, and generates a full test file that matches them. It's not just copy-pasting a generic template.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Demo: from goal to test file</h2>
+      <div class="chat-mock" style="margin-bottom:16px;">
+        <div class="chat-msg user">
+          Write Playwright tests for the user login flow. The login page is at /login. Valid credentials are in tests/fixtures/users.json. Follow the same Page Object pattern as in tests/pages/homePage.ts. Cover: successful login, wrong password, empty fields, account locked scenario.
+        </div>
+        <div class="chat-msg ai">
+          I'll start by reading your existing Page Object structure and test fixtures to match your patterns.
+          <br><br>
+          <strong>Plan:</strong><br>
+          1. Read tests/pages/homePage.ts to understand your Page Object pattern<br>
+          2. Read tests/fixtures/users.json for available credentials<br>
+          3. Create tests/pages/loginPage.ts (Page Object)<br>
+          4. Create tests/login.spec.ts (4 test scenarios)<br>
+          5. Run <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">npx playwright test tests/login.spec.ts</code> to verify
+          <br><br>
+          Shall I proceed?
+        </div>
+      </div>
+      <div style="background:var(--green-soft);border:1px solid rgba(94,194,105,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
+        ✓ Notice: it reads your project first, creates a Page Object, generates tests, then runs them to verify. All from one prompt.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — When to Use Agent Mode ─── -->
+  <div class="slide" data-title="When to Use Agent Mode" data-notes="Not every task needs Agent Mode. This slide helps people route decisions correctly. Agent Mode has overhead — it reads files, plans, waits for approvals. For a 3-line fix, it's overkill. For building out a whole test suite from scratch? It's exactly the right tool.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">When to reach for Agent Mode</h2>
+      <div class="comparison">
+        <div class="comp-col positive">
+          <div class="comp-label">Good candidates for Agent Mode</div>
+          <ul style="list-style:none;display:grid;gap:10px;font-size:0.85rem;color:var(--text-secondary);">
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Build a whole test file from scratch</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Refactor a test suite to use Page Objects</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Add tests across multiple spec files for a new feature</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Set up a new test framework from zero</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Fix multiple failing tests after an API change</li>
+          </ul>
+        </div>
+        <div class="comp-col negative">
+          <div class="comp-label">Stick with Chat or Completions</div>
+          <ul style="list-style:none;display:grid;gap:10px;font-size:0.85rem;color:var(--text-secondary);">
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Explaining what a piece of code does</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Fixing a single assertion in a single test</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Generating a quick snippet you'll paste manually</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Answering a question about a framework or API</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Adding one test case to an existing file</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — Writing Good Agent Prompts ─── -->
+  <div class="slide" data-title="Writing Good Agent Prompts" data-notes="Agent prompts are different from chat prompts. In chat you can be conversational and refine. In Agent Mode, a vague prompt means the agent might go in a completely different direction than you expected, and by the time you notice it's already made a dozen changes.&lt;br&gt;&lt;br&gt;The formula: Goal + Context + Constraints + Verification step. Let the team practice rewriting a vague prompt into a structured one.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">The anatomy of a good agent prompt</h2>
+      <div style="display:grid;gap:12px;margin-bottom:16px;">
+        <div style="background:var(--bg-card);border:1px solid var(--red);border-radius:8px;padding:14px 16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--red);margin-bottom:6px;">Too vague</div>
+          <div style="font-size:0.88rem;color:var(--text-secondary);">"Add some tests for the checkout flow"</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--green);border-radius:8px;padding:14px 16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:8px;">Structured and clear</div>
+          <div style="font-size:0.88rem;color:var(--text-secondary);line-height:1.7;">
+            <strong style="color:var(--text-primary);">Goal:</strong> Add Playwright E2E tests for the checkout flow.<br>
+            <strong style="color:var(--text-primary);">Context:</strong> Checkout starts at /cart, uses Stripe test cards, ends at /order-confirmation.<br>
+            <strong style="color:var(--text-primary);">Constraints:</strong> Only create new files in tests/checkout/. Use the existing helpers/stripe.ts for test card data. Don't modify any existing files.<br>
+            <strong style="color:var(--text-primary);">Verification:</strong> Run npx playwright test tests/checkout/ after creating the files.
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
+        Rule of thumb: if a new developer joining your team couldn't complete the task from your prompt alone, the agent can't either.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — Agent Mode vs Terminal Agents ─── -->
+  <div class="slide" data-title="Agent Mode vs Terminal Agents" data-notes="Preview of what's coming in Phase 4. Copilot Agent Mode runs inside VS Code. Terminal agents (Claude Code, Opencode) run in your terminal and have even more capability — they can manage git, read docs from URLs, and operate on larger codebases. Both are 'agents' but they have different strengths.&lt;br&gt;&lt;br&gt;Don't go too deep here — just plant the seed so Phase 4 isn't a surprise.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Looking ahead — Agent Mode is just the start</h2>
+      <img src="/images/ai-in-practice/session6-slide10.svg" alt="Copilot Agent Mode vs Terminal Agents comparison" style="width:100%;display:block;margin:12px auto 8px;border-radius:12px;"/>
+      <div class="comparison">
+        <div class="comp-col neutral">
+          <div class="comp-label">Copilot Agent Mode (what we have now)</div>
+          <ul style="list-style:none;display:grid;gap:8px;font-size:0.85rem;color:var(--text-secondary);">
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> Lives inside VS Code</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> Works on your open project</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> GUI-based approvals</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> Tight integration with editor</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> Best for single-project file tasks</li>
+          </ul>
+        </div>
+        <div class="comp-col neutral">
+          <div class="comp-label">Terminal agents (Phase 4: Claude Code, Opencode)</div>
+          <ul style="list-style:none;display:grid;gap:8px;font-size:0.85rem;color:var(--text-secondary);">
+            <li style="display:flex;gap:8px;"><span style="color:var(--purple);">·</span> Lives in your terminal</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--purple);">·</span> Can span any directory on your machine</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--purple);">·</span> Text-based workflow</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--purple);">·</span> Deeper git / command integration</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--purple);">·</span> Better for complex, multi-step operations</li>
+          </ul>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:16px;font-size:0.85rem;color:var(--text-dim);">We'll cover terminal agents in Phase 4 — Sessions 10, 11, 12</div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — Common Mistakes ─── -->
+  <div class="slide" data-title="Common Mistakes" data-notes="Quick fire round. These come from real experience. Go through each one — if the team has started experimenting with Agent Mode, some of these will resonate immediately.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Mistakes people make with Agent Mode</h2>
+      <div style="display:grid;gap:10px;">
+        <div style="display:flex;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🎯</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Giving it a vague goal and expecting precision</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">Vague prompt = unpredictable output. Be specific about scope, pattern, and constraints.</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🔍</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Approving file changes without reading them</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">The diffs are there for a reason. Always read them. Agents can be confidently wrong.</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🛡️</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Trusting passing tests as proof of correctness</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">A test that always passes regardless of app behavior is worse than no test. Check assertions, not just exit codes.</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">📦</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Letting it run without scope constraints</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">Without explicit constraints, it might helpfully "fix" other files it decides need improving. Always set boundaries.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="Summarise before the bridge. Ask the group: has anyone already tried Agent Mode? What happened? What would they use it for next week?">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:24px;">Key takeaways</h2>
+      <div class="takeaway-list">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Agent Mode is Copilot with tools</div>
+            <div class="takeaway-desc">It can read files, write files, run commands, and self-correct — not just generate text.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">You always approve changes</div>
+            <div class="takeaway-desc">Nothing is applied without your review. The diff-review workflow keeps you in control.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Best for multi-file, multi-step tasks</div>
+            <div class="takeaway-desc">Use it for building test suites, refactoring, scaffolding — not for quick one-liner fixes.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Prompt quality determines output quality</div>
+            <div class="takeaway-desc">Structured prompts with goal, context, constraints, and verification steps produce far better results.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">5</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Review the tests, not just the exit code</div>
+            <div class="takeaway-desc">A passing test that doesn't actually test anything is worse than no test. Always verify assertions.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 13 — Bridge to Phase 3 ─── -->
+  <div class="slide" data-title="What's Next" data-notes="Phase 2 is done. We've covered Copilot setup, daily workflow patterns, and Agent Mode. Phase 3 goes deeper on the specific QA work: writing test suites, debugging failures, and refactoring test code. This is where the rubber meets the road for the team's actual daily work.">
+    <div class="slide-inner" style="text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:24px;">Phase 2 Complete</div>
+      <h2 style="font-size:2rem;margin-bottom:14px;">Up next: <span style="color:var(--accent)">Phase 3</span></h2>
+      <p style="color:var(--text-secondary);font-size:0.95rem;max-width:480px;margin:0 auto 32px;line-height:1.7;">AI for Test Automation &amp; Debugging — where we apply everything to your real QA work</p>
+      <div style="display:grid;gap:10px;max-width:420px;margin:0 auto;text-align:left;">
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;">
+          <span>Session 07 — Writing Test Cases with AI</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:var(--bg-card);padding:2px 8px;border-radius:4px;color:var(--text-dim);">next</span>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;color:var(--text-muted);">Session 08 — Debugging Tests with AI</div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;color:var(--text-muted);">Session 09 — Refactoring Your Test Suite with AI</div>
+      </div>
+    </div>
+  </div>

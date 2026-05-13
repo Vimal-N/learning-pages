@@ -1,0 +1,545 @@
+---
+layout: session.njk
+title: Session 11 — The Agent Evolution
+sessionNumber: "11"
+sessionTitle: "The Agent Evolution"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="This session tells the story of how AI assistance evolved from a fancy autocomplete to a full autonomous agent. Understanding this evolution helps the team see WHY agents are more powerful — not just THAT they are. The conceptual journey: each stage gave us something new, and each stage required us to change how we think about working with AI.">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">🤖 Session 11 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools</div>
+      <h1 style="font-size:2.1rem;margin-bottom:16px;line-height:1.2;">The Agent Evolution<br><span style="font-size:1.5rem;color:var(--accent);">From Inline Suggestion to Autonomous Agent</span></h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:540px;margin:0 auto 32px;line-height:1.7;">How AI went from finishing your sentences to running your entire test suite — and why that changes everything.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">45 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Sessions 10–12</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — The Four Stages (SVG timeline) ─── -->
+  <div class="slide" data-title="The Four Stages" data-notes="This is the spine of the whole session. Every subsequent slide zooms into one of these four stages. The key insight: each stage required a different mental model from the user. Stage 1 = passive receiver. Stage 2 = active questioner. Stage 3 = workspace sharer. Stage 4 = task delegator. The shift isn&apos;t just in what AI can do — it&apos;s in how YOU work with it.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Four stages — one evolution</h2>
+      <svg viewBox="0 0 620 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:620px;display:block;margin:0 auto 10px;">
+        <!-- Background -->
+        <rect width="620" height="180" rx="12" fill="#13111d"/>
+        <!-- Timeline bar -->
+        <rect x="60" y="88" width="500" height="4" rx="2" fill="#2a2540"/>
+        <!-- Amber segment -->
+        <rect x="60" y="88" width="125" height="4" rx="2" fill="#e8a848" fill-opacity="0.5"/>
+        <!-- Blue segment -->
+        <rect x="185" y="88" width="125" height="4" fill="#6fa3f7" fill-opacity="0.5"/>
+        <!-- Purple segment -->
+        <rect x="310" y="88" width="125" height="4" fill="#b08cf5" fill-opacity="0.5"/>
+        <!-- Green segment -->
+        <rect x="435" y="88" width="125" height="4" rx="2" fill="#5ec269" fill-opacity="0.7"/>
+
+        <!-- Stage 1 — Inline Suggestion (amber) -->
+        <circle cx="100" cy="90" r="20" fill="#e8a848" fill-opacity="0.15" stroke="#e8a848" stroke-width="2"/>
+        <text x="100" y="95" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#e8a848">1</text>
+        <!-- Stage 1 badge -->
+        <rect x="64" y="34" width="72" height="18" rx="4" fill="#e8a848" fill-opacity="0.15"/>
+        <text x="100" y="47" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#e8a848">Stage 1</text>
+        <line x1="100" y1="70" x2="100" y2="52" stroke="#e8a848" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- Stage 1 labels -->
+        <text x="100" y="122" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#e8a848">Inline</text>
+        <text x="100" y="136" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#e8a848">Suggestion</text>
+        <text x="100" y="155" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#8a7048">AI guesses your next line</text>
+
+        <!-- Arrow 1→2 -->
+        <polygon points="186,87 178,83 178,91" fill="#3a3560"/>
+
+        <!-- Stage 2 — Conversation (blue) -->
+        <circle cx="225" cy="90" r="20" fill="#6fa3f7" fill-opacity="0.15" stroke="#6fa3f7" stroke-width="2"/>
+        <text x="225" y="95" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#6fa3f7">2</text>
+        <rect x="189" y="34" width="72" height="18" rx="4" fill="#6fa3f7" fill-opacity="0.12"/>
+        <text x="225" y="47" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6fa3f7">Stage 2</text>
+        <line x1="225" y1="70" x2="225" y2="52" stroke="#6fa3f7" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="225" y="122" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#6fa3f7">Conversation</text>
+        <text x="225" y="155" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#4a7acc">AI answers your questions</text>
+
+        <!-- Arrow 2→3 -->
+        <polygon points="311,87 303,83 303,91" fill="#3a3560"/>
+
+        <!-- Stage 3 — AI Assistance (purple) -->
+        <circle cx="350" cy="90" r="20" fill="#b08cf5" fill-opacity="0.15" stroke="#b08cf5" stroke-width="2"/>
+        <text x="350" y="95" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#b08cf5">3</text>
+        <rect x="314" y="34" width="72" height="18" rx="4" fill="#b08cf5" fill-opacity="0.12"/>
+        <text x="350" y="47" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#b08cf5">Stage 3</text>
+        <line x1="350" y1="70" x2="350" y2="52" stroke="#b08cf5" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="350" y="122" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#b08cf5">AI Assistance</text>
+        <text x="350" y="155" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#7a5ccc">AI understands your workspace</text>
+
+        <!-- Arrow 3→4 -->
+        <polygon points="436,87 428,83 428,91" fill="#5ec269"/>
+
+        <!-- Stage 4 — Autonomous Agent (green, highlighted) -->
+        <circle cx="476" cy="90" r="22" fill="#5ec269" fill-opacity="0.18" stroke="#5ec269" stroke-width="2.5"/>
+        <text x="476" y="95" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#5ec269">4</text>
+        <rect x="437" y="34" width="78" height="18" rx="4" fill="#5ec269" fill-opacity="0.18"/>
+        <text x="476" y="47" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5ec269">Stage 4</text>
+        <line x1="476" y1="68" x2="476" y2="52" stroke="#5ec269" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="476" y="122" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#5ec269">Autonomous</text>
+        <text x="476" y="136" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#5ec269">Agent</text>
+        <text x="476" y="155" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#3aaa42">AI acts on your behalf</text>
+
+        <!-- "We are here →" label -->
+        <text x="560" y="86" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#5ec269">We are</text>
+        <text x="560" y="97" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#5ec269">here →</text>
+      </svg>
+      <div style="text-align:center;font-size:0.78rem;color:var(--text-dim);">Each stage required a different mental model. The shift isn&apos;t just what AI can do — it&apos;s how you work with it.</div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — Stage 1: Inline Suggestion ─── -->
+  <div class="slide" data-title="Stage 1 — The Autocomplete Era" data-notes="This is where most people&apos;s mental model of AI is stuck. Copilot completions are incredibly useful — but they&apos;re reactive. The AI waits for you to start typing and then tries to finish your thought. The developer is still in full control of the direction, the architecture, the decisions. AI is just saving keystrokes. Worth asking the room: &apos;Who here still primarily uses AI this way?&apos; Normalise it — it&apos;s a valid use case. But there&apos;s so much more available.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:6px;">Stage 1 — The Autocomplete Era</h2>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:14px;">GitHub Copilot completions · 2021–present</div>
+      <div style="display:grid;gap:8px;margin-bottom:14px;font-size:0.82rem;color:var(--text-secondary);">
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">·</span> AI sees the current file and cursor position</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">·</span> Predicts the next tokens — characters, words, lines</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">·</span> Developer accepts (Tab) or rejects (Esc)</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-dim);flex-shrink:0;">·</span> <span style="color:var(--text-muted);">No conversation, no context beyond the open file, no actions</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:8px;">What you type</div>
+          <div class="code-block" style="font-size:0.8rem;line-height:1.75;">
+            <span class="kw">function</span> <span class="fn">getUser</span>(id) {{ '{' }}<br>
+            &nbsp;&nbsp;<span class="cm">// fetch from API and return</span>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;border:2px solid rgba(232,168,72,0.35);padding:14px;position:relative;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">What Copilot suggests <span style="color:var(--text-dim);">(ghost text)</span></div>
+          <div class="code-block" style="font-size:0.8rem;line-height:1.75;">
+            <span style="color:#5a5580;">&nbsp;&nbsp;<span class="kw" style="color:#7a7090;">const</span> response = <span class="kw" style="color:#7a7090;">await</span> <span class="fn" style="color:#6a6090;">fetch</span>(`/api/users/<span style="color:#5a5580;">${{ '{' }}id{{ '}' }}</span>`);<br>
+            &nbsp;&nbsp;<span class="kw" style="color:#7a7090;">return</span> response.<span class="fn" style="color:#6a6090;">json</span>();<br>
+            {{ '}' }}</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(232,168,72,0.08);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:10px 14px;font-size:0.82rem;color:var(--text-secondary);text-align:center;">
+        <strong style="color:var(--accent);">Limitation:</strong> You&apos;re still doing all the thinking. AI is just fast at typing.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — Stage 2: Conversation ─── -->
+  <div class="slide" data-title="Stage 2 — The Chat Era" data-notes="The chat era was a huge leap. Suddenly you could have a conversation with an expert who had read every Stack Overflow post, every documentation page, every GitHub repo. But notice the limitation: you&apos;re still manually copying code back into your editor. The AI can&apos;t SEE your actual project. It doesn&apos;t know which version of Playwright you&apos;re using, what your page objects look like, or how your test helper utilities are structured. Every answer is generic until YOU provide context — and that context has to fit in one message.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:6px;">Stage 2 — The Chat Era</h2>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin-bottom:12px;">ChatGPT (Nov 2022) · Copilot Chat · Claude.ai</div>
+      <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">You can now ask questions instead of just waiting for suggestions. Back-and-forth refinement is possible — but the AI still knows nothing about YOUR project.</p>
+      <div class="chat-mock" style="margin-bottom:12px;">
+        <div class="chat-msg user" style="font-size:0.82em;">How do I write a Playwright test that waits for a network request to complete before clicking?</div>
+        <div class="chat-msg ai" style="font-size:0.82em;">Use <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">page.waitForResponse()</code> to intercept the request. Here&apos;s the pattern: set up the promise before the action that triggers the request, then await it...</div>
+        <div class="chat-msg user" style="font-size:0.82em;">What if the request happens before I click?</div>
+        <div class="chat-msg ai" style="font-size:0.82em;">In that case, set up the <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">waitForResponse</code> promise BEFORE triggering the click. Because it returns a promise, not a resolved value, the race condition is avoided...</div>
+      </div>
+      <div style="background:rgba(111,163,247,0.08);border:1px solid rgba(111,163,247,0.2);border-radius:8px;padding:10px 14px;font-size:0.82rem;color:var(--text-secondary);text-align:center;">
+        <strong style="color:var(--blue);">Limitation:</strong> It knows a lot about the world. It knows nothing about YOUR project.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — Stage 3: AI Assistance (Workspace-Aware) ─── -->
+  <div class="slide" data-title="Stage 3 — The Workspace Era" data-notes="This stage was when AI assistance went from &apos;cool demo&apos; to &apos;actually useful in my daily work.&apos; The answers stopped being generic and started referencing your actual variable names, your actual patterns, your actual tech stack. But here&apos;s what&apos;s still missing: YOU are still the one making every change. AI suggests, you review, you copy-paste or accept, you run the test, you come back for the next suggestion. The bottleneck is still you.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:6px;">Stage 3 — The Workspace Era</h2>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--purple);margin-bottom:12px;">Copilot @workspace · Claude with files · GitHub Copilot Workspace</div>
+      <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">AI can now read your actual files, imports, config, and dependencies. Answers are specific to YOUR codebase — not just generic advice.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:8px;">Stage 2 answer</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.6;">Use <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">expect(page.locator(&apos;.button&apos;)).toBeVisible()</code></div>
+          <div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);">Generic — no project context</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;border:2px solid var(--purple);padding:12px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--purple);margin-bottom:8px;">Context given</div>
+          <div class="code-block" style="font-size:0.72rem;line-height:1.7;">
+            <span class="kw">class</span> <span class="fn">CheckoutPage</span> {{ '{' }}<br>
+            &nbsp;&nbsp;submitBtn = ...<br>
+            &nbsp;&nbsp;confirmModal = ...<br>
+            {{ '}' }}
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;border:2px solid rgba(176,140,245,0.5);padding:12px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--purple);margin-bottom:8px;">Stage 3 answer</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.6;">In your PageObject pattern, use <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">await this.submitBtn.click()</code> then <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">await expect(this.confirmModal).toBeVisible()</code></div>
+        </div>
+      </div>
+      <div style="background:rgba(176,140,245,0.08);border:1px solid rgba(176,140,245,0.2);border-radius:8px;padding:10px 14px;font-size:0.82rem;color:var(--text-secondary);text-align:center;">
+        <strong style="color:var(--purple);">Limitation:</strong> It understands your project. But YOU still have to apply every suggestion manually.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — Stage 4: Autonomous Agent ─── -->
+  <div class="slide" data-title="Stage 4 — The Agent Era" data-notes="THIS is the shift. You&apos;re no longer the one making every change — you&apos;re the one reviewing changes. Your job moves up the stack. You become an architect and a reviewer rather than a typist. The agent explores, plans, acts, verifies, and fixes — all in a loop. You watch, redirect when needed, and approve the final result. For a QA engineer, this means you can tackle tasks that would have taken an entire day in 20 minutes of agent oversight.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:6px;">Stage 4 — The Agent Era</h2>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:12px;">Claude Code · Opencode · GitHub Copilot Agent Mode</div>
+      <div style="display:grid;gap:7px;margin-bottom:14px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--accent);font-size:0.82rem;"><span style="color:var(--accent);flex-shrink:0;">🔍</span><div><strong style="color:var(--text-primary);">Explores</strong> <span style="color:var(--text-secondary);">your entire codebase — reads directories, searches patterns</span></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--blue);font-size:0.82rem;"><span style="color:var(--blue);flex-shrink:0;">✏️</span><div><strong style="color:var(--text-primary);">Edits</strong> <span style="color:var(--text-secondary);">multiple files in sequence — creates, modifies, deletes</span></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--purple);font-size:0.82rem;"><span style="color:var(--purple);flex-shrink:0;">⚡</span><div><strong style="color:var(--text-primary);">Runs</strong> <span style="color:var(--text-secondary);">shell commands — npm test, git, grep, any CLI</span></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--cyan);font-size:0.82rem;"><span style="color:var(--cyan);flex-shrink:0;">🔄</span><div><strong style="color:var(--text-primary);">Iterates</strong> <span style="color:var(--text-secondary);">on failures — runs tests, reads errors, fixes, retries</span></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--green);font-size:0.82rem;"><span style="color:var(--green);flex-shrink:0;">✅</span><div><strong style="color:var(--text-primary);">Asks permission</strong> <span style="color:var(--text-secondary);">before destructive actions</span></div></div>
+      </div>
+      <div style="background:rgba(94,194,105,0.08);border:1px solid rgba(94,194,105,0.25);border-radius:8px;padding:10px 14px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.78rem;">
+          <div><strong style="color:var(--text-muted);">Human (30 min):</strong> <span style="color:var(--text-dim);">Find tests → Read files → Plan → Edit 1 → Edit 2 → Edit 3 → Run → Fix</span></div>
+          <div><strong style="color:var(--green);">Agent (one task):</strong> <span style="color:var(--text-secondary);">&ldquo;Find all tests using waitForTimeout() and replace with proper waits. Run tests after each file.&rdquo;</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — The Autonomy Comparison (SVG) ─── -->
+  <div class="slide" data-title="How Much Does the AI Do?" data-notes="The point of this chart is visceral. When people see Stage 4 and realise AI does 80% of the mechanical work... it clicks. Pause here and let people sit with it. Then ask: &apos;If AI is doing 80% of the work, what does that mean for how much you can get done in a day?&apos; The answer is that your effective output multiplies — not because you work harder, but because you&apos;ve off-loaded the mechanical execution to a very capable tool.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">How much does the AI do vs how much do YOU do?</h2>
+      <svg viewBox="0 0 580 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:580px;display:block;margin:0 auto 10px;">
+        <!-- Background -->
+        <rect width="580" height="260" rx="12" fill="#13111d"/>
+
+        <!-- Row labels -->
+        <text x="10" y="65" font-family="IBM Plex Mono, monospace" font-size="11" fill="#e8a848">S1: Inline</text>
+        <text x="10" y="117" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6fa3f7">S2: Chat</text>
+        <text x="10" y="169" font-family="IBM Plex Mono, monospace" font-size="11" fill="#b08cf5">S3: Workspace</text>
+        <text x="10" y="221" font-family="IBM Plex Mono, monospace" font-size="11" fill="#5ec269">S4: Agent</text>
+
+        <!-- Bar area starts at x=110 -->
+        <!-- S1: AI 10% (40px), You 90% (360px) out of 400px total -->
+        <rect x="110" y="44" width="40" height="38" rx="3" fill="#5ec269" fill-opacity="0.8"/>
+        <rect x="150" y="44" width="360" height="38" rx="3" fill="#e8a848" fill-opacity="0.7"/>
+        <text x="130" y="67" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#fff">10%</text>
+        <text x="330" y="67" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#1a1020">90% You</text>
+        <text x="520" y="67" font-family="IBM Plex Mono, monospace" font-size="9" fill="#8a6a30">AI saves keystrokes</text>
+
+        <!-- S2: AI 30% (120px), You 70% (280px) -->
+        <rect x="110" y="96" width="120" height="38" rx="3" fill="#5ec269" fill-opacity="0.8"/>
+        <rect x="230" y="96" width="280" height="38" rx="3" fill="#e8a848" fill-opacity="0.7"/>
+        <text x="170" y="119" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#fff">30%</text>
+        <text x="370" y="119" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#1a1020">70% You</text>
+        <text x="520" y="119" font-family="IBM Plex Mono, monospace" font-size="9" fill="#8a6a30">AI researches,</text>
+        <text x="520" y="131" font-family="IBM Plex Mono, monospace" font-size="9" fill="#8a6a30">you apply</text>
+
+        <!-- S3: AI 50% (200px), You 50% (200px) -->
+        <rect x="110" y="148" width="200" height="38" rx="3" fill="#5ec269" fill-opacity="0.8"/>
+        <rect x="310" y="148" width="200" height="38" rx="3" fill="#e8a848" fill-opacity="0.7"/>
+        <text x="210" y="171" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#fff">50%</text>
+        <text x="410" y="171" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#1a1020">50% You</text>
+        <text x="520" y="171" font-family="IBM Plex Mono, monospace" font-size="9" fill="#8a6a30">AI advises,</text>
+        <text x="520" y="183" font-family="IBM Plex Mono, monospace" font-size="9" fill="#8a6a30">you apply</text>
+
+        <!-- S4: AI 80% (320px), You 20% (80px) -->
+        <rect x="110" y="200" width="320" height="38" rx="3" fill="#5ec269" fill-opacity="0.9"/>
+        <rect x="430" y="200" width="80" height="38" rx="3" fill="#e8a848" fill-opacity="0.7"/>
+        <text x="270" y="223" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#fff">80% AI</text>
+        <text x="470" y="223" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#1a1020">20%</text>
+        <text x="520" y="223" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4aaa52">AI acts,</text>
+        <text x="520" y="235" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4aaa52">you review</text>
+
+        <!-- Legend -->
+        <rect x="110" y="246" width="16" height="10" rx="2" fill="#5ec269" fill-opacity="0.85"/>
+        <text x="132" y="256" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5ec269">AI does it</text>
+        <rect x="210" y="246" width="16" height="10" rx="2" fill="#e8a848" fill-opacity="0.75"/>
+        <text x="232" y="256" font-family="IBM Plex Mono, monospace" font-size="9" fill="#e8a848">You do it</text>
+      </svg>
+      <div style="text-align:center;font-size:0.82rem;color:var(--text-secondary);">Your role is shifting: <span style="color:var(--text-dim);">typist</span> → <span style="color:var(--blue);">reviewer</span> → <span style="color:var(--green);">architect</span></div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — Why Everyone is Moving to Agents ─── -->
+  <div class="slide" data-title="Why the Industry is Going All-In" data-notes="The honest answer to &apos;why is everyone moving to agents&apos; is: because it works, and the advantages compound. Once a developer experiences finishing a week&apos;s worth of refactoring work in one afternoon, they don&apos;t go back. This isn&apos;t hype — it&apos;s a real productivity shift. For QA engineers specifically: test creation, test maintenance, debugging flaky tests — these are EXACTLY the kind of repetitive, pattern-heavy tasks that agents are best at.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">Why the industry is going all-in on agents</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:14px;">
+          <div style="font-size:0.88rem;font-weight:700;color:var(--accent);margin-bottom:5px;">Speed</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Tasks that took hours now take minutes. Not because AI is smarter — because it doesn&apos;t stop to context-switch, get distracted, or forget what it was doing.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:14px;">
+          <div style="font-size:0.88rem;font-weight:700;color:var(--blue);margin-bottom:5px;">Consistency</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">An agent applies the same pattern identically across 200 files. Humans get tired. Agents don&apos;t.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:14px;">
+          <div style="font-size:0.88rem;font-weight:700;color:var(--purple);margin-bottom:5px;">24/7 availability</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Agents don&apos;t need meetings. You describe the task clearly, come back in 10 minutes.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:14px;">
+          <div style="font-size:0.88rem;font-weight:700;color:var(--cyan);margin-bottom:5px;">Codebase-wide reasoning</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">A human can hold maybe 3–5 files in their head. An agent reads the whole repo before it starts.</div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px 16px;margin-bottom:10px;">
+        <div style="font-size:0.88rem;font-weight:700;color:var(--green);margin-bottom:4px;">The compounding effect</div>
+        <div style="font-size:0.8rem;color:var(--text-secondary);">Every good task you delegate teaches you how to delegate better. Agent users get more from agents over time.</div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:9px 14px;font-size:0.78rem;color:var(--text-secondary);">
+        By 2025, 75% of enterprise software engineers use AI coding assistants daily. By 2027, autonomous agents are projected to handle 30% of all software changes. <span style="color:var(--text-dim);">(Gartner / GitHub estimates)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — What Makes Something "Agentic" ─── -->
+  <div class="slide" data-title="The Five Properties of a True Agent" data-notes="This slide gives the audience a precise vocabulary for &apos;what is an agent.&apos; It also lets them evaluate any AI tool they encounter: &apos;Does this thing have autonomy? Can it verify its own work?&apos; The scale at the bottom is intentionally opinionated but defensible — Copilot Chat has tool use (it can search the workspace) but not full autonomy or verification loops. Full terminal agents check all five.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">The five properties of a true AI agent</h2>
+      <div style="display:grid;gap:8px;margin-bottom:16px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 14px;background:var(--bg-elevated);border-radius:7px;border-left:3px solid var(--accent);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--accent);flex-shrink:0;min-width:20px;">1</div>
+          <div style="font-size:0.84rem;"><strong style="color:var(--text-primary);">Autonomy</strong> <span style="color:var(--text-secondary);">— Can decide WHAT to do next, not just HOW to do what you asked</span></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 14px;background:var(--bg-elevated);border-radius:7px;border-left:3px solid var(--blue);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--blue);flex-shrink:0;min-width:20px;">2</div>
+          <div style="font-size:0.84rem;"><strong style="color:var(--text-primary);">Tool use</strong> <span style="color:var(--text-secondary);">— Can read files, write files, run commands, call APIs</span></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 14px;background:var(--bg-elevated);border-radius:7px;border-left:3px solid var(--purple);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--purple);flex-shrink:0;min-width:20px;">3</div>
+          <div style="font-size:0.84rem;"><strong style="color:var(--text-primary);">Memory / context</strong> <span style="color:var(--text-secondary);">— Holds the full task and prior results in context while working</span></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 14px;background:var(--bg-elevated);border-radius:7px;border-left:3px solid var(--cyan);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--cyan);flex-shrink:0;min-width:20px;">4</div>
+          <div style="font-size:0.84rem;"><strong style="color:var(--text-primary);">Planning</strong> <span style="color:var(--text-secondary);">— Breaks a large task into steps and executes them in order</span></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 14px;background:var(--bg-elevated);border-radius:7px;border-left:3px solid var(--green);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--green);flex-shrink:0;min-width:20px;">5</div>
+          <div style="font-size:0.84rem;"><strong style="color:var(--text-primary);">Verification</strong> <span style="color:var(--text-secondary);">— Can check its own work — run tests, read outputs, fix failures</span></div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:10px 14px;font-size:0.78rem;">
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;">
+          <span style="color:var(--blue);">Copilot Chat</span><span style="color:var(--text-dim);">= 1 property (tool use)</span>
+          <span style="color:var(--purple);">Copilot Agent Mode</span><span style="color:var(--text-dim);">= 3 properties (tool use, memory, planning)</span>
+          <span style="color:var(--green);">Claude Code / Opencode</span><span style="color:var(--green);">= all 5 properties</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — Real QA Scenarios: Which Stage Helps? ─── -->
+  <div class="slide" data-title="The Right Tool for the Right Task" data-notes="This slide helps the team develop judgment — not just enthusiasm. Not every task needs an agent. Simple questions are better as chat. The signal is: multi-file + needs to verify = agent territory. The rule of thumb at the bottom is one they can actually use. Write it on a sticky note.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">The right tool for the right level of task</h2>
+      <div style="overflow-x:auto;margin-bottom:14px;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--border);">
+              <th style="padding:9px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);font-weight:600;">Task</th>
+              <th style="padding:9px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);font-weight:600;">Best Stage</th>
+              <th style="padding:9px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);font-weight:600;">Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:11px 12px;color:var(--text-secondary);">&ldquo;Explain what this assertion does&rdquo;</td>
+              <td style="padding:11px 12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--blue);background:rgba(111,163,247,0.1);padding:2px 8px;border-radius:4px;">Stage 2 — Chat</span></td>
+              <td style="padding:11px 12px;color:var(--text-dim);font-size:0.78rem;">Quick question, no project context needed</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:11px 12px;color:var(--text-secondary);">&ldquo;Write a test for this component — here&apos;s the existing test next to it&rdquo;</td>
+              <td style="padding:11px 12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--purple);background:rgba(176,140,245,0.1);padding:2px 8px;border-radius:4px;">Stage 3 — Workspace</span></td>
+              <td style="padding:11px 12px;color:var(--text-dim);font-size:0.78rem;">Needs file context, but you&apos;ll paste the result</td>
+            </tr>
+            <tr>
+              <td style="padding:11px 12px;color:var(--text-secondary);">&ldquo;Add waitForLoadState to every test that navigates — run tests after&rdquo;</td>
+              <td style="padding:11px 12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--green);background:rgba(94,194,105,0.1);padding:2px 8px;border-radius:4px;">Stage 4 — Agent</span></td>
+              <td style="padding:11px 12px;color:var(--text-dim);font-size:0.78rem;">Multi-file, needs to run tests, iterate on failures</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:12px 16px;font-size:0.84rem;color:var(--text-secondary);">
+        <strong style="color:var(--accent);">Rule of thumb:</strong> Does completing this task require touching more than 3 files, or running a command after? If yes — use an agent.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — How to Leverage Agents Effectively ─── -->
+  <div class="slide" data-title="Three Mental Shifts for Agent Users" data-notes="These three shifts are what separate effective agent users from frustrated ones. The frustrated ones try to micromanage agents the same way they&apos;d direct a junior developer — with very specific instructions about WHERE to change things. The effective ones give the agent the GOAL and let it plan the HOW. But they also verify. The trust-then-verify mindset is key. It&apos;s not about being suspicious of the AI — it&apos;s about being professional. You wouldn&apos;t push code from a junior dev without reviewing it. Same principle.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Becoming an effective agent user — three mental shifts</h2>
+      <div style="display:grid;gap:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--accent);flex-shrink:0;">1</div>
+            <div>
+              <div style="font-size:0.9rem;font-weight:700;color:var(--text-primary);margin-bottom:5px;">From &ldquo;do it for me&rdquo; → &ldquo;here&apos;s the task&rdquo;</div>
+              <div style="font-size:0.82rem;color:var(--text-secondary);">Think in complete tasks, not individual actions. <em style="color:var(--green);">&ldquo;Fix the broken login test&rdquo;</em> is better than <em style="color:var(--text-dim);">&ldquo;change line 42 to use waitForNavigation instead of waitForTimeout.&rdquo;</em></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--blue);flex-shrink:0;">2</div>
+            <div>
+              <div style="font-size:0.9rem;font-weight:700;color:var(--text-primary);margin-bottom:5px;">From &ldquo;accepting completions&rdquo; → &ldquo;reviewing diffs&rdquo;</div>
+              <div style="font-size:0.82rem;color:var(--text-secondary);">Your new job is reading what the agent changed and deciding if it&apos;s right. Speed-reading diffs is a skill worth building.</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--green);flex-shrink:0;">3</div>
+            <div>
+              <div style="font-size:0.9rem;font-weight:700;color:var(--text-primary);margin-bottom:5px;">From &ldquo;trust the output&rdquo; → &ldquo;trust then verify&rdquo;</div>
+              <div style="font-size:0.82rem;color:var(--text-secondary);">Run the tests. Check the git diff. Read the changes. Agent outputs are usually correct — but you&apos;re the final reviewer, not the AI.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — A Day in the Life ─── -->
+  <div class="slide" data-title="A Day in the Life" data-notes="The math at the bottom is the point. Not &apos;AI is amazing&apos; — but &apos;this has a concrete ROI on your time.&apos; QA engineers are often dealing with high maintenance burden on test suites. Agents can absorb a huge chunk of that maintenance work. The key word is &apos;mechanical&apos; — agents are great at finding and applying patterns. They&apos;re not replacing your judgment about WHAT to test or WHY a feature should behave a certain way.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">What your workday looks like with agent-augmented QA</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">Without agents (today)</div>
+          <div style="display:grid;gap:7px;font-size:0.8rem;">
+            <div style="display:flex;gap:10px;"><span style="color:var(--text-dim);font-family:'IBM Plex Mono',monospace;flex-shrink:0;">09:00</span><span style="color:var(--text-secondary);">Open failing test, read through 8 files to understand context</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--text-dim);font-family:'IBM Plex Mono',monospace;flex-shrink:0;">10:30</span><span style="color:var(--text-secondary);">Start writing the fix</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--text-dim);font-family:'IBM Plex Mono',monospace;flex-shrink:0;">11:00</span><span style="color:var(--text-secondary);">Realise fix broke 3 other tests</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--text-dim);font-family:'IBM Plex Mono',monospace;flex-shrink:0;">11:30</span><span style="color:var(--text-secondary);">Fix those, re-run</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--red);font-family:'IBM Plex Mono',monospace;flex-shrink:0;">12:00</span><span style="color:var(--text-muted);font-style:italic;">Done with one task</span></div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid rgba(94,194,105,0.35);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:12px;">With agents (possible now)</div>
+          <div style="display:grid;gap:7px;font-size:0.8rem;">
+            <div style="display:flex;gap:10px;"><span style="color:var(--green);font-family:'IBM Plex Mono',monospace;flex-shrink:0;">09:00</span><span style="color:var(--text-secondary);">Describe the task to the agent (GCSV format)</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--green);font-family:'IBM Plex Mono',monospace;flex-shrink:0;">09:02</span><span style="color:var(--text-secondary);">Agent reads all 8 files, proposes fix</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--green);font-family:'IBM Plex Mono',monospace;flex-shrink:0;">09:10</span><span style="color:var(--text-secondary);">Review the diff, approve</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--green);font-family:'IBM Plex Mono',monospace;flex-shrink:0;">09:12</span><span style="color:var(--text-secondary);">Agent runs tests, finds 3 failures, fixes automatically</span></div>
+            <div style="display:flex;gap:10px;"><span style="color:var(--green);font-family:'IBM Plex Mono',monospace;flex-shrink:0;">09:20</span><span style="color:var(--green);font-style:italic;">Done. Move to next task.</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:10px 14px;font-size:0.82rem;color:var(--text-secondary);text-align:center;">
+        That 40 minutes saved, four times a day = <strong style="color:var(--accent);">2.5 hours reclaimed</strong>. Per week = half a day back.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 13 — The Trust Spectrum ─── -->
+  <div class="slide" data-title="The Trust Spectrum" data-notes="This slide grounds the session in professional responsibility. Agents are powerful — and that power cuts both ways. The green zone is where you can let agents run freely because mistakes are cheap to catch (tests will fail, or diffs will be obviously wrong). The red zone is where agent errors can have real-world consequences. The amber zone is where most of your work will live — and &apos;review before applying&apos; is a good habit regardless.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">How much autonomy to give — and when</h2>
+      <div style="display:grid;gap:10px;margin-bottom:12px;">
+        <div style="background:rgba(94,194,105,0.08);border:2px solid rgba(94,194,105,0.4);border-radius:10px;padding:14px 16px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
+            <div style="width:14px;height:14px;border-radius:50%;background:#5ec269;flex-shrink:0;"></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1.5px;">Green Zone — Run without review</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:0.78rem;">
+            <span style="background:rgba(94,194,105,0.12);color:var(--green);padding:3px 10px;border-radius:4px;">Adding new test files from scratch</span>
+            <span style="background:rgba(94,194,105,0.12);color:var(--green);padding:3px 10px;border-radius:4px;">Formatting / linting fixes</span>
+            <span style="background:rgba(94,194,105,0.12);color:var(--green);padding:3px 10px;border-radius:4px;">Renaming variables consistently</span>
+            <span style="background:rgba(94,194,105,0.12);color:var(--green);padding:3px 10px;border-radius:4px;">Adding imports</span>
+          </div>
+        </div>
+        <div style="background:rgba(232,168,72,0.07);border:2px solid rgba(232,168,72,0.35);border-radius:10px;padding:14px 16px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
+            <div style="width:14px;height:14px;border-radius:50%;background:#e8a848;flex-shrink:0;"></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1.5px;">Amber Zone — Review before applying</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:0.78rem;">
+            <span style="background:rgba(232,168,72,0.1);color:var(--accent);padding:3px 10px;border-radius:4px;">Changing test logic or assertions</span>
+            <span style="background:rgba(232,168,72,0.1);color:var(--accent);padding:3px 10px;border-radius:4px;">Modifying shared page objects</span>
+            <span style="background:rgba(232,168,72,0.1);color:var(--accent);padding:3px 10px;border-radius:4px;">Adding dependencies to package.json</span>
+            <span style="background:rgba(232,168,72,0.1);color:var(--accent);padding:3px 10px;border-radius:4px;">Any multi-file refactor</span>
+          </div>
+        </div>
+        <div style="background:rgba(232,92,92,0.07);border:2px solid rgba(232,92,92,0.3);border-radius:10px;padding:14px 16px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
+            <div style="width:14px;height:14px;border-radius:50%;background:#e85c5c;flex-shrink:0;"></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;">Red Zone — Human-led, agent-assisted</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:0.78rem;">
+            <span style="background:rgba(232,92,92,0.1);color:var(--red);padding:3px 10px;border-radius:4px;">Changing authentication logic</span>
+            <span style="background:rgba(232,92,92,0.1);color:var(--red);padding:3px 10px;border-radius:4px;">Modifying CI/CD pipeline files</span>
+            <span style="background:rgba(232,92,92,0.1);color:var(--red);padding:3px 10px;border-radius:4px;">Database migrations</span>
+            <span style="background:rgba(232,92,92,0.1);color:var(--red);padding:3px 10px;border-radius:4px;">Production configs</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;padding:9px 14px;font-size:0.8rem;color:var(--text-secondary);text-align:center;border:1px solid var(--border);">
+        Agent running costs you a review. Agent error in the red zone costs you an incident.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 14 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="If the audience takes away one thing: &apos;My job changes when I use agents — it doesn&apos;t disappear.&apos; That&apos;s the most important reframe. This is a session about empowerment, not replacement.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:24px;">Key takeaways</h2>
+      <div class="takeaway-list">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">AI assistance has evolved through four stages — each requiring a different mental model</div>
+            <div class="takeaway-desc">Inline suggestion, chat, workspace-aware assistance, autonomous agent. We&apos;re now in the agent era — and the shift is in how YOU work, not just what AI can do.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Agents are powerful because they combine all five properties in one loop</div>
+            <div class="takeaway-desc">Autonomy, tool use, memory, planning, and verification — running together. That&apos;s what makes terminal agents categorically different from chat assistants.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">The agent workflow shifts your role from typist to reviewer — that&apos;s not a downgrade</div>
+            <div class="takeaway-desc">Reviewing is where your judgment matters most. You&apos;re not being replaced — you&apos;re being elevated. Architects, not typists.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Use the trust spectrum: green = let it run, amber = review carefully, red = human-led</div>
+            <div class="takeaway-desc">Not all tasks are equal. Develop judgment about when to delegate freely and when to stay in control. The spectrum gives you a framework to make that call quickly.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 15 — What's Next ─── -->
+  <div class="slide" data-title="What&apos;s Next — Session 19" data-notes="The bridge is important — session 18 raises the question (how do I make agents work FOR MY project?) and session 19 answers it. Make sure the audience leaves session 18 feeling the gap: they understand agents conceptually, but they want to know how to configure them for real work.">
+    <div class="slide-inner" style="text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:20px;">Session 18 Complete · Phase 4: Terminal Agents &amp; Agentic Tools</div>
+      <h2 style="font-size:2rem;margin-bottom:10px;">Now you understand <span style="color:var(--accent);">why agents work</span></h2>
+      <p style="color:var(--text-secondary);font-size:0.92rem;max-width:500px;margin:0 auto 24px;line-height:1.7;">The next session answers: how do you make an agent understand YOUR project without explaining it every single time?</p>
+      <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid rgba(232,168,72,0.3);padding:18px 24px;max-width:460px;margin:0 auto 20px;text-align:left;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px;">Session 19 — Context Files for Agents</div>
+        <div style="display:grid;gap:8px;font-size:0.83rem;color:var(--text-secondary);">
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">→</span> What context files are (CLAUDE.md, copilot_instructions.md, Agent.md)</div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">→</span> Where to place them in your project</div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">→</span> How to structure them for maximum agent understanding</div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">→</span> Before and after comparisons — same task, different context</div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px 20px;max-width:460px;margin:0 auto;text-align:left;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px;">Phase 4 — you now have the full picture</div>
+        <div style="display:grid;gap:7px;font-size:0.82rem;color:var(--text-secondary);">
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;">✓</span> How AI assistance evolved across four stages</div>
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;">✓</span> What properties make something a true agent</div>
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;">✓</span> Three mental shifts for effective agent use</div>
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;">✓</span> The trust spectrum for deciding how much to delegate</div>
+        </div>
+      </div>
+    </div>
+  </div>

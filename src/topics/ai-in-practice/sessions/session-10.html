@@ -1,0 +1,518 @@
+---
+layout: session.njk
+title: Session 10 — Introduction to Claude Code & Opencode
+sessionNumber: "10"
+sessionTitle: "Introduction to Claude Code & Opencode"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="Phase 4 begins — and it's the phase that feels most different from everything before. We're leaving the IDE. We're going to the terminal. And we're meeting two tools the instructor uses every day: Claude Code and Opencode.&lt;br&gt;&lt;br&gt;Be upfront about the context switch: for some people, the terminal feels intimidating. That's fine. Both tools are actually quite conversational — you type natural language, they respond in natural language. The terminal is just the container they live in.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: it's like the difference between using a food ordering app (clicking menus) vs calling the restaurant and talking to someone. The terminal agents are the phone call — more flexible, more capable, more direct.&lt;/div&gt;">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">⚡ Session 10 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools</div>
+      <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Introduction to<br><span style="color:var(--accent)">Claude Code &amp; Opencode</span></h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Meet the terminal-native AI agents that can operate across your entire codebase — not just the file you have open.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">50 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 09</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — What Are Terminal Agents ─── -->
+  <div class="slide" data-title="What Are Terminal Agents" data-notes="Set the concept clearly. Terminal agents are AI assistants that run in your command line and can interact with your entire development environment — not just the file you have open. They can explore directories, read files, run shell commands, execute tests, interact with git, and make coordinated changes across many files.&lt;br&gt;&lt;br&gt;This is a significant capability leap over IDE-based tools. Copilot sees your open file and a bit of context. Terminal agents can survey your whole project, understand the architecture, and operate on it holistically.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">What makes terminal agents different</h2>
+      <svg viewBox="0 0 700 280" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <rect width="700" height="280" rx="12" fill="#13111d"/>
+        <!-- LEFT column: What you provide (blue) -->
+        <rect x="16" y="24" width="180" height="232" rx="8" fill="#0d1a2e" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="106" y="46" font-size="13" fill="#6fa3f7" font-weight="700" text-anchor="middle">What you provide</text>
+        <!-- speech bubble prompt -->
+        <rect x="28" y="58" width="156" height="82" rx="8" fill="#0a1020" stroke="#3a5080" stroke-width="1"/>
+        <text x="106" y="76" font-size="11" fill="#a0c0f0" text-anchor="middle">Your prompt /</text>
+        <text x="106" y="90" font-size="11" fill="#a0c0f0" text-anchor="middle">task description</text>
+        <text x="106" y="116" font-size="10" fill="#6080a0" text-anchor="middle" font-style="italic">"Find all flaky tests</text>
+        <text x="106" y="130" font-size="10" fill="#6080a0" text-anchor="middle" font-style="italic">and add retries"</text>
+        <!-- bubble tail -->
+        <polygon points="60,140 80,140 70,150" fill="#0a1020"/>
+        <!-- Arrow LEFT→CENTER -->
+        <line x1="196" y1="140" x2="240" y2="140" stroke="#4a4a60" stroke-width="1.5"/>
+        <polygon points="236,136 244,140 236,144" fill="#4a4a60"/>
+        <!-- CENTER: Terminal Agent (amber) -->
+        <rect x="244" y="80" width="212" height="120" rx="8" fill="#2a1f00" stroke="#e8a848" stroke-width="2"/>
+        <text x="350" y="106" font-size="16" fill="#e8a848" font-weight="700" text-anchor="middle">Claude Code</text>
+        <text x="350" y="124" font-size="14" fill="#a07020" text-anchor="middle">or Opencode</text>
+        <line x1="270" y1="132" x2="430" y2="132" stroke="#4a3010" stroke-width="1"/>
+        <text x="350" y="150" font-size="11" fill="#a0a0b8" text-anchor="middle">Reads your entire project</text>
+        <text x="350" y="166" font-size="11" fill="#a0a0b8" text-anchor="middle">Executes tools</text>
+        <text x="350" y="182" font-size="11" fill="#a0a0b8" text-anchor="middle">Iterates until done</text>
+        <!-- Arrow CENTER→RIGHT -->
+        <line x1="456" y1="140" x2="496" y2="140" stroke="#4a4a60" stroke-width="1.5"/>
+        <polygon points="492,136 500,140 492,144" fill="#4a4a60"/>
+        <!-- RIGHT column: What it does (green) stacked boxes -->
+        <rect x="500" y="24" width="184" height="232" rx="8" fill="#0a2010" stroke="#5ec269" stroke-width="1.5"/>
+        <text x="592" y="46" font-size="13" fill="#5ec269" font-weight="700" text-anchor="middle">What it does</text>
+        <rect x="514" y="56" width="156" height="44" rx="6" fill="#0a1808" stroke="#2a4a20" stroke-width="1"/>
+        <text x="592" y="74" font-size="12" fill="#5ec269" text-anchor="middle">Reads files</text>
+        <text x="592" y="90" font-size="10" fill="#6a8060" text-anchor="middle">explores your codebase</text>
+        <rect x="514" y="108" width="156" height="44" rx="6" fill="#0a1808" stroke="#2a4a20" stroke-width="1"/>
+        <text x="592" y="126" font-size="12" fill="#5ec269" text-anchor="middle">Edits files</text>
+        <text x="592" y="142" font-size="10" fill="#6a8060" text-anchor="middle">makes changes</text>
+        <rect x="514" y="160" width="156" height="44" rx="6" fill="#0a1808" stroke="#2a4a20" stroke-width="1"/>
+        <text x="592" y="178" font-size="12" fill="#5ec269" text-anchor="middle">Runs commands</text>
+        <text x="592" y="194" font-size="10" fill="#6a8060" text-anchor="middle">npm test, git, etc.</text>
+        <rect x="514" y="212" width="156" height="36" rx="6" fill="#0a1808" stroke="#2a4a20" stroke-width="1"/>
+        <text x="592" y="230" font-size="12" fill="#5ec269" text-anchor="middle">Reads output</text>
+        <text x="592" y="243" font-size="10" fill="#6a8060" text-anchor="middle">sees results, iterates</text>
+        <!-- Caption -->
+        <text x="350" y="268" font-size="11" fill="#6a6a80" text-anchor="middle">Unlike chatbots, terminal agents take ACTIONS — they don't just answer, they do.</text>
+      </svg>
+      <div class="stat-callout">
+        <div class="stat-num" style="font-size:2.2rem;">🗂️</div>
+        <div class="stat-body">
+          <div class="stat-title">Full codebase awareness</div>
+          <div class="stat-desc">A terminal agent can explore your entire project — read any file, understand the directory structure, trace how modules connect — before it writes a single line.</div>
+        </div>
+      </div>
+      <div class="stat-callout" style="margin-top:14px;">
+        <div class="stat-num" style="font-size:2.2rem;">⚡</div>
+        <div class="stat-body">
+          <div class="stat-title">Direct environment access</div>
+          <div class="stat-desc">It can run your test suite, execute shell commands, interact with git, read build output, and act on the results — in a single conversation.</div>
+        </div>
+      </div>
+      <div class="stat-callout" style="margin-top:14px;">
+        <div class="stat-num" style="font-size:2.2rem;">💬</div>
+        <div class="stat-body">
+          <div class="stat-title">Conversational and iterative</div>
+          <div class="stat-desc">You direct it in plain English. It acts, shows what it did, and you continue the conversation to refine or redirect.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — Claude Code: What It Is ─── -->
+  <div class="slide" data-title="Claude Code" data-notes="Claude Code is Anthropic's official CLI for the Claude AI model. Anthropic makes the Claude AI that powers many coding tools. Claude Code is their first-party terminal agent — it's what I use most often, and it's what most of Phase 4 will be demonstrated with.&lt;br&gt;&lt;br&gt;Be transparent: this tool is relatively new and is evolving quickly. What's true about its interface today may change. The concepts we're learning are durable even if specific commands shift.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Claude Code — what it is</h2>
+      <div style="display:grid;gap:14px;margin-bottom:20px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid var(--accent);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">What it is</div>
+          <div style="font-size:0.88rem;color:var(--text-secondary);">Anthropic's official CLI for Claude. A terminal agent that can read, write, and operate on your codebase through natural language conversation. It uses the most capable version of Claude under the hood.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">Who makes it</div>
+          <div style="font-size:0.88rem;color:var(--text-secondary);">Anthropic — the AI safety company behind the Claude model family. Claude Code is their first-party tool, meaning it's built and supported by the same team that trains Claude. It gets updates alongside the model.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">What access do you need</div>
+          <div style="font-size:0.88rem;color:var(--text-secondary);">A Claude.ai Pro or Max subscription (includes Claude Code), or an Anthropic API key for pay-per-token usage. Check with your team lead about which your organisation uses.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — Installing Claude Code Step by Step ─── -->
+  <div class="slide" data-title="Installing Claude Code" data-notes="Walk through each step carefully. Most people will have Node.js already from previous sessions. If they don't, have them install it first.&lt;br&gt;&lt;br&gt;The login command is important — it links Claude Code to their account. Without this, the tool will start but fail immediately with an auth error. Pause here and have everyone run 'claude login' if they have an account.&lt;br&gt;&lt;br&gt;Emphasise: this is a one-time setup. Once installed and logged in, every project just needs 'claude' in the terminal.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Installing Claude Code — step by step</h2>
+      <div style="display:grid;gap:12px;">
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:16px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);flex-shrink:0;">1</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);">Check Node.js is installed (18+)</div>
+          </div>
+          <div class="code-block" style="font-size:0.82rem;margin-bottom:6px;">node --version<br><span class="cm"># Should print v18.x.x or higher</span></div>
+          <div style="font-size:0.78rem;color:var(--text-dim);">If not installed: download from nodejs.org → choose the LTS version.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:16px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);flex-shrink:0;">2</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);">Install Claude Code globally</div>
+          </div>
+          <div class="code-block" style="font-size:0.82rem;margin-bottom:6px;">npm install -g @anthropic-ai/claude-code</div>
+          <div style="font-size:0.78rem;color:var(--text-dim);">The <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;">-g</code> flag installs it globally — available from any folder, not just one project.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:16px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);flex-shrink:0;">3</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);">Log in to your account</div>
+          </div>
+          <div class="code-block" style="font-size:0.82rem;margin-bottom:6px;">claude login<br><span class="cm"># Opens browser → sign in → returns to terminal authenticated</span></div>
+          <div style="font-size:0.78rem;color:var(--text-dim);">This links Claude Code to your Anthropic/Claude.ai account. Required once. Your credentials are stored securely.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:16px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);flex-shrink:0;">4</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);">Start your first session</div>
+          </div>
+          <div class="code-block" style="font-size:0.82rem;margin-bottom:6px;">cd your-project-folder<br>claude</div>
+          <div style="font-size:0.78rem;color:var(--text-dim);">Always navigate to your project folder first. Claude Code will read your files from wherever you start it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — How Claude Code Reads Your Codebase ─── -->
+  <div class="slide" data-title="How Claude Reads Your Project" data-notes="This slide demystifies the 'codebase awareness' claim. Claude Code doesn't have magic — it reads files, the same way you would. When it starts, it reads your directory structure. When you give it a task, it reads the relevant files before acting.&lt;br&gt;&lt;br&gt;The key insight: Claude Code's 'understanding' of your project comes from reading it, just like a new developer onboarding. The difference is it reads dozens of files in seconds and holds the context simultaneously.&lt;br&gt;&lt;br&gt;The context window is the limit. Huge monorepos with thousands of files can exceed it. This is why scoping your task is important — you want Claude reading the relevant files, not everything.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">How Claude Code understands your project</h2>
+      <svg viewBox="0 0 700 280" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <rect width="700" height="280" rx="12" fill="#13111d"/>
+        <!-- LEFT: file tree -->
+        <rect x="16" y="24" width="196" height="204" rx="8" fill="#0d0f1a" stroke="#3a3a50" stroke-width="1.5"/>
+        <text x="30" y="46" font-size="13" fill="#a0a0b8" font-weight="700">my-project/</text>
+        <text x="30" y="65" font-size="12" fill="#6a6a80">├── tests/</text>
+        <text x="30" y="82" font-size="12" fill="#6fa3f7">│   ├── login.spec.ts</text>
+        <text x="30" y="99" font-size="12" fill="#6fa3f7">│   └── checkout.spec.ts</text>
+        <text x="30" y="116" font-size="12" fill="#6a6a80">├── pages/</text>
+        <text x="30" y="133" font-size="12" fill="#b08cf5">│   └── LoginPage.ts</text>
+        <text x="30" y="150" font-size="12" fill="#5ec269">└── package.json</text>
+        <!-- label -->
+        <rect x="16" y="236" width="196" height="26" rx="6" fill="#1a1828" stroke="#2a2840" stroke-width="1"/>
+        <text x="114" y="253" font-size="11" fill="#6a6a80" text-anchor="middle">your project files</text>
+        <!-- Arrow left→center -->
+        <line x1="212" y1="126" x2="236" y2="126" stroke="#4a4a60" stroke-width="1.5"/>
+        <polygon points="232,122 240,126 232,130" fill="#4a4a60"/>
+        <!-- CENTER: Claude reads (amber) -->
+        <rect x="240" y="60" width="220" height="136" rx="8" fill="#2a1f00" stroke="#e8a848" stroke-width="2"/>
+        <text x="350" y="84" font-size="14" fill="#e8a848" font-weight="700" text-anchor="middle">Claude reads</text>
+        <text x="350" y="100" font-size="14" fill="#e8a848" font-weight="700" text-anchor="middle">these files</text>
+        <line x1="258" y1="110" x2="442" y2="110" stroke="#4a3010" stroke-width="1"/>
+        <text x="350" y="128" font-size="11" fill="#a0a0b8" text-anchor="middle">Starts with your task</text>
+        <text x="350" y="144" font-size="11" fill="#a0a0b8" text-anchor="middle">Explores directory structure</text>
+        <text x="350" y="160" font-size="11" fill="#a0a0b8" text-anchor="middle">Reads relevant files</text>
+        <text x="350" y="176" font-size="11" fill="#a0a0b8" text-anchor="middle">Builds full context</text>
+        <!-- Arrow center→right -->
+        <line x1="460" y1="126" x2="484" y2="126" stroke="#4a4a60" stroke-width="1.5"/>
+        <polygon points="480,122 488,126 480,130" fill="#4a4a60"/>
+        <!-- RIGHT: Response (green) -->
+        <rect x="488" y="24" width="196" height="204" rx="8" fill="#0a2010" stroke="#5ec269" stroke-width="1.5"/>
+        <text x="586" y="46" font-size="12" fill="#5ec269" font-weight="700" text-anchor="middle">Project-specific</text>
+        <text x="586" y="62" font-size="12" fill="#5ec269" font-weight="700" text-anchor="middle">answers</text>
+        <line x1="504" y1="72" x2="668" y2="72" stroke="#1a3a1a" stroke-width="1"/>
+        <text x="586" y="92" font-size="11" fill="#a0a0b8" text-anchor="middle">Uses your actual</text>
+        <text x="586" y="106" font-size="11" fill="#a0a0b8" text-anchor="middle">file paths</text>
+        <text x="586" y="124" font-size="11" fill="#a0a0b8" text-anchor="middle">References your actual</text>
+        <text x="586" y="138" font-size="11" fill="#a0a0b8" text-anchor="middle">class names</text>
+        <text x="586" y="156" font-size="11" fill="#a0a0b8" text-anchor="middle">Follows your existing</text>
+        <text x="586" y="170" font-size="11" fill="#a0a0b8" text-anchor="middle">patterns</text>
+        <text x="586" y="188" font-size="11" fill="#a0a0b8" text-anchor="middle">Runs your actual</text>
+        <text x="586" y="202" font-size="11" fill="#a0a0b8" text-anchor="middle">test commands</text>
+        <!-- right label -->
+        <rect x="488" y="236" width="196" height="26" rx="6" fill="#1a2a1a" stroke="#2a4a2a" stroke-width="1"/>
+        <text x="586" y="253" font-size="11" fill="#5ec269" text-anchor="middle">then responds</text>
+        <!-- Caption -->
+        <text x="350" y="268" font-size="11" fill="#6a6a80" text-anchor="middle">This is why Claude can write tests that fit YOUR codebase — not generic examples.</text>
+      </svg>
+      <div style="display:grid;gap:10px;">
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-soft);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--accent);">1</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Reads the directory structure</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">When you start <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">claude</code>, it runs the equivalent of <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">ls -la</code> on your project to understand the structure — folders, files, what kind of project this is.</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--bg-card);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--text-dim);">2</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Reads CLAUDE.md (if it exists)</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">If you have a CLAUDE.md in your project root, Claude reads it immediately — conventions, framework info, what not to do. Your permanent brief to the agent. (More on this in Session 11.)</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--bg-card);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--text-dim);">3</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Reads relevant files for each task</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">When you give it a task, it reads the files it needs to understand before acting. For a test fix: reads the failing test file, the relevant page object, and maybe the component being tested.</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--accent);border-left:3px solid var(--accent);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-soft);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--accent);">4</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Everything fits in its context window</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:3px;">The context window is the limit. A focused task on 5–10 files works great. "Refactor my entire 500-file codebase" is too big — break it into scoped stages first.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — The Approval Workflow ─── -->
+  <div class="slide" data-title="The Approval Workflow" data-notes="This is one of the most important things to understand about Claude Code: it asks permission before taking consequential actions. Before writing to a file or running a command, it shows you what it wants to do and waits for approval.&lt;br&gt;&lt;br&gt;There are two categories of permission: file edits (shows you the diff) and shell commands (shows you the exact command). Both require your approval by default. This is a safety design — you're always in control.&lt;br&gt;&lt;br&gt;Walk through the approval flow screenshot/description. The team should understand: they are NOT watching an AI run autonomously. They are directing it, and it's asking permission at each step.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">How Claude Code asks for permission</h2>
+      <div style="display:grid;gap:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Before editing a file — shows you the diff</div>
+          <div class="code-block" style="font-size:0.78rem;line-height:1.8;">
+            <span class="cm"># Claude wants to modify tests/checkout.spec.ts</span><br>
+            - &nbsp;&nbsp;getByText(<span class="str">'Place Order'</span>)<br>
+            + &nbsp;&nbsp;getByText(<span class="str">'Confirm Order'</span>)<br>
+            <br>
+            <span style="color:var(--accent);">Allow this edit? [y/n/always]</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px;"><strong>y</strong> = approve this once | <strong>always</strong> = approve all future edits to this file | <strong>n</strong> = reject</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Before running a command — shows you the exact command</div>
+          <div class="code-block" style="font-size:0.78rem;line-height:1.8;">
+            <span class="cm"># Claude wants to run:</span><br>
+            npx playwright test tests/checkout.spec.ts<br>
+            <br>
+            <span style="color:var(--accent);">Run this command? [y/n]</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px;">You see the exact command before it runs. Never a surprise.</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:10px 14px;font-size:0.82rem;color:var(--text-secondary);">
+        You are always in control. Claude asks, you decide. This is fundamentally different from running an untrusted script.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — How They Work (Session Flow) ─── -->
+  <div class="slide" data-title="Inside a Session" data-notes="The mental model of a terminal agent session. Most people imagine it as a chatbot that types code. It's more accurate to think of it as a developer colleague who reads your repo thoroughly before touching anything.&lt;br&gt;&lt;br&gt;The key phases: read and understand (explores your project), plan (sometimes explicitly shows you a plan), execute (makes changes, runs commands), verify (checks if the changes work), report (tells you what it did and why).">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Inside a terminal agent session</h2>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="width:30px;height:30px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);flex-shrink:0;">1</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">You give a task in plain English</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">"Add Playwright tests for the checkout flow, covering happy path and card declined scenario"</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="width:30px;height:30px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);flex-shrink:0;">2</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Agent reads your project</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Explores directory structure, reads relevant test files, understands existing patterns and conventions in your codebase</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="width:30px;height:30px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);flex-shrink:0;">3</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Asks permission, then acts</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Shows you diffs before editing files. Shows exact commands before running them. Waits for your approval at each step.</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="width:30px;height:30px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);flex-shrink:0;">4</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Runs commands and verifies</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">After making changes, runs tests, reads output, fixes errors iteratively until the task is verified complete</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="width:30px;height:30px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);flex-shrink:0;">5</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Reports what it did</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Summarises changes, shows file paths, explains key decisions. You review, ask follow-up questions, or redirect.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — Your First Claude Code Session ─── -->
+  <div class="slide" data-title="Your First Session" data-notes="If the team has access, demo this live. If not, walk through the transcript. The key things to show: (1) it reads your project before doing anything, (2) it shows what it's doing as it goes, (3) you can interrupt and redirect, (4) at the end it tells you exactly what changed.&lt;br&gt;&lt;br&gt;The most memorable moment for beginners is usually when the agent runs the tests itself and reports back whether they passed. That 'wait — it ran the tests?' moment happens for almost everyone.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Your first Claude Code session</h2>
+      <div class="chat-mock">
+        <div class="chat-msg user">
+          We have a Playwright test suite in tests/. Three tests are failing because we renamed a button from "Place Order" to "Confirm Order" in the UI. Find and fix all the affected tests.
+        </div>
+        <div class="chat-msg ai">
+          Let me search the test files for references to "Place Order"...
+          <br><br>
+          <em style="color:rgba(255,255,255,0.5);font-size:0.9em;">[Reads directory structure → searches for "Place Order" text across all test files]</em>
+          <br><br>
+          Found 3 occurrences across 2 files:
+          <ul style="margin:8px 0 0 16px;display:grid;gap:4px;font-size:0.9em;">
+            <li>tests/checkout.spec.ts — lines 34, 67</li>
+            <li>tests/pages/checkoutPage.ts — line 12</li>
+          </ul>
+          <br>
+          I'll update all three. Showing you each change for approval...
+          <br><br>
+          <em style="color:rgba(255,255,255,0.5);font-size:0.9em;">[Shows diff for each file, waits for approval, makes changes]</em>
+          <br><br>
+          Running <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">npx playwright test tests/checkout.spec.ts</code>...
+          <br><br>
+          ✅ 3/3 tests passing. All fixes applied.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — Opencode ─── -->
+  <div class="slide" data-title="Opencode" data-notes="Opencode is a newer, open-source terminal agent. It's similar in concept to Claude Code but is model-agnostic — you can point it at Claude, GPT-4, Gemini, or local models. It has a more visual TUI (terminal user interface) — panels for chat, file changes, and shell output.&lt;br&gt;&lt;br&gt;I use both, depending on the task. Opencode's TUI feels more like a mini-IDE in the terminal. Claude Code's interface is more conversational. Try both and develop a preference — the concepts are identical.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Opencode — the open-source alternative</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px;">Installing Opencode</div>
+          <div style="display:grid;gap:10px;">
+            <div style="background:var(--bg-elevated);border-radius:8px;padding:14px;border:1px solid var(--border);">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:6px;">Install</div>
+              <div class="code-block" style="font-size:0.8rem;">npm install -g opencode-ai</div>
+            </div>
+            <div style="background:var(--bg-elevated);border-radius:8px;padding:14px;border:1px solid var(--border);">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:6px;">Start</div>
+              <div class="code-block" style="font-size:0.8rem;">cd your-project<br>opencode</div>
+            </div>
+            <div style="background:var(--bg-elevated);border-radius:8px;padding:14px;border:1px solid var(--border);">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:6px;">Requires</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);">API keys for whichever model you configure. Works with Anthropic, OpenAI, Google, or local Ollama models.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px;">Claude Code vs Opencode</div>
+          <div style="display:grid;gap:8px;font-size:0.8rem;">
+            <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border:1px solid var(--border);">
+              <strong style="color:var(--accent);">Interface:</strong> <span style="color:var(--text-secondary);">Claude Code is more chat-like. Opencode has TUI panels (chat, files, shell output) — more visual.</span>
+            </div>
+            <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border:1px solid var(--border);">
+              <strong style="color:var(--accent);">Models:</strong> <span style="color:var(--text-secondary);">Claude Code = Claude only. Opencode = any model you configure.</span>
+            </div>
+            <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border:1px solid var(--border);">
+              <strong style="color:var(--accent);">Open source:</strong> <span style="color:var(--text-secondary);">Opencode is fully open source. Claude Code is Anthropic-owned.</span>
+            </div>
+            <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border:1px solid var(--border);">
+              <strong style="color:var(--accent);">Best choice if:</strong> <span style="color:var(--text-secondary);">Claude Code if you want best-in-class Claude experience. Opencode if your org restricts which AI services you can use.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — What They're Great At ─── -->
+  <div class="slide" data-title="What They Excel At" data-notes="Terminal agents truly shine on tasks that span many files, require exploration, or combine code changes with shell operations. They're the right tool when the task would take you 30 minutes of find-replace-verify cycles that the agent can do in 2 minutes.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Where terminal agents excel</h2>
+      <div class="card-grid c2" style="gap:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.3rem;margin-bottom:8px;">🔍</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Codebase exploration</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">"Where is the cart total calculated? Show me all the places it's referenced."</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.3rem;margin-bottom:8px;">🔄</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Multi-file updates</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">"Update all API endpoint URLs from v1 to v2 across the test suite"</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.3rem;margin-bottom:8px;">🧪</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Test + fix loops</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">"Run the suite, identify failing tests, and fix the failures one by one"</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.3rem;margin-bottom:8px;">📦</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Scaffolding new structure</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">"Set up the folder structure and base files for testing our new Payments module"</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.3rem;margin-bottom:8px;">📝</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Documentation generation</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">"Read all our Playwright tests and generate a test coverage summary document"</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-size:1.3rem;margin-bottom:8px;">🔀</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Git-aware operations</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">"Show what changed in this branch and check if any test selectors need updating"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — Claude Code Modes ─── -->
+  <div class="slide" data-title="Claude Code Modes" data-notes="Claude Code can run in different permission modes depending on how much autonomy you want to give it. Most people start in the default interactive mode. As you get more comfortable, you may use auto-approve for routine tasks.&lt;br&gt;&lt;br&gt;Be clear: don't use --dangerously-skip-permissions on anything important or in shared environments. It's for trusted scripts in sandboxed environments, not everyday use.&lt;br&gt;&lt;br&gt;The /trust command is useful for projects where you've reviewed the CLAUDE.md and are happy for the agent to act more autonomously on routine tasks.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Claude Code permission modes</h2>
+      <div style="display:grid;gap:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid var(--accent);padding:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.8rem;font-weight:700;color:var(--accent);">Default (interactive)</div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:var(--green-soft);color:var(--green);padding:2px 8px;border-radius:4px;">Recommended to start</span>
+          </div>
+          <div class="code-block" style="font-size:0.8rem;margin-bottom:8px;">claude</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Asks permission before every file edit and shell command. You see and approve each action. The safest mode — start here.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.8rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">Auto-approve edits in trusted project</div>
+          <div class="code-block" style="font-size:0.8rem;margin-bottom:8px;"><span class="cm"># Inside a session, type:</span><br>/trust<br><span class="cm"># Claude will apply edits without prompting (still asks for shell commands)</span></div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Use after you've established trust in a project and want faster iteration. Still asks before running shell commands.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--red);padding:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.8rem;font-weight:700;color:var(--red);">No-confirm mode (use with care)</div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(232,92,92,0.15);color:var(--red);padding:2px 8px;border-radius:4px;">Advanced only</span>
+          </div>
+          <div class="code-block" style="font-size:0.8rem;margin-bottom:8px;">claude --dangerously-skip-permissions</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Skips all confirmations. For sandboxed automated workflows only. Never use on your main project directory with important files.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — Safety and Trust ─── -->
+  <div class="slide" data-title="Safety First" data-notes="Before the team starts using terminal agents, set clear expectations about safety. Terminal agents have real power — they can delete files, modify many files at once, run arbitrary commands. This is also what makes them powerful. The safety principles are simple: commit your work before a session, review all changes, and don't grant permissions beyond what the task needs.&lt;br&gt;&lt;br&gt;Claude Code in particular asks permission before running commands and shows file diffs before applying them. It has built-in safety checkpoints. But develop the habit of committing first regardless.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Using terminal agents safely</h2>
+      <div style="display:grid;gap:10px;">
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🔖</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Commit before every session — always</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">If something goes wrong, <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">git restore .</code> returns you to a clean state in seconds. This is your undo button. Without a commit, a bad session means lost work.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">👀</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Review all diffs before approving</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">The agent shows changes before applying them. Read them the same way you'd review a teammate's PR. Don't auto-approve everything — understand what's changing.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🎯</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Give precise scope in your task description</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">"Only modify files in tests/checkout/" is more reliable than "update the checkout tests." Scope constraints prevent accidents in unrelated areas.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🚫</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Never paste API keys or credentials into chat</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Use environment variables instead. Treat the chat log as potentially readable by others. Credentials belong in .env files, not prompts.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 13 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="Check in before the summary — is anyone confused about the difference between Copilot Chat/Agent Mode and terminal agents? The main difference: terminal agents have access to your whole machine's filesystem and can run shell commands. They're more powerful but also need more care.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:24px;">Key takeaways</h2>
+      <div class="takeaway-list">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Terminal agents operate on your whole codebase, not just one file</div>
+            <div class="takeaway-desc">They can explore, read, modify, and run commands across your entire project — understanding architecture before they act.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Claude Code asks permission before every consequential action</div>
+            <div class="takeaway-desc">You see file diffs before they're applied. You see exact commands before they run. You are always in control — never surprised.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Always commit before a session — git is your safety net</div>
+            <div class="takeaway-desc">A committed working state means you can recover from any agent mistake in seconds. Make this a habit before you ever type "claude".</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Best for multi-file, exploration-heavy tasks</div>
+            <div class="takeaway-desc">When a task requires understanding your project structure before acting — or making changes in many places simultaneously — terminal agents are the right tool.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 14 — Bridge to Session 11 ─── -->
+  <div class="slide" data-title="What's Next" data-notes="Session 11 goes deeper into effective working patterns with terminal agents. Now that we know what they are and have them installed, the next session is about how to get the most out of them in practice — task decomposition, context management, iteration patterns.">
+    <div class="slide-inner" style="text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:24px;">Session 10 Complete</div>
+      <h2 style="font-size:2rem;margin-bottom:14px;">Up next: <span style="color:var(--accent)">Session 11</span></h2>
+      <p style="color:var(--text-secondary);font-size:0.95rem;max-width:460px;margin:0 auto 32px;line-height:1.7;">Working Effectively with Terminal Agents — patterns and practices for getting the most out of these tools</p>
+      <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;max-width:420px;margin:0 auto;text-align:left;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">What we'll cover in Session 11</div>
+        <ul style="list-style:none;display:grid;gap:8px;font-size:0.85rem;color:var(--text-secondary);">
+          <li>· The GCSV formula — building task descriptions that work</li>
+          <li>· What happens after you press Enter (exploration phase)</li>
+          <li>· Context management for long sessions</li>
+          <li>· Multi-step task decomposition</li>
+          <li>· How to review and iterate on agent output</li>
+          <li>· CLAUDE.md — the persistent project brief</li>
+        </ul>
+      </div>
+    </div>
+  </div>

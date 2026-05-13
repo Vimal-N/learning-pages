@@ -1,0 +1,156 @@
+---
+layout: base.njk
+---
+{% block head %}
+<style>
+body { overflow-y: auto; background: #f0ede8; }
+
+/* ─── Hero ─── */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+  padding: 72px 0 48px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  display: inline-block;
+}
+
+.hero-logo { width: 220px; height: auto; margin-bottom: 20px; display: block; }
+
+.hero-sub {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 480px;
+  line-height: 1.75;
+}
+
+/* ─── Topics Container ─── */
+.topics-container { max-width: 720px; margin: 0 auto; padding: 0 0 100px; }
+
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+
+/* ─── Topic Card — editorial strip ─── */
+.topics-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 48px; }
+
+.topic-card {
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 22px 24px 18px 22px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: background 0.18s ease;
+}
+
+.topic-card.active:hover {
+  background: #ffffff;
+}
+
+
+.topic-card.active:hover .tc-arrow {
+  transform: translateX(5px);
+  color: var(--topic-accent, var(--accent));
+}
+
+.topic-card.coming-soon {
+  cursor: default;
+}
+
+/* ─── Card internals ─── */
+.tc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+
+.tc-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+.tc-status.live { background: #edfaf0; color: #2e8b4a; }
+.tc-status.planned { background: #eeeae4; color: #9e9890; }
+
+.tc-title {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+  line-height: 1.3;
+  display: inline-block;
+  transition: color 0.18s ease, transform 0.22s ease, text-shadow 0.22s ease;
+}
+.topic-card.active:hover .tc-title {
+  transform: translateY(-2px);
+  text-shadow: 0 4px 14px rgba(0,0,0,0.13), 0 1px 3px rgba(0,0,0,0.08);
+}
+.topic-card.coming-soon .tc-title { color: var(--text-muted); }
+
+.tc-desc { font-size: 0.86rem; color: var(--text-secondary); line-height: 1.65; flex: 1; }
+.topic-card.coming-soon .tc-desc { color: var(--text-dim); }
+
+.tc-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 13px;
+}
+.tc-meta-item { font-family: 'IBM Plex Mono', monospace; font-size: 0.67rem; color: var(--text-muted); }
+.tc-meta-item strong { color: var(--text-secondary); }
+
+.tc-arrow { margin-left: auto; color: #c8c2b8; font-size: 1rem; transition: transform 0.18s ease, color 0.18s ease; }
+.topic-card.coming-soon .tc-arrow { display: none; }
+
+/* ─── Footer ─── */
+.site-footer { padding: 40px 0; max-width: 720px; margin: 0 auto; border-top: 1px solid #ddd8d1; }
+.site-footer p { font-size: 0.78rem; color: var(--text-dim); }
+
+/* ─── Fade in ─── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero > * { animation: fadeIn 0.5s ease both; }
+.hero > *:nth-child(1) { animation-delay: 0.05s; }
+.hero > *:nth-child(2) { animation-delay: 0.12s; }
+.hero > *:nth-child(3) { animation-delay: 0.18s; }
+.hero > *:nth-child(4) { animation-delay: 0.24s; }
+.topic-card { animation: fadeIn 0.4s ease both; }
+.topic-card:nth-child(1) { animation-delay: 0.18s; }
+.topic-card:nth-child(2) { animation-delay: 0.24s; }
+.topic-card:nth-child(3) { animation-delay: 0.30s; }
+.topic-card:nth-child(4) { animation-delay: 0.36s; }
+.topic-card:nth-child(5) { animation-delay: 0.42s; }
+
+@media (max-width: 780px) {
+  .hero, .topics-container, .site-footer { padding-left: 24px; padding-right: 24px; }
+  .hero h1 { font-size: 2.2rem; }
+}
+</style>
+{% endblock %}
+
+
+{{ content | safe }}

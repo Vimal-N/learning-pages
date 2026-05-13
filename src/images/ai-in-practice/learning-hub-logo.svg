@@ -1,0 +1,20 @@
+<svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(40, 6)">
+    <rect x="0" y="0" width="88" height="88" rx="18" fill="#0F6E56"/>
+
+    <rect x="16" y="18" width="22" height="6" rx="3" fill="#5DCAA5"/>
+    <rect x="16" y="30" width="36" height="6" rx="3" fill="#9FE1CB"/>
+    <rect x="16" y="42" width="28" height="6" rx="3" fill="#5DCAA5"/>
+    <rect x="16" y="54" width="40" height="6" rx="3" fill="#E1F5EE"/>
+
+    <circle cx="68" cy="68" r="14" fill="none" stroke="#E1F5EE" stroke-width="3"/>
+    <line x1="78" y1="78" x2="86" y2="86" stroke="#E1F5EE" stroke-width="3" stroke-linecap="round"/>
+
+    <circle cx="30" cy="72" r="4" fill="#5DCAA5"/>
+    <path d="M34 72 L42 64" fill="none" stroke="#5DCAA5" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M42 64 L50 70" fill="none" stroke="#9FE1CB" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <text x="148" y="45" font-family="system-ui, -apple-system, sans-serif" font-size="36" font-weight="700" letter-spacing="-1" fill="#2C2C2A">Learning</text>
+  <text x="148" y="81" font-family="system-ui, -apple-system, sans-serif" font-size="36" font-weight="300" letter-spacing="-0.5" fill="#2C2C2A">Hub</text>
+</svg>

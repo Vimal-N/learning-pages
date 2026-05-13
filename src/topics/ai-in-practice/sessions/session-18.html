@@ -1,0 +1,540 @@
+---
+layout: session.njk
+title: Session 18 — Building Your First MCP Server
+sessionNumber: "18"
+sessionTitle: "Building Your First MCP Server"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="This is the most hands-on session in Phase 5. We're building something real. A custom MCP server that gives Claude access to our test results in a structured, queryable way.&lt;br&gt;&lt;br&gt;Be honest upfront: this requires a little bit of Node.js/TypeScript comfort. It's not deep — the MCP SDK handles most of the complexity. If anyone is uncomfortable with code, they can follow along conceptually and use the finished server. Understanding HOW servers are built is the real goal here.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;You don't need to understand how a USB controller chip works to build a new USB device. But understanding the basic API — write data, read data, announce capabilities — is all you need. That's what we're learning today.&lt;/div&gt;">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">🔧 Session 18 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows</div>
+      <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Building Your First<br><span style="color:var(--accent)">MCP Server</span></h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Create a custom MCP server that gives your AI access to your team's specific tools and data — with every line of code explained.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">60 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Advanced</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 14</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — Why Build Your Own ─── -->
+  <div class="slide" data-title="Why Build Your Own" data-notes="Community MCP servers cover the common cases. But your team has specific needs that no community server covers — your custom CI system, your internal test management tool, your company's deployment pipeline.&lt;br&gt;&lt;br&gt;The other reason: once you understand how to build one, you'll see opportunities everywhere. Any repetitive task where you're copy-pasting data into Claude becomes a candidate for an MCP server.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Why build your own MCP server?</h2>
+      <svg viewBox="0 0 700 260" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg">
+        <rect width="700" height="260" rx="12" fill="#13111d"/>
+
+        <!-- LEFT: What Claude knows natively -->
+        <rect x="20" y="20" width="188" height="188" rx="10" fill="#1a2840" stroke="#6fa3f7" stroke-width="2"/>
+        <text x="114" y="45" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#6fa3f7" text-anchor="middle">Claude natively</text>
+        <text x="114" y="60" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6fa3f7" text-anchor="middle">knows</text>
+        <text x="36" y="86" font-family="IBM Plex Mono, monospace" font-size="11" fill="#9ab8e0">· General code patterns</text>
+        <text x="36" y="104" font-family="IBM Plex Mono, monospace" font-size="11" fill="#9ab8e0">· Playwright docs</text>
+        <text x="36" y="122" font-family="IBM Plex Mono, monospace" font-size="11" fill="#9ab8e0">· TypeScript</text>
+        <text x="36" y="140" font-family="IBM Plex Mono, monospace" font-size="11" fill="#9ab8e0">· Common patterns</text>
+
+        <!-- Arrow left → gap -->
+        <line x1="208" y1="114" x2="238" y2="114" stroke="#e85c5c" stroke-width="2"/>
+        <polygon points="234,109 244,114 234,119" fill="#e85c5c"/>
+
+        <!-- CENTER: The gap -->
+        <rect x="244" y="20" width="212" height="188" rx="10" fill="#1a0a0a" stroke="#e85c5c" stroke-width="2" stroke-dasharray="8 4"/>
+        <text x="350" y="46" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#e85c5c" text-anchor="middle">The gap</text>
+        <text x="350" y="76" font-family="IBM Plex Mono, monospace" font-size="11" fill="#c05050" text-anchor="middle">Your test run history</text>
+        <text x="350" y="96" font-family="IBM Plex Mono, monospace" font-size="11" fill="#c05050" text-anchor="middle">Your custom test helpers</text>
+        <text x="350" y="116" font-family="IBM Plex Mono, monospace" font-size="11" fill="#c05050" text-anchor="middle">Your internal API</text>
+        <text x="350" y="136" font-family="IBM Plex Mono, monospace" font-size="11" fill="#c05050" text-anchor="middle">Your project patterns</text>
+
+        <!-- Custom server badge below gap -->
+        <rect x="278" y="164" width="144" height="36" rx="8" fill="#2a1f0d" stroke="#e8a848" stroke-width="1.5"/>
+        <text x="350" y="183" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="700" fill="#e8a848" text-anchor="middle">+ Custom MCP server</text>
+        <text x="350" y="196" font-family="IBM Plex Mono, monospace" font-size="10" fill="#a07030" text-anchor="middle">bridges the gap</text>
+
+        <!-- Arrow gap → right -->
+        <line x1="456" y1="114" x2="480" y2="114" stroke="#5ec269" stroke-width="2"/>
+        <polygon points="476,109 486,114 476,119" fill="#5ec269"/>
+
+        <!-- RIGHT: With custom MCP -->
+        <rect x="486" y="20" width="194" height="188" rx="10" fill="#0d2010" stroke="#5ec269" stroke-width="2"/>
+        <text x="583" y="45" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#5ec269" text-anchor="middle">With custom server</text>
+        <text x="500" y="72" font-family="IBM Plex Mono, monospace" font-size="11" fill="#70c080">· Knows YOUR tools</text>
+        <text x="500" y="90" font-family="IBM Plex Mono, monospace" font-size="11" fill="#70c080">· Reads test results</text>
+        <text x="500" y="108" font-family="IBM Plex Mono, monospace" font-size="11" fill="#70c080">· Understands your</text>
+        <text x="500" y="124" font-family="IBM Plex Mono, monospace" font-size="11" fill="#70c080">  patterns</text>
+
+        <!-- Footer -->
+        <text x="350" y="234" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6a6090" text-anchor="middle">A custom MCP server closes the gap between Claude's knowledge and your team's systems</text>
+      </svg>
+      <div class="card-grid c2" style="gap:14px;margin-bottom:16px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-size:1.3rem;margin-bottom:8px;">🎯</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Your internal systems</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Custom CI pipelines, internal test management, company-specific deployment tools — these don't have community servers. You build the bridge.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-size:1.3rem;margin-bottom:8px;">🔒</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Full data control</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">You decide exactly what data the AI can see and what actions it can take. No community code touching your systems.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-size:1.3rem;margin-bottom:8px;">⚡</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Team-specific tools</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">A "summarise today's test failures in our format" tool that knows your team's naming conventions, report structure, and ticket numbering.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-size:1.3rem;margin-bottom:8px;">🔄</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Eliminate copy-paste friction</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Any time you copy data from one system into an AI chat, that's a candidate for an MCP tool. Identify the friction, build the bridge.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — Project Setup ─── -->
+  <div class="slide" data-title="Project Setup" data-notes="Walk through setup step by step. Keep it minimal — one server file is all we need for now. The project structure is: package.json → declares the project, src/server.ts → where we write our server code.&lt;br&gt;&lt;br&gt;The 'type: module' line in package.json is important — it tells Node.js to treat .js files as ES modules, which is required by the MCP SDK.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Setting up your MCP server project</h2>
+      <div style="display:grid;gap:10px;">
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:16px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">1 — Create the project folder</div>
+          <div class="code-block" style="font-size:0.82rem;">mkdir my-qa-mcp-server &amp;&amp; cd my-qa-mcp-server<br>npm init -y</div>
+          <div style="font-size:0.78rem;color:var(--text-dim);margin-top:6px;"><code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;">npm init -y</code> creates a package.json with defaults. The <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;">-y</code> skips all the questions.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:16px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">2 — Install dependencies</div>
+          <div class="code-block" style="font-size:0.82rem;">npm install @modelcontextprotocol/sdk<br>npm install -D typescript tsx @types/node</div>
+          <div style="font-size:0.78rem;color:var(--text-dim);margin-top:6px;">The next slide explains what each of these packages does.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:16px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">3 — Update package.json and create the server file</div>
+          <div class="code-block" style="font-size:0.8rem;"><span class="cm"># Add to package.json manually:</span><br><span class="str">"type"</span>: <span class="str">"module"</span>,<br><span class="str">"scripts"</span>: {{ '{' }} <span class="str">"start"</span>: <span class="str">"tsx src/server.ts"</span> {{ '}' }}<br><br><span class="cm"># Create the server file:</span><br>mkdir src &amp;&amp; touch src/server.ts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — What Each Dependency Does ─── -->
+  <div class="slide" data-title="What Each Package Does" data-notes="Don't just run npm install and move on. Explain what each package actually does and why it's needed. This demystifies the setup and helps people understand the building blocks.&lt;br&gt;&lt;br&gt;The key dependency is @modelcontextprotocol/sdk — that's Anthropic's official library that handles all the protocol-level communication. Everything else is standard TypeScript tooling.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">What each dependency does</h2>
+      <svg viewBox="0 0 700 320" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg">
+        <rect width="700" height="320" rx="12" fill="#13111d"/>
+
+        <!-- Top: Your MCP Server -->
+        <rect x="175" y="16" width="350" height="48" rx="10" fill="#2a1f0d" stroke="#e8a848" stroke-width="2.5"/>
+        <text x="350" y="37" font-family="IBM Plex Mono, monospace" font-size="14" font-weight="700" fill="#e8a848" text-anchor="middle">Your MCP Server</text>
+        <text x="350" y="55" font-family="IBM Plex Mono, monospace" font-size="11" fill="#a07030" text-anchor="middle">src/index.ts — your server code lives here</text>
+
+        <!-- Arrow down -->
+        <line x1="350" y1="64" x2="350" y2="86" stroke="#4a4570" stroke-width="2"/>
+        <polygon points="345,86 350,96 355,86" fill="#4a4570"/>
+
+        <!-- SDK box -->
+        <rect x="110" y="96" width="480" height="56" rx="10" fill="#1a2840" stroke="#6fa3f7" stroke-width="2"/>
+        <text x="350" y="119" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#6fa3f7" text-anchor="middle">@modelcontextprotocol/sdk</text>
+        <text x="350" y="140" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4a7ab0" text-anchor="middle">Provides: McpServer class · ListToolsRequest · CallToolRequest types</text>
+
+        <!-- Arrow down -->
+        <line x1="350" y1="152" x2="350" y2="172" stroke="#4a4570" stroke-width="2"/>
+        <polygon points="345,172 350,182 355,172" fill="#4a4570"/>
+
+        <!-- McpServer instance -->
+        <rect x="160" y="182" width="380" height="48" rx="10" fill="#1e1433" stroke="#b08cf5" stroke-width="2"/>
+        <text x="350" y="203" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#b08cf5" text-anchor="middle">McpServer instance</text>
+        <text x="350" y="221" font-family="IBM Plex Mono, monospace" font-size="11" fill="#7050b0" text-anchor="middle">tool() — registers a tool  ·  connect() — starts listening</text>
+
+        <!-- Two arrows branching down -->
+        <line x1="270" y1="230" x2="190" y2="258" stroke="#4a4570" stroke-width="2"/>
+        <polygon points="186,252 188,264 196,256" fill="#4a4570"/>
+        <line x1="430" y1="230" x2="510" y2="258" stroke="#4a4570" stroke-width="2"/>
+        <polygon points="504,252 512,264 518,256" fill="#4a4570"/>
+
+        <!-- LEFT branch: Tool definitions -->
+        <rect x="30" y="264" width="270" height="46" rx="10" fill="#0d2010" stroke="#5ec269" stroke-width="2"/>
+        <text x="165" y="284" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#5ec269" text-anchor="middle">Tool definitions</text>
+        <text x="165" y="301" font-family="IBM Plex Mono, monospace" font-size="10" fill="#2a6030" text-anchor="middle">name · description · inputSchema (zod)</text>
+
+        <!-- RIGHT branch: Tool handlers -->
+        <rect x="400" y="264" width="270" height="46" rx="10" fill="#0d2010" stroke="#5ec269" stroke-width="2"/>
+        <text x="535" y="284" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#5ec269" text-anchor="middle">Tool handlers</text>
+        <text x="535" y="301" font-family="IBM Plex Mono, monospace" font-size="10" fill="#2a6030" text-anchor="middle">async function(args) &#123; return result &#125;</text>
+      </svg>
+      <div style="display:grid;gap:10px;">
+        <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:2px solid var(--accent);align-items:center;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--accent);">@modelcontextprotocol/sdk</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-top:2px;">npm install (production)</div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">The official MCP library from Anthropic. Handles the entire protocol — request parsing, response formatting, error handling, transport management. Without this, you'd have to implement MCP from scratch. <strong style="color:var(--text-primary);">This is the one that matters.</strong></div>
+        </div>
+        <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--text-primary);">typescript</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-top:2px;">npm install -D (dev only)</div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">The TypeScript compiler. Lets us write type-safe code — it'll warn us if we pass the wrong type to a function, before anything runs.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--text-primary);">tsx</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-top:2px;">npm install -D (dev only)</div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Runs TypeScript files directly without a build step. Instead of: compile → run the JS, we just: run the TS. Makes development much faster. Used in the <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">npm start</code> command.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--text-primary);">@types/node</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-top:2px;">npm install -D (dev only)</div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Type definitions for Node.js built-ins like <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">fs</code> (filesystem) and <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">path</code>. Without this, TypeScript doesn't know what <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">fs.readFileSync</code> is.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — The Full Server File ─── -->
+  <div class="slide" data-title="The Complete Server File" data-notes="Show the entire server.ts file first, before breaking it down. This gives people a sense of the whole before the parts. The file is short — about 50 lines. That's the power of the SDK: it takes care of the MCP protocol so your server file just needs to describe what it does.&lt;br&gt;&lt;br&gt;Don't explain each line yet — just say 'this is the whole file, and we're going to walk through every section over the next several slides.' The overview anchors what's coming.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">The complete server file — all at once</h2>
+      <div class="code-block" style="font-size:0.74rem;line-height:1.75;">
+        <span class="cm">// src/server.ts — our complete MCP server</span><br>
+        <span class="kw">import</span> {{ '{' }} Server {{ '}' }} <span class="kw">from</span> <span class="str">'@modelcontextprotocol/sdk/server/index.js'</span>;<br>
+        <span class="kw">import</span> {{ '{' }} StdioServerTransport {{ '}' }} <span class="kw">from</span> <span class="str">'@modelcontextprotocol/sdk/server/stdio.js'</span>;<br>
+        <span class="kw">import</span> {{ '{' }} ListToolsRequestSchema, CallToolRequestSchema {{ '}' }} <span class="kw">from</span> <span class="str">'@modelcontextprotocol/sdk/types.js'</span>;<br>
+        <span class="kw">import</span> * <span class="kw">as</span> fs <span class="kw">from</span> <span class="str">'fs'</span>;<br><br>
+        <span class="kw">const</span> server = <span class="kw">new</span> <span class="fn">Server</span>({{ '{' }}<br>
+        &nbsp;&nbsp;name: <span class="str">'qa-tools'</span>,<br>
+        &nbsp;&nbsp;version: <span class="str">'1.0.0'</span><br>
+        {{ '}' }});<br><br>
+        server.<span class="fn">setRequestHandler</span>(ListToolsRequestSchema, <span class="kw">async</span> () =&gt; ({{ '{' }}<br>
+        &nbsp;&nbsp;tools: [{{ '{' }}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="str">'get-test-summary'</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;description: <span class="str">'Summarise the latest Playwright test run results'</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;inputSchema: {{ '{' }} type: <span class="str">'object'</span>, properties: {{ '{' }} reportPath: {{ '{' }} type: <span class="str">'string'</span>, description: <span class="str">'Path to the JSON report file'</span> {{ '}' }} {{ '}' }} {{ '}' }}<br>
+        &nbsp;&nbsp;{{ '}' }}]<br>
+        {{ '}' }}));<br><br>
+        server.<span class="fn">setRequestHandler</span>(CallToolRequestSchema, <span class="kw">async</span> (request) =&gt; {{ '{' }}<br>
+        &nbsp;&nbsp;<span class="kw">if</span> (request.params.name === <span class="str">'get-test-summary'</span>) {{ '{' }}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">const</span> {{ '{' }} reportPath {{ '}' }} = request.params.arguments <span class="kw">as</span> {{ '{' }} reportPath: string {{ '}' }};<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">const</span> data = <span class="fn">JSON.parse</span>(fs.<span class="fn">readFileSync</span>(reportPath, <span class="str">'utf8'</span>));<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">const</span> failed = data.suites.<span class="fn">flatMap</span>((s: <span class="kw">any</span>) =&gt; s.specs).<span class="fn">filter</span>((s: <span class="kw">any</span>) =&gt; s.ok === <span class="kw">false</span>);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> {{ '{' }} content: [{{ '{' }} type: <span class="str">'text'</span>, text: <span class="fn">JSON.stringify</span>({{ '{' }} failed, total: data.stats {{ '}' }}, <span class="kw">null</span>, <num>2</num>) {{ '}' }}] {{ '}' }};<br>
+        &nbsp;&nbsp;{{ '}' }}<br>
+        &nbsp;&nbsp;<span class="kw">throw</span> <span class="kw">new</span> <span class="fn">Error</span>(<span class="str">`Unknown tool: ${{ '{' }}request.params.name{{ '}' }}`</span>);<br>
+        {{ '}' }});<br><br>
+        <span class="kw">const</span> transport = <span class="kw">new</span> <span class="fn">StdioServerTransport</span>();<br>
+        <span class="kw">await</span> server.<span class="fn">connect</span>(transport);
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — Part 1: The Imports Explained ─── -->
+  <div class="slide" data-title="Part 1 — The Imports" data-notes="Every import is intentional. Don't skip over them. Walk through each one and explain what it gives us.&lt;br&gt;&lt;br&gt;The pattern of the SDK imports: server/index.js for the main Server class, server/stdio.js for the local transport, types.js for the schema validators that keep our request handling type-safe.&lt;br&gt;&lt;br&gt;The 'fs' import is just Node.js's built-in filesystem module — no install needed, it's always available.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Part 1 — The imports, line by line</h2>
+      <div class="code-block" style="font-size:0.8rem;line-height:1.9;margin-bottom:16px;">
+        <span class="kw">import</span> {{ '{' }} Server {{ '}' }} <span class="kw">from</span> <span class="str">'@modelcontextprotocol/sdk/server/index.js'</span>;<br>
+        <span class="kw">import</span> {{ '{' }} StdioServerTransport {{ '}' }} <span class="kw">from</span> <span class="str">'@modelcontextprotocol/sdk/server/stdio.js'</span>;<br>
+        <span class="kw">import</span> {{ '{' }} ListToolsRequestSchema, CallToolRequestSchema {{ '}' }} <span class="kw">from</span> <span class="str">'@modelcontextprotocol/sdk/types.js'</span>;<br>
+        <span class="kw">import</span> * <span class="kw">as</span> fs <span class="kw">from</span> <span class="str">'fs'</span>;
+      </div>
+      <div style="display:grid;gap:8px;">
+        <div style="display:grid;grid-template-columns:160px 1fr;gap:14px;padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--accent);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);">Server</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">The main MCP server class. We create one instance of this. It's the core object that receives requests and holds our handlers.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:160px 1fr;gap:14px;padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--text-dim);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-primary);">StdioServerTransport</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">The connection method. "Stdio" means the server communicates via standard input/output — used when running as a local process on your machine. This is the right one for local MCP servers.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:160px 1fr;gap:14px;padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--text-dim);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-primary);">ListToolsRequestSchema</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">The schema for "list my tools" requests. When Claude asks "what tools do you have?", this schema identifies that message type so our handler can respond.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:160px 1fr;gap:14px;padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--text-dim);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-primary);">CallToolRequestSchema</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">The schema for "run this tool" requests. When Claude calls one of our tools, this schema identifies that message so our handler knows to execute it.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:160px 1fr;gap:14px;padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--green);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--green);">fs</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Node.js built-in filesystem module. Lets us read files from disk. We'll use <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">fs.readFileSync()</code> to read the test report file.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — Part 2: Creating the Server ─── -->
+  <div class="slide" data-title="Part 2 — Creating the Server" data-notes="Creating the server is one simple call. The name and version are metadata that MCP-compatible clients can see — they identify your server in the connected tools list.&lt;br&gt;&lt;br&gt;The name 'qa-tools' is what will appear in Claude's tool list and in your ~/.claude.json config. Pick something descriptive that tells you and your team what this server does.&lt;br&gt;&lt;br&gt;Nothing happens yet after this line — we've just created the server object. The next two slides add the handlers that make it actually do something.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Part 2 — Creating the server instance</h2>
+      <div class="code-block" style="font-size:0.88rem;line-height:2;margin-bottom:20px;">
+        <span class="kw">const</span> server = <span class="kw">new</span> <span class="fn">Server</span>({{ '{' }}<br>
+        &nbsp;&nbsp;name: <span class="str">'qa-tools'</span>,<br>
+        &nbsp;&nbsp;version: <span class="str">'1.0.0'</span><br>
+        {{ '}' }});
+      </div>
+      <div style="display:grid;gap:10px;">
+        <div style="display:grid;grid-template-columns:100px 1fr;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:700;color:var(--accent);">new Server()</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);">Creates a new MCP server object. This is the container for our tools and the object that manages all communication. We create exactly one per server.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:100px 1fr;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:700;color:var(--text-primary);">name</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);">A human-readable name for this server. Appears in Claude's "what tools do you have?" output. Name it after what it does — 'qa-tools', 'test-results', 'ci-helper'.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:100px 1fr;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:700;color:var(--text-primary);">version</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);">Semantic version string. Used by MCP clients to detect when the server has been updated. Start at '1.0.0', increment when you add or change tools.</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
+        After this line: a server object exists but has no tools and no connection. The next two sections wire those up.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — Part 3: Registering Your Tools ─── -->
+  <div class="slide" data-title="Part 3 — Registering Tools" data-notes="The ListTools handler answers the question 'what can you do?' It returns a list of every tool this server provides. This runs once at startup when Claude sends a tools/list request.&lt;br&gt;&lt;br&gt;Three things in a tool definition: name (what the AI calls it), description (what the AI uses to decide when to call it — write this clearly!), and inputSchema (what parameters the tool accepts). The inputSchema follows the JSON Schema format.&lt;br&gt;&lt;br&gt;The description is especially important: it's what Claude reads to decide whether to call this tool. Write it like you're explaining to a smart person what the tool does and when to use it.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Part 3 — Registering your tools (ListTools handler)</h2>
+      <div class="code-block" style="font-size:0.76rem;line-height:1.8;margin-bottom:16px;">
+        server.<span class="fn">setRequestHandler</span>(ListToolsRequestSchema, <span class="kw">async</span> () =&gt; ({{ '{' }}<br>
+        &nbsp;&nbsp;tools: [{{ '{' }}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="str">'get-test-summary'</span>, <span class="cm">// ← A</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;description: <span class="str">'Summarise the latest Playwright test run results'</span>, <span class="cm">// ← B</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;inputSchema: {{ '{' }} <span class="cm">// ← C</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: <span class="str">'object'</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;properties: {{ '{' }}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reportPath: {{ '{' }} type: <span class="str">'string'</span>, description: <span class="str">'Path to the JSON report file'</span> {{ '}' }} <span class="cm">// ← D</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ '}' }}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{{ '}' }}<br>
+        &nbsp;&nbsp;{{ '}' }}]<br>
+        {{ '}' }}));
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.8rem;">
+        <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--accent);">
+          <strong style="color:var(--accent);">A — name:</strong> <span style="color:var(--text-secondary);">The identifier Claude uses to call this tool. Must be unique within this server. Use kebab-case: 'get-test-summary', 'create-ticket', 'check-coverage'.</span>
+        </div>
+        <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--blue);">
+          <strong style="color:var(--blue);">B — description:</strong> <span style="color:var(--text-secondary);">What Claude reads to decide WHEN to call this tool. Write it clearly: 'Use this when you need to see which tests passed or failed in the most recent test run.'</span>
+        </div>
+        <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--purple);">
+          <strong style="color:var(--purple);">C — inputSchema:</strong> <span style="color:var(--text-secondary);">Describes what parameters the tool accepts, in JSON Schema format. Claude uses this to know what to send when calling the tool.</span>
+        </div>
+        <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--green);">
+          <strong style="color:var(--green);">D — reportPath:</strong> <span style="color:var(--text-secondary);">One parameter: a string containing the path to the test report file. Claude will be prompted to provide this value when calling the tool.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — Part 4: The Tool Handler ─── -->
+  <div class="slide" data-title="Part 4 — Handling Tool Calls" data-notes="The CallTool handler is where the real work happens. This runs every time Claude actually calls one of our tools. It receives the tool name and arguments, executes the logic, and returns the result.&lt;br&gt;&lt;br&gt;Walk through the code carefully — each line has a specific job. The if-check is important: if you have multiple tools, you need to route to the right handler based on request.params.name. The throw at the end is a safety net for unknown tool names.&lt;br&gt;&lt;br&gt;The return format is required: an object with a content array, where each item has a type and text. The text is what Claude actually reads and uses in its response.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Part 4 — The tool handler (CallTool), line by line</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+        <div class="code-block" style="font-size:0.74rem;line-height:1.9;">
+          server.<span class="fn">setRequestHandler</span>(CallToolRequestSchema, <span class="kw">async</span> (request) =&gt; {{ '{' }}<br><br>
+          &nbsp;&nbsp;<span class="kw">if</span> (request.params.name === <span class="str">'get-test-summary'</span>) {{ '{' }}<br><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">const</span> {{ '{' }} reportPath {{ '}' }} =<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.params.arguments <span class="kw">as</span> {{ '{' }} reportPath: string {{ '}' }};<br><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">const</span> data = <span class="fn">JSON.parse</span>(<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fs.<span class="fn">readFileSync</span>(reportPath, <span class="str">'utf8'</span>)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;);<br><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">const</span> failed = data.suites<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<span class="fn">flatMap</span>((s: <span class="kw">any</span>) =&gt; s.specs)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<span class="fn">filter</span>((s: <span class="kw">any</span>) =&gt; s.ok === <span class="kw">false</span>);<br><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> {{ '{' }}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content: [{{ '{' }}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: <span class="str">'text'</span>,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text: <span class="fn">JSON.stringify</span>({{ '{' }} failed, total: data.stats {{ '}' }}, <span class="kw">null</span>, <num>2</num>)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ '}' }}]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;{{ '}' }};<br>
+          &nbsp;&nbsp;{{ '}' }}<br><br>
+          &nbsp;&nbsp;<span class="kw">throw</span> <span class="kw">new</span> <span class="fn">Error</span>(<span class="str">`Unknown tool: ${{ '{' }}request.params.name{{ '}' }}`</span>);<br>
+          {{ '}' }});
+        </div>
+        <div style="display:grid;gap:8px;font-size:0.78rem;">
+          <div style="padding:8px 10px;background:var(--bg-elevated);border-radius:6px;border-left:2px solid var(--accent);"><strong style="color:var(--accent);">setRequestHandler(CallToolRequestSchema, ...)</strong> — Registers the function that runs whenever Claude calls one of our tools. "async" means it can do file I/O without blocking.</div>
+          <div style="padding:8px 10px;background:var(--bg-elevated);border-radius:6px;border-left:2px solid var(--text-dim);">The <strong style="color:var(--text-primary);">if-check</strong> routes the request to the right tool. When you add a second tool, you add another if-block.</div>
+          <div style="padding:8px 10px;background:var(--bg-elevated);border-radius:6px;border-left:2px solid var(--blue);"><strong style="color:var(--blue);">request.params.arguments</strong> — The parameters Claude sent. We destructure <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">reportPath</code> from it.</div>
+          <div style="padding:8px 10px;background:var(--bg-elevated);border-radius:6px;border-left:2px solid var(--text-dim);"><strong style="color:var(--text-primary);">fs.readFileSync</strong> — Reads the JSON file from disk synchronously. Returns the raw string, which we parse with JSON.parse.</div>
+          <div style="padding:8px 10px;background:var(--bg-elevated);border-radius:6px;border-left:2px solid var(--purple);"><strong style="color:var(--purple);">flatMap + filter</strong> — Digs into the Playwright JSON structure: each suite has specs, each spec has an ok field. We collect all the failed ones.</div>
+          <div style="padding:8px 10px;background:var(--bg-elevated);border-radius:6px;border-left:2px solid var(--green);"><strong style="color:var(--green);">return {{ '{' }} content: [...] {{ '}' }}</strong> — Required format for all tool responses. The text value is what Claude reads and uses in its answer.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — Part 5: The Transport Connection ─── -->
+  <div class="slide" data-title="Part 5 — Connecting Transport" data-notes="The last two lines start the server. This is the equivalent of 'start listening for connections'. Without these lines, the server process would just exit immediately — nothing would be listening.&lt;br&gt;&lt;br&gt;StdioServerTransport means the server communicates via stdin/stdout — standard input and output. When Claude Code runs your server as a child process, messages flow through these channels automatically. You don't manage this — the SDK handles it.&lt;br&gt;&lt;br&gt;The 'await' is important: server.connect() starts an async loop that keeps the process running indefinitely, reading messages and responding to them. Without await, the process would start the loop and then immediately exit.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Part 5 — Connecting the transport (last 2 lines)</h2>
+      <div class="code-block" style="font-size:0.9rem;line-height:2.2;margin-bottom:20px;">
+        <span class="kw">const</span> transport = <span class="kw">new</span> <span class="fn">StdioServerTransport</span>();<br>
+        <span class="kw">await</span> server.<span class="fn">connect</span>(transport);
+      </div>
+      <div style="display:grid;gap:12px;">
+        <div style="display:grid;grid-template-columns:220px 1fr;gap:14px;padding:16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--accent);">new StdioServerTransport()</div>
+          </div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);">Creates a transport object that uses standard input/output (stdin/stdout). Claude Code starts your server as a background process and sends MCP messages through these channels. Stdio is the right choice for local servers.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:220px 1fr;gap:14px;padding:16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--accent);">await server.connect(transport)</div>
+          </div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);">Starts the server — it begins listening for incoming MCP messages. The <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">await</code> is critical: this call never resolves. It keeps the process alive, reading and responding to messages in an ongoing loop.</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
+        That's the whole file. Two imports, create a server, register handlers for "list tools" and "call tool", connect transport. Under 50 lines for a fully working MCP server.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — Connecting to Claude Code ─── -->
+  <div class="slide" data-title="Connecting to Claude Code" data-notes="Register your local server with Claude Code. The key difference from community servers: instead of npx, you're running Node directly against your TypeScript file. Claude Code starts this as a child process.&lt;br&gt;&lt;br&gt;After registering and restarting, test it: type 'what tools do you have?' — it should list your new get-test-summary tool. Then try calling it by asking Claude to summarise a test report.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Connecting your custom server to Claude Code</h2>
+      <div style="display:grid;gap:12px;">
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:16px;border:2px solid var(--accent);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">Register via CLI</div>
+          <div class="code-block" style="font-size:0.82rem;margin-bottom:8px;">claude mcp add qa-tools node /absolute/path/to/my-qa-mcp-server/src/server.ts</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Use the full absolute path — relative paths can fail depending on where Claude Code starts. You can run <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">pwd</code> in your project folder to get it.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:16px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">Or directly in ~/.claude.json</div>
+          <div class="code-block" style="font-size:0.8rem;line-height:1.8;"><span class="str">"qa-tools"</span>: {{ '{' }}<br>&nbsp;&nbsp;<span class="str">"command"</span>: <span class="str">"node"</span>,<br>&nbsp;&nbsp;<span class="str">"args"</span>: [<span class="str">"/absolute/path/to/server/src/server.ts"</span>]<br>{{ '}' }}</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:16px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">Restart and verify</div>
+          <div class="chat-mock" style="margin-top:0;">
+            <div class="chat-msg user" style="font-size:0.84em;">What tools do you have available?</div>
+            <div class="chat-msg ai" style="font-size:0.84em;">I have access to tools from your <strong>qa-tools</strong> server:<br><strong>get-test-summary</strong> — Summarise the latest Playwright test run results.<br><br>Shall I use it? Provide the path to your test report file.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — Testing Your Server End to End ─── -->
+  <div class="slide" data-title="Testing Your Server" data-notes="Walk through a real end-to-end test. This is what success looks like — you ask Claude to read your test results, it uses your custom tool, and comes back with the data.&lt;br&gt;&lt;br&gt;Important to point out: Claude is calling your code. The server.ts file you wrote is actually executing on your machine right now. That's the empowerment of building your own server.&lt;br&gt;&lt;br&gt;Common failure: forgetting to restart Claude Code after making changes to server.ts. The server process is launched once at startup — changes to the code won't take effect until you restart.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Testing your server end to end</h2>
+      <div class="chat-mock" style="margin-bottom:14px;">
+        <div class="chat-msg user">
+          Use the get-test-summary tool to summarise the results in tests/results/test-results.json
+        </div>
+        <div class="chat-msg ai">
+          I'll use the get-test-summary tool from your qa-tools server...
+          <br><br>
+          <em style="color:rgba(255,255,255,0.5);font-size:0.88em;">[Claude calls your tool with reportPath = "tests/results/test-results.json"]</em>
+          <br><br>
+          <strong>Test Run Summary:</strong><br>
+          Total: 21 tests — 18 passed, 3 failed
+          <br><br>
+          <strong>Failed tests:</strong>
+          <ul style="margin:6px 0 0 16px;display:grid;gap:4px;font-size:0.88em;">
+            <li>tests/checkout.spec.ts — "should complete payment" (timeout)</li>
+            <li>tests/auth.spec.ts — "should redirect to dashboard" (assertion)</li>
+            <li>tests/profile.spec.ts — "should upload avatar" (element not found)</li>
+          </ul>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;padding:14px 18px;font-size:0.82rem;color:var(--text-secondary);border:1px solid var(--border);">
+        <strong style="color:var(--text-primary);">If something goes wrong:</strong><br>
+        1. Check Claude Code restarted after changes<br>
+        2. Verify the file path is absolute and the report file exists<br>
+        3. Look for errors in the Claude Code output — server errors appear there<br>
+        4. Run <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">node src/server.ts</code> directly to check for TypeScript errors
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 13 — More QA Tool Ideas ─── -->
+  <div class="slide" data-title="More QA Tool Ideas" data-notes="Plant seeds for what else people might build. Each of these is a real-world scenario where a custom MCP server would save meaningful time. The pattern is always the same: you have data somewhere → you want AI to access or act on it → you build the bridge.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">More custom QA tools worth building</h2>
+      <div style="display:grid;gap:10px;">
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">📊</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Flakiness tracker</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Reads test history files, calculates a flakiness score per test (pass rate over last 20 runs), returns the worst offenders. Input: none. Output: ranked list of flaky tests.</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🔗</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Ticket creator</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Takes test failure details (name, error, file, line) and creates a formatted Jira ticket via the Jira REST API. Input: failure object. Output: created ticket URL.</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">📋</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Coverage reporter</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Reads your Istanbul/V8 coverage JSON and answers "which modules have less than 80% coverage?" Input: coverage threshold. Output: list of files below threshold.</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🌐</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Environment health checker</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Pings your staging/UAT/dev environment URLs and checks HTTP status. Input: none (list hardcoded). Output: which environments are up, which are down. Run before starting a test session.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 14 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="Celebrate the achievement — if the team has built a working server during this session, that's genuinely impressive. Even understanding the anatomy well enough to build one later is meaningful progress.&lt;br&gt;&lt;br&gt;The theme of this session: MCP servers are simpler than they look. The SDK does the hard work. Your job is: describe your tools, write the handler logic, connect the transport.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:24px;">Key takeaways</h2>
+      <div class="takeaway-list">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">An MCP server is five things: imports, server, list-tools, call-tool, transport</div>
+            <div class="takeaway-desc">Every server follows this exact structure. The SDK handles the protocol. You only write the tool logic. A complete working server fits in about 50 lines.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">The tool description is what Claude reads to decide when to use your tool</div>
+            <div class="takeaway-desc">Write descriptions clearly: "Use this when you need to see which tests failed in the most recent Playwright run." Vague descriptions lead to the AI calling the wrong tool or missing it entirely.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Build for your team's specific friction points</div>
+            <div class="takeaway-desc">Look for the moments where you're copying data from one system into an AI chat. Those are your best candidates for custom tools. The pattern: identify the friction → build the bridge.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Commit your server to the team repo — it's shared infrastructure</div>
+            <div class="takeaway-desc">A useful MCP server benefits everyone on the team, not just the person who built it. The config entry in ~/.claude.json can be shared too — add it to your project's README.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 15 — Bridge to Session 16 ─── -->
+  <div class="slide" data-title="What's Next" data-notes="The final session. We zoom out from individual tools and look at how everything fits together — agents, subagents, and multi-step AI workflows. This is the capstone that connects all 15 sessions before it.">
+    <div class="slide-inner" style="text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:24px;">Session 15 Complete</div>
+      <h2 style="font-size:2rem;margin-bottom:14px;">Up next: <span style="color:var(--accent)">Session 16</span></h2>
+      <p style="color:var(--text-secondary);font-size:0.95rem;max-width:460px;margin:0 auto 32px;line-height:1.7;">Agents, Subagents &amp; Building AI Workflows — the final session and the series capstone</p>
+      <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;max-width:420px;margin:0 auto;text-align:left;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">What we'll cover in Session 16</div>
+        <ul style="list-style:none;display:grid;gap:8px;font-size:0.85rem;color:var(--text-secondary);">
+          <li>· Agents and subagents explained</li>
+          <li>· The orchestrator and worker pattern</li>
+          <li>· Building a real multi-step AI workflow</li>
+          <li>· Where this technology is heading</li>
+          <li>· Series completion — your next steps</li>
+        </ul>
+      </div>
+    </div>
+  </div>

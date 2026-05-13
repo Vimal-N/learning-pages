@@ -1,0 +1,859 @@
+---
+layout: session.njk
+title: Session 16 — What Is MCP? Understanding the Model Context Protocol
+sessionNumber: "16"
+sessionTitle: "What Is MCP? Understanding the Model Context Protocol"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="Phase 5 begins. This is the frontier — MCP is a relatively new standard that is moving quickly. Be transparent with the team: the instructor is still learning this too. We're exploring together.&lt;br&gt;&lt;br&gt;MCP stands for Model Context Protocol. At first the name sounds intimidating. But the concept is actually quite intuitive once you have the right analogy. That's what this session is about — building the mental model before we touch any tools.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Framing for the session: MCP is to AI what USB is to your computer. USB lets you plug in any compatible device. MCP lets you connect any compatible data source or tool to your AI.&lt;/div&gt;">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">🔌 Session 16 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows</div>
+      <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">What Is <span style="color:var(--accent)">MCP</span>?</h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Understanding the Model Context Protocol — the standard that lets AI tools connect to external systems, data, and actions.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">45 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Advanced</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 12</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — The Problem MCP Solves ─── -->
+  <div class="slide" data-title="The Problem MCP Solves" data-notes="Start with the problem, not the solution. Before MCP, every AI integration was custom. If you wanted Claude to read your database, someone wrote a custom integration. If you wanted it to read your GitHub issues, another custom integration. None of them could talk to each other. It was fragmented and expensive.&lt;br&gt;&lt;br&gt;MCP is the standard that changes this — like HTTP standardised how web clients and servers talk to each other.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">The problem before MCP</h2>
+      <div class="comparison">
+        <div class="comp-col negative">
+          <div class="comp-label">Before MCP — fragmented</div>
+          <ul style="list-style:none;display:grid;gap:10px;font-size:0.85rem;color:var(--text-secondary);">
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Every AI tool has its own custom integration format</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Integrations are one-off — can't be reused across tools</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> AI can only access data it was trained on or you paste in</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> No standard way to let AI take actions in external systems</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Building integrations requires deep AI platform knowledge</li>
+          </ul>
+        </div>
+        <div class="comp-col positive">
+          <div class="comp-label">With MCP — standardised</div>
+          <ul style="list-style:none;display:grid;gap:10px;font-size:0.85rem;color:var(--text-secondary);">
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> One standard protocol — any MCP server works with any MCP client</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Build once, reuse with Claude, Copilot, Cursor, any MCP-compatible tool</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> AI can read live data from your systems, not just its training data</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> AI can take structured actions — create tickets, query databases, run scripts</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Community ecosystem of ready-built servers to install and use</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — The USB Analogy ─── -->
+  <div class="slide" data-title="The USB Analogy" data-notes="This analogy makes MCP click for almost everyone. Before USB, every device had its own proprietary port and driver. USB standardised the connection — now any USB device works with any USB port.&lt;br&gt;&lt;br&gt;MCP does the same thing for AI integrations. Write an MCP server once, it works with Claude, it works with Copilot, it works with any future MCP-compatible tool.&lt;br&gt;&lt;br&gt;Pause here and ask if the USB analogy clicks for everyone before moving on. If not, the next slide has a different analogy.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">The analogy that makes MCP click</h2>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-bottom:20px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-size:2rem;margin-bottom:10px;">🖥️</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Before USB</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">Proprietary ports for every device. PS/2 for keyboard, serial for mouse, parallel for printer...</div>
+        </div>
+        <div style="text-align:center;color:var(--text-dim);font-size:1.4rem;">→</div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--green);padding:20px;text-align:center;">
+          <div style="font-size:2rem;margin-bottom:10px;">🔌</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">After USB</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">One standard. Any device, any computer. Plug in and it works.</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;text-align:center;">
+          <div style="font-size:2rem;margin-bottom:10px;">🤖</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Before MCP</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">Custom integration for every AI + data source combination. No reuse.</div>
+        </div>
+        <div style="text-align:center;color:var(--text-dim);font-size:1.4rem;">→</div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--green);padding:20px;text-align:center;">
+          <div style="font-size:2rem;margin-bottom:10px;">🔌</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">After MCP</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">One MCP server works with any MCP-compatible AI tool. Build once, use everywhere.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — The Restaurant Analogy ─── -->
+  <div class="slide" data-title="Another Way to Think About It" data-notes="Some people find the restaurant analogy even more intuitive than USB, because it describes the flow of a request, not just the plug/socket relationship.&lt;br&gt;&lt;br&gt;The key insight: you (the diner) don't need to know how the kitchen works. The waiter handles communication. The kitchen handles execution. You just ask for what you want in a standard way — 'I'd like the pasta please' — and the system takes care of the rest.&lt;br&gt;&lt;br&gt;In MCP: the AI is the diner, the protocol is the waiter, and the server (filesystem, GitHub, database) is the kitchen.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">A second analogy — the restaurant</h2>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid var(--accent);padding:18px;text-align:center;">
+          <div style="font-size:1.8rem;margin-bottom:8px;">🧑‍💼</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:6px;">AI (Claude)</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">The diner. Knows what they want. Speaks in plain requests.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;text-align:center;">
+          <div style="font-size:1.8rem;margin-bottom:8px;">🧾</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:6px;">MCP Protocol</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">The menu &amp; waiter. Standard format for ordering. Translates requests to the kitchen.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;text-align:center;">
+          <div style="font-size:1.8rem;margin-bottom:8px;">👨‍🍳</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:6px;">MCP Server</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">The kitchen. Does the real work — reads files, queries databases, calls APIs.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;text-align:center;">
+          <div style="font-size:1.8rem;margin-bottom:8px;">🍽️</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:6px;">Result</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Structured data back to the AI. The AI uses it to form its answer.</div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:14px 18px;font-size:0.85rem;color:var(--text-secondary);line-height:1.6;">
+        <strong style="color:var(--accent);">Key insight:</strong> You can go to different restaurants (swap servers) and still order the same way. The protocol is standard — only the kitchen changes.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — How MCP Works — Three Pieces ─── -->
+  <div class="slide" data-title="How MCP Works" data-notes="Three pieces to understand: the Host, the Protocol, and the Server. The host is the AI app you're using (Claude Code, Claude Desktop, Cursor). The protocol is the standardised layer built into the host. The server is what you install or build.&lt;br&gt;&lt;br&gt;The flow: your AI wants to know something → sends a request through the protocol → the server acts on it → returns structured data → AI uses it in its response.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">How MCP works — three pieces</h2>
+      <svg viewBox="0 0 700 300" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <!-- Background -->
+        <rect width="700" height="300" rx="12" fill="#13111d"/>
+
+        <!-- TOP LAYER label -->
+        <text x="30" y="24" font-size="11" fill="#e8a848" opacity="0.6" text-anchor="start" letter-spacing="2">YOUR SIDE</text>
+
+        <!-- Outer amber box — "Your side" -->
+        <rect x="20" y="30" width="660" height="94" rx="8" fill="none" stroke="#e8a848" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+        <!-- Claude / AI Model section -->
+        <rect x="30" y="38" width="270" height="78" rx="8" fill="#e8a848" fill-opacity="0.12"/>
+        <text x="165" y="62" font-size="14" fill="#e8a848" text-anchor="middle" font-weight="bold">Claude / AI Model</text>
+        <text x="165" y="80" font-size="11" fill="#e8a848" opacity="0.75" text-anchor="middle">Reasons, plans, decides</text>
+        <text x="165" y="95" font-size="11" fill="#e8a848" opacity="0.75" text-anchor="middle">what to do</text>
+
+        <!-- Arrow label between Claude and MCP Client -->
+        <text x="350" y="68" font-size="10" fill="#6fa3f7" text-anchor="middle">function call</text>
+        <text x="350" y="81" font-size="10" fill="#6fa3f7" text-anchor="middle">request</text>
+        <!-- Arrow left to right -->
+        <line x1="302" y1="77" x2="388" y2="77" stroke="#6fa3f7" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+        <defs>
+          <marker id="arrowBlue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill="#6fa3f7"/>
+          </marker>
+          <marker id="arrowAmber" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill="#e8a848"/>
+          </marker>
+          <marker id="arrowDown" markerWidth="6" markerHeight="6" refX="3" refY="5" orient="auto">
+            <path d="M0,0 L6,0 L3,6 z" fill="#e8a848"/>
+          </marker>
+        </defs>
+
+        <!-- MCP Client section -->
+        <rect x="400" y="38" width="268" height="78" rx="8" fill="#6fa3f7" fill-opacity="0.12"/>
+        <text x="534" y="62" font-size="14" fill="#6fa3f7" text-anchor="middle" font-weight="bold">MCP Client</text>
+        <text x="534" y="80" font-size="11" fill="#6fa3f7" opacity="0.8" text-anchor="middle">Built into Claude Code</text>
+        <text x="534" y="95" font-size="11" fill="#6fa3f7" opacity="0.8" text-anchor="middle">Routes requests</text>
+
+        <!-- MIDDLE LAYER label -->
+        <text x="30" y="148" font-size="11" fill="#e8a848" opacity="0.6" letter-spacing="2">THE PROTOCOL</text>
+
+        <!-- Protocol box -->
+        <rect x="20" y="154" width="660" height="54" rx="8" fill="#e8a848" fill-opacity="0.06" stroke="#e8a848" stroke-width="1.5" stroke-dasharray="6 4"/>
+        <text x="350" y="176" font-size="15" fill="#e8a848" text-anchor="middle" font-weight="bold">MCP Protocol (JSON-RPC 2.0)</text>
+        <text x="350" y="197" font-size="11" fill="#e8a848" opacity="0.7" text-anchor="middle">Standardised message format — tools speak the same language</text>
+
+        <!-- Down arrows from protocol to servers -->
+        <line x1="160" y1="210" x2="160" y2="228" stroke="#e8a848" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+        <line x1="350" y1="210" x2="350" y2="228" stroke="#e8a848" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+        <line x1="540" y1="210" x2="540" y2="228" stroke="#e8a848" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+
+        <!-- BOTTOM LAYER label -->
+        <text x="30" y="225" font-size="11" fill="#b08cf5" opacity="0.6" letter-spacing="2">SERVER SIDE</text>
+
+        <!-- Server 1: Filesystem -->
+        <rect x="20" y="232" width="196" height="54" rx="8" fill="#b08cf5" fill-opacity="0.08" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="118" y="254" font-size="13" fill="#b08cf5" text-anchor="middle" font-weight="bold">Filesystem MCP Server</text>
+        <text x="118" y="272" font-size="11" fill="#b08cf5" opacity="0.75" text-anchor="middle">reads / writes files</text>
+
+        <!-- Server 2: GitHub -->
+        <rect x="252" y="232" width="196" height="54" rx="8" fill="#b08cf5" fill-opacity="0.08" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="350" y="254" font-size="13" fill="#b08cf5" text-anchor="middle" font-weight="bold">GitHub MCP Server</text>
+        <text x="350" y="272" font-size="11" fill="#b08cf5" opacity="0.75" text-anchor="middle">issues, PRs, repos</text>
+
+        <!-- Server 3: Playwright -->
+        <rect x="484" y="232" width="196" height="54" rx="8" fill="#b08cf5" fill-opacity="0.08" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="582" y="254" font-size="13" fill="#b08cf5" text-anchor="middle" font-weight="bold">Playwright MCP Server</text>
+        <text x="582" y="272" font-size="11" fill="#b08cf5" opacity="0.75" text-anchor="middle">browser automation</text>
+
+        <!-- Caption -->
+        <text x="350" y="296" font-size="11" fill="#888" text-anchor="middle">Each server is a separate process. Any language. Any data source.</text>
+      </svg>
+      <div style="background:var(--bg-elevated);border-radius:12px;border:1px solid var(--border);padding:22px;margin-bottom:16px;">
+        <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:center;">
+          <div style="text-align:center;padding:16px;background:var(--bg-card);border-radius:8px;border:2px solid var(--accent);">
+            <div style="font-size:1.4rem;margin-bottom:6px;">💻</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:4px;">Host</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">Claude Code, Claude Desktop, Cursor, Zed</div>
+            <div style="font-size:0.7rem;color:var(--text-dim);margin-top:6px;">The AI app the user talks to</div>
+          </div>
+          <div style="text-align:center;font-size:1.2rem;color:var(--text-dim);">⟷</div>
+          <div style="text-align:center;padding:16px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border);">
+            <div style="font-size:1.4rem;margin-bottom:6px;">🔄</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:4px;">MCP Protocol</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">Standardised JSON messages</div>
+            <div style="font-size:0.7rem;color:var(--text-dim);margin-top:6px;">The shared language both sides speak</div>
+          </div>
+          <div style="text-align:center;font-size:1.2rem;color:var(--text-dim);">⟷</div>
+          <div style="text-align:center;padding:16px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border);">
+            <div style="font-size:1.4rem;margin-bottom:6px;">🗄️</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:4px;">MCP Server</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">GitHub, database, filesystem, custom</div>
+            <div style="font-size:0.7rem;color:var(--text-dim);margin-top:6px;">The bridge to real-world systems</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:0.78rem;">
+        <div style="background:var(--bg-card);border-radius:6px;padding:10px 12px;border:1px solid var(--border);">
+          <div style="font-weight:600;color:var(--text-primary);margin-bottom:4px;">What servers expose</div>
+          <div style="color:var(--text-secondary);">Resources (data to read), Tools (actions to take), Prompts (templates to use)</div>
+        </div>
+        <div style="background:var(--bg-card);border-radius:6px;padding:10px 12px;border:1px solid var(--border);">
+          <div style="font-weight:600;color:var(--text-primary);margin-bottom:4px;">Transport options</div>
+          <div style="color:var(--text-secondary);">Local (stdio) or remote (HTTP). Most community servers run locally.</div>
+        </div>
+        <div style="background:var(--bg-card);border-radius:6px;padding:10px 12px;border:1px solid var(--border);">
+          <div style="font-weight:600;color:var(--text-primary);margin-bottom:4px;">Who controls access</div>
+          <div style="color:var(--text-secondary);">The server decides what data and actions the AI can access. You own the server.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — The Request Flow ─── -->
+  <div class="slide" data-title="The Request Flow" data-notes="Walk through this step by step. This is what actually happens in the 200 milliseconds between you pressing Enter and getting a response that includes live data.&lt;br&gt;&lt;br&gt;The key thing people don't always realise: the AI makes a decision to call a tool. It decides 'I need data from this tool to answer this properly', constructs the request, gets the data, then forms its answer. The tool call is invisible to you but it's happening.&lt;br&gt;&lt;br&gt;This flow is the same whether it's a filesystem server, a GitHub server, or your custom QA tools server.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">What actually happens when you ask Claude something</h2>
+      <svg viewBox="0 0 700 240" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <defs>
+          <marker id="arrowR" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#e8a848"/></marker>
+          <marker id="arrowL" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto"><path d="M6,0 L6,6 L0,3 z" fill="#5ec269"/></marker>
+        </defs>
+        <rect width="700" height="240" rx="12" fill="#13111d"/>
+
+        <!-- Column positions: 70, 210, 350, 490, 630 -->
+        <!-- Actor headers -->
+        <text x="70"  y="26" font-size="13" fill="#e8a848" text-anchor="middle" font-weight="bold">You</text>
+        <text x="210" y="26" font-size="13" fill="#e8a848" text-anchor="middle" font-weight="bold">Claude</text>
+        <text x="350" y="26" font-size="13" fill="#6fa3f7" text-anchor="middle" font-weight="bold">MCP Client</text>
+        <text x="490" y="26" font-size="13" fill="#b08cf5" text-anchor="middle" font-weight="bold">MCP Server</text>
+        <text x="630" y="26" font-size="13" fill="#5ec269" text-anchor="middle" font-weight="bold">External</text>
+        <text x="630" y="38" font-size="10" fill="#5ec269" opacity="0.7" text-anchor="middle">GitHub / filesystem</text>
+
+        <!-- Vertical lifelines -->
+        <line x1="70"  y1="44" x2="70"  y2="235" stroke="#e8a848" stroke-width="1" stroke-dasharray="3 3" opacity="0.3"/>
+        <line x1="210" y1="44" x2="210" y2="235" stroke="#e8a848" stroke-width="1" stroke-dasharray="3 3" opacity="0.3"/>
+        <line x1="350" y1="44" x2="350" y2="235" stroke="#6fa3f7" stroke-width="1" stroke-dasharray="3 3" opacity="0.3"/>
+        <line x1="490" y1="44" x2="490" y2="235" stroke="#b08cf5" stroke-width="1" stroke-dasharray="3 3" opacity="0.3"/>
+        <line x1="630" y1="44" x2="630" y2="235" stroke="#5ec269" stroke-width="1" stroke-dasharray="3 3" opacity="0.3"/>
+
+        <!-- ── REQUESTS (going right, solid, amber) ── -->
+        <!-- Step 1: You → Claude -->
+        <text x="11"  y="66" font-size="10" fill="#e8a848" opacity="0.6">①</text>
+        <line x1="80" y1="63" x2="198" y2="63" stroke="#e8a848" stroke-width="1.5" marker-end="url(#arrowR)"/>
+        <text x="140" y="58" font-size="10" fill="#e8a848" text-anchor="middle">Run the failing Playwright test</text>
+
+        <!-- Step 2: Claude → MCP Client -->
+        <text x="151" y="98" font-size="10" fill="#e8a848" opacity="0.6">②</text>
+        <line x1="220" y1="95" x2="338" y2="95" stroke="#e8a848" stroke-width="1.5" marker-end="url(#arrowR)"/>
+        <text x="280" y="90" font-size="10" fill="#e8a848" text-anchor="middle">call: run_test('login.spec.ts')</text>
+
+        <!-- Step 3: MCP Client → MCP Server -->
+        <text x="291" y="130" font-size="10" fill="#6fa3f7" opacity="0.7">③</text>
+        <line x1="360" y1="127" x2="478" y2="127" stroke="#6fa3f7" stroke-width="1.5" marker-end="url(#arrowR)"/>
+        <text x="420" y="120" font-size="10" fill="#6fa3f7" text-anchor="middle">JSON-RPC { method: 'run_test', </text>
+        <text x="420" y="133" font-size="10" fill="#6fa3f7" text-anchor="middle">params: {...} }</text>
+
+        <!-- Step 4: MCP Server → External -->
+        <text x="431" y="158" font-size="10" fill="#b08cf5" opacity="0.7">④</text>
+        <line x1="500" y1="155" x2="618" y2="155" stroke="#b08cf5" stroke-width="1.5" marker-end="url(#arrowR)"/>
+        <text x="560" y="150" font-size="10" fill="#b08cf5" text-anchor="middle">npx playwright test login.spec.ts</text>
+
+        <!-- ── RESPONSES (going left, dashed, green) ── -->
+        <!-- Response 4: External → MCP Server -->
+        <text x="431" y="180" font-size="10" fill="#5ec269" opacity="0.7">④</text>
+        <line x1="618" y1="177" x2="502" y2="177" stroke="#5ec269" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrowL)"/>
+        <text x="560" y="172" font-size="10" fill="#5ec269" text-anchor="middle">output: 1 failed, error: timeout</text>
+
+        <!-- Response 3: MCP Server → MCP Client -->
+        <text x="291" y="200" font-size="10" fill="#5ec269" opacity="0.7">③</text>
+        <line x1="478" y1="197" x2="362" y2="197" stroke="#5ec269" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrowL)"/>
+        <text x="420" y="192" font-size="10" fill="#5ec269" text-anchor="middle">JSON-RPC response { content: 'test output...' }</text>
+
+        <!-- Response 2: MCP Client → Claude -->
+        <text x="151" y="218" font-size="10" fill="#5ec269" opacity="0.7">②</text>
+        <line x1="338" y1="215" x2="222" y2="215" stroke="#5ec269" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrowL)"/>
+        <text x="280" y="210" font-size="10" fill="#5ec269" text-anchor="middle">tool result</text>
+
+        <!-- Response 1: Claude → You -->
+        <text x="11"  y="234" font-size="10" fill="#5ec269" opacity="0.7">①</text>
+        <line x1="198" y1="231" x2="82"  y2="231" stroke="#5ec269" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrowL)"/>
+        <text x="140" y="226" font-size="10" fill="#5ec269" text-anchor="middle">The test failed because... here's the fix</text>
+      </svg>
+      <div style="display:grid;gap:8px;">
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:center;padding:12px 14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-soft);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--accent);">1</div>
+          <div><span style="font-weight:600;color:var(--text-primary);font-size:0.88rem;">You ask:</span> <span style="color:var(--text-secondary);font-size:0.85rem;">"What tests failed in today's test run?"</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:center;padding:12px 14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--bg-card);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--text-dim);">2</div>
+          <div><span style="font-weight:600;color:var(--text-primary);font-size:0.88rem;">Claude decides:</span> <span style="color:var(--text-secondary);font-size:0.85rem;">"I have a filesystem tool available. I'll use it to read the test results."</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:center;padding:12px 14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--bg-card);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--text-dim);">3</div>
+          <div><span style="font-weight:600;color:var(--text-primary);font-size:0.88rem;">Protocol layer sends:</span> <span style="color:var(--text-secondary);font-size:0.85rem;">A structured JSON message to the filesystem MCP server: "read file: tests/results/latest.json"</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:center;padding:12px 14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--bg-card);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--text-dim);">4</div>
+          <div><span style="font-weight:600;color:var(--text-primary);font-size:0.88rem;">MCP server acts:</span> <span style="color:var(--text-secondary);font-size:0.85rem;">Opens the file from your filesystem, reads the content</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:center;padding:12px 14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--bg-card);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--text-dim);">5</div>
+          <div><span style="font-weight:600;color:var(--text-primary);font-size:0.88rem;">Server responds:</span> <span style="color:var(--text-secondary);font-size:0.85rem;">Returns the file content as structured data back through the protocol</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:center;padding:12px 14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--accent);border-left:3px solid var(--accent);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-soft);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--accent);">6</div>
+          <div><span style="font-weight:600;color:var(--text-primary);font-size:0.88rem;">Claude answers you:</span> <span style="color:var(--text-secondary);font-size:0.85rem;">"3 tests failed today: checkout.spec.ts, auth.spec.ts, and profile.spec.ts. Here's what happened..."</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — What MCP Servers Can Do ─── -->
+  <div class="slide" data-title="Three Things MCP Servers Provide" data-notes="MCP servers fall into three capability categories. Resources are read-only data sources. Tools are actions the AI can take. Prompts are reusable prompt templates. Most practical MCP servers mix all three.&lt;br&gt;&lt;br&gt;The distinction between resources and tools matters for permissions: should the AI be able to read-only, or also write and act?">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Three things MCP servers can provide</h2>
+      <svg viewBox="0 0 700 260" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <rect width="700" height="260" rx="12" fill="#13111d"/>
+
+        <!-- Dividers -->
+        <line x1="236" y1="16" x2="236" y2="246" stroke="#444" stroke-width="1" stroke-dasharray="4 4"/>
+        <line x1="464" y1="16" x2="464" y2="246" stroke="#444" stroke-width="1" stroke-dasharray="4 4"/>
+
+        <!-- ── COLUMN 1: Tools (green) ── -->
+        <!-- Badge -->
+        <rect x="76" y="16" width="82" height="22" rx="6" fill="#5ec269" fill-opacity="0.18" stroke="#5ec269" stroke-width="1"/>
+        <text x="117" y="31" font-size="13" fill="#5ec269" text-anchor="middle" font-weight="bold">Tools</text>
+        <!-- Wrench icon (simple lines) -->
+        <g transform="translate(96,50)">
+          <rect x="0" y="8" width="6" height="18" rx="2" fill="none" stroke="#5ec269" stroke-width="1.8"/>
+          <rect x="18" y="0" width="6" height="10" rx="2" fill="none" stroke="#5ec269" stroke-width="1.8"/>
+          <line x1="6" y1="14" x2="18" y2="6" stroke="#5ec269" stroke-width="1.8"/>
+        </g>
+        <!-- Title -->
+        <text x="118" y="86" font-size="13" fill="#5ec269" text-anchor="middle" font-weight="bold">Actions AI can take</text>
+        <!-- Bullets -->
+        <text x="34"  y="108" font-size="12" fill="#ccc">· run_test(path)</text>
+        <text x="34"  y="126" font-size="12" fill="#ccc">· create_issue(title, body)</text>
+        <text x="34"  y="144" font-size="12" fill="#ccc">· read_file(path)</text>
+        <text x="34"  y="162" font-size="12" fill="#ccc">· search_code(query)</text>
+        <!-- Footer -->
+        <rect x="20" y="218" width="200" height="26" rx="6" fill="#5ec269" fill-opacity="0.1"/>
+        <text x="120" y="235" font-size="11" fill="#5ec269" text-anchor="middle">Claude calls these like functions</text>
+
+        <!-- ── COLUMN 2: Resources (blue) ── -->
+        <!-- Badge -->
+        <rect x="304" y="16" width="94" height="22" rx="6" fill="#6fa3f7" fill-opacity="0.18" stroke="#6fa3f7" stroke-width="1"/>
+        <text x="351" y="31" font-size="13" fill="#6fa3f7" text-anchor="middle" font-weight="bold">Resources</text>
+        <!-- Document icon -->
+        <g transform="translate(330,46)">
+          <rect x="0" y="0" width="20" height="26" rx="2" fill="none" stroke="#6fa3f7" stroke-width="1.8"/>
+          <polyline points="13,0 13,8 20,8" fill="none" stroke="#6fa3f7" stroke-width="1.5"/>
+          <line x1="4" y1="13" x2="16" y2="13" stroke="#6fa3f7" stroke-width="1.2"/>
+          <line x1="4" y1="18" x2="16" y2="18" stroke="#6fa3f7" stroke-width="1.2"/>
+        </g>
+        <!-- Title -->
+        <text x="351" y="86" font-size="13" fill="#6fa3f7" text-anchor="middle" font-weight="bold">Data AI can read</text>
+        <!-- Bullets -->
+        <text x="252" y="108" font-size="12" fill="#ccc">· test-results.xml</text>
+        <text x="252" y="126" font-size="12" fill="#ccc">· playwright.config.ts</text>
+        <text x="252" y="144" font-size="12" fill="#ccc">· package.json</text>
+        <text x="252" y="162" font-size="12" fill="#ccc">· README.md</text>
+        <!-- Footer -->
+        <rect x="248" y="218" width="200" height="26" rx="6" fill="#6fa3f7" fill-opacity="0.1"/>
+        <text x="348" y="235" font-size="11" fill="#6fa3f7" text-anchor="middle">Claude reads these like files</text>
+
+        <!-- ── COLUMN 3: Prompts (purple) ── -->
+        <!-- Badge -->
+        <rect x="538" y="16" width="84" height="22" rx="6" fill="#b08cf5" fill-opacity="0.18" stroke="#b08cf5" stroke-width="1"/>
+        <text x="580" y="31" font-size="13" fill="#b08cf5" text-anchor="middle" font-weight="bold">Prompts</text>
+        <!-- Speech bubble -->
+        <g transform="translate(557,46)">
+          <rect x="0" y="0" width="24" height="18" rx="4" fill="none" stroke="#b08cf5" stroke-width="1.8"/>
+          <polyline points="4,18 4,26 12,18" fill="none" stroke="#b08cf5" stroke-width="1.5"/>
+          <line x1="5"  y1="7"  x2="19" y2="7"  stroke="#b08cf5" stroke-width="1.2"/>
+          <line x1="5"  y1="12" x2="15" y2="12" stroke="#b08cf5" stroke-width="1.2"/>
+        </g>
+        <!-- Title -->
+        <text x="580" y="86" font-size="13" fill="#b08cf5" text-anchor="middle" font-weight="bold">Pre-built instructions</text>
+        <!-- Bullets -->
+        <text x="475" y="108" font-size="12" fill="#ccc">· analyse-failures</text>
+        <text x="475" y="126" font-size="12" fill="#ccc">· generate-report</text>
+        <text x="475" y="144" font-size="12" fill="#ccc">· review-test-quality</text>
+        <text x="475" y="162" font-size="12" fill="#ccc">· suggest-improvements</text>
+        <!-- Footer -->
+        <rect x="474" y="218" width="208" height="26" rx="6" fill="#b08cf5" fill-opacity="0.1"/>
+        <text x="578" y="235" font-size="11" fill="#b08cf5" text-anchor="middle">Reusable task templates</text>
+      </svg>
+      <div style="display:grid;gap:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-size:1.4rem;flex-shrink:0;">📄</div>
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                <div style="font-size:0.92rem;font-weight:600;color:var(--text-primary);">Resources — data the AI can read</div>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(111,163,247,0.15);color:var(--blue);padding:2px 8px;border-radius:4px;">READ ONLY</span>
+              </div>
+              <div style="font-size:0.82rem;color:var(--text-secondary);">Files, database records, GitHub issues, Confluence pages, Jira tickets. Think of these like books on a shelf — the AI can open them and read them.</div>
+              <div style="font-size:0.78rem;color:var(--text-dim);margin-top:6px;font-family:'IBM Plex Mono',monospace;">Examples: read a file · read a database row · fetch a ticket · list directory contents</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-size:1.4rem;flex-shrink:0;">⚙️</div>
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                <div style="font-size:0.92rem;font-weight:600;color:var(--text-primary);">Tools — actions the AI can take</div>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(94,194,105,0.15);color:var(--green);padding:2px 8px;border-radius:4px;">READ + WRITE</span>
+              </div>
+              <div style="font-size:0.82rem;color:var(--text-secondary);">Create a Jira ticket, query a database, run a Playwright test, send a Slack message, commit a file. The AI can act, not just advise.</div>
+              <div style="font-size:0.78rem;color:var(--text-dim);margin-top:6px;font-family:'IBM Plex Mono',monospace;">Examples: create ticket · run SQL query · click a browser element · send notification</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-size:1.4rem;flex-shrink:0;">💬</div>
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                <div style="font-size:0.92rem;font-weight:600;color:var(--text-primary);">Prompts — reusable templates</div>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(176,140,245,0.15);color:var(--purple);padding:2px 8px;border-radius:4px;">TEMPLATES</span>
+              </div>
+              <div style="font-size:0.82rem;color:var(--text-secondary);">Pre-built prompt templates for common tasks. A "write test report" template that knows your format and automatically pulls the latest test run data.</div>
+              <div style="font-size:0.78rem;color:var(--text-dim);margin-top:6px;font-family:'IBM Plex Mono',monospace;">Examples: daily standup summary · test failure report · release notes template</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — Resources vs Tools: The Real Difference ─── -->
+  <div class="slide" data-title="Resources vs Tools" data-notes="This is a subtle but important distinction. Resources are passive — like reading a file. Tools are active — like writing a file or clicking a button.&lt;br&gt;&lt;br&gt;The reason this matters: from a safety perspective, read-only access (resources) is much lower risk than read-write access (tools). When setting up MCP servers, think about whether the AI needs to just observe data or actually change things.&lt;br&gt;&lt;br&gt;For the filesystem server: reading your test results = resource. Writing a file = tool. Both are available, but you control which paths the server can access.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:20px;">Resources vs Tools — the key difference</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--blue);padding:20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+            <div style="font-size:1.3rem;">📖</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--blue);">Resources (read-only)</div>
+          </div>
+          <div style="display:grid;gap:8px;font-size:0.82rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> AI can observe data but not change it</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> Like opening a file to read it</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> Safe for sensitive data — read access only</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> Examples: read test report, read ticket details, read code file</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--green);padding:20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+            <div style="font-size:1.3rem;">⚡</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);">Tools (active)</div>
+          </div>
+          <div style="display:grid;gap:8px;font-size:0.82rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);">·</span> AI can take actions that change things</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);">·</span> Like clicking a button or submitting a form</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);">·</span> More powerful — requires careful scope control</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);">·</span> Examples: create ticket, write file, send message, run query</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:14px 18px;font-size:0.82rem;color:var(--text-secondary);">
+        <strong style="color:var(--text-primary);">Practical rule:</strong> Start with read-only resources. Add tools only when the AI needs to take action. The scope you grant is the scope the AI can use — keep it minimal until you need more.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — What an MCP Message Looks Like ─── -->
+  <div class="slide" data-title="What MCP Messages Look Like" data-notes="You don't need to write these messages yourself — the SDK does it for you. But seeing the raw format demystifies what MCP actually is at the transport level.&lt;br&gt;&lt;br&gt;Two messages to show: a tool call request (what the AI sends to the server) and a tool result (what the server sends back). Both are simple JSON. The AI constructs the request, the server processes it, and returns structured text.&lt;br&gt;&lt;br&gt;The takeaway: MCP is not magic. It's structured messages over a standard connection. Anyone can read these messages. They're not encrypted inside the tool — you can see exactly what the AI is requesting.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">What MCP messages actually look like</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">📤 Request (AI → Server)</div>
+          <div class="code-block" style="font-size:0.76rem;line-height:1.8;">
+            {{ '{' }}<br>
+            &nbsp;&nbsp;<span class="str">"jsonrpc"</span>: <span class="str">"2.0"</span>,<br>
+            &nbsp;&nbsp;<span class="str">"method"</span>: <span class="str">"tools/call"</span>,<br>
+            &nbsp;&nbsp;<span class="str">"params"</span>: {{ '{' }}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"name"</span>: <span class="str">"read_file"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"arguments"</span>: {{ '{' }}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"path"</span>: <span class="str">"tests/results/latest.json"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;{{ '}' }}<br>
+            &nbsp;&nbsp;{{ '}' }}<br>
+            {{ '}' }}
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:10px;">📥 Response (Server → AI)</div>
+          <div class="code-block" style="font-size:0.76rem;line-height:1.8;">
+            {{ '{' }}<br>
+            &nbsp;&nbsp;<span class="str">"jsonrpc"</span>: <span class="str">"2.0"</span>,<br>
+            &nbsp;&nbsp;<span class="str">"result"</span>: {{ '{' }}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"content"</span>: [{{ '{' }}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"type"</span>: <span class="str">"text"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"text"</span>: <span class="str">"{{ '{' }} \"passed\": 18, \"failed\": 3, ... {{ '}' }}"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;{{ '}' }}]<br>
+            &nbsp;&nbsp;{{ '}' }}<br>
+            {{ '}' }}
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px;background:var(--bg-elevated);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
+        You don't write these by hand — the MCP SDK generates them automatically. But they explain why MCP is interoperable: every server speaks the same JSON format.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — Real MCP Examples ─── -->
+  <div class="slide" data-title="Real MCP Servers Available Today" data-notes="Make it concrete. These are real MCP servers that exist today and that QA engineers could use directly. The Playwright MCP server is particularly relevant — it gives AI the ability to control a real browser, not just generate test code.&lt;br&gt;&lt;br&gt;Point out that this ecosystem is growing fast. New servers are published every week. The pattern is: identify a tool your team uses daily → check if an MCP server exists for it → if not, Session 15 teaches you to build one.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">MCP servers you could use today</h2>
+      <svg viewBox="0 0 700 300" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <rect width="700" height="300" rx="12" fill="#13111d"/>
+
+        <!-- Row 1: File & Code (green) -->
+        <text x="24" y="46" font-size="14" fill="#5ec269" font-weight="bold">File &amp; Code</text>
+        <!-- Chips -->
+        <rect x="140" y="28" width="88" height="26" rx="8" fill="#5ec269" fill-opacity="0.15" stroke="#5ec269" stroke-width="1.2"/>
+        <text x="184" y="45" font-size="12" fill="#5ec269" text-anchor="middle">Filesystem</text>
+        <rect x="238" y="28" width="56" height="26" rx="8" fill="#5ec269" fill-opacity="0.15" stroke="#5ec269" stroke-width="1.2"/>
+        <text x="266" y="45" font-size="12" fill="#5ec269" text-anchor="middle">Git</text>
+        <rect x="304" y="28" width="66" height="26" rx="8" fill="#5ec269" fill-opacity="0.15" stroke="#5ec269" stroke-width="1.2"/>
+        <text x="337" y="45" font-size="12" fill="#5ec269" text-anchor="middle">SQLite</text>
+        <rect x="380" y="28" width="76" height="26" rx="8" fill="#5ec269" fill-opacity="0.15" stroke="#5ec269" stroke-width="1.2"/>
+        <text x="418" y="45" font-size="12" fill="#5ec269" text-anchor="middle">Postgres</text>
+
+        <!-- Row separator -->
+        <line x1="16" y1="64" x2="684" y2="64" stroke="#333" stroke-width="1"/>
+
+        <!-- Row 2: Developer Tools (blue) -->
+        <text x="24" y="102" font-size="14" fill="#6fa3f7" font-weight="bold">Developer Tools</text>
+        <rect x="200" y="82" width="72" height="26" rx="8" fill="#6fa3f7" fill-opacity="0.15" stroke="#6fa3f7" stroke-width="1.2"/>
+        <text x="236" y="99" font-size="12" fill="#6fa3f7" text-anchor="middle">GitHub</text>
+        <rect x="282" y="82" width="68" height="26" rx="8" fill="#6fa3f7" fill-opacity="0.15" stroke="#6fa3f7" stroke-width="1.2"/>
+        <text x="316" y="99" font-size="12" fill="#6fa3f7" text-anchor="middle">GitLab</text>
+        <rect x="360" y="82" width="52" height="26" rx="8" fill="#6fa3f7" fill-opacity="0.15" stroke="#6fa3f7" stroke-width="1.2"/>
+        <text x="386" y="99" font-size="12" fill="#6fa3f7" text-anchor="middle">Jira</text>
+        <rect x="422" y="82" width="64" height="26" rx="8" fill="#6fa3f7" fill-opacity="0.15" stroke="#6fa3f7" stroke-width="1.2"/>
+        <text x="454" y="99" font-size="12" fill="#6fa3f7" text-anchor="middle">Linear</text>
+
+        <!-- Row separator -->
+        <line x1="16" y1="120" x2="684" y2="120" stroke="#333" stroke-width="1"/>
+
+        <!-- Row 3: Browser & Testing (purple) -->
+        <text x="24" y="158" font-size="14" fill="#b08cf5" font-weight="bold">Browser &amp; Testing</text>
+        <rect x="218" y="138" width="86" height="26" rx="8" fill="#b08cf5" fill-opacity="0.15" stroke="#b08cf5" stroke-width="1.2"/>
+        <text x="261" y="155" font-size="12" fill="#b08cf5" text-anchor="middle">Playwright</text>
+        <rect x="314" y="138" width="80" height="26" rx="8" fill="#b08cf5" fill-opacity="0.15" stroke="#b08cf5" stroke-width="1.2"/>
+        <text x="354" y="155" font-size="12" fill="#b08cf5" text-anchor="middle">Puppeteer</text>
+        <rect x="404" y="138" width="108" height="26" rx="8" fill="#b08cf5" fill-opacity="0.15" stroke="#b08cf5" stroke-width="1.2"/>
+        <text x="458" y="155" font-size="12" fill="#b08cf5" text-anchor="middle">Fetch/Browser</text>
+        <rect x="522" y="138" width="78" height="26" rx="8" fill="#b08cf5" fill-opacity="0.15" stroke="#b08cf5" stroke-width="1.2"/>
+        <text x="561" y="155" font-size="12" fill="#b08cf5" text-anchor="middle">Selenium</text>
+
+        <!-- Row separator -->
+        <line x1="16" y1="176" x2="684" y2="176" stroke="#333" stroke-width="1"/>
+
+        <!-- Row 4: Comms & Data (cyan) -->
+        <text x="24" y="214" font-size="14" fill="#4ecdc4" font-weight="bold">Comms &amp; Data</text>
+        <rect x="196" y="194" width="56" height="26" rx="8" fill="#4ecdc4" fill-opacity="0.15" stroke="#4ecdc4" stroke-width="1.2"/>
+        <text x="224" y="211" font-size="12" fill="#4ecdc4" text-anchor="middle">Slack</text>
+        <rect x="262" y="194" width="104" height="26" rx="8" fill="#4ecdc4" fill-opacity="0.15" stroke="#4ecdc4" stroke-width="1.2"/>
+        <text x="314" y="211" font-size="12" fill="#4ecdc4" text-anchor="middle">Google Drive</text>
+        <rect x="376" y="194" width="64" height="26" rx="8" fill="#4ecdc4" fill-opacity="0.15" stroke="#4ecdc4" stroke-width="1.2"/>
+        <text x="408" y="211" font-size="12" fill="#4ecdc4" text-anchor="middle">Notion</text>
+        <rect x="450" y="194" width="50" height="26" rx="8" fill="#4ecdc4" fill-opacity="0.15" stroke="#4ecdc4" stroke-width="1.2"/>
+        <text x="475" y="211" font-size="12" fill="#4ecdc4" text-anchor="middle">AWS</text>
+
+        <!-- Bottom note -->
+        <line x1="16" y1="234" x2="684" y2="234" stroke="#333" stroke-width="1"/>
+        <text x="350" y="256" font-size="12" fill="#888" text-anchor="middle">Community-built. Open source. Many more at modelcontextprotocol.io</text>
+      </svg>
+      <div class="card-grid c2" style="gap:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:6px;">@modelcontextprotocol/server-filesystem</div>
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Filesystem — read &amp; write local files</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Let AI read your test reports, update config files, generate documentation — no copy-pasting file contents into chat.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:6px;">@modelcontextprotocol/server-github</div>
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">GitHub — issues, PRs, code search</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Ask AI "what issues were opened this week?", "summarise PR comments", "which files changed in this release?"</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--accent);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:6px;">@playwright/mcp ⭐ Great for QA</div>
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Playwright — browser automation</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">AI can control a real browser — navigate pages, click elements, take screenshots, run exploratory tests.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:6px;">@modelcontextprotocol/server-sqlite</div>
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Database — query live data</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">AI can query your database directly — "show me all failed orders from today", "how many users registered this week?"</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:6px;">mcp-server-jira / mcp-linear</div>
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Issue tracking</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Create test failure tickets, link test results to stories, query sprint status, update issue descriptions automatically.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:6px;">@modelcontextprotocol/server-slack</div>
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Slack — messages &amp; notifications</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Post test results to a channel, read recent messages, notify the team when a build fails.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — MCP vs API Calls ─── -->
+  <div class="slide" data-title="MCP vs Direct API Calls" data-notes="Clarify the distinction — people sometimes wonder why MCP matters when the AI could just call an API directly. The difference: direct API calls are one-off, require custom code, and aren't standardised. MCP is the standard layer that works across all AI tools without custom integration for each one.&lt;br&gt;&lt;br&gt;Also: MCP servers handle authentication, error handling, and data formatting — the boring stuff — so the AI just sees clean data and clean action interfaces.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">MCP vs just calling an API directly</h2>
+      <svg viewBox="0 0 700 280" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <defs>
+          <marker id="arrowRed"   markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#e85c5c"/></marker>
+          <marker id="arrowGreen" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#5ec269"/></marker>
+          <marker id="arrowAmb"   markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#e8a848"/></marker>
+        </defs>
+        <rect width="700" height="280" rx="12" fill="#13111d"/>
+
+        <!-- LEFT background tint -->
+        <rect x="10" y="10" width="318" height="260" rx="10" fill="#e85c5c" fill-opacity="0.05" stroke="#e85c5c" stroke-width="1" stroke-dasharray="5 3"/>
+
+        <!-- RIGHT background tint -->
+        <rect x="372" y="10" width="318" height="260" rx="10" fill="#5ec269" fill-opacity="0.05" stroke="#5ec269" stroke-width="1" stroke-dasharray="5 3"/>
+
+        <!-- VS label -->
+        <text x="350" y="148" font-size="16" fill="#888" text-anchor="middle" font-weight="bold">vs</text>
+
+        <!-- ── LEFT: Without MCP ── -->
+        <text x="169" y="30" font-size="14" fill="#e85c5c" text-anchor="middle" font-weight="bold">Without MCP</text>
+
+        <!-- Claude box (left) -->
+        <rect x="60" y="42" width="70" height="30" rx="6" fill="#e85c5c" fill-opacity="0.2" stroke="#e85c5c" stroke-width="1.2"/>
+        <text x="95" y="62" font-size="12" fill="#e85c5c" text-anchor="middle">Claude</text>
+
+        <!-- Three API boxes -->
+        <rect x="200" y="36" width="106" height="24" rx="6" fill="#333" stroke="#e85c5c" stroke-width="1"/>
+        <text x="253" y="52" font-size="11" fill="#ccc" text-anchor="middle">GitHub API</text>
+        <rect x="200" y="76" width="106" height="24" rx="6" fill="#333" stroke="#e85c5c" stroke-width="1"/>
+        <text x="253" y="92" font-size="11" fill="#ccc" text-anchor="middle">Filesystem</text>
+        <rect x="200" y="116" width="106" height="24" rx="6" fill="#333" stroke="#e85c5c" stroke-width="1"/>
+        <text x="253" y="132" font-size="11" fill="#ccc" text-anchor="middle">Jira API</text>
+
+        <!-- Arrows: Claude → each API -->
+        <line x1="130" y1="52" x2="196" y2="48" stroke="#e85c5c" stroke-width="1.2" marker-end="url(#arrowRed)"/>
+        <line x1="130" y1="57" x2="196" y2="88" stroke="#e85c5c" stroke-width="1.2" marker-end="url(#arrowRed)"/>
+        <line x1="130" y1="62" x2="196" y2="128" stroke="#e85c5c" stroke-width="1.2" marker-end="url(#arrowRed)"/>
+
+        <!-- Custom labels -->
+        <text x="163" y="43" font-size="9" fill="#e85c5c" opacity="0.8" text-anchor="middle">custom</text>
+        <text x="163" y="80" font-size="9" fill="#e85c5c" opacity="0.8" text-anchor="middle">custom</text>
+        <text x="163" y="117" font-size="9" fill="#e85c5c" opacity="0.8" text-anchor="middle">custom</text>
+
+        <!-- Caption bottom-left -->
+        <text x="169" y="158" font-size="11" fill="#e85c5c" text-anchor="middle">Every integration is custom-built</text>
+        <text x="169" y="173" font-size="11" fill="#e85c5c" text-anchor="middle">and one-off</text>
+        <text x="169" y="196" font-size="10" fill="#aaa" text-anchor="middle">3 APIs = 3 different schemas,</text>
+        <text x="169" y="211" font-size="10" fill="#aaa" text-anchor="middle">3 auth patterns, 3 error formats</text>
+
+        <!-- ── RIGHT: With MCP ── -->
+        <text x="531" y="30" font-size="14" fill="#5ec269" text-anchor="middle" font-weight="bold">With MCP</text>
+
+        <!-- Claude box (right) -->
+        <rect x="374" y="42" width="70" height="30" rx="6" fill="#e8a848" fill-opacity="0.2" stroke="#e8a848" stroke-width="1.2"/>
+        <text x="409" y="62" font-size="12" fill="#e8a848" text-anchor="middle">Claude</text>
+
+        <!-- MCP Client -->
+        <rect x="460" y="42" width="78" height="30" rx="6" fill="#6fa3f7" fill-opacity="0.2" stroke="#6fa3f7" stroke-width="1.2"/>
+        <text x="499" y="62" font-size="12" fill="#6fa3f7" text-anchor="middle">MCP Client</text>
+
+        <!-- Arrow Claude → MCP Client -->
+        <line x1="444" y1="57" x2="457" y2="57" stroke="#e8a848" stroke-width="1.5" marker-end="url(#arrowAmb)"/>
+
+        <!-- Three MCP server boxes -->
+        <rect x="556" y="36" width="120" height="24" rx="6" fill="#333" stroke="#5ec269" stroke-width="1"/>
+        <text x="616" y="52" font-size="11" fill="#ccc" text-anchor="middle">GitHub MCP Server</text>
+        <rect x="556" y="76" width="120" height="24" rx="6" fill="#333" stroke="#5ec269" stroke-width="1"/>
+        <text x="616" y="92" font-size="11" fill="#ccc" text-anchor="middle">Filesystem MCP Server</text>
+        <rect x="556" y="116" width="120" height="24" rx="6" fill="#333" stroke="#5ec269" stroke-width="1"/>
+        <text x="616" y="132" font-size="11" fill="#ccc" text-anchor="middle">Jira MCP Server</text>
+
+        <!-- Arrows: MCP Client → servers -->
+        <line x1="538" y1="52" x2="552" y2="48" stroke="#5ec269" stroke-width="1.2" marker-end="url(#arrowGreen)"/>
+        <line x1="538" y1="57" x2="552" y2="88" stroke="#5ec269" stroke-width="1.2" marker-end="url(#arrowGreen)"/>
+        <line x1="538" y1="62" x2="552" y2="128" stroke="#5ec269" stroke-width="1.2" marker-end="url(#arrowGreen)"/>
+
+        <!-- Protocol label on right arrows -->
+        <text x="545" y="43" font-size="9" fill="#5ec269" opacity="0.8" text-anchor="middle">MCP</text>
+        <text x="545" y="80" font-size="9" fill="#5ec269" opacity="0.8" text-anchor="middle">MCP</text>
+        <text x="545" y="117" font-size="9" fill="#5ec269" opacity="0.8" text-anchor="middle">MCP</text>
+
+        <!-- Caption bottom-right -->
+        <text x="531" y="158" font-size="11" fill="#5ec269" text-anchor="middle">One protocol. Plug in any server.</text>
+        <text x="531" y="196" font-size="10" fill="#aaa" text-anchor="middle">Add a new tool = add one line to config</text>
+      </svg>
+      <div class="comparison">
+        <div class="comp-col neutral">
+          <div class="comp-label">Direct API call (old way)</div>
+          <ul style="list-style:none;display:grid;gap:9px;font-size:0.85rem;color:var(--text-secondary);">
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> Requires custom code for every AI + API combination</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> Doesn't work across different AI tools</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> Auth, error handling all bespoke per integration</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> No standard for what data to expose to AI</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--blue);">·</span> Each integration is a one-off engineering project</li>
+          </ul>
+        </div>
+        <div class="comp-col positive">
+          <div class="comp-label">MCP server (new way)</div>
+          <ul style="list-style:none;display:grid;gap:9px;font-size:0.85rem;color:var(--text-secondary);">
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">·</span> Build once, works with Claude, Copilot, Cursor, any MCP client</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">·</span> AI automatically discovers what tools are available</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">·</span> Standardised authentication and error handling patterns</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">·</span> Community ecosystem of ready-to-install servers</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--green);">·</span> Reusable across your whole team — one server, everyone benefits</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — Why MCP Matters for QA ─── -->
+  <div class="slide" data-title="Why MCP Matters for QA" data-notes="Bring it back to the audience. Abstract protocol standards are interesting, but what makes them relevant to QA engineers specifically? These are the concrete scenarios where MCP changes the QA workflow day to day.&lt;br&gt;&lt;br&gt;The through-line: today you spend time manually moving data between systems — copying test results into chat, copying errors into tickets, manually checking what changed. MCP lets AI do that movement automatically.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Why MCP matters for QA engineers specifically</h2>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.3rem;flex-shrink:0;">🧪</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Test execution awareness</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">AI with a filesystem MCP server reads your latest test run results directly and suggests fixes — no copy-pasting output into chat</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.3rem;flex-shrink:0;">🔗</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Test-to-ticket linking</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">AI can automatically create Jira/Linear tickets for test failures with full context — test name, error message, affected file — without you typing it out</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.3rem;flex-shrink:0;">📊</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Live data for test generation</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Database MCP lets AI generate tests with realistic data pulled from your actual system — real product IDs, real edge cases, not invented fixtures</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.3rem;flex-shrink:0;">🌐</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">AI-powered exploratory testing</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Playwright MCP lets AI operate a real browser, navigate your app, and report UI and functional issues it finds — AI as a tireless exploratory tester</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 13 — Key Terms Glossary ─── -->
+  <div class="slide" data-title="Key Terms Glossary" data-notes="Give the team a reference slide they can come back to. These terms will come up constantly in Sessions 14 and 15. The goal is that by the end of this slide, nobody is confused by the vocabulary.&lt;br&gt;&lt;br&gt;Spend a moment on each term — not a lecture, just a quick confirmation that everyone is comfortable with it. Ask 'does anyone want me to explain any of these more before we move on?'">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Key terms to know</h2>
+      <div style="display:grid;gap:8px;">
+        <div style="display:grid;grid-template-columns:140px 1fr;gap:16px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.76rem;font-weight:700;color:var(--accent);">MCP</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Model Context Protocol. The open standard that defines how AI tools and external systems communicate. Published by Anthropic, adopted by the industry.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr;gap:16px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.76rem;font-weight:700;color:var(--accent);">MCP Host</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">The AI application the user works in. Examples: Claude Code, Claude Desktop, Cursor, Zed. The host contains the MCP client.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr;gap:16px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.76rem;font-weight:700;color:var(--accent);">MCP Client</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">The protocol layer built into the host. Handles sending requests to servers and receiving responses. Invisible to the user.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr;gap:16px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.76rem;font-weight:700;color:var(--accent);">MCP Server</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">The program that connects your AI to a real-world system. Can be community-built (filesystem, GitHub) or custom-built by your team.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr;gap:16px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.76rem;font-weight:700;color:var(--accent);">Transport</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">How the client and server connect. stdio = local process (most common). HTTP/SSE = remote server over the network.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr;gap:16px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.76rem;font-weight:700;color:var(--accent);">Tool Call</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">When the AI decides to use an MCP tool. The AI constructs a request, the server executes it, the result comes back to the AI.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 14 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="The central takeaway: MCP is infrastructure. Understanding it unlocks everything in Phase 5. Don't worry if it still feels slightly abstract — Session 14 is hands-on with real MCP servers where the concepts will click more concretely.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:24px;">Key takeaways</h2>
+      <div class="takeaway-list">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">MCP = the USB standard for AI integrations</div>
+            <div class="takeaway-desc">One standard protocol so any MCP server works with any MCP-compatible AI tool. Build once, use everywhere — the same server works with Claude, Copilot, and Cursor.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Three capabilities: Resources, Tools, Prompts</div>
+            <div class="takeaway-desc">Read data passively (resources), take active actions (tools), and reuse prompt templates — the three things an MCP server can provide.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">A growing ecosystem of ready-to-use servers</div>
+            <div class="takeaway-desc">GitHub, filesystem, Playwright, databases, Jira — most common integrations already exist. Session 14 covers using them. Session 15 covers building your own.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">QA engineers have strong concrete use cases</div>
+            <div class="takeaway-desc">CI test results, issue tracking, live test data, browser control — MCP makes these accessible to AI without any copy-pasting between systems.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 15 — Bridge to Session 14 ─── -->
+  <div class="slide" data-title="What's Next" data-notes="Session 14 is hands-on. We're installing and connecting MCP servers to Claude Code and seeing them work in practice. The theory is behind us — next session is doing.">
+    <div class="slide-inner" style="text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:24px;">Session 13 Complete</div>
+      <h2 style="font-size:2rem;margin-bottom:14px;">Up next: <span style="color:var(--accent)">Session 14</span></h2>
+      <p style="color:var(--text-secondary);font-size:0.95rem;max-width:460px;margin:0 auto 32px;line-height:1.7;">Using MCP Servers in Your Workflow — hands-on with real integrations, live demos, step-by-step setup</p>
+      <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;max-width:420px;margin:0 auto;text-align:left;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">What we'll do in Session 14</div>
+        <ul style="list-style:none;display:grid;gap:8px;font-size:0.85rem;color:var(--text-secondary);">
+          <li>· Install and configure your first MCP server</li>
+          <li>· Walk through the JSON config line by line</li>
+          <li>· Demo: filesystem server — reading test results</li>
+          <li>· Demo: GitHub MCP server — querying issues and PRs</li>
+          <li>· Demo: Playwright MCP — AI controlling a real browser</li>
+          <li>· End-to-end QA workflow patterns</li>
+        </ul>
+      </div>
+    </div>
+  </div>

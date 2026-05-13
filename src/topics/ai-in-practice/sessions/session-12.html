@@ -1,0 +1,752 @@
+---
+layout: session.njk
+title: Session 12 — Context Files
+sessionNumber: "12"
+sessionTitle: "Context Files"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="This session solves a very specific frustration. Every time you start a new agent session, you explain the same things: &apos;We use Playwright, TypeScript, page object pattern, tests are in /tests/e2e, don&apos;t use waitForTimeout...&apos; Context files are how you eliminate that repetition. Write it once in a file, put the file in your project, and every future agent session starts already knowing all of it.">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">Session 19 &nbsp;&middot;&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools</div>
+      <h1 style="font-size:2rem;margin-bottom:16px;line-height:1.25;">Context Files<br><span style="color:var(--accent);font-size:1.55rem;">CLAUDE.md, copilot-instructions.md &amp; AGENTS.md</span></h1>
+      <p style="color:var(--text-secondary);font-size:0.95rem;max-width:540px;margin:0 auto 32px;line-height:1.7;">One file changes everything. Teach your agent about your project once &mdash; and it remembers forever.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">50 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 11</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — The Problem: Groundhog Day with Agents ─── -->
+  <div class="slide" data-title="The Problem: Groundhog Day with Agents" data-notes="Start with the pain. Most people who have used terminal agents for more than a week have felt this &mdash; you spend 2-3 minutes at the start of every session giving the AI the same background. It feels like onboarding a new contractor every single day. Context files are how you pre-brief the agent before the conversation even starts.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Why do you have to explain the same things every session?</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px;">Session A — Monday</div>
+          <div class="chat-mock">
+            <div class="chat-msg user" style="font-size:0.78em;">"Before we start: we use Playwright with TypeScript, page object pattern, tests in /tests/e2e/, utilities in /tests/utils/, we never use waitForTimeout, we use waitForLoadState(&apos;networkidle&apos;) instead..."</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px;">Session B — Tuesday</div>
+          <div class="chat-mock">
+            <div class="chat-msg user" style="font-size:0.78em;">"Before we start: we use Playwright with TypeScript, page object pattern, tests in /tests/e2e/, utilities in /tests/utils/..."</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(232,168,72,0.1);border:1px solid rgba(232,168,72,0.3);border-radius:8px;padding:12px 16px;text-align:center;font-size:0.85rem;color:var(--accent);margin-bottom:12px;">
+        You wrote this exact same thing yesterday. And the day before.
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px 16px;text-align:center;font-size:0.85rem;color:var(--text-secondary);">
+        <strong style="color:var(--text-primary);">Context files solve this.</strong> Write your project knowledge ONCE. Every agent reads it automatically.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — The Three Main Context Files ─── -->
+  <div class="slide" data-title="The Three Main Context Files" data-notes="The important insight here is that these files all serve the same purpose &mdash; they just belong to different tools. If you use Claude Code, write CLAUDE.md. If you use Copilot, write copilot-instructions.md. If you want something portable that works with multiple agents, AGENTS.md is the emerging standard. Many projects include all three &mdash; they share much of the same content, just in different files.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">One purpose, three files &mdash; one for each tool</h2>
+      <svg viewBox="0 0 700 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin:0 auto 8px;">
+        <!-- Background -->
+        <rect width="700" height="310" rx="12" fill="#13111d"/>
+
+        <!-- Column: Claude Code / CLAUDE.md (left, center x=117) -->
+        <text x="117" y="38" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="15" font-weight="700" fill="#e8a848">Claude Code</text>
+        <text x="117" y="58" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#7a6a40">terminal agent</text>
+        <line x1="117" y1="68" x2="117" y2="106" stroke="#e8a848" stroke-width="2" stroke-dasharray="5,4"/>
+        <polygon points="111,102 117,112 123,102" fill="#e8a848"/>
+        <text x="117" y="88" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#e8a848">reads automatically</text>
+        <!-- CLAUDE.md box -->
+        <rect x="32" y="118" width="170" height="66" rx="9" fill="#e8a848" fill-opacity="0.10"/>
+        <rect x="32" y="118" width="170" height="66" rx="9" fill="none" stroke="#e8a848" stroke-width="2.5"/>
+        <text x="117" y="145" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="17" font-weight="700" fill="#e8a848">CLAUDE.md</text>
+        <text x="117" y="166" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#a89060">project root or ~/.claude/</text>
+        <!-- desc -->
+        <text x="117" y="206" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#7a6a40">For Claude Code sessions</text>
+        <text x="117" y="224" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#7a6a40">user-level or project-level</text>
+
+        <!-- Column: GitHub Copilot / copilot-instructions.md (center, x=350) -->
+        <text x="350" y="38" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="15" font-weight="700" fill="#5ec269">GitHub Copilot</text>
+        <text x="350" y="58" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#3a7a42">completions · chat · agent</text>
+        <line x1="350" y1="68" x2="350" y2="106" stroke="#5ec269" stroke-width="2" stroke-dasharray="5,4"/>
+        <polygon points="344,102 350,112 356,102" fill="#5ec269"/>
+        <text x="350" y="88" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#5ec269">reads automatically</text>
+        <!-- copilot-instructions.md box -->
+        <rect x="222" y="118" width="256" height="66" rx="9" fill="#5ec269" fill-opacity="0.10"/>
+        <rect x="222" y="118" width="256" height="66" rx="9" fill="none" stroke="#5ec269" stroke-width="2.5"/>
+        <text x="350" y="142" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" font-weight="700" fill="#5ec269">.github/copilot-</text>
+        <text x="350" y="160" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" font-weight="700" fill="#5ec269">instructions.md</text>
+        <text x="350" y="176" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#3a7a42">committed to the repo</text>
+        <!-- desc -->
+        <text x="350" y="206" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#3a7a42">Affects all Copilot features</text>
+        <text x="350" y="224" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#3a7a42">for the whole team</text>
+
+        <!-- Column: Any agent / AGENTS.md (right, x=590) -->
+        <text x="590" y="38" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="15" font-weight="700" fill="#b08cf5">Any agent</text>
+        <text x="590" y="58" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#7a60c0">Opencode · Claude Code · etc.</text>
+        <line x1="590" y1="68" x2="590" y2="106" stroke="#b08cf5" stroke-width="2" stroke-dasharray="5,4"/>
+        <polygon points="584,102 590,112 596,102" fill="#b08cf5"/>
+        <text x="590" y="88" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#b08cf5">reads automatically</text>
+        <!-- AGENTS.md box -->
+        <rect x="508" y="118" width="164" height="66" rx="9" fill="#b08cf5" fill-opacity="0.10"/>
+        <rect x="508" y="118" width="164" height="66" rx="9" fill="none" stroke="#b08cf5" stroke-width="2.5"/>
+        <text x="590" y="148" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="17" font-weight="700" fill="#b08cf5">AGENTS.md</text>
+        <text x="590" y="168" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#7a60c0">project root</text>
+        <!-- desc -->
+        <text x="590" y="206" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#7a60c0">Vendor-neutral, portable</text>
+        <text x="590" y="224" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#7a60c0">growing convention</text>
+
+        <!-- Bottom spanning note -->
+        <rect x="20" y="248" width="660" height="44" rx="7" fill="#1a1728"/>
+        <text x="350" y="272" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#6a6090">All three serve the same purpose:</text>
+        <text x="350" y="288" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#8a80b0">give the agent persistent, automatic context about your project</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — CLAUDE.md — What It Is and What Goes In It ─── -->
+  <div class="slide" data-title="CLAUDE.md — What Goes In It" data-notes="Think of CLAUDE.md as the onboarding doc you&apos;d write for a new contractor who joins your team and is going to touch your test suite. What do they need to know before their first day? What are the gotchas that would waste their time if they didn&apos;t know? That&apos;s exactly what goes in CLAUDE.md. Be specific and concrete. Vague guidance (&apos;write clean code&apos;) is useless. Concrete guidance (&apos;never use waitForTimeout &mdash; always use waitForLoadState&apos;) is gold.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">CLAUDE.md &mdash; the pre-brief for Claude Code</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px;">What it IS</div>
+          <div style="display:grid;gap:8px;font-size:0.83rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">&rarr;</span> Markdown file named exactly <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;color:var(--text-primary);">CLAUDE.md</code></div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">&rarr;</span> Lives in your project root (or subdirectories for sub-project scope)</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">&rarr;</span> Read automatically by Claude Code at the start of every session</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">&rarr;</span> Can also be placed in <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;color:var(--text-primary);">~/.claude/CLAUDE.md</code> for user-level preferences</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:12px;">What goes IN it</div>
+          <div style="display:grid;gap:8px;font-size:0.83rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">&bull;</span> Tech stack and versions ("We use Playwright 1.48, TypeScript 5.4")</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">&bull;</span> Project structure ("Tests live in /tests/e2e, utilities in /tests/utils")</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">&bull;</span> Coding conventions ("Never use waitForTimeout. Always await locators before asserting")</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">&bull;</span> What NOT to do ("Don&apos;t install new packages without asking")</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">&bull;</span> How to run things ("npm run test:e2e runs all tests")</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — copilot-instructions.md ─── -->
+  <div class="slide" data-title="copilot-instructions.md — Copilot's Context File" data-notes="The copilot-instructions.md file is particularly powerful for teams because it&apos;s committed to the repo. Every developer on the team gets the same Copilot behavior once this file is in source control. If you establish that &apos;we use TypeScript generics instead of any&apos;, and you write that in copilot-instructions.md, everyone&apos;s Copilot will naturally avoid `any` in suggestions. It creates a kind of AI-enforced consistency.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:12px;">copilot-instructions.md &mdash; persistent instructions for GitHub Copilot</h2>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:var(--text-dim);margin-bottom:14px;">Path: <span style="color:var(--green);">.github/copilot-instructions.md</span> &nbsp;&mdash;&nbsp; this exact path</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin-bottom:10px;">Effect on completions</div>
+          <div style="display:grid;gap:7px;font-size:0.82rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Completions now follow your patterns</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Copilot learns your variable naming conventions</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Suggestions use your existing helper functions</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Won&apos;t suggest deprecated patterns you&apos;ve explicitly banned</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--purple);margin-bottom:10px;">Effect on Copilot Chat &amp; Agent Mode</div>
+          <div style="display:grid;gap:7px;font-size:0.82rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> @workspace answers filtered by your instructions</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Chat references your actual tech stack</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Agent Mode follows your architectural decisions</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Consistent suggestions across all team members</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(94,194,105,0.08);border:1px solid rgba(94,194,105,0.25);border-radius:8px;padding:11px 16px;font-size:0.83rem;color:var(--text-secondary);">
+        <strong style="color:var(--green);">Team effect:</strong> This file applies to ALL Copilot features &mdash; completions, chat, and agent mode. It affects your whole team when committed to the repo.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — AGENTS.md — The Portable Option ─── -->
+  <div class="slide" data-title="AGENTS.md — The Portable Option" data-notes="AGENTS.md is the new kid on the block but it&apos;s gaining traction fast. The idea is simple: instead of maintaining three separate context files with overlapping content, you write AGENTS.md as the source of truth, and tool-specific files (CLAUDE.md, copilot-instructions.md) only contain tool-specific overrides. This is the direction the industry is moving.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">AGENTS.md &mdash; the multi-agent standard</h2>
+      <div style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:14px;">Works with Opencode, Claude Code, and any agent that follows the emerging AGENTS.md convention.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--purple);margin-bottom:10px;">What it is</div>
+          <div style="display:grid;gap:7px;font-size:0.81rem;color:var(--text-secondary);">
+            <div>A growing convention (not a single vendor standard)</div>
+            <div>Placed in project root as <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;color:var(--text-primary);">AGENTS.md</code></div>
+            <div>Supported by Opencode, and growing in Claude Code support</div>
+            <div>Designed to be vendor-neutral &mdash; write once, works anywhere</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--cyan);margin-bottom:10px;">When to use it</div>
+          <div style="display:grid;gap:7px;font-size:0.81rem;color:var(--text-secondary);">
+            <div>Your team uses multiple agent tools</div>
+            <div>You want one source of truth for agent context</div>
+            <div>Building CI/CD workflows that invoke agents</div>
+            <div>You want future-proofing as new tools emerge</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Relationship to other files</div>
+          <div style="display:grid;gap:7px;font-size:0.81rem;color:var(--text-secondary);">
+            <div>Can coexist with CLAUDE.md and copilot-instructions.md</div>
+            <div>Prefer AGENTS.md content for cross-tool information</div>
+            <div>Keep tool-specific guidance in tool-specific files</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — Where to Place These Files ─── -->
+  <div class="slide" data-title="Where to Place These Files" data-notes="The placement hierarchy is important. User-level CLAUDE.md in `~/.claude/` applies to every Claude Code session everywhere on your machine &mdash; use it for your personal preferences (coding style, preferred patterns, tools you always use). Project-level CLAUDE.md in the project root applies to that specific project &mdash; use it for project-specific conventions. Subdirectory CLAUDE.md is a power-user feature: it only applies when the agent is working in that directory. Great for large monorepos where different parts have different conventions.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:12px;">Where you put the file determines what it affects</h2>
+      <svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin:0 auto;">
+        <!-- Background -->
+        <rect width="720" height="360" rx="12" fill="#13111d"/>
+        <!-- File tree (left) -->
+        <text x="24" y="40" font-family="IBM Plex Mono, monospace" font-size="14" font-weight="700" fill="#c8c0e0">~/</text>
+        <text x="60" y="40" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4a4570">&larr; user home</text>
+        <text x="24" y="64" font-family="IBM Plex Mono, monospace" font-size="13" fill="#5a5580">&#x251C;&#x2500;&#x2500; .claude/</text>
+        <text x="24" y="88" font-family="IBM Plex Mono, monospace" font-size="13" fill="#e8a848">&#x2502;&nbsp;&nbsp; &#x2514;&#x2500;&#x2500; CLAUDE.md</text>
+        <text x="200" y="88" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4a4570">&larr; ALL projects on this machine</text>
+        <text x="24" y="114" font-family="IBM Plex Mono, monospace" font-size="13" fill="#5a5580">&#x2514;&#x2500;&#x2500; projects/</text>
+        <text x="24" y="138" font-family="IBM Plex Mono, monospace" font-size="13" fill="#5a5580">&nbsp;&nbsp;&nbsp;&nbsp; &#x2514;&#x2500;&#x2500; my-project/</text>
+        <text x="168" y="138" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4a4570">&larr; project root</text>
+        <text x="24" y="162" font-family="IBM Plex Mono, monospace" font-size="13" fill="#5ec269">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#x251C;&#x2500;&#x2500; CLAUDE.md</text>
+        <text x="200" y="162" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4a4570">&larr; this project only</text>
+        <text x="24" y="186" font-family="IBM Plex Mono, monospace" font-size="13" fill="#b08cf5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#x251C;&#x2500;&#x2500; AGENTS.md</text>
+        <text x="200" y="186" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4a4570">&larr; this project only</text>
+        <text x="24" y="210" font-family="IBM Plex Mono, monospace" font-size="13" fill="#5a5580">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#x251C;&#x2500;&#x2500; .github/</text>
+        <text x="24" y="234" font-family="IBM Plex Mono, monospace" font-size="13" fill="#5ec269">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#x2502;&nbsp;&nbsp; &#x2514;&#x2500;&#x2500; copilot-instructions.md</text>
+        <text x="24" y="258" font-family="IBM Plex Mono, monospace" font-size="13" fill="#5a5580">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#x251C;&#x2500;&#x2500; src/</text>
+        <text x="24" y="282" font-family="IBM Plex Mono, monospace" font-size="13" fill="#5a5580">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#x2514;&#x2500;&#x2500; tests/</text>
+        <text x="24" y="306" font-family="IBM Plex Mono, monospace" font-size="13" fill="#b08cf5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#x2514;&#x2500;&#x2500; CLAUDE.md</text>
+        <text x="220" y="306" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4a4570">&larr; only when in /tests</text>
+        <!-- Right: callout labels -->
+        <rect x="456" y="68" width="246" height="58" rx="7" fill="#e8a848" fill-opacity="0.08"/>
+        <rect x="456" y="68" width="246" height="58" rx="7" fill="none" stroke="#e8a848" stroke-width="1.5"/>
+        <text x="470" y="88" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#e8a848">User level (~/.claude/)</text>
+        <text x="470" y="107" font-family="IBM Plex Mono, monospace" font-size="11" fill="#a89060">Personal preferences, coding style,</text>
+        <text x="470" y="121" font-family="IBM Plex Mono, monospace" font-size="11" fill="#a89060">tools you always use everywhere</text>
+        <rect x="456" y="140" width="246" height="72" rx="7" fill="#5ec269" fill-opacity="0.08"/>
+        <rect x="456" y="140" width="246" height="72" rx="7" fill="none" stroke="#5ec269" stroke-width="1.5"/>
+        <text x="470" y="160" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#5ec269">Project level (project root)</text>
+        <text x="470" y="179" font-family="IBM Plex Mono, monospace" font-size="11" fill="#3a7a42">Tech stack, architecture decisions,</text>
+        <text x="470" y="194" font-family="IBM Plex Mono, monospace" font-size="11" fill="#3a7a42">conventions, forbidden patterns</text>
+        <text x="470" y="208" font-family="IBM Plex Mono, monospace" font-size="11" fill="#3a7a42">Commit to Git &mdash; whole team benefits</text>
+        <rect x="456" y="228" width="246" height="72" rx="7" fill="#b08cf5" fill-opacity="0.08"/>
+        <rect x="456" y="228" width="246" height="72" rx="7" fill="none" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="470" y="248" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#b08cf5">Sub-directory level</text>
+        <text x="470" y="267" font-family="IBM Plex Mono, monospace" font-size="11" fill="#7a60c0">Scope-specific rules only</text>
+        <text x="470" y="282" font-family="IBM Plex Mono, monospace" font-size="11" fill="#7a60c0">/tests rules don&apos;t need to know</text>
+        <text x="470" y="296" font-family="IBM Plex Mono, monospace" font-size="11" fill="#7a60c0">anything about /src architecture</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — Anatomy of a Good Context File ─── -->
+  <div class="slide" data-title="Anatomy of a Good Context File" data-notes="Notice what makes this good: it&apos;s specific and actionable. &apos;Use Playwright 1.48&apos; &mdash; not just &apos;use Playwright.&apos; &apos;Never use waitForTimeout &mdash; use waitForLoadState&apos; &mdash; not &apos;write good async code.&apos; &apos;Don&apos;t edit /src&apos; &mdash; not &apos;be careful with file changes.&apos; The agent can act on specific rules. It can&apos;t act on vague guidance. The Run Commands section is underrated &mdash; it means the agent can actually run your tests without guessing the command.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">What a well-structured context file looks like</h2>
+      <div class="code-block" style="font-size:0.77rem;line-height:1.75;margin-bottom:14px;">
+        <span class="cm"># CLAUDE.md &mdash; QA Test Suite</span><br><br>
+        <span class="kw">## Tech Stack</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="background:rgba(232,168,72,0.15);color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:0.8em;padding:1px 6px;border-radius:3px;">A: Versions matter, not just names</span><br>
+        - Playwright 1.48 (TypeScript)<br>
+        - Tests: /tests/e2e/**/*.spec.ts<br><br>
+        <span class="kw">## Run Commands</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="background:rgba(94,194,105,0.15);color:var(--green);font-family:'IBM Plex Mono',monospace;font-size:0.8em;padding:1px 6px;border-radius:3px;">B: Agent can self-verify</span><br>
+        - All tests: npm run test:e2e<br>
+        - Debug mode: npx playwright test --debug<br><br>
+        <span class="kw">## Conventions</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="background:rgba(111,163,247,0.15);color:var(--blue);font-family:'IBM Plex Mono',monospace;font-size:0.8em;padding:1px 6px;border-radius:3px;">C: The rules that matter</span><br>
+        - NEVER use waitForTimeout() &mdash; use waitForLoadState(&apos;networkidle&apos;)<br>
+        - Selectors: prefer data-testid attributes over CSS selectors<br><br>
+        <span class="kw">## Do NOT</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="background:rgba(232,92,92,0.15);color:var(--red);font-family:'IBM Plex Mono',monospace;font-size:0.8em;padding:1px 6px;border-radius:3px;">D: Explicit forbidden actions</span><br>
+        - Don&apos;t install npm packages without confirming<br>
+        - Don&apos;t edit files in /src &mdash; that&apos;s the application code
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.78rem;">
+        <div style="padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);">A &mdash; Stack:</strong> <span style="color:var(--text-secondary);">Include exact versions. "Playwright 1.48" beats "Playwright."</span></div>
+        <div style="padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--green);"><strong style="color:var(--green);">B &mdash; Commands:</strong> <span style="color:var(--text-secondary);">Agent can run and verify tests without guessing the command.</span></div>
+        <div style="padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--blue);"><strong style="color:var(--blue);">C &mdash; Conventions:</strong> <span style="color:var(--text-secondary);">Specific, actionable rules. Write the comment you&apos;d leave in a PR review.</span></div>
+        <div style="padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--red);"><strong style="color:var(--red);">D &mdash; Do Not:</strong> <span style="color:var(--text-secondary);">Explicit prohibitions prevent the most costly mistakes.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — Context File Sections: Full Reference ─── -->
+  <div class="slide" data-title="Context File Sections — Full Reference" data-notes="Walk through each section type and explain WHEN to use it. Not every project needs all nine sections &mdash; the goal is to pick the ones that answer questions the agent gets wrong without them. A good exercise: run an agent session without a CLAUDE.md, note every decision it made incorrectly, then write a context file specifically to fix those decisions.&lt;br&gt;&lt;br&gt;The &apos;priority&apos; column matters. High-priority sections (Run Commands, Do Not) directly prevent errors. Medium-priority sections improve quality. Low-priority sections are nice-to-have but won&apos;t cause failures if omitted.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.7rem;margin-bottom:14px;">Every section you can include &mdash; and what each one does</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <code style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);">## Tech Stack</code>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(232,92,92,0.15);color:var(--red);padding:2px 6px;border-radius:3px;">High</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Framework names, exact versions, language. Agent picks correct APIs and avoids deprecated syntax.</div>
+        </div>
+
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <code style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);">## Directory Structure</code>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(232,92,92,0.15);color:var(--red);padding:2px 6px;border-radius:3px;">High</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Where tests, page objects, utilities, fixtures, and config files live. Agent creates files in the right place.</div>
+        </div>
+
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <code style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);">## Run Commands</code>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(232,92,92,0.15);color:var(--red);padding:2px 6px;border-radius:3px;">High</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Exact commands to run tests, build, lint. Without this the agent guesses &mdash; usually wrong.</div>
+        </div>
+
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <code style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);">## Coding Conventions</code>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(232,168,72,0.2);color:var(--accent);padding:2px 6px;border-radius:3px;">High</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Selectors, naming patterns, wait strategies, assertion style. Shapes every line of code the agent writes.</div>
+        </div>
+
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <code style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);">## Do Not</code>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(232,92,92,0.15);color:var(--red);padding:2px 6px;border-radius:3px;">High</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Explicit prohibitions. What the agent must never do. Most impactful section for preventing costly mistakes.</div>
+        </div>
+
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <code style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);">## CI / Environment</code>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(111,163,247,0.2);color:var(--blue);padding:2px 6px;border-radius:3px;">Medium</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">CI-specific flags, env vars, headless mode, retry settings. Prevents "works locally, breaks in CI."</div>
+        </div>
+
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <code style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);">## Security Notes</code>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(111,163,247,0.2);color:var(--blue);padding:2px 6px;border-radius:3px;">Medium</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Which files are sensitive, which env vars hold secrets, what must never be committed. Keeps credentials safe.</div>
+        </div>
+
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <code style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);">## Project Context</code>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(94,194,105,0.15);color:var(--green);padding:2px 6px;border-radius:3px;">Situational</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Non-obvious decisions, known constraints, why certain patterns exist. Helps agent respect intentional design choices.</div>
+        </div>
+
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <code style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);">## Common Tasks</code>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:rgba(94,194,105,0.15);color:var(--green);padding:2px 6px;border-radius:3px;">Situational</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Shortcuts for things you ask the agent to do repeatedly &mdash; test generation patterns, migration steps, PR checklists.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — How Instructions Control AI Behavior ─── -->
+  <div class="slide" data-title="How Instructions Control AI Behavior" data-notes="This is the &apos;under the hood&apos; slide. Most people think of CLAUDE.md as documentation &mdash; but it&apos;s actually injected into the system prompt that the model receives before your first message. The model treats it as authoritative configuration, not as background reading.&lt;br&gt;&lt;br&gt;The three instruction types are key: factual context is treated as ground truth, behavioral rules are applied as constraints on every response, and prohibitions are treated as hard limits. The model weights explicit instructions much more heavily than its training defaults.&lt;br&gt;&lt;br&gt;This is why vague instructions fail &mdash; &apos;write clean code&apos; doesn&apos;t give the model a constraint to apply. &apos;Never use waitForTimeout()&apos; gives it a specific pattern to actively avoid. Specificity is what transforms guidance into control.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.7rem;margin-bottom:14px;">How does the AI actually "obey" these instructions?</h2>
+
+      <!-- Flow diagram -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-align:center;flex:1;min-width:110px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-bottom:4px;">Session starts</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:700;color:var(--accent);">CLAUDE.md</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);">read from disk</div>
+        </div>
+        <div style="font-size:1.2rem;color:var(--border);">&rarr;</div>
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-align:center;flex:1;min-width:110px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-bottom:4px;">Merged into</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:700;color:var(--blue);">System Prompt</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);">before your first message</div>
+        </div>
+        <div style="font-size:1.2rem;color:var(--border);">&rarr;</div>
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-align:center;flex:1;min-width:110px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-bottom:4px;">Model applies</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:700;color:var(--purple);">Constraints</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);">on every response</div>
+        </div>
+        <div style="font-size:1.2rem;color:var(--border);">&rarr;</div>
+        <div style="background:rgba(94,194,105,0.08);border:1px solid rgba(94,194,105,0.3);border-radius:8px;padding:10px 14px;text-align:center;flex:1;min-width:110px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-bottom:4px;">Output follows</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:700;color:var(--green);">Your rules</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);">automatically</div>
+        </div>
+      </div>
+
+      <!-- Three instruction types -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid rgba(232,168,72,0.4);padding:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">Type 1 &mdash; Factual Context</div>
+          <div class="code-block" style="font-size:0.7rem;margin-bottom:8px;padding:6px 10px;">- Playwright 1.48<br>- Tests: /tests/e2e/</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Treated as <strong style="color:var(--text-primary);">ground truth.</strong> Agent uses these as facts about the project &mdash; no guessing.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid rgba(111,163,247,0.4);padding:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin-bottom:8px;">Type 2 &mdash; Behavioural Rules</div>
+          <div class="code-block" style="font-size:0.7rem;margin-bottom:8px;padding:6px 10px;">Always use waitForLoadState<br>Use data-testid selectors</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Applied as a <strong style="color:var(--text-primary);">constraint on every suggestion.</strong> The model actively steers toward these patterns.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid rgba(232,92,92,0.4);padding:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:2px;color:var(--red);margin-bottom:8px;">Type 3 &mdash; Prohibitions</div>
+          <div class="code-block" style="font-size:0.7rem;margin-bottom:8px;padding:6px 10px;">Never use waitForTimeout()<br>Don&apos;t edit /src files</div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);">Treated as <strong style="color:var(--text-primary);">hard limits.</strong> Model actively avoids these even when a naive solution would use them.</div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:10px 16px;margin-top:10px;font-size:0.82rem;color:var(--text-secondary);text-align:center;">
+        Specificity = control. <strong style="color:var(--text-primary);">"Write clean code"</strong> is unactionable &mdash; the model can&apos;t apply it. <strong style="color:var(--text-primary);">"Never use waitForTimeout()"</strong> is a constraint it can enforce on every line.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — Full Annotated Sample ─── -->
+  <div class="slide" data-title="Full Annotated Sample — Line by Line" data-notes="Walk through this line by line. The key teaching moment is connecting each instruction to the TYPE it represents (factual / behavioural / prohibition) and explaining what would go wrong without it. Ask the team: &apos;What would the agent do on line X if this instruction wasn&apos;t there?&apos; Hearing the wrong answer makes the right instruction memorable.&lt;br&gt;&lt;br&gt;Note the progressive specificity: the Tech Stack section is factual, the Conventions section is behavioural, the Do Not section is prohibitions. A good CLAUDE.md has all three.&lt;br&gt;&lt;br&gt;Also note the Run Commands section &mdash; this is the section most people forget and it matters the most for agentic tasks, because the agent cannot verify its own work unless it can run the tests.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.65rem;margin-bottom:12px;">A complete CLAUDE.md &mdash; every section explained</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+        <!-- Left: annotated code -->
+        <div class="code-block" style="font-size:0.68rem;line-height:1.75;align-self:start;">
+          <span class="cm"># CLAUDE.md &mdash; My QA Project</span><br><br>
+
+          <span style="background:rgba(232,168,72,0.18);display:inline-block;width:100%;padding:0 4px;border-radius:2px;"><span class="kw">## Tech Stack</span> <span style="color:var(--accent);font-size:0.8em;">← A</span></span><br>
+          - Playwright 1.48, TypeScript 5.4, Node 20<br>
+          - Test runner: <span class="fn">npm run test:e2e</span><br>
+          - Lint: <span class="fn">npm run lint</span><br><br>
+
+          <span style="background:rgba(111,163,247,0.18);display:inline-block;width:100%;padding:0 4px;border-radius:2px;"><span class="kw">## Directory Structure</span> <span style="color:var(--blue);font-size:0.8em;">← B</span></span><br>
+          - E2E specs: <span class="str">/tests/e2e/**/*.spec.ts</span><br>
+          - Page objects: <span class="str">/tests/pages/[Name]Page.ts</span><br>
+          - Utilities: <span class="str">/tests/utils/</span><br><br>
+
+          <span style="background:rgba(94,194,105,0.15);display:inline-block;width:100%;padding:0 4px;border-radius:2px;"><span class="kw">## Coding Conventions</span> <span style="color:var(--green);font-size:0.8em;">← C</span></span><br>
+          - NEVER use <span class="fn">waitForTimeout()</span><br>
+          - Always: <span class="fn">waitForLoadState(<span class="str">&apos;networkidle&apos;</span>)</span><br>
+          - Selectors: <span class="prop">data-testid</span> first, <span class="fn">getByRole()</span> second<br>
+          - Tests must be independent &mdash; no shared state<br><br>
+
+          <span style="background:rgba(176,140,245,0.15);display:inline-block;width:100%;padding:0 4px;border-radius:2px;"><span class="kw">## Do Not</span> <span style="color:var(--purple);font-size:0.8em;">← D</span></span><br>
+          - Never edit <span class="str">/src</span> or <span class="str">/app</span> directories<br>
+          - Never install packages without confirming<br>
+          - Never hardcode URLs; use <span class="prop">BASE_URL</span> env var<br><br>
+
+          <span style="background:rgba(78,205,196,0.15);display:inline-block;width:100%;padding:0 4px;border-radius:2px;"><span class="kw">## CI Notes</span> <span style="color:var(--cyan);font-size:0.8em;">← E</span></span><br>
+          - CI sets <span class="prop">HEADLESS=true</span> automatically<br>
+          - Max retries: 2 (set in playwright.config.ts)<br>
+          - Never commit .env or credential files
+        </div>
+
+        <!-- Right: callout explanations -->
+        <div style="display:grid;gap:9px;align-self:start;">
+          <div style="background:rgba(232,168,72,0.08);border:1px solid rgba(232,168,72,0.3);border-radius:8px;padding:11px 14px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--accent);margin-bottom:5px;">A &mdash; Tech Stack</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">Factual context. Exact versions prevent the agent from using deprecated APIs. The run commands tell it how to verify its own work.</div>
+          </div>
+          <div style="background:rgba(111,163,247,0.08);border:1px solid rgba(111,163,247,0.3);border-radius:8px;padding:11px 14px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--blue);margin-bottom:5px;">B &mdash; Directory Structure</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">Ground truth for navigation. Without this the agent might create <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">login.test.ts</code> in the root instead of <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">/tests/e2e/</code>.</div>
+          </div>
+          <div style="background:rgba(94,194,105,0.08);border:1px solid rgba(94,194,105,0.3);border-radius:8px;padding:11px 14px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--green);margin-bottom:5px;">C &mdash; Coding Conventions</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">Behavioural rules. Applied as constraints on every line of code. The agent steers toward <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">waitForLoadState</code> automatically even when it wasn&apos;t asked explicitly.</div>
+          </div>
+          <div style="background:rgba(176,140,245,0.08);border:1px solid rgba(176,140,245,0.3);border-radius:8px;padding:11px 14px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--purple);margin-bottom:5px;">D &mdash; Do Not</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">Hard prohibitions. The model treats these as inviolable limits &mdash; it won&apos;t touch <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">/src</code> even if the task description seems to imply it should.</div>
+          </div>
+          <div style="background:rgba(78,205,196,0.08);border:1px solid rgba(78,205,196,0.3);border-radius:8px;padding:11px 14px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--cyan);margin-bottom:5px;">E &mdash; CI Notes</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">Environment context. Prevents "works locally but fails CI" surprises. The agent knows CI is headless and respects your retry config.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — Before vs After: Same Prompt, Different Results ─── -->
+  <div class="slide" data-title="Before vs After: Context Makes the Difference" data-notes="This is the most convincing slide in the session. The same prompt, with the same AI model, produces dramatically different results depending on whether the agent has context. The version without context isn&apos;t wrong &mdash; it&apos;s just generic. It writes valid Playwright code. But it doesn&apos;t write YOUR Playwright code. With context, the agent writes code that fits into your existing codebase immediately, following your patterns, in your locations, with your naming conventions.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:12px;">What happens when the agent has NO context file</h2>
+      <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:10px 14px;font-size:0.82rem;color:var(--text-secondary);margin-bottom:12px;text-align:center;">
+        <strong style="color:var(--text-primary);">Same prompt:</strong> "Add a test for the checkout flow. It should verify that the order summary page appears after clicking Pay Now."
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid rgba(232,92,92,0.4);padding:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--red);margin-bottom:10px;">Without CLAUDE.md</div>
+          <div style="display:grid;gap:6px;font-size:0.8rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;">✗</span> Uses <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">page.waitForTimeout(2000)</code> &larr; forbidden pattern</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;">✗</span> Creates test in root folder &larr; wrong location</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;">✗</span> Uses CSS selectors like <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">.pay-button</code> &larr; wrong style</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--red);flex-shrink:0;">✗</span> No page object pattern</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid rgba(94,194,105,0.4);padding:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:10px;">With CLAUDE.md</div>
+          <div style="display:grid;gap:6px;font-size:0.8rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Uses <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">waitForLoadState(&apos;networkidle&apos;)</code> &larr; correct</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Creates test in <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">/tests/e2e/checkout.spec.ts</code></div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Uses <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">data-testid="pay-button"</code> &larr; correct</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Follows page object pattern correctly</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.25);border-radius:8px;padding:10px 16px;text-align:center;font-size:0.85rem;color:var(--text-secondary);">
+        Same prompt. Same model. <strong style="color:var(--accent);">Completely different quality of output.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — Before vs After: A More Complex Task ─── -->
+  <div class="slide" data-title="Before vs After: Multi-File Tasks" data-notes="Complex multi-file tasks amplify the difference between no-context and with-context. Without CLAUDE.md, the agent has to guess at every decision point &mdash; and 5 wrong guesses in a 10-step task means 5 things to fix manually. With CLAUDE.md, those decisions are pre-answered. The agent just executes. This is the compounding benefit: the more complex the task, the bigger the payoff from having a well-written context file.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:12px;">What happens with multi-file agent tasks</h2>
+      <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:10px 14px;font-size:0.82rem;color:var(--text-secondary);margin-bottom:12px;">
+        <strong style="color:var(--text-primary);">Prompt:</strong> "Find all tests that use waitForTimeout and update them to use the correct Playwright wait pattern. Run the tests after updating to make sure nothing broke."
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid rgba(232,92,92,0.4);padding:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--red);margin-bottom:10px;">Without CLAUDE.md &mdash; 3 problems</div>
+          <div style="display:grid;gap:10px;font-size:0.8rem;color:var(--text-secondary);">
+            <div><span style="color:var(--red);font-weight:700;">1.</span> Doesn&apos;t know what "correct wait pattern" means for your project &mdash; defaults to <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">page.waitForSelector()</code></div>
+            <div><span style="color:var(--red);font-weight:700;">2.</span> Doesn&apos;t know where tests are &mdash; searches entire repo including node_modules</div>
+            <div><span style="color:var(--red);font-weight:700;">3.</span> Doesn&apos;t know how to run tests &mdash; guesses <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">npm test</code> which fails</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid rgba(94,194,105,0.4);padding:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:10px;">With CLAUDE.md &mdash; 3 successes</div>
+          <div style="display:grid;gap:10px;font-size:0.8rem;color:var(--text-secondary);">
+            <div><span style="color:var(--green);font-weight:700;">1.</span> Replaces with <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">waitForLoadState(&apos;networkidle&apos;)</code> &mdash; your exact convention</div>
+            <div><span style="color:var(--green);font-weight:700;">2.</span> Searches only <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">/tests/e2e/**/*.spec.ts</code> &mdash; the right location</div>
+            <div><span style="color:var(--green);font-weight:700;">3.</span> Runs <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">npm run test:e2e</code> &mdash; the correct command</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="background:rgba(232,92,92,0.07);border:1px solid rgba(232,92,92,0.2);border-radius:8px;padding:10px 14px;text-align:center;font-size:0.82rem;color:var(--red);">15 wrong changes and a failed CI build</div>
+        <div style="background:rgba(94,194,105,0.07);border:1px solid rgba(94,194,105,0.2);border-radius:8px;padding:10px 14px;text-align:center;font-size:0.82rem;color:var(--green);">27 correct replacements, all tests passing</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — Sample: CLAUDE.md for a QA Project ─── -->
+  <div class="slide" data-title="Sample: CLAUDE.md Template for QA" data-notes="Hand this template out. Seriously &mdash; stop this slide and give people 3 minutes to think about what they&apos;d fill in for their own project. The most valuable exercise is identifying &apos;what are the most common mistakes new people (or AI agents) make in our codebase?&apos; Those are the things that go in the &apos;Do Not&apos; section. The conventions section should list the things you&apos;d put in a PR review comment. If you write the same PR comment three times a month, it goes in CLAUDE.md.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:12px;">A real, usable CLAUDE.md template for your test suite</h2>
+      <div class="code-block" style="font-size:0.72rem;line-height:1.7;">
+        <span class="cm"># CLAUDE.md &mdash; [Project Name] QA Test Suite</span><br><br>
+        <span class="kw">## Stack</span><br>
+        - Framework: Playwright [version] with TypeScript<br>
+        - Test runner: <span class="fn">npm run test:e2e</span> (all), <span class="fn">npm run test:unit</span> (unit only)<br><br>
+        <span class="kw">## Directory Structure</span><br>
+        - E2E tests: /tests/e2e/**/*.spec.ts<br>
+        - Page objects: /tests/pages/[PageName]Page.ts<br>
+        - Utilities: /tests/utils/ &nbsp; Fixtures: /tests/fixtures/<br><br>
+        <span class="kw">## Coding Rules</span><br>
+        - Never use <span class="fn">waitForTimeout()</span> &mdash; always <span class="fn">waitForLoadState(&apos;networkidle&apos;)</span> or explicit locator waits<br>
+        - Use data-testid attributes for selectors, not CSS class names<br>
+        - Each test must be independent &mdash; no shared state, no test order dependencies<br><br>
+        <span class="kw">## Do Not</span><br>
+        - Do not edit files in /src or /app &mdash; that&apos;s application code, not test code<br>
+        - Do not install npm packages without asking first<br>
+        - Do not hardcode URLs &mdash; use <span class="prop">BASE_URL</span> from .env<br>
+        - Do not commit .env files or files containing real credentials<br><br>
+        <span class="kw">## CI Notes</span><br>
+        - CI uses <span class="prop">HEADLESS=true</span> (already set in playwright.config.ts)<br>
+        - Retries set to 2 &mdash; flaky tests should be fixed, not retried away
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — Sample: copilot-instructions.md for QA Work ─── -->
+  <div class="slide" data-title="Sample: copilot-instructions.md Template" data-notes="The copilot-instructions.md is written in a slightly different style &mdash; more like instructions to a person than a structured config file. That&apos;s intentional. Copilot reads it as natural language and applies it as guidance. Notice the &apos;Always prefer...&apos; and &apos;Never suggest...&apos; language &mdash; these are direct instructions to the AI, and Copilot follows them reliably when they&apos;re this explicit.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:12px;">A real copilot-instructions.md template</h2>
+      <div class="code-block" style="font-size:0.72rem;line-height:1.7;">
+        <span class="cm"># Copilot Instructions &mdash; [Project] Test Automation</span><br><br>
+        <span class="kw">## Language and Framework</span><br>
+        This project uses Playwright with TypeScript for end-to-end testing.<br>
+        Always use async/await. Never use callbacks or .then() chains.<br>
+        TypeScript strict mode is enabled &mdash; avoid <span class="prop">`any`</span> types.<br><br>
+        <span class="kw">## Test Structure</span><br>
+        - Tests are in /tests/e2e/ as *.spec.ts files<br>
+        - Use the Page Object Model &mdash; page objects live in /tests/pages/<br>
+        - Use Playwright fixtures for setup/teardown where possible<br><br>
+        <span class="kw">## Selectors</span><br>
+        Always prefer data-testid attributes: <span class="fn">page.getByTestId(&apos;submit-button&apos;)</span><br>
+        Use <span class="fn">getByRole()</span> as second choice: <span class="fn">page.getByRole(&apos;button&apos;, {{ '{' }} name: &apos;Submit&apos; {{ '}' }})</span><br><br>
+        <span class="kw">## Waits</span><br>
+        Never suggest <span class="fn">waitForTimeout()</span>. Instead:<br>
+        - For navigation: <span class="fn">await page.waitForLoadState(&apos;networkidle&apos;)</span><br>
+        - For element: <span class="fn">await expect(locator).toBeVisible()</span><br>
+        - For API: <span class="fn">await page.waitForResponse(&apos;**/api/endpoint&apos;)</span><br><br>
+        <span class="kw">## Code Style</span><br>
+        - Descriptive test names: <span class="str">test(&apos;should display error when login fails&apos;, ...)</span><br>
+        - Group related tests with <span class="fn">test.describe()</span> blocks
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 13 — CI/CD Integration ─── -->
+  <div class="slide" data-title="CI/CD Integration — Context Files in Pipelines" data-notes="The CI/CD angle is where this gets really interesting for the future. Right now, most of you use agents locally. But in 12-18 months, many teams will have automated agent steps in their CI pipelines &mdash; &apos;review this PR and flag any patterns that violate our test conventions&apos; or &apos;when a test is marked flaky, automatically investigate and create a fix PR.&apos; Those automated agents also read CLAUDE.md. Writing a good CLAUDE.md now is investing in that future.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">Context files work everywhere your agent runs</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Local development</div>
+          <div style="display:grid;gap:7px;font-size:0.8rem;color:var(--text-secondary);">
+            <div>CLAUDE.md in project root</div>
+            <div>Agent reads it on every <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">claude</code> or <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">opencode</code> command</div>
+            <div>Consistent behavior across all sessions</div>
+            <div>Changes to CLAUDE.md take effect immediately next session</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:10px;">Team repository</div>
+          <div style="display:grid;gap:7px;font-size:0.8rem;color:var(--text-secondary);">
+            <div>CLAUDE.md and copilot-instructions.md committed to Git</div>
+            <div>All team members get the same agent behavior</div>
+            <div>New joiners&apos; AI immediately knows the project conventions</div>
+            <div>Changes go through PR review &mdash; team consensus on agent behavior</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin-bottom:10px;">CI/CD pipelines</div>
+          <div style="display:grid;gap:7px;font-size:0.8rem;color:var(--text-secondary);">
+            <div>Automated agents in GitHub Actions read CLAUDE.md</div>
+            <div>Pipeline-specific instructions can be added</div>
+            <div>Code review agents give project-aware feedback</div>
+            <div>Security agents know which files are sensitive</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.25);border-radius:8px;padding:11px 16px;text-align:center;font-size:0.85rem;color:var(--text-secondary);">
+        <strong style="color:var(--accent);">CLAUDE.md is version-controlled team knowledge.</strong> It gets better over time.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 14 — Common Mistakes ─── -->
+  <div class="slide" data-title="Common Mistakes When Writing Context Files" data-notes="The most common mistake is #1 &mdash; vagueness. Developers often write what they WISH the agent would do rather than specific instructions the agent can follow. Test your CLAUDE.md by asking: &apos;If someone read only this file, could they make the exact right decisions in our codebase?&apos; If the answer is no, it needs more specificity.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">What NOT to do &mdash; and why it doesn&apos;t work</h2>
+      <div style="display:grid;gap:10px;">
+        <div class="myth-card" style="display:grid;grid-template-columns:auto 1fr;gap:0;">
+          <div style="padding:14px 16px;border-right:1px solid var(--border-subtle);">
+            <div class="myth-tag">Mistake 1</div>
+            <div style="font-size:0.82rem;color:var(--text-primary);font-weight:600;margin-top:6px;">Writing vague guidance</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim);margin-top:4px;">"Write clean, readable code with good test coverage"</div>
+          </div>
+          <div style="padding:14px 16px;">
+            <div style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:6px;"><strong style="color:var(--red);">Why it fails:</strong> Agent can&apos;t act on "clean." It needs specific, measurable instructions.</div>
+            <div class="reality-tag" style="display:inline-block;margin-bottom:4px;">Fix</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">"Tests must have descriptive names starting with &apos;should&apos;. Coverage threshold is 80%."</div>
+          </div>
+        </div>
+        <div class="myth-card" style="display:grid;grid-template-columns:auto 1fr;gap:0;">
+          <div style="padding:14px 16px;border-right:1px solid var(--border-subtle);">
+            <div class="myth-tag">Mistake 2</div>
+            <div style="font-size:0.82rem;color:var(--text-primary);font-weight:600;margin-top:6px;">Making it a novel</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim);margin-top:4px;">"Here is the complete history of this project..."</div>
+          </div>
+          <div style="padding:14px 16px;">
+            <div style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:6px;"><strong style="color:var(--red);">Why it fails:</strong> Context files compete with your task for the model&apos;s attention window. Shorter = better signal.</div>
+            <div class="reality-tag" style="display:inline-block;margin-bottom:4px;">Fix</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">Keep to 50-100 lines. Every line should be something the agent will act on.</div>
+          </div>
+        </div>
+        <div class="myth-card" style="display:grid;grid-template-columns:auto 1fr;gap:0;">
+          <div style="padding:14px 16px;border-right:1px solid var(--border-subtle);">
+            <div class="myth-tag">Mistake 3</div>
+            <div style="font-size:0.82rem;color:var(--text-primary);font-weight:600;margin-top:6px;">Putting secrets in context files</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim);margin-top:4px;word-break:break-all;">DATABASE_URL=postgres://user:pass@host/db</div>
+          </div>
+          <div style="padding:14px 16px;">
+            <div style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:6px;"><strong style="color:var(--red);">Why it fails:</strong> CLAUDE.md is committed to git. Secrets in git = security incident.</div>
+            <div class="reality-tag" style="display:inline-block;margin-bottom:4px;">Fix</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">Reference env vars by name only: "Database URL is in DATABASE_URL env var."</div>
+          </div>
+        </div>
+        <div class="myth-card" style="display:grid;grid-template-columns:auto 1fr;gap:0;">
+          <div style="padding:14px 16px;border-right:1px solid var(--border-subtle);">
+            <div class="myth-tag">Mistake 4</div>
+            <div style="font-size:0.82rem;color:var(--text-primary);font-weight:600;margin-top:6px;">Never updating it</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text-dim);margin-top:4px;">Writing CLAUDE.md once and leaving it for 6 months</div>
+          </div>
+          <div style="padding:14px 16px;">
+            <div style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:6px;"><strong style="color:var(--red);">Why it fails:</strong> Project conventions change. A stale CLAUDE.md teaches the agent the wrong things.</div>
+            <div class="reality-tag" style="display:inline-block;margin-bottom:4px;">Fix</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);">Review and update every 2-4 weeks, or whenever you adopt a new convention.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 15 — Key Takeaways + What's Next ─── -->
+  <div class="slide" data-title="Key Takeaways &amp; What&apos;s Next" data-notes="End with a call to action: &apos;Before next session, spend 10 minutes writing a basic CLAUDE.md for your current project. Even a 20-line file with your tech stack, test location, and 3 forbidden patterns will make a noticeable difference.&apos; That&apos;s a concrete, achievable homework assignment. If they do it, the next agent session they run will immediately feel different.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Key takeaways</h2>
+      <div class="takeaway-list" style="margin-bottom:20px;">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Context files eliminate the Groundhog Day problem</div>
+            <div class="takeaway-desc">CLAUDE.md, copilot-instructions.md, and AGENTS.md teach your agent about your project once &mdash; so you never have to explain it again. Every session starts pre-briefed.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Placement determines scope</div>
+            <div class="takeaway-desc">User-level (~/.claude/CLAUDE.md) for personal preferences. Project-level for team conventions. Subdirectory for scope-specific rules in large monorepos.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">The before/after difference is dramatic</div>
+            <div class="takeaway-desc">Same prompt + same model + context file = output that fits your codebase immediately, in the right location, following your patterns, with your naming conventions.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">CLAUDE.md is living documentation &mdash; keep it evolving</div>
+            <div class="takeaway-desc">Commit it to git, keep it short, keep it specific, and update it as your conventions evolve. If you write the same PR review comment three times, it belongs in CLAUDE.md.</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px;">This completes Phase 4 &mdash; Terminal Agents &amp; Agentic Tools. You now have:</div>
+        <div style="display:grid;gap:7px;font-size:0.82rem;color:var(--text-secondary);margin-bottom:12px;">
+          <div style="display:flex;gap:10px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Knowledge of the full agent evolution (Session 11)</div>
+          <div style="display:flex;gap:10px;"><span style="color:var(--green);flex-shrink:0;">✓</span> Hands-on experience with Claude Code and Opencode (Sessions 10-12, 17)</div>
+          <div style="display:flex;gap:10px;"><span style="color:var(--accent);flex-shrink:0;">✓</span> The tools to configure agents to know your project (this session)</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--accent);">Coming up: Phase 5 &mdash; MCP, Agents &amp; AI-Powered Workflows</div>
+      </div>
+    </div>
+  </div>

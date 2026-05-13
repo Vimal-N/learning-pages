@@ -1,0 +1,536 @@
+---
+layout: session.njk
+title: Session 14 — Comparing Your AI Toolkit
+sessionNumber: "14"
+sessionTitle: "Comparing Your AI Toolkit"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="Phase 4's final session. By now the team has a real toolkit: Copilot Completions, Copilot Chat, Copilot Agent Mode, Claude Code, Opencode. Five tools with overlapping capabilities. This session is about decision-making — developing the instinct for which tool to reach for in which situation.&lt;br&gt;&lt;br&gt;Acknowledge: this is partly personal preference. Different people settle on different defaults. The goal isn't to tell them which is 'best' — it's to give them a framework for making the choice themselves.">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">⚡ Session 14 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools</div>
+      <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Comparing Your<br><span style="color:var(--accent)">AI Toolkit</span></h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">You have five tools. Learn when to reach for each one — and how to combine them for maximum impact.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">45 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 11</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — Your Toolkit ─── -->
+  <div class="slide" data-title="Your Toolkit" data-notes="Orient people. By now they should recognise all five tools. Quickly name each one and its home — this is a memory refresh before the comparison.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Your full AI toolkit</h2>
+      <svg viewBox="0 0 700 280" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <!-- background -->
+        <rect width="700" height="280" rx="12" fill="#13111d"/>
+        <!-- Axis labels -->
+        <text x="350" y="22" text-anchor="middle" font-size="12" fill="#6b647a">Reactive ↑</text>
+        <text x="350" y="270" text-anchor="middle" font-size="12" fill="#6b647a">Autonomous ↓</text>
+        <text x="26" y="145" text-anchor="middle" font-size="12" fill="#6b647a" transform="rotate(-90,26,145)">← IDE-based</text>
+        <text x="678" y="145" text-anchor="middle" font-size="12" fill="#6b647a" transform="rotate(90,678,145)">Terminal-based →</text>
+        <!-- Grid dividers -->
+        <line x1="350" y1="30" x2="350" y2="256" stroke="#2a273a" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="46" y1="143" x2="654" y2="143" stroke="#2a273a" stroke-width="1" stroke-dasharray="4,4"/>
+        <!-- Top-left: Copilot Completions (blue border) -->
+        <rect x="50" y="32" width="282" height="106" rx="8" fill="#1a1826" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="191" y="54" text-anchor="middle" font-size="15" font-weight="700" fill="#6fa3f7">Copilot Completions</text>
+        <text x="191" y="73" text-anchor="middle" font-size="12" fill="#9090b0">Trigger:  While typing</text>
+        <text x="191" y="91" text-anchor="middle" font-size="12" fill="#9090b0">Action:  Suggests next lines</text>
+        <text x="191" y="109" text-anchor="middle" font-size="12" fill="#9090b0">Approval:  Tab = yes,  Esc = no</text>
+        <text x="191" y="127" text-anchor="middle" font-size="11" fill="#6b647a">Use when: you know roughly what to write</text>
+        <!-- Top-right: Copilot Chat (purple border) -->
+        <rect x="368" y="32" width="282" height="106" rx="8" fill="#1a1826" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="509" y="54" text-anchor="middle" font-size="15" font-weight="700" fill="#b08cf5">Copilot Chat / @workspace</text>
+        <text x="509" y="73" text-anchor="middle" font-size="12" fill="#9090b0">Trigger:  You ask a question</text>
+        <text x="509" y="91" text-anchor="middle" font-size="12" fill="#9090b0">Action:  Explains, suggests, reviews</text>
+        <text x="509" y="109" text-anchor="middle" font-size="12" fill="#9090b0">Approval:  You copy what you want</text>
+        <text x="509" y="127" text-anchor="middle" font-size="11" fill="#6b647a">Use when: you need information or advice</text>
+        <!-- Bottom-left: Copilot Agent Mode (blue, dashed) -->
+        <rect x="50" y="151" width="282" height="100" rx="8" fill="#1a1826" stroke="#6fa3f7" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <text x="191" y="173" text-anchor="middle" font-size="15" font-weight="700" fill="#6fa3f7">Copilot Agent Mode</text>
+        <text x="191" y="192" text-anchor="middle" font-size="12" fill="#9090b0">Trigger:  Describe a task in chat</text>
+        <text x="191" y="210" text-anchor="middle" font-size="12" fill="#9090b0">Action:  Plans + edits files in VS Code</text>
+        <text x="191" y="228" text-anchor="middle" font-size="12" fill="#9090b0">Approval:  Shows diff before applying</text>
+        <text x="191" y="244" text-anchor="middle" font-size="11" fill="#6b647a">Use when: multi-file task, staying in VS Code</text>
+        <!-- Bottom-right: Claude Code / Opencode (amber border) -->
+        <rect x="368" y="151" width="282" height="100" rx="8" fill="#1a1826" stroke="#e8a848" stroke-width="1.5"/>
+        <text x="509" y="173" text-anchor="middle" font-size="15" font-weight="700" fill="#e8a848">Claude Code / Opencode</text>
+        <text x="509" y="192" text-anchor="middle" font-size="12" fill="#9090b0">Trigger:  Type a task in terminal</text>
+        <text x="509" y="210" text-anchor="middle" font-size="12" fill="#9090b0">Action:  Reads repo, edits, runs cmds</text>
+        <text x="509" y="228" text-anchor="middle" font-size="12" fill="#9090b0">Approval:  Confirms before each action</text>
+        <text x="509" y="244" text-anchor="middle" font-size="11" fill="#6b647a">Use when: complex task, needs shell access</text>
+      </svg>
+      <div style="display:grid;gap:10px;">
+        <div style="display:flex;gap:16px;padding:14px 18px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-size:1.4rem;flex-shrink:0;">✨</div>
+          <div>
+            <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);">Copilot Completions</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);">Lives in your editor. Auto-suggests as you type. Inline, fast, no conversation required.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;padding:14px 18px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-size:1.4rem;flex-shrink:0;">💬</div>
+          <div>
+            <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);">Copilot Chat</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);">Lives in your IDE sidebar. Conversational. Can reference open files with @. Answers questions and generates code on demand.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;padding:14px 18px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-size:1.4rem;flex-shrink:0;">🤖</div>
+          <div>
+            <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);">Copilot Agent Mode</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);">Chat upgraded. Can read files, edit files, run commands, self-correct. Goal-oriented. Lives in VS Code.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;padding:14px 18px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-size:1.4rem;flex-shrink:0;">⚡</div>
+          <div>
+            <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);">Claude Code</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);">Terminal agent. Full codebase access. Shell command execution. Deepest reasoning. Paid API or subscription.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;padding:14px 18px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-size:1.4rem;flex-shrink:0;">🔧</div>
+          <div>
+            <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);">Opencode</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);">Terminal agent with TUI. Open source. Model-agnostic. Useful when Claude or Copilot aren't available.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — Comparison Matrix ─── -->
+  <div class="slide" data-title="Comparison Matrix" data-notes="Walk through the matrix row by row. The key differentiators: IDE vs terminal (where it lives), single file vs project-wide scope (how much it can see), inline vs explicit invocation (how you activate it), and the task types each excels at.&lt;br&gt;&lt;br&gt;Don't try to memorise this — it's a reference. The patterns on the next slides are more practically useful.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Side-by-side comparison</h2>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.78rem;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--border);">
+              <th style="padding:8px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);font-weight:600;">Tool</th>
+              <th style="padding:8px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);font-weight:600;">Home</th>
+              <th style="padding:8px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);font-weight:600;">Scope</th>
+              <th style="padding:8px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);font-weight:600;">Best for</th>
+              <th style="padding:8px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);font-weight:600;">Activation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:10px 12px;color:var(--text-primary);font-weight:600;">Completions</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">IDE</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Current file</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Inline completion while typing</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Automatic</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:10px 12px;color:var(--text-primary);font-weight:600;">Copilot Chat</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">IDE</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Open files + context</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Questions, explanations, quick code gen</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Type in sidebar</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:10px 12px;color:var(--text-primary);font-weight:600;">Agent Mode</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">IDE</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Project + shell</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Multi-file tasks, scaffolding, test suites</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Ctrl+I, give goal</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:10px 12px;color:var(--text-primary);font-weight:600;">Claude Code</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Terminal</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Full system</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Complex, exploratory, long-running tasks</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);"><code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">claude</code> in terminal</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;color:var(--text-primary);font-weight:600;">Opencode</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Terminal</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Full system</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Same as Claude Code; model flexibility</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);"><code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">opencode</code> in terminal</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — Decision Framework ─── -->
+  <div class="slide" data-title="Decision Framework" data-notes="This is the practical decision tree. Walk through each question. Most people will find that 80% of their tasks fall into the first two categories (single-line or small changes → Completions/Chat). Terminal agents are for the other 20% — but that 20% often takes 80% of the time without AI.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Which tool? A quick decision tree</h2>
+      <svg viewBox="0 0 700 320" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <!-- background -->
+        <rect width="700" height="320" rx="12" fill="#13111d"/>
+        <!-- START node (amber, rounded rect) -->
+        <rect x="264" y="12" width="172" height="34" rx="10" fill="rgba(232,168,72,0.22)" stroke="#e8a848" stroke-width="1.5"/>
+        <text x="350" y="34" text-anchor="middle" font-size="14" font-weight="700" fill="#e8a848">New task</text>
+        <!-- Arrow down to diamond 1 -->
+        <line x1="350" y1="46" x2="350" y2="62" stroke="#6b647a" stroke-width="1.5"/>
+        <polygon points="346,62 354,62 350,70" fill="#6b647a"/>
+        <!-- Diamond 1: question/explanation? -->
+        <polygon points="350,72 430,96 350,120 270,96" fill="#1e1b2e" stroke="#6b647a" stroke-width="1.5"/>
+        <text x="350" y="91" text-anchor="middle" font-size="11" fill="#c8c0d8">Question or</text>
+        <text x="350" y="105" text-anchor="middle" font-size="11" fill="#c8c0d8">explanation?</text>
+        <!-- YES → right from diamond 1 -->
+        <line x1="430" y1="96" x2="474" y2="96" stroke="#5ec269" stroke-width="1.5"/>
+        <polygon points="474,92 482,96 474,100" fill="#5ec269"/>
+        <text x="452" y="90" text-anchor="middle" font-size="10" fill="#5ec269">YES</text>
+        <!-- Box: Copilot Chat -->
+        <rect x="484" y="78" width="156" height="40" rx="8" fill="rgba(111,163,247,0.14)" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="562" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#6fa3f7">Copilot Chat</text>
+        <text x="562" y="112" text-anchor="middle" font-size="11" fill="#9090b0">Ask it. Get the answer.</text>
+        <!-- NO → down from diamond 1 -->
+        <line x1="350" y1="120" x2="350" y2="138" stroke="#6b647a" stroke-width="1.5"/>
+        <polygon points="346,138 354,138 350,146" fill="#6b647a"/>
+        <text x="332" y="133" text-anchor="end" font-size="10" fill="#6b647a">NO</text>
+        <!-- Diamond 2: single-file? -->
+        <polygon points="350,148 430,172 350,196 270,172" fill="#1e1b2e" stroke="#6b647a" stroke-width="1.5"/>
+        <text x="350" y="167" text-anchor="middle" font-size="11" fill="#c8c0d8">Single-file</text>
+        <text x="350" y="181" text-anchor="middle" font-size="11" fill="#c8c0d8">change?</text>
+        <!-- YES → right from diamond 2 -->
+        <line x1="430" y1="172" x2="474" y2="172" stroke="#5ec269" stroke-width="1.5"/>
+        <polygon points="474,168 482,172 474,176" fill="#5ec269"/>
+        <text x="452" y="166" text-anchor="middle" font-size="10" fill="#5ec269">YES</text>
+        <!-- Box: Completions/Chat -->
+        <rect x="484" y="154" width="156" height="40" rx="8" fill="rgba(111,163,247,0.14)" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="562" y="172" text-anchor="middle" font-size="12" font-weight="700" fill="#6fa3f7">Completions / Chat</text>
+        <text x="562" y="188" text-anchor="middle" font-size="11" fill="#9090b0">Tab complete or ask</text>
+        <!-- NO → down from diamond 2 -->
+        <line x1="350" y1="196" x2="350" y2="214" stroke="#6b647a" stroke-width="1.5"/>
+        <polygon points="346,214 354,214 350,222" fill="#6b647a"/>
+        <text x="332" y="210" text-anchor="end" font-size="10" fill="#6b647a">NO</text>
+        <!-- Diamond 3: 3+ files or commands? -->
+        <polygon points="350,224 430,248 350,272 270,248" fill="#1e1b2e" stroke="#6b647a" stroke-width="1.5"/>
+        <text x="350" y="243" text-anchor="middle" font-size="11" fill="#c8c0d8">3+ files or</text>
+        <text x="350" y="257" text-anchor="middle" font-size="11" fill="#c8c0d8">run commands?</text>
+        <!-- YES → right from diamond 3 -->
+        <line x1="430" y1="248" x2="474" y2="248" stroke="#5ec269" stroke-width="1.5"/>
+        <polygon points="474,244 482,248 474,252" fill="#5ec269"/>
+        <text x="452" y="242" text-anchor="middle" font-size="10" fill="#5ec269">YES</text>
+        <!-- Box: Terminal Agent -->
+        <rect x="484" y="230" width="156" height="40" rx="8" fill="rgba(232,168,72,0.14)" stroke="#e8a848" stroke-width="1.5"/>
+        <text x="562" y="248" text-anchor="middle" font-size="13" font-weight="700" fill="#e8a848">Terminal Agent</text>
+        <text x="562" y="264" text-anchor="middle" font-size="11" fill="#9090b0">Claude Code / Opencode</text>
+        <!-- NO → down from diamond 3 to final box -->
+        <line x1="350" y1="272" x2="350" y2="292" stroke="#6b647a" stroke-width="1.5"/>
+        <polygon points="346,292 354,292 350,300" fill="#6b647a"/>
+        <text x="332" y="288" text-anchor="end" font-size="10" fill="#6b647a">NO</text>
+        <!-- Box: Copilot Agent Mode -->
+        <rect x="174" y="300" width="352" height="14" rx="6" fill="rgba(111,163,247,0.08)" stroke="#6fa3f7" stroke-width="1" stroke-dasharray="4,2"/>
+        <text x="350" y="311" text-anchor="middle" font-size="11" fill="#6fa3f7">Copilot Agent Mode  —  multi-file, stay in VS Code</text>
+      </svg>
+      <div style="display:grid;gap:10px;">
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:14px 16px;border:1px solid var(--border);">
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Am I typing code and want suggestions inline?</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">→ <strong style="color:var(--accent);">Completions</strong> — just keep typing, suggestions appear automatically</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:14px 16px;border:1px solid var(--border);">
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Do I have a question, need an explanation, or want a quick snippet?</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">→ <strong style="color:var(--accent);">Copilot Chat</strong> — ask it in the sidebar, fast and conversational</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:14px 16px;border:1px solid var(--border);">
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Is the task bigger than one file and I'm already in VS Code?</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">→ <strong style="color:var(--accent);">Copilot Agent Mode</strong> — Ctrl+I, give it a clear goal</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:14px 16px;border:1px solid var(--border);">
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Does the task require exploring my whole codebase, running shell commands, or working across many files?</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">→ <strong style="color:var(--accent);">Claude Code or Opencode</strong> — open the terminal</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:14px 16px;border:1px solid var(--border);">
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Is Claude unavailable or am I on a restricted network?</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">→ <strong style="color:var(--accent);">Opencode with GPT-4o or a local model</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — Real Scenarios: Which Tool? ─── -->
+  <div class="slide" data-title="Real Scenarios" data-notes="Pause the slide and ask the team to call out which tool they'd pick before you reveal the answer. This makes it interactive and builds the intuition faster than just watching the slide.&lt;br&gt;&lt;br&gt;The point isn't 'there's one right answer' — it's to show that the reasoning process is quick and consistent: what's the scope, where are you working, how complex is it?&lt;br&gt;&lt;br&gt;Scenario C might surprise people — the answer is Copilot Chat, not a terminal agent, because it's a single-file question about a specific API. Agents are overkill for this.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Real scenarios — which tool would you pick?</h2>
+      <div style="display:grid;gap:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);">Scenario A</div>
+          </div>
+          <div style="font-size:0.9rem;color:var(--text-primary);font-weight:500;margin-bottom:8px;">"I need to understand what this test does — there's no documentation and it's 80 lines long."</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);background:var(--green-soft);padding:3px 10px;border-radius:4px;">Answer</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);"><strong style="color:var(--text-primary);">Copilot Chat</strong> — paste the test, ask "explain this test line by line". Quick, in-IDE, no file edits needed.</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);">Scenario B</div>
+          </div>
+          <div style="font-size:0.9rem;color:var(--text-primary);font-weight:500;margin-bottom:8px;">"I need to add API response mocking to our entire test suite — about 40 test files, all using different patterns."</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);background:var(--green-soft);padding:3px 10px;border-radius:4px;">Answer</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);"><strong style="color:var(--text-primary);">Claude Code</strong> — needs to explore 40+ files, understand patterns, make consistent changes. This is exactly what terminal agents excel at.</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);">Scenario C</div>
+          </div>
+          <div style="font-size:0.9rem;color:var(--text-primary);font-weight:500;margin-bottom:8px;">"I keep getting a TypeScript error on this assertion and I don't know why."</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);background:var(--green-soft);padding:3px 10px;border-radius:4px;">Answer</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);"><strong style="color:var(--text-primary);">Copilot Chat</strong> — paste the error, ask for help. Single file, quick fix. A terminal agent is serious overkill here.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — Same Task, Two Tools ─── -->
+  <div class="slide" data-title="Same Task, Two Tools" data-notes="This is the slide that makes the abstract concrete. Both tools can handle 'write tests for the checkout page' — the question is the experience, not the outcome.&lt;br&gt;&lt;br&gt;Copilot Agent Mode advantage: stays in your IDE, diff appears inline, approve button is right there. If your codebase is relatively small and well-structured, this is often enough.&lt;br&gt;&lt;br&gt;Claude Code advantage: reads the entire repo before writing a line. For large, complex codebases it produces more contextually-aware output — it actually understood how your project works before generating code.&lt;br&gt;&lt;br&gt;The honest answer: try both. Most people settle on a personal preference. Both are valid.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Same task — two different tools</h2>
+      <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:12px;text-align:center;font-style:italic;">Task: "Create Playwright E2E tests for the checkout flow. Read existing auth tests as reference."</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin-bottom:12px;">Copilot Agent Mode</div>
+          <div style="display:grid;gap:8px;font-size:0.82rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;font-weight:700;">1.</span> Press Ctrl+I in VS Code to open Agent Mode</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;font-weight:700;">2.</span> Type the task description into the chat window</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;font-weight:700;">3.</span> Agent reads files visible in your workspace</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;font-weight:700;">4.</span> Inline diffs appear in your editor — click Accept</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;font-weight:700;">5.</span> Agent runs the tests, shows results in panel</div>
+          </div>
+          <div style="margin-top:12px;background:rgba(111,163,247,0.08);border-radius:6px;padding:8px 12px;font-size:0.78rem;color:var(--text-dim);">Best when: you're already in VS Code and your codebase is well-structured</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px;">Claude Code</div>
+          <div style="display:grid;gap:8px;font-size:0.82rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;"><span style="color:var(--accent);flex-shrink:0;font-weight:700;">1.</span> Open terminal, <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">cd your-project &amp;&amp; claude</code></div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--accent);flex-shrink:0;font-weight:700;">2.</span> Type the task — Claude reads the full repo structure first</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--accent);flex-shrink:0;font-weight:700;">3.</span> Claude reads all related files, forms a plan</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--accent);flex-shrink:0;font-weight:700;">4.</span> Approve each file edit or command as prompted</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--accent);flex-shrink:0;font-weight:700;">5.</span> Claude runs tests, fixes failures, reports done</div>
+          </div>
+          <div style="margin-top:12px;background:rgba(232,168,72,0.08);border-radius:6px;padding:8px 12px;font-size:0.78rem;color:var(--text-dim);">Best when: codebase is large or complex, or tasks span many files</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;text-align:center;font-size:0.8rem;color:var(--text-dim);">Both tools can do the job. The difference is how much context they gather and where the workflow lives.</div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — Combining Tools ─── -->
+  <div class="slide" data-title="Combining Tools" data-notes="The real power move is using tools together. Completions while typing, Chat for questions, Agent Mode or terminal agents for the heavy lifting. They're not alternatives — they're complements for different granularities of work.&lt;br&gt;&lt;br&gt;Show a realistic workflow: for a new feature's test suite, you might use Claude Code to scaffold the files, then switch to Copilot Completions as you flesh out individual tests, and use Chat when you have a question about a specific Playwright API.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Using tools together</h2>
+      <div style="background:var(--bg-elevated);border-radius:12px;border:1px solid var(--border);padding:22px;margin-bottom:16px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:16px;">Example: building a new test suite for the payments module</div>
+        <div style="display:grid;gap:12px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;">1</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);"><strong style="color:var(--text-primary);">Claude Code:</strong> "Scaffold the folder structure and base Page Objects for payments tests. Read the existing auth tests as reference."</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;">2</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);"><strong style="color:var(--text-primary);">Copilot Chat:</strong> "What's the Playwright way to intercept and mock a payment API response? Show me an example."</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;">3</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);"><strong style="color:var(--text-primary);">Copilot Completions:</strong> Writing individual test assertions inline, accepting suggestions as you type each one</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;">4</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);"><strong style="color:var(--text-primary);">Claude Code again:</strong> "Run the payment tests, identify any failures, and fix them. Don't change the test assertions, only fix the code."</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:10px 16px;font-size:0.82rem;color:var(--text-secondary);">These tools are complements, not alternatives. Use the right granularity for each part of the task.</div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — When NOT to Use Agents ─── -->
+  <div class="slide" data-title="When NOT to Use Agents" data-notes="This is just as important as knowing when to use agents. People who are excited about terminal agents sometimes reach for them for everything — including tasks where they're complete overkill and slower than just doing it yourself.&lt;br&gt;&lt;br&gt;The rule of thumb: if you can read, understand, and make the change yourself in under 5 minutes, just do it. Agents shine on tasks that are tedious at scale or that require exploring unfamiliar code.&lt;br&gt;&lt;br&gt;Also worth mentioning: for sensitive operations (deleting data, changing configs in production-adjacent files), you want full manual control. Agents work well with a human in the loop, not without one.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">When agents are overkill</h2>
+      <div style="margin-bottom:14px;background:rgba(232,92,92,0.06);border:1px solid rgba(232,92,92,0.2);border-radius:10px;padding:16px 18px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--red);margin-bottom:10px;">Skip the agent — just do it yourself</div>
+        <div style="display:grid;gap:8px;font-size:0.84rem;color:var(--text-secondary);">
+          <div style="display:flex;gap:8px;"><span style="color:var(--red);">·</span> <strong style="color:var(--text-primary);">Single-line changes</strong> — renaming a variable, fixing a typo, updating a URL</div>
+          <div style="display:flex;gap:8px;"><span style="color:var(--red);">·</span> <strong style="color:var(--text-primary);">Understanding one function</strong> — Copilot Chat is faster and cheaper</div>
+          <div style="display:flex;gap:8px;"><span style="color:var(--red);">·</span> <strong style="color:var(--text-primary);">Copy-pasting a known pattern</strong> — if you already know what to write, just write it</div>
+          <div style="display:flex;gap:8px;"><span style="color:var(--red);">·</span> <strong style="color:var(--text-primary);">Writing a single test case</strong> — one test, clear scenario, just type it</div>
+          <div style="display:flex;gap:8px;"><span style="color:var(--red);">·</span> <strong style="color:var(--text-primary);">Quick config change</strong> — updating a port number, changing an environment variable</div>
+        </div>
+      </div>
+      <div class="myth-card">
+        <div class="myth-tag">Common mistake</div>
+        <div style="font-size:0.88rem;font-weight:600;margin:8px 0 4px;">"I'll use Claude Code for everything — it's always better"</div>
+        <div class="reality-tag" style="margin-top:8px;">Reality</div>
+        <div style="font-size:0.82rem;color:var(--text-secondary);margin-top:4px;">Starting a terminal agent session takes time. For a 30-second task, writing a 2-minute GCSV prompt and waiting for exploration is the wrong tradeoff. The agent is a power tool — use it for power tasks.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — When Agents Are the Obvious Choice ─── -->
+  <div class="slide" data-title="When Agents Shine" data-notes="These are the tasks where the ROI is obvious — where the alternative would take 2+ hours and the agent does it in 10 minutes. This is the 20% of tasks that agents are genuinely transformative for.&lt;br&gt;&lt;br&gt;Walk through each one and ask if anyone has experienced this kind of task recently. The migration example is especially relatable — migrating 40 tests from Cypress to Playwright manually would be a miserable afternoon. An agent can do it in one session.&lt;br&gt;&lt;br&gt;The debugging example is subtle but powerful: for a flaky test with complex async behaviour, the agent can systematically add logging, run the test multiple times, and trace the failure pattern in a way that would take a human much longer.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">When agents are the obvious choice</h2>
+      <div style="display:grid;gap:10px;">
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);border-left:3px solid var(--green);">
+          <div style="font-size:1.1rem;flex-shrink:0;">🏗️</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Setting up a new test framework from scratch</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:2px;">Folder structure, config, base classes, fixtures, CI config — a half-day task done in one session</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);border-left:3px solid var(--green);">
+          <div style="font-size:1.1rem;flex-shrink:0;">🔄</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Migrating tests between frameworks</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:2px;">Cypress → Playwright, Jest → Vitest — 40 files, consistent conversion. A miserable afternoon vs. one session.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);border-left:3px solid var(--green);">
+          <div style="font-size:1.1rem;flex-shrink:0;">🔁</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Adding a consistent pattern across many files</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:2px;">Adding error logging, updating selector conventions, wrapping all API calls — agent reads all files and applies consistently</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);border-left:3px solid var(--green);">
+          <div style="font-size:1.1rem;flex-shrink:0;">🐛</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Debugging a flaky test with complex async behaviour</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:2px;">Agent adds logging, runs multiple times, traces the failure pattern, proposes a fix — systematic where humans guess</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);border-left:3px solid var(--green);">
+          <div style="font-size:1.1rem;flex-shrink:0;">🗺️</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Writing tests for an unfamiliar part of the codebase</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:2px;">Agent explores the code, understands it, then writes tests. You'd need to do the same exploration manually first.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — Cost Considerations ─── -->
+  <div class="slide" data-title="Cost Considerations" data-notes="Be honest about cost. Copilot is a flat subscription (covered by the company). Claude Code charges per token of input/output — long sessions with large codebases can be expensive. Opencode with GPT-4o is similar. These costs are real and should factor into when you reach for the more expensive tools.&lt;br&gt;&lt;br&gt;Rule of thumb: Copilot Chat for anything conversational. Terminal agents for tasks that justify the cost by saving significant time — usually 30+ minutes of work done in 5 minutes.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Cost &amp; access realities</h2>
+      <div style="display:grid;gap:12px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);">GitHub Copilot</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;background:var(--green-soft);color:var(--green);padding:3px 8px;border-radius:4px;">Flat monthly fee</div>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Completions, Chat, Agent Mode all included. Predictable cost. Most organisations cover this as a standard developer tool.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);">Claude Code</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;background:var(--accent-soft);color:var(--accent);padding:3px 8px;border-radius:4px;">Usage-based or subscription</div>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Included with Claude.ai Max plan, or billed per token via Anthropic API. Long sessions on large codebases can add up — use for tasks that justify it by saving 30+ minutes.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);">Opencode</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;background:var(--bg-card);color:var(--text-dim);padding:3px 8px;border-radius:4px;">Free tool + model cost</div>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">The tool itself is free and open source. You pay for whichever model you configure. Can run local models via Ollama at zero marginal cost.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — Building Your Daily AI Workflow ─── -->
+  <div class="slide" data-title="Your Daily Workflow" data-notes="This is the practical integration slide — turning everything from Phase 4 into a daily habit. The goal isn't to use AI all the time. It's to have clear instincts about which tool to reach for, so you can make the decision in seconds rather than deliberating.&lt;br&gt;&lt;br&gt;The weekly CLAUDE.md update is subtle but valuable. After a few sessions, you'll notice patterns: things you keep telling the agent, conventions it keeps getting wrong. Those belong in the file. Spend 5 minutes each week improving it.&lt;br&gt;&lt;br&gt;Encourage the team to start small: pick one task this week and use a terminal agent for it. Build the habit before trying to use it for everything.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Building your daily AI workflow</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px;">Each task — the habit loop</div>
+          <div style="display:grid;gap:8px;font-size:0.83rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;font-weight:700;">1.</span> Classify the task by scope → pick the right tool</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;font-weight:700;">2.</span> For agents: commit first, write GCSV prompt</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;font-weight:700;">3.</span> Review output: read the diff, check for red flags</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;font-weight:700;">4.</span> Verify: run tests, confirm they pass meaningfully</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;font-weight:700;">5.</span> Commit the result with a meaningful message</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--cyan);margin-bottom:12px;">Weekly — maintain your toolkit</div>
+          <div style="display:grid;gap:8px;font-size:0.83rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--cyan);">·</span> Update CLAUDE.md with any new patterns or forbidden conventions you learned this week</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--cyan);">·</span> Note which tasks were good candidates for agents (and which weren't)</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--cyan);">·</span> Share useful prompts or patterns with the team — GCSV prompts are reusable</div>
+          </div>
+          <div style="margin-top:12px;background:rgba(78,205,196,0.08);border-radius:6px;padding:8px 12px;font-size:0.78rem;color:var(--text-dim);">The team's collective CLAUDE.md and prompt library is a shared asset — keep contributing to it.</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:10px 14px;font-size:0.8rem;color:var(--text-secondary);">Start small: pick one task this week and use a terminal agent. Build the habit before trying to use it for everything.</div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="Close Phase 4. The team now has a real toolkit they understand. Pause and ask: which tool surprised you the most? Which do you think you'll use most often? Opening up discussion here is worthwhile — people learn from each other's planned use cases.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:24px;">Key takeaways</h2>
+      <div class="takeaway-list">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">These tools are complements, not alternatives</div>
+            <div class="takeaway-desc">Completions for inline typing, Chat for questions, Agent Mode or terminal agents for multi-file tasks. Use the right granularity for the job.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Know when NOT to use agents</div>
+            <div class="takeaway-desc">Single-line changes, quick questions, and familiar patterns don't need an agent. Save agents for tasks that genuinely save 30+ minutes.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">The decision is quick once you have the framework</div>
+            <div class="takeaway-desc">Scope of task + where you're working + how complex = which tool. Internalize this and the choice becomes automatic.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Build the habit deliberately</div>
+            <div class="takeaway-desc">Pick one task this week. Use the GCSV formula. Commit first, review the output. The habit compounds — each session makes the next one easier.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 13 — Bridge to Phase 5 ─── -->
+  <div class="slide" data-title="What's Next" data-notes="Phase 4 done. Phase 5 is the most advanced phase — MCP (Model Context Protocol), building custom integrations, and multi-agent workflows. Be honest: the instructor is still learning this phase too. We're all at the frontier together. That's what makes it exciting.">
+    <div class="slide-inner" style="text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:24px;">Phase 4 Complete</div>
+      <h2 style="font-size:2rem;margin-bottom:14px;">Up next: <span style="color:var(--accent)">Phase 5</span></h2>
+      <p style="color:var(--text-secondary);font-size:0.95rem;max-width:480px;margin:0 auto 32px;line-height:1.7;">MCP, Agents &amp; AI-Powered Workflows — the frontier of what's possible</p>
+      <div style="display:grid;gap:10px;max-width:420px;margin:0 auto;text-align:left;">
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;">
+          <span>Session 13 — What Is MCP?</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:var(--bg-card);padding:2px 8px;border-radius:4px;color:var(--text-dim);">next</span>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;color:var(--text-muted);">Session 14 — Using MCP Servers</div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;color:var(--text-muted);">Session 15 — Building Your First MCP Server</div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;color:var(--text-muted);">Session 16 — Agents, Subagents &amp; AI Workflows</div>
+      </div>
+    </div>
+  </div>

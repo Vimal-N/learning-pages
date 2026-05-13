@@ -1,0 +1,658 @@
+---
+layout: base.njk
+---
+{% block head %}
+<style>
+body { overflow: hidden; }
+
+/* ══════════════════════════════════════════
+   SESSION SHELL — flex column filling viewport
+   ══════════════════════════════════════════ */
+.session-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ─── Top Bar ─── */
+.session-topbar {
+  height: 48px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  z-index: 10;
+}
+
+.session-back {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-elevated);
+}
+.session-back:hover { color: var(--accent); border-color: var(--accent); }
+
+.topbar-sep { color: var(--border); font-size: 0.85rem; flex-shrink: 0; }
+
+.session-topbar-title {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.session-topbar-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 9px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sidebar-toggle-btn {
+  display: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ─── Body: Sidebar + Main ─── */
+.session-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ══════════════════════════════════════════
+   SIDEBAR
+   ══════════════════════════════════════════ */
+.session-sidebar {
+  width: 230px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-head {
+  padding: 12px 14px 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.sidebar-list::-webkit-scrollbar { width: 4px; }
+.sidebar-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.sb-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+.sb-item:hover { background: var(--bg-elevated); }
+.sb-item.is-active { background: var(--bg-elevated); border-left-color: var(--accent); }
+.sb-item.is-done  { border-left-color: var(--green); }
+
+.sb-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  margin-top: 5px;
+  transition: background 0.2s;
+}
+.sb-item.is-done  .sb-dot { background: var(--green); }
+.sb-item.is-active .sb-dot { background: var(--accent); }
+
+.sb-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--text-dim);
+  min-width: 18px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+.sb-item.is-active .sb-num { color: var(--accent); }
+.sb-item.is-done   .sb-num { color: var(--green); }
+
+.sb-label {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.sb-item.is-active .sb-label { color: var(--text-primary); font-weight: 500; }
+.sb-item.is-done   .sb-label { color: var(--text-secondary); }
+
+.sidebar-foot {
+  padding: 10px 14px;
+  border-top: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+.prog-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+.prog-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--text-dim);
+}
+
+/* ══════════════════════════════════════════
+   MAIN: Deck area
+   ══════════════════════════════════════════ */
+.session-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* ─── Deck ─── */
+.deck {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.deck-progress {
+  position: absolute;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+  z-index: 5;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 32px 48px 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  overflow-y: auto;
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+
+.slide-inner { max-width: 860px; width: 100%; margin: auto 0; }
+
+/* ══════════════════════════════════════════
+   PRESENTER PANEL
+   Hidden in main view. Shown when ?presenter
+   query param is present (presenter mode).
+   ══════════════════════════════════════════ */
+.presenter-panel {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  background: #0f0d13;
+}
+
+/* Presenter mode overrides */
+body.presenter-mode .deck            { display: none; }
+body.presenter-mode .session-sidebar { display: none; }
+body.presenter-mode .sidebar-toggle-btn { display: none; }
+body.presenter-mode .presenter-panel { display: flex; }
+
+.pv-header {
+  padding: 16px 28px 12px;
+  border-bottom: 1px solid #2a2540;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 16px;
+}
+.pv-slide-meta {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+.pv-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.pv-sep {
+  color: #3d3660;
+  margin: 0 10px;
+  flex-shrink: 0;
+}
+.pv-title {
+  font-size: 0.9rem;
+  color: #c8c0e0;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pv-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #6a6090;
+  flex-shrink: 0;
+}
+
+.pv-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 32px;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2540 transparent;
+}
+.pv-notes {
+  font-size: 1.1rem;
+  line-height: 1.85;
+  color: #e0d8f4;
+  max-width: 780px;
+}
+
+/* Note callouts — work in both inline (legacy) and presenter contexts */
+.analogy-note {
+  background: rgba(232,168,72,0.08);
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  border-radius: 0 6px 6px 0;
+  margin: 12px 0;
+  font-size: 0.95rem;
+}
+.warning-note {
+  background: rgba(232,92,92,0.08);
+  border-left: 3px solid #e85c5c;
+  padding: 10px 14px;
+  border-radius: 0 6px 6px 0;
+  margin: 12px 0;
+  font-size: 0.95rem;
+}
+
+.pv-footer {
+  padding: 10px 28px;
+  border-top: 1px solid #2a2540;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.pv-next-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #4a4570;
+  flex-shrink: 0;
+}
+.pv-next-title {
+  font-size: 0.82rem;
+  color: #8880a8;
+}
+
+/* ─── Nav Bar ─── */
+.nav-bar {
+  height: 50px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  gap: 10px;
+}
+
+body.presenter-mode .nav-bar {
+  background: #1a1520;
+  border-top-color: #2a2540;
+}
+
+.nav-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid var(--border);
+  padding: 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-btn:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+.nav-btn.presenter-active { color: var(--accent); border-color: var(--accent); }
+
+body.presenter-mode .nav-btn {
+  border-color: #2a2540;
+  color: #8880a8;
+}
+body.presenter-mode .nav-btn:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.slide-counter {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 1px;
+  flex: 1;
+  text-align: center;
+}
+
+body.presenter-mode .slide-counter { color: #6a6090; }
+
+/* ─── Session-specific styles ─── */
+{{ sessionStyles | safe }}
+
+/* ─── Mobile: sidebar slides in ─── */
+@media (max-width: 820px) {
+  .session-sidebar {
+    position: fixed;
+    left: -230px;
+    top: 48px;
+    bottom: 50px;
+    z-index: 200;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.4);
+    transition: left 0.28s ease;
+  }
+  .session-sidebar.sb-open { left: 0; }
+  .sidebar-toggle-btn { display: flex; }
+  .session-topbar-title { display: none; }
+}
+@media (max-width: 520px) {
+  .session-topbar-num { display: none; }
+  .slide { padding: 24px 20px 16px; }
+  .pv-body { padding: 20px 18px; }
+  .pv-notes { font-size: 1rem; }
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="session-shell">
+
+  <!-- ─── Top Bar ─── -->
+  <div class="session-topbar">
+    <a href="{{ topicUrl | default('/') }}" class="session-back">← {{ topicName | default('Back') }}</a>
+    <span class="topbar-sep">/</span>
+    <div class="session-topbar-title">{{ sessionTitle | default(title) }}</div>
+    <div class="session-topbar-num">Session {{ sessionNumber | default('01') }}</div>
+    <button class="sidebar-toggle-btn" onclick="toggleSidebar()">☰ Slides</button>
+  </div>
+
+  <!-- ─── Body ─── -->
+  <div class="session-body">
+
+    <!-- Sidebar -->
+    <div class="session-sidebar" id="session-sidebar">
+      <div class="sidebar-head">Session Slides</div>
+      <div class="sidebar-list" id="sidebar-list"></div>
+      <div class="sidebar-foot">
+        <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+        <div class="prog-label" id="prog-label">Slide 1 of —</div>
+      </div>
+    </div>
+
+    <!-- Slide area -->
+    <div class="session-main">
+
+      <!-- Main presentation deck -->
+      <div class="deck" id="deck">
+        <div class="deck-progress" id="deck-progress"></div>
+        {{ content | safe }}
+      </div>
+
+      <!-- Presenter panel — replaces deck when ?presenter param is present -->
+      <div class="presenter-panel" id="presenter-panel">
+        <div class="pv-header">
+          <div class="pv-slide-meta">
+            <span class="pv-num" id="pv-num">1 / —</span>
+            <span class="pv-sep">·</span>
+            <span class="pv-title" id="pv-title"></span>
+          </div>
+          <div class="pv-badge">Presenter View</div>
+        </div>
+        <div class="pv-body">
+          <div class="pv-notes" id="pv-notes"></div>
+        </div>
+        <div class="pv-footer">
+          <div class="pv-next-label">Up Next</div>
+          <div class="pv-next-title" id="pv-next-title">—</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ─── Nav Bar ─── -->
+  <div class="nav-bar">
+    <button class="nav-btn" id="btn-notes" onclick="openPresenterView()">Presenter Notes ↗</button>
+    <span class="slide-counter" id="slide-counter">1 / —</span>
+    <button class="nav-btn" id="btn-prev" onclick="navigate(-1)" disabled>← Prev</button>
+    <button class="nav-btn" id="btn-next" onclick="navigate(1)">Next →</button>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  var slides   = Array.from(document.querySelectorAll('#deck .slide'));
+  var total    = slides.length;
+  var current  = 0;
+  var touchX   = 0;
+
+  /* ── Presenter mode: ?presenter query param ── */
+  var isPresenter = new URLSearchParams(location.search).has('presenter');
+  if (isPresenter) document.body.classList.add('presenter-mode');
+
+  /* ── BroadcastChannel for cross-tab sync ── */
+  var sessionNum  = "{{ sessionNumber | default('00') }}";
+  var bc          = typeof BroadcastChannel !== 'undefined'
+                    ? new BroadcastChannel('lh-session-' + sessionNum) : null;
+  var bcReceiving = false; /* prevents echo when acting on a received message */
+
+  if (bc) {
+    bc.onmessage = function (e) {
+      if (e.data.type === 'slide-change' && e.data.index !== current) {
+        bcReceiving = true;
+        showSlide(e.data.index);
+        bcReceiving = false;
+      }
+    };
+  }
+
+  /* ── Build sidebar from data-title on each slide ── */
+  var listEl = document.getElementById('sidebar-list');
+  slides.forEach(function (slide, i) {
+    var title = slide.dataset.title || ('Slide ' + (i + 1));
+    var item  = document.createElement('div');
+    item.className = 'sb-item';
+    item.dataset.idx = i;
+    item.innerHTML =
+      '<div class="sb-dot"></div>' +
+      '<div class="sb-num">' + String(i + 1).padStart(2, '0') + '</div>' +
+      '<div class="sb-label">' + title + '</div>';
+    item.addEventListener('click', function () { showSlide(i); closeSidebar(); });
+    listEl.appendChild(item);
+  });
+
+  function getSbItems() { return Array.from(listEl.querySelectorAll('.sb-item')); }
+
+  /* ── Core: show slide n ── */
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    slides[current].scrollTop = 0;
+
+    /* counter + deck progress bar */
+    document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('deck-progress').style.width = ((current + 1) / total * 100) + '%';
+
+    /* nav buttons */
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+
+    /* presenter panel */
+    var raw      = slides[current].dataset.notes || '';
+    var nextSlide = slides[current + 1];
+    document.getElementById('pv-num').textContent   = (current + 1) + ' / ' + total;
+    document.getElementById('pv-title').textContent = slides[current].dataset.title || '';
+    document.getElementById('pv-notes').innerHTML   =
+      raw || '<em style="color:#4a4570">No notes for this slide.</em>';
+    document.getElementById('pv-next-title').textContent =
+      nextSlide ? (nextSlide.dataset.title || 'Slide ' + (current + 2)) : '— End of session —';
+    var pvBody = document.querySelector('.pv-body');
+    if (pvBody) pvBody.scrollTop = 0;
+
+    /* sidebar */
+    var items = getSbItems();
+    items.forEach(function (item, i) {
+      item.classList.remove('is-active', 'is-done');
+      if (i <  current) item.classList.add('is-done');
+      if (i === current) item.classList.add('is-active');
+    });
+    if (items[current]) {
+      items[current].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    /* sidebar progress */
+    var pct = Math.round((current + 1) / total * 100);
+    document.getElementById('prog-fill').style.width  = pct + '%';
+    document.getElementById('prog-label').textContent = 'Slide ' + (current + 1) + ' of ' + total;
+
+    /* broadcast to other tab (skip if we're acting on a received message) */
+    if (bc && !bcReceiving) {
+      bc.postMessage({ type: 'slide-change', index: current });
+    }
+  }
+
+  /* ── Navigate ── */
+  window.navigate = function (dir) { showSlide(current + dir); };
+
+  /* ── Open presenter view in a separate tab ── */
+  var presenterWin = null;
+  window.openPresenterView = function () {
+    var url = location.pathname + '?presenter';
+    if (!presenterWin || presenterWin.closed) {
+      presenterWin = window.open(url, 'lh-presenter-notes');
+      document.getElementById('btn-notes').classList.add('presenter-active');
+    } else {
+      presenterWin.focus();
+    }
+  };
+
+  /* ── Sidebar (mobile) ── */
+  window.toggleSidebar = function () {
+    document.getElementById('session-sidebar').classList.toggle('sb-open');
+  };
+  function closeSidebar() {
+    document.getElementById('session-sidebar').classList.remove('sb-open');
+  }
+
+  /* ── Keyboard ── */
+  document.addEventListener('keydown', function (e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); navigate(-1); }
+    if (e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'n' || e.key === 'N') openPresenterView();
+    if (e.key === 'Escape') closeSidebar();
+  });
+
+  /* ── Touch swipe ── */
+  document.getElementById('deck').addEventListener('touchstart', function (e) {
+    touchX = e.touches[0].clientX;
+  }, { passive: true });
+  document.getElementById('deck').addEventListener('touchend', function (e) {
+    var dx = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 40) navigate(dx > 0 ? 1 : -1);
+  });
+
+  /* ── Init ── */
+  showSlide(0);
+})();
+</script>
+{% endblock %}

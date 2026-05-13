@@ -1,0 +1,54 @@
+<svg viewBox="0 0 700 340" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+  <rect width="700" height="340" rx="12" fill="#f8f7f4"/>
+
+  <!-- Column headers -->
+  <text x="170" y="26" text-anchor="middle" fill="#854F0B" font-size="14" font-weight="700">You</text>
+  <text x="530" y="26" text-anchor="middle" fill="#185FA5" font-size="14" font-weight="700">AI</text>
+
+  <!-- Divider -->
+  <line x1="350" y1="14" x2="350" y2="316" stroke="#888780" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- Bubble 1 (You): y=40 -->
+  <rect x="28" y="40" width="300" height="40" rx="8" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1"/>
+  <text x="42" y="57" fill="#444441" font-size="12">Write a login test</text>
+  <text x="42" y="73" fill="#BA7517" font-size="10" font-style="italic">(vague first prompt)</text>
+
+  <!-- Connector 1→2: smooth curve You → AI -->
+  <path d="M328 60 C350 60, 350 108, 372 108" fill="none" stroke="#85B7EB" stroke-width="1.5"/>
+  <polygon points="369,104 377,108 369,112" fill="#185FA5"/>
+
+  <!-- Bubble 2 (AI): y=90 -->
+  <rect x="372" y="90" width="300" height="40" rx="8" fill="#E6F1FB" stroke="#85B7EB" stroke-width="1"/>
+  <text x="386" y="107" fill="#444441" font-size="12">Here's a basic login test...</text>
+  <text x="386" y="123" fill="#378ADD" font-size="10" font-style="italic">(generic response)</text>
+
+  <!-- Connector 2→3: smooth curve AI → You -->
+  <path d="M372 110 C350 110, 350 158, 328 158" fill="none" stroke="#EF9F27" stroke-width="1.5"/>
+  <polygon points="331,154 323,158 331,162" fill="#854F0B"/>
+
+  <!-- Bubble 3 (You): y=140 -->
+  <rect x="28" y="140" width="300" height="40" rx="8" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1"/>
+  <text x="42" y="157" fill="#444441" font-size="12">Now add wrong-password handling</text>
+  <text x="42" y="173" fill="#BA7517" font-size="10" font-style="italic">(refine the scope)</text>
+
+  <!-- Connector 3→4: smooth curve You → AI -->
+  <path d="M328 160 C350 160, 350 208, 372 208" fill="none" stroke="#85B7EB" stroke-width="1.5"/>
+  <polygon points="369,204 377,208 369,212" fill="#185FA5"/>
+
+  <!-- Bubble 4 (AI): y=190 -->
+  <rect x="372" y="190" width="300" height="40" rx="8" fill="#E6F1FB" stroke="#85B7EB" stroke-width="1"/>
+  <text x="386" y="207" fill="#444441" font-size="12">Updated with error test case...</text>
+  <text x="386" y="223" fill="#378ADD" font-size="10" font-style="italic">(improved output)</text>
+
+  <!-- Connector 4→5: smooth curve AI → You -->
+  <path d="M372 210 C350 210, 350 258, 328 258" fill="none" stroke="#EF9F27" stroke-width="1.5"/>
+  <polygon points="331,254 323,258 331,262" fill="#854F0B"/>
+
+  <!-- Bubble 5 (You): y=240 -->
+  <rect x="28" y="240" width="300" height="40" rx="8" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1"/>
+  <text x="42" y="257" fill="#444441" font-size="12">Perfect — add data-testid selectors</text>
+  <text x="42" y="273" fill="#3B6D11" font-size="10" font-style="italic">(three turns → usable result)</text>
+
+  <!-- Caption -->
+  <text x="350" y="310" text-anchor="middle" fill="#5F5E5A" font-size="12">Iterate — each reply refines the result. The first prompt is a starting point, not the endpoint.</text>
+</svg>

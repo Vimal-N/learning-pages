@@ -1,0 +1,71 @@
+<svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+  <rect width="700" height="260" fill="#f8f7f4" rx="12"/>
+
+  <!-- Header row -->
+  <rect x="14" y="14" width="672" height="34" rx="8" fill="#F1EFE8"/>
+  <text x="202" y="35" text-anchor="middle" fill="#444441" font-size="13" font-weight="700">Scenario</text>
+  <text x="458" y="35" text-anchor="middle" fill="#444441" font-size="13" font-weight="700">Best tool</text>
+  <text x="616" y="35" text-anchor="middle" fill="#444441" font-size="13" font-weight="700">Why</text>
+
+  <!-- Column dividers -->
+  <line x1="384" y1="14" x2="384" y2="246" stroke="#888780" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="532" y1="14" x2="532" y2="246" stroke="#888780" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- Row divider: header → row 1 -->
+  <line x1="14" y1="52" x2="686" y2="52" stroke="#D3D1C7" stroke-width="1"/>
+
+  <!-- Row 1 -->
+  <rect x="14" y="52" width="672" height="36" rx="0" fill="#FAEEDA" fill-opacity="0.3"/>
+  <text x="30" y="74" fill="#444441" font-size="12">Writing code and know roughly what comes next</text>
+  <rect x="400" y="59" width="116" height="22" rx="6" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1"/>
+  <text x="458" y="74" text-anchor="middle" fill="#854F0B" font-size="12" font-weight="600">Completions</text>
+  <text x="544" y="67" fill="#5F5E5A" font-size="11">AI finishes pattern</text>
+  <text x="544" y="80" fill="#5F5E5A" font-size="11">— faster than typing</text>
+
+  <!-- Row divider: row 1 → row 2 -->
+  <line x1="14" y1="92" x2="686" y2="92" stroke="#D3D1C7" stroke-width="1"/>
+
+  <!-- Row 2 -->
+  <rect x="14" y="92" width="672" height="36" rx="0" fill="#E6F1FB" fill-opacity="0.3"/>
+  <text x="30" y="114" fill="#444441" font-size="12">You have a question about an error message</text>
+  <rect x="400" y="99" width="116" height="22" rx="6" fill="#E6F1FB" stroke="#85B7EB" stroke-width="1"/>
+  <text x="458" y="114" text-anchor="middle" fill="#0C447C" font-size="12" font-weight="600">Chat</text>
+  <text x="544" y="107" fill="#5F5E5A" font-size="11">AI explains and</text>
+  <text x="544" y="120" fill="#5F5E5A" font-size="11">suggests a fix</text>
+
+  <!-- Row divider: row 2 → row 3 -->
+  <line x1="14" y1="132" x2="686" y2="132" stroke="#D3D1C7" stroke-width="1"/>
+
+  <!-- Row 3 -->
+  <rect x="14" y="132" width="672" height="36" rx="0" fill="#FAEEDA" fill-opacity="0.3"/>
+  <text x="30" y="154" fill="#444441" font-size="12">Generate a whole function from a comment</text>
+  <rect x="400" y="139" width="116" height="22" rx="6" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1"/>
+  <text x="458" y="154" text-anchor="middle" fill="#854F0B" font-size="12" font-weight="600">Completions</text>
+  <text x="544" y="147" fill="#5F5E5A" font-size="11">Write signature +</text>
+  <text x="544" y="160" fill="#5F5E5A" font-size="11">comment, Tab twice</text>
+
+  <!-- Row divider: row 3 → row 4 -->
+  <line x1="14" y1="172" x2="686" y2="172" stroke="#D3D1C7" stroke-width="1"/>
+
+  <!-- Row 4 -->
+  <rect x="14" y="172" width="672" height="36" rx="0" fill="#E6F1FB" fill-opacity="0.3"/>
+  <text x="30" y="194" fill="#444441" font-size="12">Refactor a block of code a different way</text>
+  <rect x="400" y="179" width="116" height="22" rx="6" fill="#E6F1FB" stroke="#85B7EB" stroke-width="1"/>
+  <text x="458" y="194" text-anchor="middle" fill="#0C447C" font-size="12" font-weight="600">Chat</text>
+  <text x="544" y="187" fill="#5F5E5A" font-size="11">Select code, ask to</text>
+  <text x="544" y="200" fill="#5F5E5A" font-size="11">rewrite using POM</text>
+
+  <!-- Row divider: row 4 → row 5 -->
+  <line x1="14" y1="212" x2="686" y2="212" stroke="#D3D1C7" stroke-width="1"/>
+
+  <!-- Row 5 -->
+  <rect x="14" y="212" width="672" height="34" rx="0" fill="#E6F1FB" fill-opacity="0.3"/>
+  <text x="30" y="233" fill="#444441" font-size="12">You're in an unfamiliar codebase</text>
+  <rect x="400" y="218" width="116" height="22" rx="6" fill="#E6F1FB" stroke="#85B7EB" stroke-width="1"/>
+  <text x="458" y="233" text-anchor="middle" fill="#0C447C" font-size="12" font-weight="600">Chat</text>
+  <text x="544" y="226" fill="#5F5E5A" font-size="11">Ask 'what does</text>
+  <text x="544" y="239" fill="#5F5E5A" font-size="11">this test do?'</text>
+
+  <!-- Bottom border -->
+  <line x1="14" y1="246" x2="686" y2="246" stroke="#D3D1C7" stroke-width="1"/>
+</svg>

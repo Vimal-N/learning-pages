@@ -1,0 +1,424 @@
+---
+layout: session.njk
+title: Session 07 — Writing Test Cases with AI — From Scratch to Suite
+sessionNumber: "07"
+sessionTitle: "Writing Test Cases with AI — From Scratch to Suite"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="This is Phase 3 — and it's the phase people have been waiting for. Everything so far has been setup, theory, and general patterns. Now we get into the actual daily QA work: writing tests. This session is about generating test cases with AI — from a single test to a full suite.&lt;br&gt;&lt;br&gt;Set expectations: AI can dramatically speed up test authoring. But the quality of the tests depends entirely on the quality of your direction. The AI writes code — you provide the testing strategy.">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">🧪 Session 07 &nbsp;·&nbsp; Phase 3: AI for Test Automation &amp; Debugging</div>
+      <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Writing Test Cases<br><span style="color:var(--accent)">with AI</span></h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Four strategies for using AI to go from zero to a complete test suite — with QA examples at every step.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">50 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 06</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — The QA Engineer's Advantage ─── -->
+  <div class="slide" data-title="Your QA Advantage" data-notes="QA engineers have something developers don't always have: a user perspective and a testing mindset. We think in scenarios, edge cases, and failure modes naturally. This is exactly what makes us better AI-assisted test writers than developers who just ask AI for 'some tests'.&lt;br&gt;&lt;br&gt;The AI is good at the how — writing the code. You are good at the what — knowing what needs to be tested. Together, you cover a lot of ground quickly.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">You already have the hard part</h2>
+      <div class="stat-callout">
+        <div class="stat-num" style="font-size:2.4rem;">You</div>
+        <div class="stat-body">
+          <div class="stat-title">bring the testing strategy</div>
+          <div class="stat-desc">You know what to test — the happy path, edge cases, error conditions, business rules, regression scenarios. This is the hard part that AI can't invent for you.</div>
+        </div>
+      </div>
+      <div class="stat-callout" style="margin-top:14px;">
+        <div class="stat-num" style="font-size:2.4rem;">AI</div>
+        <div class="stat-body">
+          <div class="stat-title">brings the implementation speed</div>
+          <div class="stat-desc">AI knows the API, the framework syntax, the patterns. It can turn a plain-English test scenario into working Playwright/Cypress/Jest code in seconds.</div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:12px 16px;margin-top:16px;font-size:0.85rem;color:var(--text-secondary);">
+        The result: you cover more test scenarios, faster, than either of you could alone.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — Agenda ─── -->
+  <div class="slide" data-title="4 Strategies" data-notes="Four concrete strategies, each with a different starting point. Strategy 1 is for greenfield — you have a feature description and nothing else. Strategy 2 is for existing code. Strategy 3 is for getting AI to find edge cases you might have missed. Strategy 4 is for generating realistic test data.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:20px;">4 strategies we'll cover</h2>
+      <svg viewBox="0 0 700 280" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <rect width="700" height="280" rx="12" fill="#13111d"/>
+        <!-- Tile 1: top-left, blue -->
+        <rect x="18" y="18" width="322" height="116" rx="8" fill="#1a1828" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="34" y="44" font-size="11" fill="#6fa3f7" letter-spacing="1.5" text-transform="uppercase">STRATEGY 1</text>
+        <text x="34" y="64" font-size="15" fill="#6fa3f7" font-weight="700">From Feature Description</text>
+        <!-- doc → code icon -->
+        <rect x="34" y="74" width="18" height="22" rx="3" fill="none" stroke="#6fa3f7" stroke-width="1.5"/>
+        <line x1="38" y1="80" x2="48" y2="80" stroke="#6fa3f7" stroke-width="1"/>
+        <line x1="38" y1="85" x2="48" y2="85" stroke="#6fa3f7" stroke-width="1"/>
+        <line x1="38" y1="90" x2="44" y2="90" stroke="#6fa3f7" stroke-width="1"/>
+        <text x="58" y="82" font-size="13" fill="#6fa3f7">→</text>
+        <rect x="76" y="74" width="18" height="22" rx="3" fill="none" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="79" y="83" font-size="7" fill="#6fa3f7">&lt;/&gt;</text>
+        <text x="34" y="112" font-size="12" fill="#a0a0b8">Plain English description → test scaffold</text>
+        <text x="34" y="126" font-size="11" fill="#6a6a80" font-style="italic">"The login page should reject invalid emails"</text>
+        <!-- Tile 2: top-right, purple -->
+        <rect x="360" y="18" width="322" height="116" rx="8" fill="#1a1828" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="376" y="44" font-size="11" fill="#b08cf5" letter-spacing="1.5">STRATEGY 2</text>
+        <text x="376" y="64" font-size="15" fill="#b08cf5" font-weight="700">From Existing Code</text>
+        <!-- code → test icon -->
+        <rect x="376" y="74" width="18" height="22" rx="3" fill="none" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="379" y="83" font-size="7" fill="#b08cf5">&lt;/&gt;</text>
+        <text x="400" y="82" font-size="13" fill="#b08cf5">→</text>
+        <rect x="418" y="74" width="20" height="22" rx="3" fill="none" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="421" y="83" font-size="7" fill="#b08cf5">test</text>
+        <text x="376" y="112" font-size="12" fill="#a0a0b8">Point AI at your code → matching tests</text>
+        <text x="376" y="126" font-size="11" fill="#6a6a80" font-style="italic">"Here's LoginForm — write tests for it"</text>
+        <!-- Tile 3: bottom-left, green -->
+        <rect x="18" y="150" width="322" height="116" rx="8" fill="#1a1828" stroke="#5ec269" stroke-width="1.5"/>
+        <text x="34" y="176" font-size="11" fill="#5ec269" letter-spacing="1.5">STRATEGY 3</text>
+        <text x="34" y="196" font-size="15" fill="#5ec269" font-weight="700">Edge Cases !!</text>
+        <text x="34" y="242" font-size="12" fill="#a0a0b8">AI brainstorms gaps you haven't thought of</text>
+        <text x="34" y="257" font-size="11" fill="#6a6a80" font-style="italic">"What edge cases for this input validation?"</text>
+        <!-- Tile 4: bottom-right, amber -->
+        <rect x="360" y="150" width="322" height="116" rx="8" fill="#1a1828" stroke="#e8a848" stroke-width="1.5"/>
+        <text x="376" y="176" font-size="11" fill="#e8a848" letter-spacing="1.5">STRATEGY 4</text>
+        <text x="376" y="196" font-size="15" fill="#e8a848" font-weight="700">Test Data</text>
+        <!-- table/grid icon -->
+        <rect x="376" y="202" width="28" height="22" rx="2" fill="none" stroke="#e8a848" stroke-width="1.5"/>
+        <line x1="376" y1="210" x2="404" y2="210" stroke="#e8a848" stroke-width="1"/>
+        <line x1="376" y1="217" x2="404" y2="217" stroke="#e8a848" stroke-width="1"/>
+        <line x1="389" y1="202" x2="389" y2="224" stroke="#e8a848" stroke-width="1"/>
+        <text x="376" y="242" font-size="12" fill="#a0a0b8">Generate realistic, varied data at scale</text>
+        <text x="376" y="257" font-size="11" fill="#6a6a80" font-style="italic">"Give me 20 invalid email variations"</text>
+      </svg>
+      <div class="card-grid c2" style="gap:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">Strategy 1</div>
+          <div style="font-size:0.92rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">New test from feature description</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Start with user stories or acceptance criteria — get complete test code</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">Strategy 2</div>
+          <div style="font-size:0.92rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Tests from existing code</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Point AI at a component or API and get tests that match its actual behaviour</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">Strategy 3</div>
+          <div style="font-size:0.92rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Edge case generation</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Show AI your happy-path tests — ask it to find the gaps and generate the missing scenarios</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px;">Strategy 4</div>
+          <div style="font-size:0.92rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Test data generation</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Get realistic, varied datasets — not just "test@test.com" repeated forever</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — Strategy 1: From Feature Description ─── -->
+  <div class="slide" data-title="Strategy 1: From Feature Description" data-notes="Walk through this pattern step by step. The key ingredient the user provides: the acceptance criteria. This is the specification the AI needs to write meaningful tests. Without it, the AI generates generic tests that don't match your requirements.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: asking AI to write tests without acceptance criteria is like asking a builder to construct a house without blueprints. They'll build something — but it might not be what you wanted.&lt;/div&gt;">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Strategy 1 — Start with acceptance criteria</h2>
+      <div class="chat-mock" style="margin-bottom:16px;">
+        <div class="chat-msg user">
+          I need Playwright tests for our password reset feature. Here are the acceptance criteria:
+          - User enters their email on /forgot-password
+          - If email exists: success message shown, email sent
+          - If email not found: generic error (don't reveal whether email exists)
+          - Submit button disabled during API call
+          - Rate limit: 3 attempts per 10 minutes, then locked out
+          Use our existing Page Object pattern from tests/pages/. Test file goes in tests/auth/.
+        </div>
+        <div class="chat-msg ai">
+          I'll create tests/pages/forgotPasswordPage.ts and tests/auth/passwordReset.spec.ts covering all 5 scenarios. Let me read your existing Page Object pattern first to match the style...
+        </div>
+      </div>
+      <div style="background:var(--green-soft);border:1px solid rgba(94,194,105,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
+        ✓ Notice: acceptance criteria becomes the test specification. The AI uses it to know exactly what to assert — not just what to click.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — Strategy 2: From Existing Code ─── -->
+  <div class="slide" data-title="Strategy 2: From Existing Code" data-notes="This is powerful for legacy code where there are no tests yet. You point the AI at an API endpoint, a React component, or a service function, and ask it to generate tests that match the actual implementation.&lt;br&gt;&lt;br&gt;The prompt pattern: attach the code as context, specify the test framework, specify the level (unit/integration/e2e), specify where the file goes.&lt;br&gt;&lt;br&gt;Watch out: the AI will generate tests that match the CURRENT behaviour, including bugs. The tests will pass — even if the behaviour is wrong. This is why you need to review test assertions against your requirements, not just against the code.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Strategy 2 — Generate tests from the code itself</h2>
+      <div class="chat-mock" style="margin-bottom:16px;">
+        <div class="chat-msg user">
+          Here is our UserService.validateLogin() function. Write Jest unit tests for it. Cover: successful auth, wrong password, account locked, expired token, and null input guard. Output to tests/unit/userService.test.ts.
+          <br><br>
+          <code style="display:block;background:rgba(255,255,255,0.08);padding:10px;border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:0.8em;margin-top:8px;">
+            async validateLogin(email, password) {{ '{' }}...{{ '}' }}
+          </code>
+        </div>
+        <div class="chat-msg ai">
+          I can see the function checks for account lock status before password comparison. I'll write tests that cover the exact conditional paths in the implementation, including the lock check ordering...
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
+        ⚠️ Tests from existing code verify current behaviour — including existing bugs. Always compare generated assertions against your requirements too.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — Strategy 3: Edge Case Generation ─── -->
+  <div class="slide" data-title="Strategy 3: Edge Cases" data-notes="This one is underused and it's incredibly valuable. You show the AI your existing tests and ask: what have I missed? AI has seen thousands of common test gaps across many codebases. It will surface edge cases that are genuinely easy to miss.&lt;br&gt;&lt;br&gt;Common gaps it finds: boundary values (0, -1, max int), null/undefined inputs, empty arrays, concurrent operations, race conditions, character encoding edge cases (special chars, emoji, Unicode), very long strings.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Strategy 3 — Find the gaps</h2>
+      <div class="chat-mock" style="margin-bottom:16px;">
+        <div class="chat-msg user">
+          Here are my existing tests for the product search feature. What important test cases am I missing? List them as test scenario descriptions first — don't write code yet.
+        </div>
+        <div class="chat-msg ai">
+          Looking at your test coverage, I can see gaps in several areas:
+          <ol style="margin:8px 0 0 16px;display:grid;gap:6px;font-size:0.9em;">
+            <li>Search with special characters: &amp;, %, ', "SQL injection attempt"</li>
+            <li>Search term exceeding max length (what happens at 500+ chars?)</li>
+            <li>Concurrent searches — does the UI handle rapid successive requests?</li>
+            <li>Search while page is still loading initial data</li>
+            <li>Empty results state — is the "no results" message displayed correctly?</li>
+            <li>Results pagination edge cases — last page, single result page</li>
+          </ol>
+          Want me to generate test code for any of these?
+        </div>
+      </div>
+      <div style="background:var(--green-soft);border:1px solid rgba(94,194,105,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
+        ✓ Ask for scenario descriptions first, then code. Lets you validate the test strategy before writing anything.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — Strategy 4: Test Data Generation ─── -->
+  <div class="slide" data-title="Strategy 4: Test Data" data-notes="Test data is genuinely tedious to write manually. Realistic, varied test data is critical for meaningful tests — 'test@test.com' with password 'password' doesn't test much. AI can generate realistic datasets that cover the important variations.&lt;br&gt;&lt;br&gt;Also useful: asking AI to generate data that conforms to your specific business rules — UK phone numbers, NHS-format IDs, postcodes with specific formats, etc.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Strategy 4 — Generate realistic test data</h2>
+      <div class="chat-mock" style="margin-bottom:16px;">
+        <div class="chat-msg user">
+          Generate a JSON fixture file for user test data. I need 10 users covering: standard users, admin users, read-only users, accounts with MFA enabled, accounts with expired passwords, locked accounts, and accounts with no profile photo. Use realistic UK names, email addresses, and phone numbers. Output as tests/fixtures/users.json.
+        </div>
+        <div class="chat-msg ai">
+          Here's tests/fixtures/users.json with 10 realistic UK users covering all the scenarios you specified, each with a clear type label so tests can select the right user by scenario...
+        </div>
+      </div>
+      <div style="display:grid;gap:8px;margin-top:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:4px;">Other great test data prompts</div>
+        <div style="background:var(--bg-elevated);border-radius:6px;padding:10px 14px;font-size:0.82rem;color:var(--text-secondary);">"Generate 20 product records with varying prices, stock levels, and category combinations"</div>
+        <div style="background:var(--bg-elevated);border-radius:6px;padding:10px 14px;font-size:0.82rem;color:var(--text-secondary);">"Create boundary-value test inputs for a date-of-birth field: valid, too young, too old, invalid format, leap year edge cases"</div>
+        <div style="background:var(--bg-elevated);border-radius:6px;padding:10px 14px;font-size:0.82rem;color:var(--text-secondary);">"Generate API response mocks for success, 400 validation error, 401 unauthorised, 404 not found, 500 server error"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — The Review Rule ─── -->
+  <div class="slide" data-title="Always Review First" data-notes="This cannot be skipped. The AI will produce test code that looks correct and may even pass. But 'looks correct' and 'actually tests the right thing' are different. Common issues: asserting the wrong thing (checks that submit button exists, not that the form submitted), missing await on async operations, using data that always works (never tests the error path), testing implementation details not behaviour.&lt;br&gt;&lt;br&gt;The rule: never commit AI-generated test code without reading every assertion and asking 'would this fail if the feature broke?'">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">The non-negotiable review rule</h2>
+      <div style="background:var(--bg-elevated);border-radius:12px;border:1px solid var(--border);padding:22px;margin-bottom:16px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:14px;">Before committing any AI-generated test, ask these questions</div>
+        <div style="display:grid;gap:10px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:var(--accent);font-weight:700;flex-shrink:0;">?</span>
+            <div style="font-size:0.88rem;color:var(--text-primary);">If this feature <strong>broke tomorrow</strong>, would this test catch it?</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:var(--accent);font-weight:700;flex-shrink:0;">?</span>
+            <div style="font-size:0.88rem;color:var(--text-primary);">Are the <strong>assertions checking the right thing</strong>, not just that the element exists?</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:var(--accent);font-weight:700;flex-shrink:0;">?</span>
+            <div style="font-size:0.88rem;color:var(--text-primary);">Are all <strong>async operations awaited</strong> properly?</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:var(--accent);font-weight:700;flex-shrink:0;">?</span>
+            <div style="font-size:0.88rem;color:var(--text-primary);">Does the test data <strong>actually exercise the scenario</strong>, or is it always-valid data?</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:var(--accent);font-weight:700;flex-shrink:0;">?</span>
+            <div style="font-size:0.88rem;color:var(--text-primary);">Do I understand <strong>every line</strong> of this test? If not, ask AI to explain it.</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:0.85rem;color:var(--text-dim);">A test you understand and trust is worth more than five tests you just accepted.</div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — Building a Full Suite ─── -->
+  <div class="slide" data-title="Building a Full Suite" data-notes="Show how the four strategies combine into a systematic workflow for building a complete test suite for a new feature. This is what a real AI-assisted test session looks like in practice.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Building a full suite — the workflow</h2>
+      <svg viewBox="0 0 700 260" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <rect width="700" height="260" rx="12" fill="#13111d"/>
+        <!-- Stage boxes -->
+        <!-- Stage 1: blue -->
+        <rect x="18" y="28" width="144" height="90" rx="8" fill="#1a1828" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="90" y="52" font-size="14" fill="#6fa3f7" font-weight="700" text-anchor="middle">Single test</text>
+        <text x="90" y="70" font-size="12" fill="#a0a0b8" text-anchor="middle">1 happy path</text>
+        <text x="90" y="90" font-size="11" fill="#6a6a80" text-anchor="middle">Start here.</text>
+        <text x="90" y="104" font-size="11" fill="#6a6a80" text-anchor="middle">AI writes scaffold.</text>
+        <!-- Arrow 1→2 -->
+        <line x1="162" y1="73" x2="183" y2="73" stroke="#4a4a60" stroke-width="1.5"/>
+        <polygon points="183,69 191,73 183,77" fill="#4a4a60"/>
+        <!-- Stage 2: purple -->
+        <rect x="191" y="28" width="144" height="90" rx="8" fill="#1a1828" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="263" y="52" font-size="14" fill="#b08cf5" font-weight="700" text-anchor="middle">Test group</text>
+        <text x="263" y="70" font-size="12" fill="#a0a0b8" text-anchor="middle">Happy + 3 edge</text>
+        <text x="263" y="90" font-size="11" fill="#6a6a80" text-anchor="middle">Ask AI: what</text>
+        <text x="263" y="104" font-size="11" fill="#6a6a80" text-anchor="middle">can go wrong?</text>
+        <!-- Arrow 2→3 -->
+        <line x1="335" y1="73" x2="356" y2="73" stroke="#4a4a60" stroke-width="1.5"/>
+        <polygon points="356,69 364,73 356,77" fill="#4a4a60"/>
+        <!-- Stage 3: amber -->
+        <rect x="364" y="28" width="144" height="90" rx="8" fill="#1a1828" stroke="#e8a848" stroke-width="1.5"/>
+        <text x="436" y="46" font-size="14" fill="#e8a848" font-weight="700" text-anchor="middle">Feature coverage</text>
+        <text x="436" y="62" font-size="12" fill="#a0a0b8" text-anchor="middle">Login, logout,</text>
+        <text x="436" y="76" font-size="12" fill="#a0a0b8" text-anchor="middle">session</text>
+        <text x="436" y="92" font-size="11" fill="#6a6a80" text-anchor="middle">Ask AI: what else</text>
+        <text x="436" y="106" font-size="11" fill="#6a6a80" text-anchor="middle">needs testing?</text>
+        <!-- Arrow 3→4 -->
+        <line x1="508" y1="73" x2="529" y2="73" stroke="#4a4a60" stroke-width="1.5"/>
+        <polygon points="529,69 537,73 529,77" fill="#4a4a60"/>
+        <!-- Stage 4: green -->
+        <rect x="537" y="28" width="145" height="90" rx="8" fill="#1a1828" stroke="#5ec269" stroke-width="1.5"/>
+        <text x="609" y="46" font-size="14" fill="#5ec269" font-weight="700" text-anchor="middle">Full suite</text>
+        <text x="609" y="62" font-size="12" fill="#a0a0b8" text-anchor="middle">All features,</text>
+        <text x="609" y="76" font-size="12" fill="#a0a0b8" text-anchor="middle">data driven</text>
+        <text x="609" y="92" font-size="11" fill="#6a6a80" text-anchor="middle">AI maintains</text>
+        <text x="609" y="106" font-size="11" fill="#6a6a80" text-anchor="middle">&amp; refactors</text>
+        <!-- Divider -->
+        <line x1="18" y1="138" x2="682" y2="138" stroke="#2a2840" stroke-width="1"/>
+        <!-- AI contribution labels -->
+        <text x="14" y="156" font-size="10" fill="#4a4a60" letter-spacing="1">AI CONTRIBUTES AT EACH STAGE</text>
+        <!-- Stage 1 contribution -->
+        <rect x="18" y="162" width="144" height="80" rx="6" fill="#13111d" stroke="#2a2840" stroke-width="1"/>
+        <text x="90" y="183" font-size="11" fill="#6fa3f7" text-anchor="middle">Writes initial code</text>
+        <!-- Stage 2 contribution -->
+        <rect x="191" y="162" width="144" height="80" rx="6" fill="#13111d" stroke="#2a2840" stroke-width="1"/>
+        <text x="263" y="183" font-size="11" fill="#b08cf5" text-anchor="middle">Suggests edge cases</text>
+        <!-- Stage 3 contribution -->
+        <rect x="364" y="162" width="144" height="80" rx="6" fill="#13111d" stroke="#2a2840" stroke-width="1"/>
+        <text x="436" y="183" font-size="11" fill="#e8a848" text-anchor="middle">Identifies coverage</text>
+        <text x="436" y="198" font-size="11" fill="#e8a848" text-anchor="middle">gaps</text>
+        <!-- Stage 4 contribution -->
+        <rect x="537" y="162" width="145" height="80" rx="6" fill="#13111d" stroke="#2a2840" stroke-width="1"/>
+        <text x="609" y="183" font-size="11" fill="#5ec269" text-anchor="middle">Flags duplication,</text>
+        <text x="609" y="198" font-size="11" fill="#5ec269" text-anchor="middle">refactors patterns</text>
+      </svg>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;">S1</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Generate from acceptance criteria</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Write the core happy-path and documented error scenarios</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;">S3</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Ask AI to identify gaps</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Show it what you have, get a list of missing edge cases</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;">S4</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Generate test data fixtures</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Create the realistic data your tests will use across all scenarios</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:700;color:var(--cyan);background:rgba(78,205,196,0.1);padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:2px;">✓</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Review, run, iterate</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Read every assertion, run the suite, fix failures with AI assistance, commit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — Common Mistakes ─── -->
+  <div class="slide" data-title="Common Mistakes" data-notes="Run through these quickly. They're the patterns that trip up QA engineers who are new to AI-assisted test writing.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Mistakes to avoid</h2>
+      <div style="display:grid;gap:10px;">
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="color:var(--red);font-size:1.1rem;flex-shrink:0;">✗</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">"Write tests for my checkout feature" (no context)</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Without acceptance criteria, selectors, framework, or constraints — the output is a generic template with no real value.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="color:var(--red);font-size:1.1rem;flex-shrink:0;">✗</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Accepting tests without running them first</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Always run generated tests before committing. Syntax issues, wrong selectors, missing imports — they happen.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="color:var(--red);font-size:1.1rem;flex-shrink:0;">✗</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Only writing happy-path tests</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">The most valuable tests are the ones that fail when something goes wrong. Always include error scenarios.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="color:var(--red);font-size:1.1rem;flex-shrink:0;">✗</div>
+          <div><div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Using AI selectors without checking they exist</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">AI may invent plausible-looking selectors that don't exist in your actual DOM. Always verify selectors in the browser.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="Bring the session home. The big message: AI handles the typing, you handle the thinking. Your testing knowledge makes you a far more effective AI-assisted test writer than someone who just asks for generic tests.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:24px;">Key takeaways</h2>
+      <div class="takeaway-list">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">You bring the strategy, AI brings the code</div>
+            <div class="takeaway-desc">AI can't invent your acceptance criteria or know your business rules. You provide those — AI handles the implementation.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Four strategies for different starting points</div>
+            <div class="takeaway-desc">Feature description → existing code → edge case finding → test data. Pick the right one for your situation.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Ask for scenarios before code</div>
+            <div class="takeaway-desc">Validating the test plan first catches strategy errors cheaply — before any code is written.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Review every assertion — not just that it runs</div>
+            <div class="takeaway-desc">A passing test that doesn't actually test your feature is a false confidence trap. Read every assert.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — Bridge to Session 08 ─── -->
+  <div class="slide" data-title="What's Next" data-notes="Next session tackles the other side: debugging. When tests fail and you don't know why — or when tests are flaky and you can't reproduce the failure consistently — AI becomes your debugging partner. That's Session 08.">
+    <div class="slide-inner" style="text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:24px;">Session 07 Complete</div>
+      <h2 style="font-size:2rem;margin-bottom:14px;">Up next: <span style="color:var(--accent)">Session 08</span></h2>
+      <p style="color:var(--text-secondary);font-size:0.95rem;max-width:460px;margin:0 auto 32px;line-height:1.7;">Debugging Tests with AI — Stop Guessing, Start Asking</p>
+      <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;max-width:420px;margin:0 auto;text-align:left;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">What we'll cover</div>
+        <ul style="list-style:none;display:grid;gap:8px;font-size:0.85rem;color:var(--text-secondary);">
+          <li>· Giving AI the right context to diagnose failures</li>
+          <li>· Error message investigation patterns</li>
+          <li>· Flaky test diagnosis</li>
+          <li>· Timeout and selector issues in Playwright</li>
+          <li>· When AI gets it wrong — cross-checking suggestions</li>
+        </ul>
+      </div>
+    </div>
+  </div>

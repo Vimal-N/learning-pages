@@ -1,0 +1,600 @@
+---
+layout: session.njk
+title: Session 15 — Opencode with GitHub Copilot
+sessionNumber: "15"
+sessionTitle: "Opencode with GitHub Copilot"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="This session connects two tools the team already knows: GitHub Copilot (from Phase 2) and Opencode (from Session 10). The key insight is that Copilot is not just an IDE tool — it&apos;s also a model provider. Opencode can talk to Copilot&apos;s models directly, giving you full terminal agent capabilities without a separate Anthropic API key or billing account.&lt;br&gt;&lt;br&gt;By the end of this session, everyone will have a working Opencode setup that uses their existing Copilot subscription to power a terminal agent.">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">⚡ Session 15 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools</div>
+      <h1 style="font-size:2.2rem;margin-bottom:16px;line-height:1.2;">Opencode <span style="color:var(--accent)">×</span> GitHub Copilot<br><span style="font-size:1.6rem;color:var(--text-secondary);">Terminal Agent, Copilot-Powered</span></h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Your Copilot subscription already includes Claude, GPT-4o, and more. This session shows you how to unlock them as a full terminal agent — no extra API key required.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">45 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 10</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — The Value Proposition ─── -->
+  <div class="slide" data-title="Why This Combination" data-notes="The core message: most people think of GitHub Copilot as a VS Code plugin. But it&apos;s actually a model subscription — and Opencode lets you use that subscription in the terminal.&lt;br&gt;&lt;br&gt;The practical impact: your team already pays for Copilot. If you&apos;ve been hesitant to set up Claude Code because of the separate API billing, this session gives you an alternative: all the same terminal agent power, using the budget you already have approved.&lt;br&gt;&lt;br&gt;Analogy: you&apos;ve already rented a powerful car (Copilot). Opencode is a second steering wheel — it lets you drive the same engine from a different position (the terminal).">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Why combine Opencode with Copilot?</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">What you already have</div>
+          <div style="display:grid;gap:8px;font-size:0.84rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">✓</span> GitHub Copilot subscription (Individual or Business)</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">✓</span> Access to Claude, GPT-4o, o1, Gemini via Copilot</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--green);flex-shrink:0;">✓</span> Copilot completions + Chat + Agent Mode in VS Code</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--text-dim);flex-shrink:0;">✗</span> <span style="color:var(--text-muted);">No terminal agent — you&apos;re limited to the IDE</span></div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid var(--accent);padding:20px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px;">What Opencode adds</div>
+          <div style="display:grid;gap:8px;font-size:0.84rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">+</span> Full codebase exploration — reads every file, every directory</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">+</span> Shell command execution — run tests, install packages, git</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">+</span> Works anywhere — no VS Code needed, just a terminal</div>
+            <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--accent);flex-shrink:0;">+</span> Billed to your existing Copilot subscription</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.25);border-radius:8px;padding:12px 16px;font-size:0.85rem;color:var(--text-secondary);text-align:center;">
+        Same models, same subscription — plus the power of a terminal agent workflow
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — Provider Architecture (SVG) ─── -->
+  <div class="slide" data-title="How Opencode Connects" data-notes="Opencode is model-agnostic — it doesn&apos;t care which AI it talks to. You configure a provider and model, and the terminal agent experience is identical regardless of which backend is running.&lt;br&gt;&lt;br&gt;This diagram shows the four main providers. GitHub Copilot is highlighted because it&apos;s the focus of this session — and because it&apos;s the one your team already has access to.&lt;br&gt;&lt;br&gt;The key design insight: Opencode separates the interface (the TUI, the workflow, the GCSV prompts) from the model. This means everything you learned in Sessions 10-12 applies here — you&apos;re just changing one line in a config file.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Opencode is model-agnostic — you choose the provider</h2>
+      <svg viewBox="0 0 580 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:580px;display:block;margin:0 auto 14px;">
+        <!-- Background -->
+        <rect width="580" height="310" rx="12" fill="#13111d"/>
+        <!-- Dashed lines to providers -->
+        <line x1="290" y1="155" x2="290" y2="62" stroke="#3a3560" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <line x1="290" y1="155" x2="476" y2="155" stroke="#3a3560" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <line x1="290" y1="155" x2="290" y2="252" stroke="#3a3560" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <!-- GitHub Copilot line — solid, highlighted -->
+        <line x1="290" y1="155" x2="104" y2="155" stroke="#5ec269" stroke-width="2.5"/>
+        <polygon points="108,150 100,155 108,160" fill="#5ec269"/>
+        <!-- Center: Opencode -->
+        <rect x="220" y="125" width="140" height="60" rx="10" fill="#e8a848" fill-opacity="0.12"/>
+        <rect x="220" y="125" width="140" height="60" rx="10" fill="none" stroke="#e8a848" stroke-width="2"/>
+        <text x="290" y="149" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" font-weight="700" fill="#e8a848">Opencode</text>
+        <text x="290" y="167" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#a89060">terminal agent</text>
+        <!-- GitHub Copilot (left, highlighted) -->
+        <rect x="14" y="125" width="150" height="60" rx="8" fill="#5ec269" fill-opacity="0.10"/>
+        <rect x="14" y="125" width="150" height="60" rx="8" fill="none" stroke="#5ec269" stroke-width="2"/>
+        <text x="89" y="147" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#5ec269">GitHub Copilot</text>
+        <text x="89" y="162" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4aaa52">Claude · GPT-4o · o1</text>
+        <rect x="30" y="172" width="118" height="7" rx="3" fill="#5ec269" fill-opacity="0.25"/>
+        <text x="89" y="179" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#5ec269">← this session</text>
+        <!-- Anthropic (top) -->
+        <rect x="215" y="20" width="150" height="52" rx="8" fill="#b08cf5" fill-opacity="0.10"/>
+        <rect x="215" y="20" width="150" height="52" rx="8" fill="none" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="290" y="42" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#b08cf5">Anthropic</text>
+        <text x="290" y="58" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#907ac8">Claude direct API</text>
+        <!-- OpenAI (right) -->
+        <rect x="416" y="125" width="150" height="52" rx="8" fill="#6fa3f7" fill-opacity="0.10"/>
+        <rect x="416" y="125" width="150" height="52" rx="8" fill="none" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="491" y="147" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#6fa3f7">OpenAI</text>
+        <text x="491" y="162" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a82c5">GPT-4o direct API</text>
+        <!-- Ollama (bottom) -->
+        <rect x="215" y="240" width="150" height="52" rx="8" fill="#4ecdc4" fill-opacity="0.10"/>
+        <rect x="215" y="240" width="150" height="52" rx="8" fill="none" stroke="#4ecdc4" stroke-width="1.5"/>
+        <text x="290" y="262" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#4ecdc4">Ollama</text>
+        <text x="290" y="278" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#38aaa2">Local models (free)</text>
+        <!-- Bottom label -->
+        <text x="290" y="302" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a4570">Same workflow · Same commands · Change one line in config to switch provider</text>
+      </svg>
+      <div style="text-align:center;font-size:0.8rem;color:var(--text-dim);">The terminal agent workflow — GCSV prompts, staged tasks, git checkpoints — is identical regardless of which provider you use.</div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — Models Inside Copilot ─── -->
+  <div class="slide" data-title="Models in Your Copilot Subscription" data-notes="GitHub Copilot now provides access to a range of frontier models through its API — not just GitHub&apos;s own model. This is a relatively recent change (2024-2025) that transformed Copilot from a code completion tool into a multi-model platform.&lt;br&gt;&lt;br&gt;The exact models available depend on your Copilot tier (Individual vs Business vs Enterprise). Claude Sonnet is generally available on Individual. The premium models (o1, Claude Opus) typically require Business or Enterprise.&lt;br&gt;&lt;br&gt;For most QA tasks in this training: claude-sonnet-4 is the recommended default. It provides the best combination of reasoning quality and response speed.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Models inside your Copilot subscription</h2>
+      <div style="display:grid;gap:8px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:200px 1fr 100px;gap:12px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:2px solid var(--accent);align-items:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.8rem;font-weight:700;color:var(--accent);">claude-sonnet-4</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Best overall reasoning, code quality, and multi-file understanding. Most coherent for long QA tasks.</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;background:var(--accent-soft);color:var(--accent);padding:3px 8px;border-radius:4px;text-align:center;">Recommended</div>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 1fr 100px;gap:12px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.8rem;font-weight:700;color:var(--blue);">gpt-4o</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Fast responses, good for quick questions, code generation, and explanations. Lower cost per token.</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;background:rgba(111,163,247,0.12);color:var(--blue);padding:3px 8px;border-radius:4px;text-align:center;">Fast</div>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 1fr 100px;gap:12px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.8rem;font-weight:700;color:var(--purple);">o1 / o3-mini</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Deep reasoning — best for complex debugging, algorithmic problems. Slower; use when you need maximum accuracy.</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;background:rgba(176,140,245,0.12);color:var(--purple);padding:3px 8px;border-radius:4px;text-align:center;">Deep</div>
+        </div>
+        <div style="display:grid;grid-template-columns:200px 1fr 100px;gap:12px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.8rem;font-weight:700;color:var(--cyan);">gemini-1.5-pro</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Huge context window (1M tokens). Best for reading and understanding very large test suites or documentation.</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;background:rgba(78,205,196,0.12);color:var(--cyan);padding:3px 8px;border-radius:4px;text-align:center;">Wide ctx</div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.8rem;color:var(--text-secondary);">
+        <strong style="color:var(--text-primary);">Note:</strong> Available models depend on your Copilot tier. Check github.com/settings/copilot to see which models your plan includes. Business and Enterprise plans include premium models.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — Prerequisites ─── -->
+  <div class="slide" data-title="Prerequisites" data-notes="Before anyone tries to configure this, make sure the checklist is complete. The most common failure is people trying to use Opencode without being authenticated to GitHub CLI — they get an Unauthorized error and aren&apos;t sure why.&lt;br&gt;&lt;br&gt;Walk through the checklist live. Ask who has each item. The Copilot subscription is the gate — if they don&apos;t have it, they can&apos;t proceed, but they can follow along conceptually.&lt;br&gt;&lt;br&gt;Node.js 18+ is important — Opencode requires modern Node.js. If anyone has an older version (16 or below), they&apos;ll need to update first.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Before you start — prerequisites checklist</h2>
+      <div style="display:grid;gap:10px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:4px;flex-shrink:0;margin-top:1px;">1</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Active GitHub Copilot subscription</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:2px;">Individual, Business, or Enterprise. Verify at github.com/settings/copilot — it should show your plan is active.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:4px;flex-shrink:0;margin-top:1px;">2</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">GitHub CLI installed and authenticated</div>
+            <div class="code-block" style="font-size:0.78rem;margin-top:6px;padding:8px 10px;">
+              <span class="cm"># Install (macOS)</span><br>
+              brew install gh<br>
+              <span class="cm"># Install (Windows)</span><br>
+              winget install GitHub.cli<br>
+              <span class="cm"># Authenticate</span><br>
+              gh auth login
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:4px;flex-shrink:0;margin-top:1px;">3</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Node.js 18 or higher</div>
+            <div class="code-block" style="font-size:0.78rem;margin-top:6px;padding:8px 10px;">node --version <span class="cm"># should show v18.x or higher</span></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:4px;flex-shrink:0;margin-top:1px;">4</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Opencode installed</div>
+            <div class="code-block" style="font-size:0.78rem;margin-top:6px;padding:8px 10px;">
+              <span class="cm"># Via npm (all platforms)</span><br>
+              npm install -g opencode-ai<br>
+              <span class="cm"># Via Homebrew (macOS)</span><br>
+              brew install sst/tap/opencode<br>
+              <span class="cm"># Verify</span><br>
+              opencode --version
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — Authentication ─── -->
+  <div class="slide" data-title="Step 1 — Authentication" data-notes="Two ways to get the token. The GitHub CLI approach (recommended) is more secure — it uses your existing GitHub session, so the token has the right scopes automatically and you don&apos;t have to manage expiry manually. Each time you run the export command, you get a fresh token.&lt;br&gt;&lt;br&gt;The PAT approach is useful if you don&apos;t want to install GitHub CLI, or if you&apos;re setting this up on a machine where GitHub CLI isn&apos;t available. The token needs the copilot scope — without it, the authentication will succeed but model calls will fail with a permission error.&lt;br&gt;&lt;br&gt;The environment variable GITHUB_TOKEN is what Opencode looks for. You can set it in your shell profile (.zshrc / .bashrc) to avoid exporting it each time.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Step 1 — Getting your GitHub token</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid var(--green);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:12px;">Recommended — GitHub CLI</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:10px;">Uses your existing GitHub login. No new token to create or manage.</div>
+          <div class="code-block" style="font-size:0.78rem;line-height:1.8;">
+            <span class="cm"># Verify GitHub CLI is logged in</span><br>
+            gh auth status<br><br>
+            <span class="cm"># Export the token into your shell</span><br>
+            <span class="kw">export</span> GITHUB_TOKEN=$(<span class="fn">gh auth token</span>)<br><br>
+            <span class="cm"># Confirm it&apos;s set (shows first 10 chars)</span><br>
+            <span class="fn">echo</span> $GITHUB_TOKEN | <span class="fn">head</span> -c 10
+          </div>
+          <div style="margin-top:10px;font-size:0.75rem;color:var(--text-dim);">The token starts with <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">ghu_</code> — that&apos;s a GitHub user token, which is what you need.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">Alternative — Personal Access Token</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:10px;">Create at github.com/settings/tokens — use a Fine-grained PAT.</div>
+          <div style="display:grid;gap:8px;font-size:0.8rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:8px;"><span style="color:var(--accent);font-weight:700;flex-shrink:0;">1.</span> Go to github.com/settings/tokens</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--accent);font-weight:700;flex-shrink:0;">2.</span> Create a new Fine-grained token</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--accent);font-weight:700;flex-shrink:0;">3.</span> Under Permissions → Repository → Copilot: Read &amp; Write</div>
+            <div style="display:flex;gap:8px;"><span style="color:var(--accent);font-weight:700;flex-shrink:0;">4.</span> Copy the token (starts with <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">github_pat_</code>)</div>
+          </div>
+          <div class="code-block" style="font-size:0.78rem;margin-top:10px;padding:8px 10px;"><span class="kw">export</span> GITHUB_TOKEN=<span class="str">github_pat_xxxx</span></div>
+        </div>
+      </div>
+      <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:10px 16px;font-size:0.8rem;color:var(--text-secondary);">Add the export line to your <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">~/.zshrc</code> or <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">~/.bashrc</code> so you don&apos;t have to run it every time you open a terminal.</div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — Config File ─── -->
+  <div class="slide" data-title="Step 2 — Config File" data-notes="The config file is how you tell Opencode which provider and model to use by default. Without it, Opencode will ask you to choose a provider when you first launch — the config makes that persistent.&lt;br&gt;&lt;br&gt;Walk through each labelled field. The provider block (A) tells Opencode where to look up the API key. The apiKey field (C) can be a literal string — but using the environment variable reference means your token never appears in a file on disk, which is more secure.&lt;br&gt;&lt;br&gt;The model ID format (D) is always &apos;provider/model-name&apos;. GitHub is the provider prefix for all Copilot models. The model name should match what Copilot exposes — check with opencode models list if you&apos;re not sure.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Step 2 — The Opencode config file, annotated</h2>
+      <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px 20px;margin-bottom:14px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px;">~/.config/opencode/config.json</div>
+        <div class="code-block" style="font-size:0.82rem;line-height:2.0;">
+          {{ '{' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:0.75rem;">← A: root config object</span><br>
+          &nbsp;&nbsp;<span class="str">"provider"</span>: {{ '{' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--blue);font-family:'IBM Plex Mono',monospace;font-size:0.75rem;">← A: provider block</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"github"</span>: {{ '{' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--blue);font-family:'IBM Plex Mono',monospace;font-size:0.75rem;">← B: provider name</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"apiKey"</span>: <span class="str">"${GITHUB_TOKEN}"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--green);font-family:'IBM Plex Mono',monospace;font-size:0.75rem;">← C: reads from env var</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;{{ '}' }}<br>
+          &nbsp;&nbsp;{{ '}' }},<br>
+          &nbsp;&nbsp;<span class="str">"model"</span>: <span class="str">"github/claude-sonnet-4"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--purple);font-family:'IBM Plex Mono',monospace;font-size:0.75rem;">← D: provider/model-name</span><br>
+          {{ '}' }}
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.8rem;">
+        <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--blue);"><strong style="color:var(--blue);">B — "github":</strong> <span style="color:var(--text-secondary);">The provider name. Tells Opencode to use GitHub&apos;s Copilot API endpoint. Use "anthropic" for direct Claude, "openai" for direct GPT-4o.</span></div>
+        <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--green);"><strong style="color:var(--green);">C — apiKey:</strong> <span style="color:var(--text-secondary);">The <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">${GITHUB_TOKEN}</code> syntax reads from your environment — your token never lives in this file as plain text.</span></div>
+        <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--purple);"><strong style="color:var(--purple);">D — model:</strong> <span style="color:var(--text-secondary);">Format is always <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">provider/model-name</code>. The "github/" prefix routes through Copilot&apos;s API rather than Anthropic&apos;s directly.</span></div>
+        <div style="padding:10px 14px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);">Tip:</strong> <span style="color:var(--text-secondary);">Run <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;">opencode models list</code> to see every model name available through your configured provider.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — Launch and First Run ─── -->
+  <div class="slide" data-title="Step 3 — Launch Opencode" data-notes="Three commands — that&apos;s all it takes to start your first Copilot-powered terminal agent session. Once you&apos;re inside Opencode, the workflow is identical to what was covered in Sessions 10 and 11: GCSV prompts, staged tasks, reading agent output.&lt;br&gt;&lt;br&gt;Switching models mid-session is useful when you start with claude-sonnet-4 for deep analysis and want to switch to gpt-4o for faster answers to simpler follow-up questions. The /model command (or Ctrl+M depending on version) shows a searchable list of all available models.&lt;br&gt;&lt;br&gt;The /help command is worth showing — it lists all available slash commands in the current version.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Step 3 — Launch Opencode and start a session</h2>
+      <div style="display:grid;gap:12px;margin-bottom:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Starting a session</div>
+          <div class="code-block" style="font-size:0.84rem;line-height:1.9;">
+            <span class="cm"># 1. Make sure your token is set</span><br>
+            <span class="kw">export</span> GITHUB_TOKEN=$(<span class="fn">gh auth token</span>)<br><br>
+            <span class="cm"># 2. Go to your project</span><br>
+            <span class="kw">cd</span> your-qa-project<br><br>
+            <span class="cm"># 3. Launch Opencode</span><br>
+            <span class="fn">opencode</span>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">Useful commands inside Opencode</div>
+          <div style="display:grid;gap:6px;font-size:0.82rem;">
+            <div style="display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:baseline;">
+              <code style="font-family:'IBM Plex Mono',monospace;color:var(--accent);">/model</code>
+              <span style="color:var(--text-secondary);">Open the model picker — switch to a different Copilot model mid-session</span>
+            </div>
+            <div style="display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:baseline;">
+              <code style="font-family:'IBM Plex Mono',monospace;color:var(--accent);">/new</code>
+              <span style="color:var(--text-secondary);">Start a fresh session — resets context, keeps your config</span>
+            </div>
+            <div style="display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:baseline;">
+              <code style="font-family:'IBM Plex Mono',monospace;color:var(--accent);">/compact</code>
+              <span style="color:var(--text-secondary);">Summarise and compress the conversation to free up context window space</span>
+            </div>
+            <div style="display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:baseline;">
+              <code style="font-family:'IBM Plex Mono',monospace;color:var(--accent);">Ctrl+C</code>
+              <span style="color:var(--text-secondary);">Stop the current agent action (mid-stream, before it finishes)</span>
+            </div>
+            <div style="display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:baseline;">
+              <code style="font-family:'IBM Plex Mono',monospace;color:var(--accent);">/help</code>
+              <span style="color:var(--text-secondary);">List all available slash commands in the current version</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — TUI Interface (SVG) ─── -->
+  <div class="slide" data-title="The Opencode TUI" data-notes="Orient people to the interface before they use it. The Opencode TUI has four zones — once you know where each is, navigation becomes instinctive. The most important zone is the conversation panel: this is where you type your task and read the agent&apos;s output.&lt;br&gt;&lt;br&gt;The context panel on the left shows which files Opencode has read into its working context. Watching this panel grow as the agent explores your project is a good indicator that it understood your task description.&lt;br&gt;&lt;br&gt;The token counter in the status bar is useful for managing context: as you approach the model&apos;s limit, the counter turns red. That&apos;s your cue to use /compact or start a new session.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:14px;">The Opencode TUI — every panel explained</h2>
+      <svg viewBox="0 0 620 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:620px;display:block;margin:0 auto 10px;">
+        <!-- Terminal frame -->
+        <rect width="620" height="340" rx="10" fill="#0d0b12"/>
+        <!-- Title bar -->
+        <rect width="620" height="30" rx="10" fill="#1e1a2e"/>
+        <rect y="22" width="620" height="8" fill="#1e1a2e"/>
+        <circle cx="16" cy="15" r="5" fill="#e85c5c" opacity="0.8"/>
+        <circle cx="32" cy="15" r="5" fill="#e8a848" opacity="0.8"/>
+        <circle cx="48" cy="15" r="5" fill="#5ec269" opacity="0.8"/>
+        <text x="310" y="20" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#4a4570">opencode</text>
+
+        <!-- Status bar (top) -->
+        <rect y="30" width="620" height="26" fill="#1a1728"/>
+        <text x="10" y="47" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#e8a848">github/claude-sonnet-4</text>
+        <text x="200" y="47" font-family="IBM Plex Mono, monospace" font-size="10" fill="#3a3560">│</text>
+        <text x="210" y="47" font-family="IBM Plex Mono, monospace" font-size="10" fill="#5a5580">tokens: 2,841 / 200k</text>
+        <text x="480" y="47" font-family="IBM Plex Mono, monospace" font-size="10" fill="#5a5580">session: qa-tests</text>
+        <!-- Status bar annotation -->
+        <line x1="310" y1="30" x2="310" y2="16" stroke="#6fa3f7" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="310" y="11" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6fa3f7">A — Status bar: model, tokens, session</text>
+
+        <!-- Left panel -->
+        <rect x="0" y="56" width="170" height="250" fill="#13111d"/>
+        <rect x="0" y="56" width="170" height="20" fill="#1a1728"/>
+        <text x="10" y="70" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a4570">CONTEXT</text>
+        <text x="8" y="90" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6fa3f7">📄 tests/login.spec.ts</text>
+        <text x="8" y="105" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6fa3f7">📄 tests/pages/loginPage.ts</text>
+        <text x="8" y="120" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a4570">📄 playwright.config.ts</text>
+        <text x="8" y="135" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a4570">📄 package.json</text>
+        <rect x="170" y="56" width="1" height="250" fill="#2a2540"/>
+        <!-- Left panel annotation -->
+        <line x1="85" y1="56" x2="85" y2="42" stroke="#4ecdc4" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="85" y="37" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4ecdc4">B — Context files the agent has read</text>
+
+        <!-- Right panel — conversation -->
+        <rect x="171" y="56" width="449" height="213" fill="#0f0d18"/>
+        <!-- AI message bubble -->
+        <rect x="182" y="66" width="428" height="78" rx="5" fill="#1a1728"/>
+        <text x="194" y="82" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5ec269">● claude-sonnet-4</text>
+        <text x="194" y="97" font-family="IBM Plex Mono, monospace" font-size="9" fill="#c8c0e0">I found 8 instances of waitForTimeout() across your</text>
+        <text x="194" y="111" font-family="IBM Plex Mono, monospace" font-size="9" fill="#c8c0e0">test suite. Replacing with proper network-idle waits...</text>
+        <text x="194" y="126" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5ec269">✓ tests/login.spec.ts  ✓ tests/checkout.spec.ts +6</text>
+        <!-- User message bubble -->
+        <rect x="182" y="154" width="428" height="36" rx="5" fill="#1e1a2e"/>
+        <text x="194" y="169" font-family="IBM Plex Mono, monospace" font-size="9" fill="#e8a848">● you</text>
+        <text x="194" y="183" font-family="IBM Plex Mono, monospace" font-size="9" fill="#d0c8e8">Run the tests and confirm they all pass now.</text>
+        <!-- Conversation annotation -->
+        <line x1="395" y1="56" x2="395" y2="42" stroke="#b08cf5" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="395" y="37" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#b08cf5">C — Conversation: your tasks + agent responses</text>
+
+        <!-- Input bar -->
+        <rect x="171" y="269" width="449" height="37" fill="#13111d"/>
+        <rect x="171" y="269" width="449" height="1" fill="#2a2540"/>
+        <text x="184" y="291" font-family="IBM Plex Mono, monospace" font-size="9" fill="#4a4570">▸ </text>
+        <text x="198" y="291" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6a6090">Write your next task (GCSV format)...</text>
+        <rect x="556" y="275" width="55" height="20" rx="3" fill="#e8a848" fill-opacity="0.15"/>
+        <text x="584" y="289" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#e8a848">Enter ↵</text>
+        <!-- Input annotation -->
+        <line x1="395" y1="306" x2="395" y2="318" stroke="#e8a848" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="395" y="328" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#e8a848">D — Input bar: type your task, Enter to send</text>
+
+        <!-- Slash commands bar at bottom -->
+        <rect y="306" width="620" height="34" fill="#13111d"/>
+        <rect y="306" width="620" height="1" fill="#1e1a2e"/>
+        <text x="10" y="328" font-family="IBM Plex Mono, monospace" font-size="9" fill="#3a3560">/model &nbsp;/new &nbsp;/compact &nbsp;/help &nbsp;&nbsp;Ctrl+C: stop &nbsp;&nbsp;Esc: back</text>
+      </svg>
+      <div style="display:flex;gap:20px;justify-content:center;font-size:0.75rem;font-family:'IBM Plex Mono',monospace;">
+        <span style="color:var(--blue);">A — Status bar</span>
+        <span style="color:var(--cyan);">B — Context panel</span>
+        <span style="color:var(--purple);">C — Conversation</span>
+        <span style="color:var(--accent);">D — Input bar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — First QA Task ─── -->
+  <div class="slide" data-title="Your First QA Task" data-notes="Walk through this task step by step, narrating what the agent is doing at each stage. This is the same workflow as Sessions 10 and 11 — GCSV prompt, git checkpoint first, review output.&lt;br&gt;&lt;br&gt;The &apos;waitForTimeout&apos; replacement is a good demo task because it&apos;s something QA engineers genuinely need to do, it spans multiple files, and the agent needs to understand Playwright&apos;s async patterns to replace each instance correctly rather than just doing a text substitution.&lt;br&gt;&lt;br&gt;Pause at step 3 (the diff) and ask the audience: what would you check before approving this change? Reinforce the reviewer mindset from Session 11 — read the diff, check for red flags, then approve.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Your first task — step by step</h2>
+      <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:16px 20px;margin-bottom:12px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:8px;">Task: replace all waitForTimeout() with proper waits</div>
+        <div class="chat-mock">
+          <div class="chat-msg user" style="font-size:0.82em;"><strong>Goal:</strong> Find every waitForTimeout() call in our test suite and replace with the appropriate Playwright wait (waitForLoadState, waitForSelector, waitForResponse — depending on context).<br><strong>Context:</strong> We use Playwright 1.44. Read our playwright.config.ts for project structure. Check tests/ directory.<br><strong>Scope:</strong> Modify only files in tests/. Do not touch playwright.config.ts.<br><strong>Verify:</strong> Run npx playwright test after replacing and confirm all tests pass.</div>
+          <div class="chat-msg ai" style="font-size:0.82em;">Reading project structure... found 8 uses of waitForTimeout() across 5 test files.&lt;br&gt;Analysing context for each: 3 are waiting for page load, 3 for network responses, 2 for element appearance.&lt;br&gt;&lt;br&gt;Proposed replacements:&lt;br&gt;• tests/login.spec.ts:34 — waitForTimeout(2000) → waitForLoadState('networkidle')&lt;br&gt;• tests/checkout.spec.ts:67 — waitForTimeout(1500) → waitForResponse('**/api/cart')&lt;br&gt;[+ 6 more]&lt;br&gt;&lt;br&gt;Shall I apply all 8 changes? [y/n]</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:0.78rem;">
+        <div style="padding:10px;background:var(--bg-elevated);border-radius:6px;border-top:2px solid var(--accent);text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);margin-bottom:4px;">1. Git first</div>
+          <div style="color:var(--text-secondary);">Commit current state before the agent touches any file</div>
+        </div>
+        <div style="padding:10px;background:var(--bg-elevated);border-radius:6px;border-top:2px solid var(--blue);text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--blue);margin-bottom:4px;">2. GCSV prompt</div>
+          <div style="color:var(--text-secondary);">Type the task — Goal, Context, Scope, Verify — as shown above</div>
+        </div>
+        <div style="padding:10px;background:var(--bg-elevated);border-radius:6px;border-top:2px solid var(--purple);text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--purple);margin-bottom:4px;">3. Review diff</div>
+          <div style="color:var(--text-secondary);">Read each proposed change. Approve per-file or reject and redirect</div>
+        </div>
+        <div style="padding:10px;background:var(--bg-elevated);border-radius:6px;border-top:2px solid var(--green);text-align:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--green);margin-bottom:4px;">4. Tests pass</div>
+          <div style="color:var(--text-secondary);">Agent runs tests, all green — commit the result</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — Model Selection Guide ─── -->
+  <div class="slide" data-title="Choosing the Right Model" data-notes="One of the advantages of using Opencode+Copilot is that you have multiple model options and can switch mid-session. This slide gives a practical guide to when to use each one.&lt;br&gt;&lt;br&gt;The key insight: for most day-to-day QA automation tasks, claude-sonnet-4 is the right default. It has the best combination of reasoning depth and coherence over long sessions. Switch to gpt-4o when you want faster iteration on small changes. Switch to o1/o3-mini only when you have a genuinely hard problem (a complex flaky test, an architectural decision) because the wait time is significant.&lt;br&gt;&lt;br&gt;Gemini 1.5 Pro&apos;s 1M context window is a real advantage when you need to read a very large codebase — something Claude Sonnet and GPT-4o can&apos;t hold all at once.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Choosing the right Copilot model for your task</h2>
+      <div style="display:grid;gap:10px;">
+        <div style="display:grid;grid-template-columns:180px 1fr;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:2px solid var(--accent);align-items:start;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.82rem;font-weight:700;color:var(--accent);">claude-sonnet-4</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-top:2px;">Default recommendation</div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Multi-file tasks, writing new test suites, refactoring existing tests, understanding complex code flows. Best reasoning quality — use for anything where accuracy matters more than speed.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:180px 1fr;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.82rem;font-weight:700;color:var(--blue);">gpt-4o</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-top:2px;">Fast iteration</div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Quick follow-up questions, small code changes, generating boilerplate, asking "how does this API work?" Fast responses make it good for when you&apos;re iterating quickly.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:180px 1fr;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.82rem;font-weight:700;color:var(--purple);">o1 / o3-mini</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-top:2px;">Hard problems only</div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Complex flaky test root-cause analysis, architectural decisions, debugging async race conditions. Significantly slower — justify the wait with a genuinely hard problem.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:180px 1fr;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:start;">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.82rem;font-weight:700;color:var(--cyan);">gemini-1.5-pro</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--text-dim);margin-top:2px;">Large codebases</div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">When your test suite or codebase is too large for other models to hold in context — 1M token window means it can read everything at once. Use when context overflow is the problem.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — Three-Way Comparison ─── -->
+  <div class="slide" data-title="Three-Way Comparison" data-notes="This is the comparison people need to make a concrete decision about which tool to reach for. The key insight: Copilot Agent Mode and Opencode+Copilot are using the same models — they&apos;re just different interfaces for accessing them.&lt;br&gt;&lt;br&gt;The practical difference: Agent Mode lives in VS Code and shows diffs inline in the editor. Opencode+Copilot lives in the terminal and shows diffs in the TUI. Neither is objectively better — it&apos;s a workflow preference.&lt;br&gt;&lt;br&gt;Claude Code differs because it uses Anthropic&apos;s API directly — not routed through Copilot. So the billing is separate, but the model is the same Claude Sonnet. If your team has Anthropic API access, Claude Code may produce slightly better results because it&apos;s not going through an intermediary.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Copilot Agent Mode vs Opencode+Copilot vs Claude Code</h2>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.78rem;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--border);">
+              <th style="padding:8px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);font-weight:600;"></th>
+              <th style="padding:8px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--blue);font-weight:600;">Copilot Agent Mode</th>
+              <th style="padding:8px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);font-weight:600;">Opencode + Copilot</th>
+              <th style="padding:8px 12px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);font-weight:600;">Claude Code</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:10px 12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;">Lives in</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">VS Code (IDE)</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Terminal (any)</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Terminal (any)</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:10px 12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;">Model</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Copilot models (Claude, GPT-4o...)</td>
+              <td style="padding:10px 12px;color:var(--green);">Same Copilot models</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Claude direct (Anthropic API)</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:10px 12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;">Billing</td>
+              <td style="padding:10px 12px;color:var(--green);">Copilot subscription</td>
+              <td style="padding:10px 12px;color:var(--green);">Copilot subscription</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Anthropic API (separate)</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:10px 12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;">Diff view</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Inline in editor</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">In TUI pane</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">In terminal output</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:10px 12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;">Codebase scope</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Workspace files</td>
+              <td style="padding:10px 12px;color:var(--green);">Full system access</td>
+              <td style="padding:10px 12px;color:var(--green);">Full system access</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;">Best for</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">You prefer staying in VS Code</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Terminal workflow, no extra API key</td>
+              <td style="padding:10px 12px;color:var(--text-secondary);">Maximum Claude capability, complex tasks</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:10px 14px;font-size:0.8rem;color:var(--text-secondary);">Agent Mode and Opencode+Copilot use the same models — the only difference is where you do the work. Pick the one that fits your workflow.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 13 — Troubleshooting ─── -->
+  <div class="slide" data-title="Troubleshooting" data-notes="These are the four most common failure modes. Have this slide ready during the hands-on portion of the session — people will hit at least one of these when they set it up live.&lt;br&gt;&lt;br&gt;The Unauthorized error is by far the most common. It happens when GITHUB_TOKEN is not set, or has expired. The fix is always the same: re-run the export command.&lt;br&gt;&lt;br&gt;The &apos;model not found&apos; error usually means a typo in the model ID in config.json. The format is exactly provider/model-name — one forward slash, no spaces. Running opencode models list shows the exact strings to use.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Troubleshooting common issues</h2>
+      <div style="display:grid;gap:10px;">
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:16px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--red);background:rgba(232,92,92,0.12);padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:1px;">Error</div>
+            <div>
+              <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);">Unauthorized / 401</div>
+              <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:3px;"><strong style="color:var(--text-muted);">Cause:</strong> GITHUB_TOKEN is missing, expired, or doesn&apos;t have Copilot access.</div>
+              <div class="code-block" style="font-size:0.75rem;margin-top:6px;padding:8px 10px;"><span class="kw">export</span> GITHUB_TOKEN=$(<span class="fn">gh auth token</span>)&nbsp;&nbsp;<span class="cm"># re-run this, then retry</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:16px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--red);background:rgba(232,92,92,0.12);padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:1px;">Error</div>
+            <div>
+              <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);">Model not found</div>
+              <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:3px;"><strong style="color:var(--text-muted);">Cause:</strong> Typo in model ID, or that model isn&apos;t available on your Copilot plan.</div>
+              <div class="code-block" style="font-size:0.75rem;margin-top:6px;padding:8px 10px;">opencode models list&nbsp;&nbsp;<span class="cm"># shows exact model IDs available</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:16px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--red);background:rgba(232,92,92,0.12);padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:1px;">Error</div>
+            <div>
+              <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);">No Copilot access / Forbidden</div>
+              <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:3px;"><strong style="color:var(--text-muted);">Cause:</strong> Your GitHub account doesn&apos;t have an active Copilot subscription, or the subscription doesn&apos;t include API access.</div>
+              <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">Check: github.com/settings/copilot — verify your plan is active and includes model API access.</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);padding:16px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--red);background:rgba(232,92,92,0.12);padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:1px;">Error</div>
+            <div>
+              <div style="font-size:0.85rem;font-weight:600;color:var(--text-primary);">opencode: command not found</div>
+              <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:3px;"><strong style="color:var(--text-muted);">Cause:</strong> Opencode wasn&apos;t installed, or npm global bin isn&apos;t in your PATH.</div>
+              <div class="code-block" style="font-size:0.75rem;margin-top:6px;padding:8px 10px;">npm install -g opencode-ai&nbsp;&nbsp;<span class="cm"># reinstall; then restart your terminal</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 14 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="Celebrate: by the end of this session, everyone who has a Copilot subscription has a working terminal agent. That&apos;s a meaningful capability unlock.&lt;br&gt;&lt;br&gt;The central message to leave with: the interface is Opencode, but the power comes from the same Copilot models they already rely on. There&apos;s no new subscription to justify — just a config file and one export command.&lt;br&gt;&lt;br&gt;The multi-model flexibility is a real practical advantage. Being able to switch between Claude for deep reasoning and GPT-4o for fast iteration — all from the same terminal session — is something neither Claude Code (Claude only) nor Copilot Agent Mode (fixed to whatever VS Code uses) gives you.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:24px;">Key takeaways</h2>
+      <div class="takeaway-list">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Your Copilot subscription is already a model API</div>
+            <div class="takeaway-desc">Opencode gives you terminal agent access to Claude, GPT-4o, o1, and Gemini — all billed to the Copilot subscription you already have. No separate Anthropic account needed.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Setup is three steps: authenticate, configure, launch</div>
+            <div class="takeaway-desc">GitHub CLI token → config.json with provider + model → opencode command. Everything from Sessions 10 and 11 (GCSV prompts, git checkpoints, staged tasks) works identically.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Multi-model flexibility is the unique advantage</div>
+            <div class="takeaway-desc">Use claude-sonnet-4 for deep reasoning tasks, gpt-4o for fast iteration, o1/o3-mini for hard debugging, gemini-1.5-pro for very large codebases. Switch with /model mid-session.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">It&apos;s the same model as Copilot Agent Mode — different interface</div>
+            <div class="takeaway-desc">Copilot Agent Mode and Opencode+Copilot both use Claude Sonnet. The difference is IDE vs terminal workflow. Use whichever fits how you work — the results are equivalent.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 15 — Bridge ─── -->
+  <div class="slide" data-title="Phase 4 Complete" data-notes="Phase 4 is now fully complete. The team has a comprehensive AI toolkit: Copilot completions and chat for in-IDE work, Agent Mode and Opencode+Copilot for agentic tasks, Claude Code for the deepest codebase reasoning. Phase 5 is about connecting these tools to external systems through MCP — which they&apos;ve already covered in sessions 13-16.">
+    <div class="slide-inner" style="text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:24px;">Session 17 Complete · Phase 4 Bonus</div>
+      <h2 style="font-size:2rem;margin-bottom:14px;">You now have a <span style="color:var(--accent);">full toolkit</span></h2>
+      <p style="color:var(--text-secondary);font-size:0.95rem;max-width:480px;margin:0 auto 32px;line-height:1.7;">Copilot for the IDE, Opencode+Copilot or Claude Code for the terminal, MCP servers for custom integrations. The same workflow principles apply everywhere.</p>
+      <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;max-width:440px;margin:0 auto;text-align:left;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">Your complete Phase 4 toolkit</div>
+        <div style="display:grid;gap:8px;font-size:0.84rem;color:var(--text-secondary);">
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;">✓</span> Session 10 — Claude Code &amp; Opencode: introduction</div>
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;">✓</span> Session 11 — GCSV prompts, git checkpoints, context files</div>
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--green);flex-shrink:0;">✓</span> Session 12 — Toolkit comparison &amp; decision framework</div>
+          <div style="display:flex;gap:10px;align-items:center;"><span style="color:var(--accent);flex-shrink:0;">✓</span> Session 17 — Opencode powered by your Copilot subscription</div>
+        </div>
+      </div>
+    </div>
+  </div>

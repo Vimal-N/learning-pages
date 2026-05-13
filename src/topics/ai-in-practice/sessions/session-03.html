@@ -1,0 +1,511 @@
+---
+layout: session.njk
+title: Session 03 — How to Talk to AI — Prompting That Actually Works
+sessionNumber: "03"
+sessionTitle: "How to Talk to AI — Prompting That Actually Works"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="Welcome to what is arguably the most practically useful session in Phase 1. Everything we covered in Sessions 1 and 2 was context. Today is the first session where you leave with skills you can use immediately — today, at your desk, in your actual work.&lt;br&gt;&lt;br&gt;Set the tone: prompting isn&apos;t a mystical art. It&apos;s a learnable skill. Like writing clear bug reports, or writing good acceptance criteria — it takes a bit of practice, and you get better fast.">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">🤖 Session 03 &nbsp;·&nbsp; Phase 1: AI Foundations</div>
+      <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">How to Talk to AI<br><span style="color:var(--accent)">Prompting That<br>Actually Works</span></h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">The difference between a useful AI response and a useless one is usually the quality of the prompt. This session gives you the patterns that matter.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">50 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Beginner</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Sessions 1–2</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — Opening Hook ─── -->
+  <div class="slide" data-title="Same Question, Two Results" data-notes="Show this slide and ask the team: &apos;Which prompt do you think got the better response?&apos; It&apos;s obvious once you see them side by side. Then ask: &apos;What&apos;s the difference?&apos; Let them say it — context, specificity, tools named. This primes the whole session.&lt;br&gt;&lt;br&gt;Key message: the AI is the same in both cases. The LLM didn&apos;t get smarter. The PROMPT got better. That&apos;s entirely within your control.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:6px;">Same AI. Same question. Very different results.</h2>
+      <p style="color:var(--text-secondary);font-size:0.88rem;margin-bottom:18px;">The only thing that changed was how it was asked.</p>
+      <div class="comparison">
+        <div class="comp-col negative">
+          <div class="comp-label">Vague prompt</div>
+          <div class="chat-mock" style="font-size:0.82rem;">
+            <div class="chat-msg user"><div class="chat-label">You</div><div class="chat-bubble">write a test</div></div>
+            <div class="chat-msg ai"><div class="chat-label">AI</div><div class="chat-bubble">Sure! Here&apos;s a basic test example:<br><br><code style="font-family:'IBM Plex Mono',monospace;font-size:0.8em;">function add(a, b) { return a + b; }<br>console.assert(add(2, 3) === 5);</code><br><br>Let me know what kind of test you&apos;d like!</div></div>
+          </div>
+          <div style="margin-top:8px;font-size:0.78rem;color:var(--red);">Not useful. No framework, no context, no relevance to your work.</div>
+        </div>
+        <div class="comp-col positive">
+          <div class="comp-label">Specific prompt</div>
+          <div class="chat-mock" style="font-size:0.82rem;">
+            <div class="chat-msg user"><div class="chat-label">You</div><div class="chat-bubble">Write a Playwright test in TypeScript that verifies the login page at /login redirects to /dashboard after a valid email and password are entered. Use the Page Object Model pattern.</div></div>
+            <div class="chat-msg ai"><div class="chat-label">AI</div><div class="chat-bubble">Here&apos;s a Playwright test using POM for the login flow...<br><br><em style="color:rgba(255,255,255,0.5)">[Generates a complete, usable test file]</em></div></div>
+          </div>
+          <div style="margin-top:8px;font-size:0.78rem;color:var(--green);">Immediately usable. Right framework, right pattern, right scope.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — Agenda ─── -->
+  <div class="slide" data-title="Today's Agenda" data-notes="Quick overview — under 60 seconds. Tell them: &apos;First we&apos;ll cover the theory — the four parts of a good prompt. Then we&apos;ll look at the most common mistakes. Then we&apos;ll get into QA-specific patterns you can use today.&apos;">
+    <div class="slide-inner">
+      <div class="session-badge" style="margin-bottom:18px;">Today&apos;s Session</div>
+      <h2 style="font-size:1.8rem;margin-bottom:24px;">What we&apos;re covering</h2>
+      <div style="display:grid;gap:12px;max-width:600px;">
+        <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;min-width:28px;">01</div>
+          <div style="font-size:0.9rem;">What a prompt really is — and why it matters so much</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;min-width:28px;">02</div>
+          <div style="font-size:0.9rem;">The four elements of a strong prompt</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;min-width:28px;">03</div>
+          <div style="font-size:0.9rem;">Common prompting mistakes (and how to fix them)</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;min-width:28px;">04</div>
+          <div style="font-size:0.9rem;">QA-specific prompting patterns for daily use</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;min-width:28px;">05</div>
+          <div style="font-size:0.9rem;">The iteration loop — prompting is a conversation, not a one-shot</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — What is a Prompt ─── -->
+  <div class="slide" data-title="What Is a Prompt?" data-notes="Keep this simple. A prompt is everything you send to the LLM. That includes the question, the context you provide, any examples you give it, and the format you request. The LLM has ONLY what you put in the prompt. It can&apos;t see your codebase, your team conventions, or your previous conversations (unless you include them).&lt;br&gt;&lt;br&gt;&lt;div class=&apos;analogy-note&apos;&gt;Analogy: A prompt is your briefing to a very capable new colleague. The more clearly you brief them, the better they can help. If you hand them a vague request and expect magic — you&apos;ll be disappointed. Same prompt, same colleague.&lt;/div&gt;">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">What is a prompt?</h2>
+      <div style="background:var(--bg-elevated);border-radius:10px;padding:24px;border:1px solid var(--border);margin-bottom:18px;max-width:640px;">
+        <p style="font-size:1rem;line-height:1.75;margin-bottom:0;">A prompt is <strong>everything you send to an LLM</strong> — the question, the context you provide, examples, constraints, and the format you want back. The LLM reasons only from what&apos;s in the prompt. Nothing else.</p>
+      </div>
+      <div class="card-grid c2" style="gap:12px;">
+        <div style="padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--text-dim);margin-bottom:6px;">THE LLM KNOWS</div>
+          <ul style="list-style:none;display:grid;gap:6px;">
+            <li style="font-size:0.85rem;display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Everything you wrote in this prompt</li>
+            <li style="font-size:0.85rem;display:flex;gap:8px;"><span style="color:var(--green);">✓</span> Everything it learned during training</li>
+            <li style="font-size:0.85rem;display:flex;gap:8px;"><span style="color:var(--green);">✓</span> The conversation history (in the same session)</li>
+          </ul>
+        </div>
+        <div style="padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--text-dim);margin-bottom:6px;">THE LLM DOES NOT KNOW</div>
+          <ul style="list-style:none;display:grid;gap:6px;">
+            <li style="font-size:0.85rem;display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Your codebase or project</li>
+            <li style="font-size:0.85rem;display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Your team&apos;s conventions or standards</li>
+            <li style="font-size:0.85rem;display:flex;gap:8px;"><span style="color:var(--red);">✗</span> Previous conversations (in a new session)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — The Four Elements ─── -->
+  <div class="slide" data-title="The 4 Elements of a Good Prompt" data-notes="Introduce the four-part framework. Not every prompt needs all four — but every prompt BENEFITS from thinking about all four. The more of these you include, the more useful the response will be.&lt;br&gt;&lt;br&gt;Tell the team: &apos;We&apos;re going to look at each of these in detail. Then we&apos;ll see them working together in a real example.&apos;">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">The four elements of a strong prompt</h2>
+      <svg viewBox="0 0 700 260" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <!-- Background -->
+        <rect width="700" height="260" fill="#13111d" rx="12"/>
+        <!-- Tile 1: Context (blue) -->
+        <rect x="14" y="14" width="155" height="185" rx="8" fill="#6fa3f7" fill-opacity="0.12" stroke="#6fa3f7" stroke-width="1.5"/>
+        <rect x="14" y="14" width="155" height="185" rx="8" fill="none" stroke="#6fa3f7" stroke-width="1.5"/>
+        <rect x="68" y="22" width="48" height="22" rx="6" fill="#6fa3f7" fill-opacity="0.25"/>
+        <text x="92" y="37" text-anchor="middle" fill="#6fa3f7" font-size="13" font-weight="700">1</text>
+        <text x="92" y="60" text-anchor="middle" fill="#6fa3f7" font-size="16" font-weight="700">Context</text>
+        <!-- house icon -->
+        <polyline points="72,82 92,68 112,82" fill="none" stroke="#6fa3f7" stroke-width="1.5" stroke-linecap="round"/>
+        <rect x="79" y="82" width="26" height="16" rx="1" fill="none" stroke="#6fa3f7" stroke-width="1.5"/>
+        <rect x="88" y="89" width="8" height="9" rx="1" fill="#6fa3f7" fill-opacity="0.4"/>
+        <text x="92" y="117" text-anchor="middle" fill="#c0c8e8" font-size="12">Who you are</text>
+        <text x="92" y="131" text-anchor="middle" fill="#c0c8e8" font-size="12">What project</text>
+        <text x="92" y="145" text-anchor="middle" fill="#c0c8e8" font-size="12">What tech stack</text>
+        <text x="92" y="159" text-anchor="middle" fill="#c0c8e8" font-size="12">What you tried</text>
+        <text x="92" y="180" text-anchor="middle" fill="#6fa3f7" fill-opacity="0.6" font-size="11" font-style="italic">I'm a QA eng using</text>
+        <text x="92" y="192" text-anchor="middle" fill="#6fa3f7" fill-opacity="0.6" font-size="11" font-style="italic">Playwright + TS...</text>
+        <!-- Tile 2: Task (amber) -->
+        <rect x="183" y="14" width="155" height="185" rx="8" fill="#e8a848" fill-opacity="0.12" stroke="#e8a848" stroke-width="1.5"/>
+        <rect x="237" y="22" width="48" height="22" rx="6" fill="#e8a848" fill-opacity="0.25"/>
+        <text x="261" y="37" text-anchor="middle" fill="#e8a848" font-size="13" font-weight="700">2</text>
+        <text x="261" y="60" text-anchor="middle" fill="#e8a848" font-size="16" font-weight="700">Task</text>
+        <!-- checkbox icon -->
+        <rect x="249" y="68" width="24" height="20" rx="3" fill="none" stroke="#e8a848" stroke-width="1.5"/>
+        <polyline points="253,78 259,84 271,72" fill="none" stroke="#e8a848" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="261" y="108" text-anchor="middle" fill="#c0c8e8" font-size="12">What you want</text>
+        <text x="261" y="122" text-anchor="middle" fill="#c0c8e8" font-size="12">Specific &amp; actionable</text>
+        <text x="261" y="136" text-anchor="middle" fill="#c0c8e8" font-size="12">Verb-first</text>
+        <text x="261" y="150" text-anchor="middle" fill="#c0c8e8" font-size="12">instructions</text>
+        <text x="261" y="172" text-anchor="middle" fill="#e8a848" fill-opacity="0.6" font-size="11" font-style="italic">Write a test that</text>
+        <text x="261" y="184" text-anchor="middle" fill="#e8a848" fill-opacity="0.6" font-size="11" font-style="italic">verifies login...</text>
+        <text x="261" y="196" text-anchor="middle" fill="#e8a848" fill-opacity="0.6" font-size="11" font-style="italic">&#160;</text>
+        <!-- Tile 3: Format (green) -->
+        <rect x="352" y="14" width="155" height="185" rx="8" fill="#5ec269" fill-opacity="0.12" stroke="#5ec269" stroke-width="1.5"/>
+        <rect x="406" y="22" width="48" height="22" rx="6" fill="#5ec269" fill-opacity="0.25"/>
+        <text x="430" y="37" text-anchor="middle" fill="#5ec269" font-size="13" font-weight="700">3</text>
+        <text x="430" y="60" text-anchor="middle" fill="#5ec269" font-size="16" font-weight="700">Format</text>
+        <!-- lines icon -->
+        <line x1="415" y1="70" x2="445" y2="70" stroke="#5ec269" stroke-width="2" stroke-linecap="round"/>
+        <line x1="415" y1="77" x2="440" y2="77" stroke="#5ec269" stroke-width="2" stroke-linecap="round"/>
+        <line x1="415" y1="84" x2="445" y2="84" stroke="#5ec269" stroke-width="2" stroke-linecap="round"/>
+        <line x1="415" y1="91" x2="437" y2="91" stroke="#5ec269" stroke-width="2" stroke-linecap="round"/>
+        <text x="430" y="115" text-anchor="middle" fill="#c0c8e8" font-size="12">How the answer</text>
+        <text x="430" y="129" text-anchor="middle" fill="#c0c8e8" font-size="12">should look</text>
+        <text x="430" y="143" text-anchor="middle" fill="#c0c8e8" font-size="12">Code block</text>
+        <text x="430" y="157" text-anchor="middle" fill="#c0c8e8" font-size="12">Step list</text>
+        <text x="430" y="179" text-anchor="middle" fill="#5ec269" fill-opacity="0.65" font-size="11" font-style="italic">Return only the TS</text>
+        <text x="430" y="191" text-anchor="middle" fill="#5ec269" fill-opacity="0.65" font-size="11" font-style="italic">code, no explanation</text>
+        <!-- Tile 4: Constraints (purple) -->
+        <rect x="521" y="14" width="155" height="185" rx="8" fill="#b08cf5" fill-opacity="0.12" stroke="#b08cf5" stroke-width="1.5"/>
+        <rect x="575" y="22" width="48" height="22" rx="6" fill="#b08cf5" fill-opacity="0.25"/>
+        <text x="599" y="37" text-anchor="middle" fill="#b08cf5" font-size="13" font-weight="700">4</text>
+        <text x="599" y="60" text-anchor="middle" fill="#b08cf5" font-size="16" font-weight="700">Constraints</text>
+        <!-- fence icon -->
+        <line x1="578" y1="68" x2="578" y2="90" stroke="#b08cf5" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="589" y1="68" x2="589" y2="90" stroke="#b08cf5" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="600" y1="68" x2="600" y2="90" stroke="#b08cf5" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="611" y1="68" x2="611" y2="90" stroke="#b08cf5" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="622" y1="68" x2="622" y2="90" stroke="#b08cf5" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="574" y1="74" x2="626" y2="74" stroke="#b08cf5" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="574" y1="84" x2="626" y2="84" stroke="#b08cf5" stroke-width="1.5" stroke-linecap="round"/>
+        <text x="599" y="112" text-anchor="middle" fill="#c0c8e8" font-size="12">What to avoid</text>
+        <text x="599" y="126" text-anchor="middle" fill="#c0c8e8" font-size="12">Scope limits</text>
+        <text x="599" y="140" text-anchor="middle" fill="#c0c8e8" font-size="12">What NOT to</text>
+        <text x="599" y="154" text-anchor="middle" fill="#c0c8e8" font-size="12">include</text>
+        <text x="599" y="176" text-anchor="middle" fill="#b08cf5" fill-opacity="0.65" font-size="11" font-style="italic">Don't use</text>
+        <text x="599" y="188" text-anchor="middle" fill="#b08cf5" fill-opacity="0.65" font-size="11" font-style="italic">waitForTimeout</text>
+        <text x="599" y="200" text-anchor="middle" fill="#b08cf5" fill-opacity="0.65" font-size="11" font-style="italic">Max 30 lines</text>
+        <!-- Amber banner -->
+        <rect x="14" y="210" width="672" height="36" rx="8" fill="#e8a848" fill-opacity="0.13" stroke="#e8a848" stroke-opacity="0.35" stroke-width="1"/>
+        <text x="350" y="232" text-anchor="middle" fill="#e8a848" font-size="14" font-weight="600">All 4 together = a prompt the AI can act on precisely</text>
+      </svg>
+      <div style="display:grid;gap:12px;max-width:680px;">
+        <div style="display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:flex-start;padding:16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
+          <div style="font-family:'Source Serif 4',serif;font-size:1.5rem;font-weight:700;color:var(--accent);">1</div>
+          <div><div style="font-weight:600;margin-bottom:4px;">Context</div><div style="font-size:0.85rem;color:var(--text-secondary);">What situation are you in? What tool, language, framework, or codebase is involved?</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:flex-start;padding:16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
+          <div style="font-family:'Source Serif 4',serif;font-size:1.5rem;font-weight:700;color:var(--accent);">2</div>
+          <div><div style="font-weight:600;margin-bottom:4px;">Task</div><div style="font-size:0.85rem;color:var(--text-secondary);">What specifically do you want the AI to do? Be precise. "Write a test" is not a task. "Write a Playwright test that verifies X" is.</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:flex-start;padding:16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
+          <div style="font-family:'Source Serif 4',serif;font-size:1.5rem;font-weight:700;color:var(--accent);">3</div>
+          <div><div style="font-weight:600;margin-bottom:4px;">Format</div><div style="font-size:0.85rem;color:var(--text-secondary);">How do you want the response? Code only? With explanation? A numbered list? Short or detailed?</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:flex-start;padding:16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
+          <div style="font-family:'Source Serif 4',serif;font-size:1.5rem;font-weight:700;color:var(--accent);">4</div>
+          <div><div style="font-weight:600;margin-bottom:4px;">Constraints</div><div style="font-size:0.85rem;color:var(--text-secondary);">What should it NOT do? What are the limits? "Don&apos;t use third-party libraries." "Keep it under 20 lines." "No async/await."</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — Element: Context ─── -->
+  <div class="slide" data-title="Element 1: Context" data-notes="Context is the most commonly missing piece. People ask vague questions and are surprised when they get vague answers. The more specific your context, the more targeted the response.&lt;br&gt;&lt;br&gt;Examples of good context for QA work: the testing framework (Playwright, Cypress, Jest), the language (TypeScript, JS, Python), the page or feature being tested, the error message if debugging.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;analogy-note&apos;&gt;Analogy: If someone calls you and says &apos;it&apos;s broken&apos; — you don&apos;t know where to start. If they say &apos;the login form on Chrome on staging is throwing a 401 after a valid login&apos; — you can immediately help. Context is what makes help possible.&lt;/div&gt;">
+    <div class="slide-inner">
+      <div class="session-badge" style="margin-bottom:14px;">Element 1 of 4</div>
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Context — give it your situation</h2>
+      <div class="comparison">
+        <div class="comp-col negative">
+          <div class="comp-label">Missing context</div>
+          <div style="background:var(--bg-elevated);border-radius:6px;padding:12px;font-family:'IBM Plex Mono',monospace;font-size:0.8rem;line-height:1.6;margin-bottom:8px;">"My test is failing. How do I fix it?"</div>
+          <div style="font-size:0.82rem;color:var(--text-muted);">The AI has to guess the framework, language, and error. Its answer will be generic and probably not useful.</div>
+        </div>
+        <div class="comp-col positive">
+          <div class="comp-label">Rich context</div>
+          <div style="background:var(--bg-elevated);border-radius:6px;padding:12px;font-family:'IBM Plex Mono',monospace;font-size:0.8rem;line-height:1.6;margin-bottom:8px;">"I&apos;m using Playwright 1.40 with TypeScript. My test is clicking #submit-btn on the login page, but it times out in CI (GitHub Actions, Ubuntu runner) while passing locally on macOS. Here&apos;s the test and the error..."</div>
+          <div style="font-size:0.82rem;color:var(--text-muted);">Framework, language, environment, symptom, and code — the AI can give a targeted, actionable answer.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — Element: Task ─── -->
+  <div class="slide" data-title="Element 2: Task Specificity" data-notes="Vague tasks produce vague responses. Specific tasks produce specific responses. The key question to ask yourself before sending a prompt: &apos;Could this request be answered in ten completely different ways?&apos; If yes, make it more specific.&lt;br&gt;&lt;br&gt;For QA work, this means: name the page or component, name the behaviour you&apos;re testing, name the assertion you want made.">
+    <div class="slide-inner">
+      <div class="session-badge" style="margin-bottom:14px;">Element 2 of 4</div>
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Task — be specific about what you want</h2>
+      <div style="display:grid;gap:10px;margin-bottom:16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="padding:12px;background:rgba(232,92,92,0.06);border:1px solid rgba(232,92,92,0.2);border-radius:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--red);margin-bottom:6px;">TOO VAGUE</div>
+            <div style="font-size:0.86rem;font-style:italic;color:var(--text-secondary);">"Write a test"</div>
+          </div>
+          <div style="padding:12px;background:rgba(94,194,105,0.06);border:1px solid rgba(94,194,105,0.2);border-radius:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--green);margin-bottom:6px;">SPECIFIC</div>
+            <div style="font-size:0.86rem;font-style:italic;color:var(--text-secondary);">"Write a Playwright TypeScript test that navigates to /checkout, fills the address form, clicks Submit, and asserts the confirmation page URL contains /order-confirmed"</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="padding:12px;background:rgba(232,92,92,0.06);border:1px solid rgba(232,92,92,0.2);border-radius:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--red);margin-bottom:6px;">TOO VAGUE</div>
+            <div style="font-size:0.86rem;font-style:italic;color:var(--text-secondary);">"Explain this code"</div>
+          </div>
+          <div style="padding:12px;background:rgba(94,194,105,0.06);border:1px solid rgba(94,194,105,0.2);border-radius:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--green);margin-bottom:6px;">SPECIFIC</div>
+            <div style="font-size:0.86rem;font-style:italic;color:var(--text-secondary);">"Explain what this Playwright beforeEach hook does and why the page.waitForLoadState call is needed"</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="padding:12px;background:rgba(232,92,92,0.06);border:1px solid rgba(232,92,92,0.2);border-radius:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--red);margin-bottom:6px;">TOO VAGUE</div>
+            <div style="font-size:0.86rem;font-style:italic;color:var(--text-secondary);">"Fix this"</div>
+          </div>
+          <div style="padding:12px;background:rgba(94,194,105,0.06);border:1px solid rgba(94,194,105,0.2);border-radius:8px;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--green);margin-bottom:6px;">SPECIFIC</div>
+            <div style="font-size:0.86rem;font-style:italic;color:var(--text-secondary);">"This test fails with Error: strict mode violation — getByRole finds 2 elements. Show me how to make the selector more specific."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — Element: Format ─── -->
+  <div class="slide" data-title="Element 3: Format" data-notes="Format is the most overlooked element. By default, LLMs will give a verbose explanation with code. Sometimes that&apos;s exactly what you want. Other times you just want the code, or a bullet list, or a one-line answer.&lt;br&gt;&lt;br&gt;Getting the format right saves you time — you don&apos;t have to wade through an explanation to find the code you needed.">
+    <div class="slide-inner">
+      <div class="session-badge" style="margin-bottom:14px;">Element 3 of 4</div>
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Format — tell it how to respond</h2>
+      <div class="card-grid c2" style="gap:12px;margin-bottom:16px;">
+        <div style="padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--accent);margin-bottom:8px;">USEFUL FORMAT INSTRUCTIONS</div>
+          <ul style="list-style:none;display:grid;gap:7px;font-size:0.85rem;">
+            <li style="display:flex;gap:8px;"><span style="color:var(--accent);">→</span> "Give me only the code, no explanation"</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--accent);">→</span> "Explain in simple terms, no jargon"</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--accent);">→</span> "List the options as bullet points"</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--accent);">→</span> "Give me a one-sentence answer"</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--accent);">→</span> "Show before and after code side by side"</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--accent);">→</span> "Explain each line with inline comments"</li>
+          </ul>
+        </div>
+        <div style="padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--text-dim);margin-bottom:8px;">CHOOSE BASED ON YOUR GOAL</div>
+          <ul style="list-style:none;display:grid;gap:7px;font-size:0.85rem;">
+            <li style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--text-dim);flex-shrink:0;">→</span> <span><strong>Just need the code?</strong> Ask for code only</span></li>
+            <li style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--text-dim);flex-shrink:0;">→</span> <span><strong>Learning something new?</strong> Ask for explanation + code</span></li>
+            <li style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--text-dim);flex-shrink:0;">→</span> <span><strong>Presenting to team?</strong> Ask for a structured summary</span></li>
+            <li style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--text-dim);flex-shrink:0;">→</span> <span><strong>Need options?</strong> Ask for a comparison list</span></li>
+          </ul>
+        </div>
+      </div>
+      <div style="background:rgba(232,168,72,0.06);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 14px;font-size:0.85rem;color:var(--text-secondary);">
+        <strong>Tip:</strong> If you&apos;re copying code into a file, adding "give me only the code" saves you 30 seconds of cleanup every time.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — Element: Constraints ─── -->
+  <div class="slide" data-title="Element 4: Constraints" data-notes="Constraints stop the AI from going in directions you don&apos;t want. Without them, an AI will make decisions on your behalf — which framework to use, how long the answer should be, whether to add comments or not. Constraints put you back in control.&lt;br&gt;&lt;br&gt;For QA teams, common constraints: stick to the existing framework, don&apos;t add new dependencies, match the existing file naming convention, keep tests under X lines.">
+    <div class="slide-inner">
+      <div class="session-badge" style="margin-bottom:14px;">Element 4 of 4</div>
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Constraints — tell it what NOT to do</h2>
+      <div style="display:grid;gap:10px;margin-bottom:18px;">
+        <div style="padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--text-dim);margin-bottom:8px;">WITHOUT A CONSTRAINT</div>
+          <div style="font-size:0.86rem;color:var(--text-secondary);">"Write a test for the API response" → AI picks whatever assertion library it prefers, possibly one you don&apos;t use</div>
+        </div>
+        <div style="padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);border-left:3px solid var(--green);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--green);margin-bottom:8px;">WITH A CONSTRAINT</div>
+          <div style="font-size:0.86rem;color:var(--text-secondary);">"Write a test for the API response using Jest and supertest only — no other libraries. Keep it under 25 lines."</div>
+        </div>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--text-dim);margin-bottom:8px;">USEFUL CONSTRAINT PHRASES</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:0.78rem;padding:5px 12px;background:var(--bg-elevated);border-radius:20px;border:1px solid var(--border);">Don&apos;t add new imports</span>
+        <span style="font-size:0.78rem;padding:5px 12px;background:var(--bg-elevated);border-radius:20px;border:1px solid var(--border);">Use only built-in methods</span>
+        <span style="font-size:0.78rem;padding:5px 12px;background:var(--bg-elevated);border-radius:20px;border:1px solid var(--border);">No async/await</span>
+        <span style="font-size:0.78rem;padding:5px 12px;background:var(--bg-elevated);border-radius:20px;border:1px solid var(--border);">Match the existing code style</span>
+        <span style="font-size:0.78rem;padding:5px 12px;background:var(--bg-elevated);border-radius:20px;border:1px solid var(--border);">Keep under 30 lines</span>
+        <span style="font-size:0.78rem;padding:5px 12px;background:var(--bg-elevated);border-radius:20px;border:1px solid var(--border);">No third-party libraries</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — Putting It Together ─── -->
+  <div class="slide" data-title="Putting It All Together" data-notes="Walk through this example carefully. Show how each part of the prompt maps to one of the four elements. Then point out: this isn&apos;t a novel — it&apos;s still one short paragraph. It doesn&apos;t take long to write a good prompt once you know the pattern.&lt;br&gt;&lt;br&gt;Ask the team: &apos;Can you spot the context, task, format, and constraints?&apos; Let them find each part.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">A complete prompt — all four elements</h2>
+      <div style="background:var(--bg-elevated);border-radius:10px;padding:20px;border:1px solid var(--border);margin-bottom:16px;font-family:'IBM Plex Mono',monospace;font-size:0.82rem;line-height:1.8;">
+        <span style="background:rgba(232,168,72,0.15);border-radius:3px;padding:1px 3px;">I&apos;m writing Playwright TypeScript tests for an e-commerce checkout flow.</span> <span style="background:rgba(94,194,105,0.15);border-radius:3px;padding:1px 3px;">Write a test that adds a product to the cart, goes through checkout, and asserts the order confirmation number is visible on the success page.</span> <span style="background:rgba(111,163,247,0.15);border-radius:3px;padding:1px 3px;">Return only the test code with inline comments explaining each step.</span> <span style="background:rgba(176,140,245,0.15);border-radius:3px;padding:1px 3px;">Do not use any helpers or utilities not already in Playwright — no third-party packages.</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="display:flex;gap:8px;align-items:flex-start;font-size:0.82rem;"><span style="background:rgba(232,168,72,0.15);border-radius:3px;padding:2px 8px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--accent);flex-shrink:0;margin-top:1px;">CONTEXT</span><span style="color:var(--text-secondary);">Playwright TypeScript, e-commerce checkout</span></div>
+        <div style="display:flex;gap:8px;align-items:flex-start;font-size:0.82rem;"><span style="background:rgba(94,194,105,0.15);border-radius:3px;padding:2px 8px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--green);flex-shrink:0;margin-top:1px;">TASK</span><span style="color:var(--text-secondary);">Cart → checkout → assert confirmation</span></div>
+        <div style="display:flex;gap:8px;align-items:flex-start;font-size:0.82rem;"><span style="background:rgba(111,163,247,0.15);border-radius:3px;padding:2px 8px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--blue);flex-shrink:0;margin-top:1px;">FORMAT</span><span style="color:var(--text-secondary);">Code only, inline comments per step</span></div>
+        <div style="display:flex;gap:8px;align-items:flex-start;font-size:0.82rem;"><span style="background:rgba(176,140,245,0.15);border-radius:3px;padding:2px 8px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--purple);flex-shrink:0;margin-top:1px;">CONSTRAINTS</span><span style="color:var(--text-secondary);">Playwright built-ins only</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — Common Mistakes ─── -->
+  <div class="slide" data-title="Common Prompting Mistakes" data-notes="This slide is best delivered conversationally. Ask: &apos;Has anyone made any of these mistakes?&apos; (Everyone has. Including the instructor.) Normalise it — these are learnable. Each mistake has a one-line fix.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">The four most common mistakes</h2>
+      <div style="display:grid;gap:10px;">
+        <div style="display:grid;grid-template-columns:24px 1fr 1fr;gap:12px;align-items:flex-start;padding:12px 14px;background:var(--bg-elevated);border-radius:8px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--red);font-weight:700;padding-top:1px;">01</div>
+          <div><div style="font-size:0.86rem;font-weight:600;color:var(--red);margin-bottom:3px;">Too vague</div><div style="font-size:0.82rem;color:var(--text-muted);">"Fix this code" / "Write a test"</div></div>
+          <div><div style="font-size:0.86rem;font-weight:600;color:var(--green);margin-bottom:3px;">Fix</div><div style="font-size:0.82rem;color:var(--text-secondary);">Name the tool, the behaviour, the expected outcome</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:24px 1fr 1fr;gap:12px;align-items:flex-start;padding:12px 14px;background:var(--bg-elevated);border-radius:8px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--red);font-weight:700;padding-top:1px;">02</div>
+          <div><div style="font-size:0.86rem;font-weight:600;color:var(--red);margin-bottom:3px;">No context</div><div style="font-size:0.82rem;color:var(--text-muted);">Assumes the AI knows your setup</div></div>
+          <div><div style="font-size:0.86rem;font-weight:600;color:var(--green);margin-bottom:3px;">Fix</div><div style="font-size:0.82rem;color:var(--text-secondary);">Include framework, language, error message, and relevant code</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:24px 1fr 1fr;gap:12px;align-items:flex-start;padding:12px 14px;background:var(--bg-elevated);border-radius:8px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--red);font-weight:700;padding-top:1px;">03</div>
+          <div><div style="font-size:0.86rem;font-weight:600;color:var(--red);margin-bottom:3px;">Asking too many things at once</div><div style="font-size:0.82rem;color:var(--text-muted);">"Fix, refactor, add tests, and explain"</div></div>
+          <div><div style="font-size:0.86rem;font-weight:600;color:var(--green);margin-bottom:3px;">Fix</div><div style="font-size:0.82rem;color:var(--text-secondary);">One clear task per message. Follow up for each additional thing.</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:24px 1fr 1fr;gap:12px;align-items:flex-start;padding:12px 14px;background:var(--bg-elevated);border-radius:8px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--red);font-weight:700;padding-top:1px;">04</div>
+          <div><div style="font-size:0.86rem;font-weight:600;color:var(--red);margin-bottom:3px;">Not iterating</div><div style="font-size:0.82rem;color:var(--text-muted);">Accepting a mediocre first response</div></div>
+          <div><div style="font-size:0.86rem;font-weight:600;color:var(--green);margin-bottom:3px;">Fix</div><div style="font-size:0.82rem;color:var(--text-secondary);">Follow up: "Make it shorter." / "Now add error handling." / "That&apos;s not right — here&apos;s why..."</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — QA Pattern: Writing Tests ─── -->
+  <div class="slide" data-title="QA Pattern: Writing Tests" data-notes="This is the prompting pattern your team will use most often. Walk through the template slowly. Point out: you always give it the URL or component, the user action, and the expected outcome. The AI does the selector guessing — you verify.&lt;br&gt;&lt;br&gt;Live demo idea: open Claude or Copilot Chat and write this prompt live. Show the output. Ask the team: &apos;Would you need to change anything?&apos;">
+    <div class="slide-inner">
+      <div class="session-badge" style="margin-bottom:14px;">QA Pattern 1 of 3</div>
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Writing test cases with AI</h2>
+      <div style="background:var(--code-bg);border:1px solid var(--border-subtle);border-radius:8px;padding:16px;margin-bottom:14px;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;line-height:1.8;">
+        <div style="color:var(--code-comment);margin-bottom:4px;">// Prompting template for new test</div>
+        <div><span style="color:var(--text-secondary);">I&apos;m writing Playwright TypeScript tests.</span></div>
+        <div><span style="color:var(--text-secondary);">Page: [URL or component name]</span></div>
+        <div><span style="color:var(--text-secondary);">User action: [what the user does]</span></div>
+        <div><span style="color:var(--text-secondary);">Expected result: [what should happen]</span></div>
+        <div style="margin-top:4px;"><span style="color:var(--text-secondary);">Write a test. Use getByRole and getByLabel for selectors</span></div>
+        <div><span style="color:var(--text-secondary);">where possible. Return code only.</span></div>
+      </div>
+      <div style="background:var(--code-bg);border:1px solid var(--border-subtle);border-radius:8px;padding:16px;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;line-height:1.8;">
+        <div style="color:var(--code-comment);margin-bottom:4px;">// Filled example</div>
+        <div><span style="color:var(--text-secondary);">I&apos;m writing Playwright TypeScript tests.</span></div>
+        <div><span style="color:var(--text-secondary);">Page: /account/settings</span></div>
+        <div><span style="color:var(--text-secondary);">User action: Updates display name and saves</span></div>
+        <div><span style="color:var(--text-secondary);">Expected result: Success toast appears, name updates in header</span></div>
+        <div style="margin-top:4px;"><span style="color:var(--text-secondary);">Write a test. Use getByRole and getByLabel for selectors</span></div>
+        <div><span style="color:var(--text-secondary);">where possible. Return code only.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 13 — QA Pattern: Debugging ─── -->
+  <div class="slide" data-title="QA Pattern: Debugging" data-notes="Debugging is where prompting skills pay off fastest. The key: always paste the actual error message. Don&apos;t describe it — paste it. Then paste the relevant test code. Then ask a specific question. The AI will work through the most likely causes systematically.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;warning-note&apos;&gt;⚠️ Remind the team: the AI is reasoning, not running. It will give you its best hypotheses — you still need to verify each one by actually running the test.&lt;/div&gt;">
+    <div class="slide-inner">
+      <div class="session-badge" style="margin-bottom:14px;">QA Pattern 2 of 3</div>
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Debugging a failing test</h2>
+      <div style="background:var(--code-bg);border:1px solid var(--border-subtle);border-radius:8px;padding:16px;margin-bottom:14px;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;line-height:1.8;">
+        <div style="color:var(--code-comment);margin-bottom:4px;">// Debug prompt template</div>
+        <div><span style="color:var(--text-secondary);">My Playwright test is failing with this error:</span></div>
+        <div><span style="color:var(--text-secondary);">[paste full error message here]</span></div>
+        <div style="margin-top:4px;"><span style="color:var(--text-secondary);">Here is the failing test:</span></div>
+        <div><span style="color:var(--text-secondary);">[paste test code here]</span></div>
+        <div style="margin-top:4px;"><span style="color:var(--text-secondary);">The test passes locally but fails in CI (GitHub Actions).</span></div>
+        <div><span style="color:var(--text-secondary);">What are the most likely causes? List them ranked by probability.</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.82rem;">
+        <div style="padding:10px 12px;background:var(--bg-elevated);border-radius:6px;display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span><span>Always paste the full error — not a description of it</span></div>
+        <div style="padding:10px 12px;background:var(--bg-elevated);border-radius:6px;display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span><span>Include the test code — not a description of what it does</span></div>
+        <div style="padding:10px 12px;background:var(--bg-elevated);border-radius:6px;display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span><span>Mention environment differences (local vs CI, OS, versions)</span></div>
+        <div style="padding:10px 12px;background:var(--bg-elevated);border-radius:6px;display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">✓</span><span>Ask for ranked hypotheses — gives you a debugging order</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 14 — QA Pattern: Code Review ─── -->
+  <div class="slide" data-title="QA Pattern: Code Review" data-notes="This pattern is underused. AI is very good at spotting issues in test code — missing assertions, brittle selectors, missing edge cases, anti-patterns. Use it before submitting a PR, especially if you wrote the tests quickly.&lt;br&gt;&lt;br&gt;Important: the AI might flag things that are fine given context it doesn&apos;t have. Use your judgement. It&apos;s a reviewer, not an oracle.">
+    <div class="slide-inner">
+      <div class="session-badge" style="margin-bottom:14px;">QA Pattern 3 of 3</div>
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Reviewing your own tests</h2>
+      <div style="background:var(--code-bg);border:1px solid var(--border-subtle);border-radius:8px;padding:16px;margin-bottom:14px;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;line-height:1.8;">
+        <div style="color:var(--code-comment);margin-bottom:4px;">// Review prompt template</div>
+        <div><span style="color:var(--text-secondary);">Review this Playwright test and flag any issues.</span></div>
+        <div><span style="color:var(--text-secondary);">Look for: brittle selectors, missing assertions,</span></div>
+        <div><span style="color:var(--text-secondary);">missing edge cases, anti-patterns, and anything</span></div>
+        <div><span style="color:var(--text-secondary);">that would make this test flaky in CI.</span></div>
+        <div style="margin-top:4px;"><span style="color:var(--text-secondary);">[paste your test code here]</span></div>
+        <div style="margin-top:4px;"><span style="color:var(--text-secondary);">Return a numbered list of issues with a severity rating.</span></div>
+      </div>
+      <div style="background:rgba(232,168,72,0.06);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 14px;font-size:0.85rem;color:var(--text-secondary);">
+        <strong>Pro tip:</strong> At the end add "Also suggest any additional test cases I might have missed for this feature." — you often get 2–3 edge cases you hadn&apos;t thought of.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 15 — The Iteration Loop ─── -->
+  <div class="slide" data-title="Prompting Is a Conversation" data-notes="This is the mental model shift that makes everything click: prompting isn&apos;t a one-shot. It&apos;s a conversation. You ask, you get something back, you refine. Most people get a mediocre first response and give up — or accept the mediocre response. The skill is in the follow-up.&lt;br&gt;&lt;br&gt;&lt;div class=&apos;analogy-note&apos;&gt;Analogy: You wouldn&apos;t brief a colleague, get a rough first draft, and ship it. You&apos;d read it, give feedback, and ask for revisions. Same with AI — the first response is a starting point, not an endpoint.&lt;/div&gt;">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Prompting is a conversation, not a one-shot</h2>
+      <img src="/images/ai-in-practice/session3-slide15.svg" alt="Iterative prompting conversation diagram" style="width:100%;display:block;margin:12px auto 8px;border-radius:12px;"/>
+      <div style="display:grid;gap:10px;max-width:680px;margin-bottom:18px;">
+        <div style="display:flex;gap:14px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;align-items:flex-start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;flex-shrink:0;min-width:40px;">TURN 1</div>
+          <div style="font-size:0.86rem;">Send your initial prompt → get a first response</div>
+        </div>
+        <div style="display:flex;gap:14px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;align-items:flex-start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;flex-shrink:0;min-width:40px;">TURN 2</div>
+          <div style="font-size:0.86rem;">Refine: "That&apos;s close, but the selector should use getByRole. Update it." → improved code</div>
+        </div>
+        <div style="display:flex;gap:14px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;align-items:flex-start;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;flex-shrink:0;min-width:40px;">TURN 3</div>
+          <div style="font-size:0.86rem;">Push further: "Now add a test for the error state when the form is submitted empty." → extended</div>
+        </div>
+        <div style="display:flex;gap:14px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;align-items:flex-start;border-left:3px solid var(--green);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--green);font-weight:700;flex-shrink:0;min-width:40px;">DONE</div>
+          <div style="font-size:0.86rem;">You have exactly what you need. Three turns, five minutes.</div>
+        </div>
+      </div>
+      <div style="font-size:0.85rem;color:var(--text-secondary);text-align:center;">Useful follow-up phrases: <em>"Make it shorter" · "Add error handling" · "That&apos;s wrong — here&apos;s why" · "Show me an alternative"</em></div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 16 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="Read each one slowly. After the last point, say: &apos;Before next session, I want you to write at least one real prompt using the four-element structure. Doesn&apos;t matter if it&apos;s perfect — just try the pattern.&apos;">
+    <div class="slide-inner">
+      <div class="session-badge" style="margin-bottom:18px;">Key Takeaways</div>
+      <h2 style="font-size:1.7rem;margin-bottom:20px;">What to take from today</h2>
+      <div class="takeaway-list">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-text">A prompt is everything the LLM has to work with. The more you give it, the better it can help.</div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-text">The four elements: Context, Task, Format, Constraints. Not all are required — but all improve the result.</div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-text">Specificity is the single biggest lever. Vague in, vague out. Specific in, specific out.</div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-text">Prompting is a conversation. The first response is a starting point — follow up and refine.</div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">5</div>
+          <div class="takeaway-text">Three QA patterns to use today: writing tests, debugging failures, reviewing your own code.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 17 — Bridge to Session 04 ─── -->
+  <div class="slide" data-title="Up Next: Session 04" data-notes="Close with excitement — Phase 2 starts next session. We move from foundations to actually using GitHub Copilot inside VS Code. Everything they&apos;ve learned about prompting applies directly to Copilot Chat.">
+    <div class="slide-inner" style="text-align:center;">
+      <div style="font-size:2.5rem;margin-bottom:20px;">⌨️</div>
+      <div class="session-badge" style="margin-bottom:16px;">Phase 2 Begins</div>
+      <h2 style="font-size:1.8rem;margin-bottom:12px;">Session 04</h2>
+      <h3 style="font-size:1.3rem;color:var(--accent);margin-bottom:16px;font-weight:500;">Setting Up GitHub Copilot &amp; Understanding What It Can Do</h3>
+      <p style="color:var(--text-secondary);max-width:500px;margin:0 auto 28px;line-height:1.7;font-size:0.92rem;">Phase 1 is complete. You now have the foundations: what AI is, how it evolved, and how to talk to it effectively. Phase 2 puts that into practice inside your editor.</p>
+      <div style="display:inline-flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;padding:6px 14px;border-radius:20px;background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-secondary);">Try one of today&apos;s prompting patterns on a real task before next session</div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,352 @@
+---
+layout: session.njk
+title: Session 09 — Refactoring & Reviewing Your Test Suite with AI
+sessionNumber: "09"
+sessionTitle: "Refactoring & Reviewing Your Test Suite with AI"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="Phase 3's final session. Writing tests and debugging failures got us here — now we talk about keeping the test suite maintainable over time. This is where the difference between a suite that helps the team and one that burdens the team comes from.&lt;br&gt;&lt;br&gt;Be honest with the team: most test suites accumulate technical debt just like production code does. AI can help spot it, explain it, and fix it — faster than doing it manually.">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">🛠️ Session 09 &nbsp;·&nbsp; Phase 3: AI for Test Automation &amp; Debugging</div>
+      <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Refactoring Your<br><span style="color:var(--accent)">Test Suite with AI</span></h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">How to use AI to identify test code smells, extract reusable patterns, and keep your suite maintainable as the application grows.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">45 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Intermediate</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 08</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — Why Test Code Quality Matters ─── -->
+  <div class="slide" data-title="Why Test Code Quality Matters" data-notes="Some engineers treat test code as second-class code — quick and dirty is fine because it's 'just tests'. This is the mindset that creates unmaintainable suites that slow the team down.&lt;br&gt;&lt;br&gt;The argument to make: tests are read more often than they're written. When a test fails in production, you're reading it under pressure. When you need to update 40 tests because a button label changed, you're paying the debt of duplicated selectors. Good test code structure pays dividends every day.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Test code is production code</h2>
+      <div class="card-grid c2" style="gap:16px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-size:1.4rem;margin-bottom:10px;">💸</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Duplicated selectors</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">A button ID changes → update 40 tests. Or: extract to a Page Object once, update one line.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-size:1.4rem;margin-bottom:10px;">🔍</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Unreadable test names</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">"test_1234" failing in CI tells you nothing. "should show error when email already exists" tells you exactly where to look.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-size:1.4rem;margin-bottom:10px;">🔗</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Tests sharing state</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Test B depends on data Test A created. Test A fails → Test B fails → Test C fails. The actual bug gets buried.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="font-size:1.4rem;margin-bottom:10px;">📦</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;">3000-line test files</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">No grouping, no hierarchy, no structure. Finding the failing test is a job in itself.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — AI Code Review ─── -->
+  <div class="slide" data-title="AI Code Review" data-notes="The simplest starting point: ask AI to review your test code and identify issues. This doesn't require understanding refactoring patterns first — you give it the code, it gives you a prioritised list of problems.&lt;br&gt;&lt;br&gt;Ask it to be specific: 'list concrete issues with file and line numbers' produces more useful output than 'what's wrong with this code?'. Also ask it to prioritise by impact — some issues are cosmetic, some cause real maintenance pain.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Start with an AI code review</h2>
+      <div class="chat-mock" style="margin-bottom:14px;">
+        <div class="chat-msg user">
+          Review this Playwright test file for quality issues. List concrete problems with line numbers, grouped by: maintainability issues, reliability risks, and readability problems. Prioritise by impact.
+        </div>
+        <div class="chat-msg ai">
+          <strong>Maintainability (High Impact):</strong>
+          <ul style="margin:6px 0 10px 16px;display:grid;gap:4px;font-size:0.9em;">
+            <li>Lines 12, 34, 67, 89: Selector <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">'button.submit-primary'</code> duplicated 4 times — extract to Page Object</li>
+            <li>Lines 15, 38, 71: Login credentials hardcoded — move to fixture file</li>
+          </ul>
+          <strong>Reliability (High Impact):</strong>
+          <ul style="margin:6px 0 10px 16px;display:grid;gap:4px;font-size:0.9em;">
+            <li>Lines 23, 55: <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">waitForTimeout(1000)</code> — replace with explicit waits</li>
+          </ul>
+          <strong>Readability (Medium Impact):</strong>
+          <ul style="margin:6px 0 0 16px;display:grid;gap:4px;font-size:0.9em;">
+            <li>Test names use "test1", "test2" — rename to describe the scenario being tested</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — Refactoring Pattern 1: Page Objects ─── -->
+  <div class="slide" data-title="Refactoring: Page Objects" data-notes="Page Objects are the most impactful refactoring pattern for E2E tests. The rule: selectors live in one place. If the UI changes, you update one file, not forty tests.&lt;br&gt;&lt;br&gt;AI is very good at extracting Page Objects because it can read your test file and identify: all the selectors, all the actions performed, and then generate a clean Page Object class. This is genuinely tedious to do manually and fast with AI.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Pattern 1 — Extract Page Objects</h2>
+      <img src="/images/ai-in-practice/session9-slide4.png" alt="Page Objects refactoring pattern diagram" style="width:100%;display:block;margin:12px auto 8px;border-radius:12px;"/>
+      <div class="chat-mock" style="margin-bottom:14px;">
+        <div class="chat-msg user">
+          Here's my login.spec.ts test file. Extract a LoginPage Page Object class that encapsulates all the selectors and interactions. Create it at tests/pages/loginPage.ts. Then update the test file to use it. TypeScript, Playwright style.
+        </div>
+        <div class="chat-msg ai">
+          I can see 6 distinct selectors and 4 common action sequences across your tests. I'll create a <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">LoginPage</code> class with:
+          <ul style="margin:8px 0 0 16px;display:grid;gap:4px;font-size:0.9em;">
+            <li>Properties: <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">emailInput</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">passwordInput</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">submitButton</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">errorMessage</code></li>
+            <li>Methods: <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">goto()</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">login(email, password)</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">getErrorMessage()</code></li>
+          </ul>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:0.75rem;">
+        <div style="background:var(--bg-card);border:1px solid var(--red);border-radius:8px;padding:12px;">
+          <div style="color:var(--red);margin-bottom:6px;font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;">Before</div>
+          <div style="color:var(--text-secondary);line-height:1.7;">await page.fill('<strong>#email</strong>', 'user@test.com');<br>await page.fill('<strong>#password</strong>', 'pass');<br>await page.click('<strong>button.submit</strong>');</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--green);border-radius:8px;padding:12px;">
+          <div style="color:var(--green);margin-bottom:6px;font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;">After</div>
+          <div style="color:var(--text-secondary);line-height:1.7;">const login = new LoginPage(page);<br>await login.goto();<br>await <strong>login.login</strong>('user@test.com', 'pass');</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — Refactoring Pattern 2: Helper Extraction ─── -->
+  <div class="slide" data-title="Refactoring: Helpers" data-notes="Helper functions for test setup and teardown. The most common: creating test data (creating a user, creating an order), authenticating before tests, seeding database state. Without helpers, every test does this setup manually — 20 lines of boilerplate at the top of each test.&lt;br&gt;&lt;br&gt;Ask AI to identify the setup patterns that repeat across your tests and extract them into shared helpers.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Pattern 2 — Extract test helpers</h2>
+      <div class="chat-mock" style="margin-bottom:14px;">
+        <div class="chat-msg user">
+          I have 15 test files that each start with the same 20 lines: create a test user via API, log in, navigate to the dashboard. Extract this into a shared beforeEach helper or fixture. TypeScript, Playwright. Target location: tests/helpers/auth.ts.
+        </div>
+        <div class="chat-msg ai">
+          I'll create a Playwright fixture-based approach rather than a beforeEach helper — fixtures are composable and can be reused across any spec file without imports. Here's <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">tests/helpers/auth.ts</code>:
+        </div>
+      </div>
+      <div style="display:grid;gap:10px;">
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:14px;border:1px solid var(--border);">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:8px;">Other good helper candidates</div>
+          <ul style="list-style:none;display:grid;gap:7px;font-size:0.85rem;color:var(--text-secondary);">
+            <li style="display:flex;gap:8px;"><span style="color:var(--cyan);">·</span> Database reset between tests — reset to known state</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--cyan);">·</span> API client helpers — create test data via API quickly</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--cyan);">·</span> Network intercept setup — mock API responses consistently</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--cyan);">·</span> Screenshot on failure — capture automatically on test error</li>
+            <li style="display:flex;gap:8px;"><span style="color:var(--cyan);">·</span> Test data cleanup — delete created records after each test</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — Refactoring Pattern 3: Readability ─── -->
+  <div class="slide" data-title="Refactoring: Readability" data-notes="Readability refactoring is the least glamorous but genuinely matters. A test that reads like a specification is self-documenting. When someone joins the team and needs to understand what's tested, good test names and structure get them there without digging through implementation.&lt;br&gt;&lt;br&gt;The Gherkin-style (Given/When/Then) approach makes test intent extremely clear. Ask AI to rename tests and add describe blocks as an easy win.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Pattern 3 — Improve readability</h2>
+      <div class="comparison">
+        <div class="comp-col negative">
+          <div class="comp-label">Hard to read</div>
+          <div class="code-block" style="margin-top:10px;font-size:0.78rem;line-height:1.6;">
+            <span class="cm">// test1</span><br>
+            <span class="kw">test</span>(<span class="str">'login'</span>, <span class="kw">async</span> () =&gt; {{ '{' }}...{{ '}' }});<br><br>
+            <span class="cm">// test2</span><br>
+            <span class="kw">test</span>(<span class="str">'login_error'</span>, <span class="kw">async</span> () =&gt; {{ '{' }}...{{ '}' }});<br><br>
+            <span class="cm">// test3</span><br>
+            <span class="kw">test</span>(<span class="str">'locked'</span>, <span class="kw">async</span> () =&gt; {{ '{' }}...{{ '}' }});
+          </div>
+        </div>
+        <div class="comp-col positive">
+          <div class="comp-label">Self-documenting</div>
+          <div class="code-block" style="margin-top:10px;font-size:0.78rem;line-height:1.6;">
+            <span class="fn">describe</span>(<span class="str">'Login page'</span>, () =&gt; {{ '{' }}<br>
+            &nbsp;&nbsp;<span class="fn">test</span>(<span class="str">'logs in with valid credentials'</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">async</span> () =&gt; {{ '{' }}...{{ '}' }});<br>
+            &nbsp;&nbsp;<span class="fn">test</span>(<span class="str">'shows error for wrong password'</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">async</span> () =&gt; {{ '{' }}...{{ '}' }});<br>
+            &nbsp;&nbsp;<span class="fn">test</span>(<span class="str">'blocks locked accounts'</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">async</span> () =&gt; {{ '{' }}...{{ '}' }});<br>
+            {{ '}' }});
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;margin-top:14px;font-size:0.82rem;color:var(--text-secondary);">
+        Quick win prompt: "Rename all test() calls in this file to describe what the test verifies, not what it does. Use present tense: 'shows error for wrong password' not 'test wrong password'."
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — Refactoring Pattern 4: Remove Duplication ─── -->
+  <div class="slide" data-title="Refactoring: Remove Duplication" data-notes="Duplication is the most common and most costly problem in test suites. It's easy to copy-paste a test and tweak it — and two years later you have 40 nearly-identical tests that all need to be updated whenever a selector changes.&lt;br&gt;&lt;br&gt;Parameterised tests are the solution. One test function with a data table drives multiple scenarios. AI is very good at spotting the duplication pattern and generating the parameterised version.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Pattern 4 — Replace duplication with parameterised tests</h2>
+      <div class="chat-mock" style="margin-bottom:14px;">
+        <div class="chat-msg user">
+          I have 8 nearly-identical tests for form validation — each tests a different invalid input but the test structure is the same. Can you convert them to a single parameterised test using Playwright's test.each()?
+        </div>
+        <div class="chat-msg ai">
+          Yes — I can see the pattern: same setup, different input, same assertion pattern. Here's the parameterised version:
+        </div>
+      </div>
+      <div class="code-block" style="font-size:0.78rem;line-height:1.8;">
+        <span class="kw">const</span> <span class="prop">validationCases</span> = [<br>
+        &nbsp;&nbsp;{{ '{' }} <span class="prop">field</span>: <span class="str">'email'</span>, <span class="prop">value</span>: <span class="str">'not-an-email'</span>, <span class="prop">error</span>: <span class="str">'Invalid email format'</span> {{ '}' }},<br>
+        &nbsp;&nbsp;{{ '{' }} <span class="prop">field</span>: <span class="str">'password'</span>, <span class="prop">value</span>: <span class="str">'abc'</span>, <span class="prop">error</span>: <span class="str">'Password too short'</span> {{ '}' }},<br>
+        &nbsp;&nbsp;<span class="cm">// ... more cases</span><br>
+        ];<br><br>
+        <span class="kw">for</span> (<span class="kw">const</span> {{ '{' }} <span class="prop">field</span>, <span class="prop">value</span>, <span class="prop">error</span> {{ '}' }} <span class="kw">of</span> <span class="prop">validationCases</span>) {{ '{' }}<br>
+        &nbsp;&nbsp;<span class="fn">test</span>(<span class="str">`shows error for invalid </span><span class="prop">${{ '{' }}field{{ '}' }}</span><span class="str">`</span>, <span class="kw">async</span> (<span class="prop">{{ '{' }} page {{ '}' }}</span>) =&gt; {{ '{' }}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// same test logic, different data</span><br>
+        &nbsp;&nbsp;{{ '}' }});<br>
+        {{ '}' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — The Refactoring Mindset ─── -->
+  <div class="slide" data-title="Refactoring Safely" data-notes="One critical rule: refactor with a safety net. The tests should pass before and after the refactoring. If you're refactoring test code, you need another way to verify the refactoring is correct — typically: all tests pass before, you make the change, all tests pass after. The same tests, just cleaner code.&lt;br&gt;&lt;br&gt;The risk: you accidentally change what the test checks while refactoring how it's written. Always run the full suite before and after.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Refactoring safely</h2>
+      <svg viewBox="0 0 700 240" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <rect width="700" height="240" rx="12" fill="#13111d"/>
+        <!-- Step 1: Commit first (blue) -->
+        <rect x="16" y="24" width="118" height="148" rx="8" fill="#0d1a2e" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="75" y="46" font-size="13" fill="#6fa3f7" font-weight="700" text-anchor="middle">Commit first</text>
+        <text x="75" y="64" font-size="11" fill="#a0a0b8" text-anchor="middle">git commit</text>
+        <text x="75" y="78" font-size="11" fill="#a0a0b8" text-anchor="middle">before starting</text>
+        <text x="75" y="96" font-size="11" fill="#6a6a80" text-anchor="middle">Safe rollback</text>
+        <text x="75" y="110" font-size="11" fill="#6a6a80" text-anchor="middle">point</text>
+        <rect x="22" y="120" width="106" height="42" rx="5" fill="#0a0e1a" stroke="#2a4070" stroke-width="1"/>
+        <text x="75" y="137" font-size="9" fill="#6fa3f7" text-anchor="middle" font-style="italic">git commit -am</text>
+        <text x="75" y="151" font-size="9" fill="#6fa3f7" text-anchor="middle" font-style="italic">'before refactor'</text>
+        <!-- Arrow 1→2 -->
+        <line x1="134" y1="98" x2="148" y2="98" stroke="#4a4a60" stroke-width="1.5"/>
+        <polygon points="148,94 156,98 148,102" fill="#4a4a60"/>
+        <!-- Step 2: Give AI scope (purple) -->
+        <rect x="156" y="24" width="118" height="148" rx="8" fill="#1a1030" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="215" y="46" font-size="13" fill="#b08cf5" font-weight="700" text-anchor="middle">Give AI scope</text>
+        <text x="215" y="66" font-size="11" fill="#a0a0b8" text-anchor="middle">Tell AI exactly</text>
+        <text x="215" y="80" font-size="11" fill="#a0a0b8" text-anchor="middle">what to refactor</text>
+        <text x="215" y="98" font-size="11" fill="#6a6a80" text-anchor="middle">One pattern</text>
+        <text x="215" y="112" font-size="11" fill="#6a6a80" text-anchor="middle">at a time</text>
+        <text x="215" y="130" font-size="11" fill="#6a6a80" text-anchor="middle">Not "refactor</text>
+        <text x="215" y="144" font-size="11" fill="#6a6a80" text-anchor="middle">everything"</text>
+        <!-- Arrow 2→3 -->
+        <line x1="274" y1="98" x2="288" y2="98" stroke="#4a4a60" stroke-width="1.5"/>
+        <polygon points="288,94 296,98 288,102" fill="#4a4a60"/>
+        <!-- Step 3: Review the diff (amber) -->
+        <rect x="296" y="24" width="118" height="148" rx="8" fill="#2a1f00" stroke="#e8a848" stroke-width="1.5"/>
+        <text x="355" y="46" font-size="13" fill="#e8a848" font-weight="700" text-anchor="middle">Review diff</text>
+        <text x="355" y="66" font-size="11" fill="#a0a0b8" text-anchor="middle">Read every</text>
+        <text x="355" y="80" font-size="11" fill="#a0a0b8" text-anchor="middle">changed line</text>
+        <text x="355" y="98" font-size="11" fill="#6a6a80" text-anchor="middle">Does it match</text>
+        <text x="355" y="112" font-size="11" fill="#6a6a80" text-anchor="middle">what you asked?</text>
+        <text x="355" y="130" font-size="11" fill="#6a6a80" text-anchor="middle">No blind</text>
+        <text x="355" y="144" font-size="11" fill="#6a6a80" text-anchor="middle">accepts</text>
+        <!-- Arrow 3→4 -->
+        <line x1="414" y1="98" x2="428" y2="98" stroke="#4a4a60" stroke-width="1.5"/>
+        <polygon points="428,94 436,98 428,102" fill="#4a4a60"/>
+        <!-- Step 4: Run the tests (green) -->
+        <rect x="436" y="24" width="118" height="148" rx="8" fill="#0a2010" stroke="#5ec269" stroke-width="1.5"/>
+        <text x="495" y="46" font-size="13" fill="#5ec269" font-weight="700" text-anchor="middle">Run tests</text>
+        <rect x="442" y="54" width="106" height="26" rx="4" fill="#0a1808" stroke="#2a4a20" stroke-width="1"/>
+        <text x="495" y="71" font-size="9" fill="#5ec269" text-anchor="middle">npm run test:e2e</text>
+        <text x="495" y="98" font-size="11" fill="#a0a0b8" text-anchor="middle">All green = safe</text>
+        <text x="495" y="116" font-size="11" fill="#6a6a80" text-anchor="middle">Failures =</text>
+        <text x="495" y="130" font-size="11" fill="#6a6a80" text-anchor="middle">investigate</text>
+        <text x="495" y="144" font-size="11" fill="#6a6a80" text-anchor="middle">before continuing</text>
+        <!-- Arrow 4→5 -->
+        <line x1="554" y1="98" x2="568" y2="98" stroke="#4a4a60" stroke-width="1.5"/>
+        <polygon points="568,94 576,98 568,102" fill="#4a4a60"/>
+        <!-- Step 5: Commit result (cyan) -->
+        <rect x="576" y="24" width="108" height="148" rx="8" fill="#0a2020" stroke="#4ecdc4" stroke-width="1.5"/>
+        <text x="630" y="46" font-size="13" fill="#4ecdc4" font-weight="700" text-anchor="middle">Commit result</text>
+        <text x="630" y="66" font-size="11" fill="#a0a0b8" text-anchor="middle">git commit with</text>
+        <text x="630" y="80" font-size="11" fill="#a0a0b8" text-anchor="middle">clear message</text>
+        <text x="630" y="98" font-size="11" fill="#6a6a80" text-anchor="middle">Clear history</text>
+        <text x="630" y="116" font-size="11" fill="#6a6a80" text-anchor="middle">Easy to revert</text>
+        <text x="630" y="134" font-size="11" fill="#6a6a80" text-anchor="middle">if needed</text>
+        <!-- Caption -->
+        <text x="350" y="196" font-size="11" fill="#e8a848" text-anchor="middle">AI refactoring is fast — but YOU are still the reviewer. Never skip the run.</text>
+      </svg>
+      <div style="display:grid;gap:12px;margin-bottom:16px;">
+        <div style="display:flex;gap:12px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="font-size:1.2rem;flex-shrink:0;">✅</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Run the suite before starting</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Establish the baseline. Know how many tests pass. If any are already failing, fix those before refactoring.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="font-size:1.2rem;flex-shrink:0;">📦</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Refactor one pattern at a time</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Extract Page Objects → run suite. Extract helpers → run suite. Don't batch all refactoring into one step.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="font-size:1.2rem;flex-shrink:0;">🔍</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Read the diff before applying AI changes</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">AI may subtly change assertions while refactoring. Read the diff the same way you'd review a PR.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:flex-start;">
+          <div style="font-size:1.2rem;flex-shrink:0;">✅</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Run the suite after each step</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Same number of passes as before = safe refactor. Any new failures = investigate immediately before continuing.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="Close out Phase 3. Acknowledge: it's a lot to take in. Sessions 7, 8, and 9 together form a complete AI-assisted QA workflow — writing, debugging, maintaining. The team now has the tools to move faster on all three.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:24px;">Key takeaways</h2>
+      <div class="takeaway-list">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Test code quality pays dividends every day</div>
+            <div class="takeaway-desc">A well-structured test suite is faster to maintain, easier to debug, and builds more team confidence in CI results.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Start with an AI code review</div>
+            <div class="takeaway-desc">Point AI at your test files and ask for a prioritised list of issues. It spots patterns you've gone blind to.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Four high-impact refactoring patterns</div>
+            <div class="takeaway-desc">Page Object extraction, helper extraction, readability improvements, and parameterised tests eliminate most test maintenance debt.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Run the suite before and after each change</div>
+            <div class="takeaway-desc">Refactoring test code should not change what the tests verify — only how they're written. The test results should be identical.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — Phase 3 Complete / Bridge to Phase 4 ─── -->
+  <div class="slide" data-title="What's Next" data-notes="Phase 3 complete. The team can now write, debug, and maintain tests with AI assistance. Phase 4 takes things up a notch — we introduce terminal agents. These are AI tools that live in your terminal, not your IDE, and have broader capabilities. Some people find this shift exciting; some find it daunting. Both are fine — Phase 4 is practical and grounded in real use cases.">
+    <div class="slide-inner" style="text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:24px;">Phase 3 Complete</div>
+      <h2 style="font-size:2rem;margin-bottom:14px;">Up next: <span style="color:var(--accent)">Phase 4</span></h2>
+      <p style="color:var(--text-secondary);font-size:0.95rem;max-width:480px;margin:0 auto 32px;line-height:1.7;">Terminal Agents &amp; Agentic Tools — meeting Claude Code and Opencode</p>
+      <div style="display:grid;gap:10px;max-width:420px;margin:0 auto;text-align:left;">
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;">
+          <span>Session 10 — Introduction to Claude Code &amp; Opencode</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;background:var(--bg-card);padding:2px 8px;border-radius:4px;color:var(--text-dim);">next</span>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;color:var(--text-muted);">Session 11 — Working Effectively with Terminal Agents</div>
+        <div style="background:var(--bg-elevated);border-radius:8px;padding:12px 16px;border:1px solid var(--border);font-size:0.85rem;color:var(--text-muted);">Session 12 — Comparing Your AI Toolkit</div>
+      </div>
+    </div>
+  </div>

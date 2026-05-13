@@ -1,0 +1,597 @@
+---
+layout: session.njk
+title: Session 17 — Using MCP Servers in Your Workflow
+sessionNumber: "17"
+sessionTitle: "Using MCP Servers in Your Workflow"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+sessionStyles: ""
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide active" data-title="Session Overview" data-notes="Last session was the concept. This session is the doing. We're configuring real MCP servers, connecting them to Claude Code, and seeing what changes when your AI has access to live data and real tools.&lt;br&gt;&lt;br&gt;Note to presenter: this session works best with a live demo if possible. The before/after difference — asking an AI a question with and without an MCP server — is more impactful when seen than described. If you can, have Claude Code open with the filesystem MCP server connected and show it live.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Goal for this session: everyone leaves knowing how to install, configure, and use at least one real MCP server.&lt;/div&gt;">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="session-badge" style="margin-bottom:20px;">🔌 Session 17 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows</div>
+      <h1 style="font-size:2.4rem;margin-bottom:16px;line-height:1.2;">Using MCP Servers<br><span style="color:var(--accent)">in Your Workflow</span></h1>
+      <p style="color:var(--text-secondary);font-size:1rem;max-width:520px;margin:0 auto 32px;line-height:1.7;">Hands-on with real MCP servers — configure, connect, and use them to give your AI access to your actual systems.</p>
+      <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">50 min</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Duration</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Advanced</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Level</div></div>
+        <div style="text-align:center;"><div style="font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;">Session 13</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-top:3px;">Prerequisite</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — Two Ways to Add an MCP Server ─── -->
+  <div class="slide" data-title="Two Ways to Add a Server" data-notes="There are two ways to register an MCP server with Claude Code. The CLI command is easier for one-off setups. The JSON config is better when you want to version-control your server list or share it with your team.&lt;br&gt;&lt;br&gt;Both end up in the same place — the Claude config file. We'll walk through both, then look at the JSON format in detail on the next slide.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:20px;">Two ways to register an MCP server</h2>
+      <div style="display:grid;gap:16px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid var(--accent);padding:20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:4px;">Option 1 — CLI (easiest)</span>
+          </div>
+          <div class="code-block" style="font-size:0.84rem;margin-bottom:10px;">claude mcp add &lt;name&gt; &lt;command&gt; [args...]</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Claude Code updates the config file automatically. Best for quick setups and experimenting.</div>
+          <div class="code-block" style="font-size:0.82rem;margin-top:10px;"><span class="cm"># Real example — add the filesystem server</span><br>claude mcp add filesystem npx -y @modelcontextprotocol/server-filesystem /Users/you/projects</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);background:var(--bg-card);padding:3px 8px;border-radius:4px;">Option 2 — JSON config file</span>
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:10px;">Edit the config directly. Stored at <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">~/.claude.json</code>. Good for teams — commit it to your repo.</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Both options do the same thing. The CLI is just a shortcut for editing the JSON file.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — The JSON Config Explained Line By Line ─── -->
+  <div class="slide" data-title="The Config File: Line by Line" data-notes="Walk through each line of the JSON config. This is important because understanding the format means you can add any server from the community — they all follow this pattern.&lt;br&gt;&lt;br&gt;The key fields: command is what runs the server process. args is an array of arguments passed to that command. env lets you pass API keys or tokens the server needs.&lt;br&gt;&lt;br&gt;Walk through each annotation on the slide and pause for questions.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">The JSON config — every line explained</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+        <div class="code-block" style="font-size:0.78rem;line-height:1.9;">
+          {{ '{' }} <span class="cm">// ~/.claude.json</span><br>
+          &nbsp;&nbsp;<span class="str">"mcpServers"</span>: {{ '{' }}<br>
+          <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"filesystem"</span>: {{ '{' }} <span class="cm">// ← A</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"command"</span>: <span class="str">"npx"</span>, <span class="cm">// ← B</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"args"</span>: [ <span class="cm">// ← C</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"-y"</span>, <span class="cm">// ← D</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"@modelcontextprotocol/server-filesystem"</span>, <span class="cm">// ← E</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"/Users/you/projects"</span> <span class="cm">// ← F</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;{{ '}' }}<br>
+          &nbsp;&nbsp;{{ '}' }}<br>
+          {{ '}' }}
+        </div>
+        <div style="display:grid;gap:8px;font-size:0.8rem;">
+          <div style="padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);">A</strong> <span style="color:var(--text-secondary);">The name you give this server. Anything descriptive. You'll see this in Claude's tool list.</span></div>
+          <div style="padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--text-dim);"><strong style="color:var(--text-primary);">B</strong> <span style="color:var(--text-secondary);">The command Claude uses to start the server process. "npx" = run an npm package without installing it first.</span></div>
+          <div style="padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--text-dim);"><strong style="color:var(--text-primary);">C</strong> <span style="color:var(--text-secondary);">Arguments passed to that command, as a JSON array. Each word/value is a separate item.</span></div>
+          <div style="padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--text-dim);"><strong style="color:var(--text-primary);">D</strong> <span style="color:var(--text-secondary);">The "-y" flag tells npx to automatically say "yes" to install prompts — no confirmation needed.</span></div>
+          <div style="padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--text-dim);"><strong style="color:var(--text-primary);">E</strong> <span style="color:var(--text-secondary);">The npm package name of the MCP server to run. This is the community filesystem server from Anthropic.</span></div>
+          <div style="padding:8px 12px;background:var(--bg-elevated);border-radius:6px;border-left:3px solid var(--green);"><strong style="color:var(--green);">F</strong> <span style="color:var(--text-secondary);">The path on your computer the server is allowed to access. The AI can only read/write inside this folder.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — What Happens at Startup ─── -->
+  <div class="slide" data-title="What Happens When Claude Starts" data-notes="People often wonder: how does Claude know what tools are available? This slide explains the discovery handshake that happens invisibly every time Claude Code starts.&lt;br&gt;&lt;br&gt;The key insight: Claude doesn't have hardcoded knowledge of 'filesystem tools'. It asks each registered server 'what can you do?' on startup, and the server lists its tools. That's why the AI can say 'I have a read_file tool available' — it just learned that from the server.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">What happens when Claude Code starts up</h2>
+      <svg viewBox="0 0 700 260" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg">
+        <rect width="700" height="260" rx="12" fill="#13111d"/>
+        <!-- Step boxes -->
+        <!-- Step 1 -->
+        <rect x="30" y="24" width="128" height="56" rx="10" fill="#1a2840" stroke="#6fa3f7" stroke-width="2"/>
+        <text x="94" y="47" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#6fa3f7" text-anchor="middle">You run</text>
+        <text x="94" y="65" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="700" fill="#6fa3f7" text-anchor="middle">`claude`</text>
+        <!-- Arrow 1→2 -->
+        <line x1="158" y1="52" x2="186" y2="52" stroke="#4a4570" stroke-width="2" stroke-dasharray="4 3"/>
+        <polygon points="186,47 196,52 186,57" fill="#4a4570"/>
+        <!-- Step 2 -->
+        <rect x="196" y="18" width="148" height="68" rx="10" fill="#2a1f0d" stroke="#e8a848" stroke-width="2"/>
+        <text x="270" y="40" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#e8a848" text-anchor="middle">Reads config file</text>
+        <text x="270" y="57" font-family="IBM Plex Mono, monospace" font-size="10" fill="#a07030" text-anchor="middle">~/.claude/claude.json</text>
+        <text x="270" y="73" font-family="IBM Plex Mono, monospace" font-size="10" fill="#a07030" text-anchor="middle">finds server defs</text>
+        <!-- Arrow 2→3 -->
+        <line x1="344" y1="52" x2="372" y2="52" stroke="#4a4570" stroke-width="2" stroke-dasharray="4 3"/>
+        <polygon points="372,47 382,52 372,57" fill="#4a4570"/>
+        <!-- Step 3 -->
+        <rect x="382" y="18" width="148" height="68" rx="10" fill="#1e1433" stroke="#b08cf5" stroke-width="2"/>
+        <text x="456" y="38" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#b08cf5" text-anchor="middle">Spawns MCP</text>
+        <text x="456" y="54" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#b08cf5" text-anchor="middle">server processes</text>
+        <text x="456" y="73" font-family="IBM Plex Mono, monospace" font-size="10" fill="#7050b0" text-anchor="middle">Separate process each</text>
+        <!-- Arrow 3→4 (diagonal down) -->
+        <line x1="456" y1="86" x2="456" y2="112" stroke="#4a4570" stroke-width="2" stroke-dasharray="4 3"/>
+        <polygon points="451,112 456,122 461,112" fill="#4a4570"/>
+        <!-- Step 4 -->
+        <rect x="382" y="122" width="148" height="68" rx="10" fill="#0d2828" stroke="#4ecdc4" stroke-width="2"/>
+        <text x="456" y="143" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#4ecdc4" text-anchor="middle">Exchanges tool list</text>
+        <text x="456" y="159" font-family="IBM Plex Mono, monospace" font-size="10" fill="#2a8080" text-anchor="middle">Server reports: here are</text>
+        <text x="456" y="174" font-family="IBM Plex Mono, monospace" font-size="10" fill="#2a8080" text-anchor="middle">the tools I offer</text>
+        <!-- Arrow 4→5 -->
+        <line x1="382" y1="156" x2="354" y2="156" stroke="#4a4570" stroke-width="2" stroke-dasharray="4 3"/>
+        <polygon points="354,151 344,156 354,161" fill="#4a4570"/>
+        <!-- Step 5 -->
+        <rect x="196" y="122" width="148" height="68" rx="10" fill="#0d2010" stroke="#5ec269" stroke-width="2"/>
+        <text x="270" y="148" font-family="IBM Plex Mono, monospace" font-size="14" font-weight="700" fill="#5ec269" text-anchor="middle">Ready</text>
+        <text x="270" y="166" font-family="IBM Plex Mono, monospace" font-size="10" fill="#2a6030" text-anchor="middle">Claude knows all tools —</text>
+        <text x="270" y="181" font-family="IBM Plex Mono, monospace" font-size="10" fill="#2a6030" text-anchor="middle">they appear in context</text>
+        <!-- Caption -->
+        <text x="350" y="230" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6a6090" text-anchor="middle">All 5 steps happen in milliseconds at startup — invisible to you</text>
+        <!-- Step labels -->
+        <text x="94" y="100" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6a6090" text-anchor="middle">Step 1</text>
+        <text x="270" y="100" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6a6090" text-anchor="middle">Step 2</text>
+        <text x="456" y="100" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6a6090" text-anchor="middle">Step 3</text>
+        <text x="456" y="204" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6a6090" text-anchor="middle">Step 4</text>
+        <text x="270" y="204" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6a6090" text-anchor="middle">Step 5</text>
+      </svg>
+      <div style="display:grid;gap:10px;">
+        <div style="display:grid;grid-template-columns:120px 1fr;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);">Step 1 — Read config</div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);">Claude reads <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">~/.claude.json</code> and finds the list of registered MCP servers</div>
+        </div>
+        <div style="display:grid;grid-template-columns:120px 1fr;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);">Step 2 — Launch servers</div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);">Claude starts each server as a background process using the <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">command</code> and <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">args</code> from the config</div>
+        </div>
+        <div style="display:grid;grid-template-columns:120px 1fr;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);">Step 3 — Discovery</div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);">Claude sends a <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">tools/list</code> request to each server. Each server responds with its capabilities.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:120px 1fr;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);align-items:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);">Step 4 — Awareness</div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);">Claude now knows: "I have a <strong>read_file</strong> tool, a <strong>write_file</strong> tool, a <strong>list_directory</strong> tool..." — and can use them in any conversation</div>
+        </div>
+        <div style="display:grid;grid-template-columns:120px 1fr;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--accent);border-left:3px solid var(--accent);align-items:center;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);">In practice</div>
+          <div style="font-size:0.83rem;color:var(--text-secondary);">This all happens in milliseconds at startup. You never see it. When you type a question, Claude already knows what tools it has available.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — Demo: Filesystem Server — Setup ─── -->
+  <div class="slide" data-title="Demo: Filesystem Server Setup" data-notes="The filesystem MCP server is the best one to start with — everyone understands files. Walk through the setup step by step on this slide.&lt;br&gt;&lt;br&gt;Important to emphasise: the path you provide at the end limits what the AI can access. If you give it '/Users/you/projects/myapp/tests' — it can only see inside that tests folder. It cannot read your entire home directory. This is the safety boundary.&lt;br&gt;&lt;br&gt;After running the command, restart Claude Code. Then in the next slide we'll see what it can do.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Demo — Setting up the Filesystem MCP server</h2>
+      <div style="display:grid;gap:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Step 1 — Register the server</div>
+          <div class="code-block" style="font-size:0.82rem;margin-bottom:10px;"><span class="cm"># Add the filesystem MCP server, scoped to your tests folder</span><br>claude mcp add filesystem npx -y @modelcontextprotocol/server-filesystem ./tests</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Replace <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">./tests</code> with any folder path. The AI will only be able to access files inside that path.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Step 2 — Restart Claude Code</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">Type <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">/exit</code> and reopen Claude Code. The server starts fresh on every session.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Step 3 — Verify it's connected</div>
+          <div class="code-block" style="font-size:0.82rem;margin-bottom:8px;">claude mcp list</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">You should see <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">filesystem</code> listed. You can also ask Claude: "What tools do you have?" and it will list <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">read_file</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">write_file</code>, <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">list_directory</code>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — Demo: Filesystem In Action ─── -->
+  <div class="slide" data-title="Demo: Filesystem In Action" data-notes="This is the wow moment. The AI reads a file you never pasted into the chat. It just... knows what's in there. That's MCP working.&lt;br&gt;&lt;br&gt;If you're doing a live demo: open Claude Code, don't paste anything, just ask 'Read the latest test results from tests/results/ and summarise what failed.' Watch it use the read_file tool and return a summary.&lt;br&gt;&lt;br&gt;The key thing to narrate: 'I didn't copy anything. Claude used the filesystem MCP server to read that file directly from my computer.'">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Demo — Filesystem MCP server in action</h2>
+      <div class="chat-mock">
+        <div class="chat-msg user">
+          Read the latest Playwright test report from tests/results/ and give me a summary of which tests failed, what the error messages were, and which files they're in.
+        </div>
+        <div class="chat-msg ai">
+          I'll read the test results directory using the filesystem tool...
+          <br><br>
+          Found <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">tests/results/test-results-2025-05-12.json</code>. Here's the summary:
+          <br><br>
+          <strong>3 failures out of 21 tests:</strong>
+          <ul style="margin:8px 0 0 16px;display:grid;gap:7px;font-size:0.88em;">
+            <li><strong>tests/checkout.spec.ts:67</strong> — TimeoutError waiting for payment button. Selector <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">[data-testid="confirm-order"]</code> not found. Likely renamed in a recent PR.</li>
+            <li><strong>tests/auth.spec.ts:134</strong> — AssertionError: expected page title "Dashboard" but got "Login". Session expired before assertion ran.</li>
+            <li><strong>tests/profile.spec.ts:45</strong> — Element not found: <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">.avatar-upload-btn</code> — this element may have been removed from the page.</li>
+          </ul>
+          <br>
+          Want me to investigate the root cause for any of these, or check what changed recently in those files?
+        </div>
+      </div>
+      <div style="margin-top:12px;background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:10px 14px;font-size:0.8rem;color:var(--text-secondary);">
+        Nothing was pasted into this conversation. Claude read the file directly using the filesystem MCP server.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — Demo: GitHub MCP Server — Setup ─── -->
+  <div class="slide" data-title="Demo: GitHub Server Setup" data-notes="The GitHub MCP server is highly practical for QA workflows — ask AI about what changed in a release, what bugs are open, what PRs touched a specific file.&lt;br&gt;&lt;br&gt;The server needs a GITHUB_TOKEN environment variable for authentication. Walk through how to get one: GitHub Settings → Developer Settings → Personal Access Tokens → Generate new token → select repo scope.&lt;br&gt;&lt;br&gt;Two ways to pass the token: environment variable (easier) or env block in the JSON config (better for teams).">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Demo — Setting up the GitHub MCP server</h2>
+      <div style="display:grid;gap:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Step 1 — Get a GitHub token</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">GitHub → Settings → Developer Settings → Personal Access Tokens → Tokens (classic) → Generate new. Select <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">repo</code> scope.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Step 2 — Register the server with your token</div>
+          <div class="code-block" style="font-size:0.81rem;"><span class="cm"># Register and pass the token as an environment variable</span><br>GITHUB_TOKEN=ghp_yourtoken claude mcp add github npx -y @modelcontextprotocol/server-github</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Alternative — in the JSON config (team-friendly)</div>
+          <div class="code-block" style="font-size:0.8rem;line-height:1.8;"><span class="str">"github"</span>: {{ '{' }}<br>
+          &nbsp;&nbsp;<span class="str">"command"</span>: <span class="str">"npx"</span>,<br>
+          &nbsp;&nbsp;<span class="str">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@modelcontextprotocol/server-github"</span>],<br>
+          &nbsp;&nbsp;<span class="str">"env"</span>: {{ '{' }} <span class="str">"GITHUB_TOKEN"</span>: <span class="str">"ghp_yourtoken"</span> {{ '}' }}<br>
+          {{ '}' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — Demo: GitHub In Action ─── -->
+  <div class="slide" data-title="Demo: GitHub In Action" data-notes="This is where QA engineers often get excited. Being able to ask 'what changed this week that might break checkout tests' — and getting a real answer — transforms how investigation work feels.&lt;br&gt;&lt;br&gt;In a live demo: run this exact prompt against a real repo. Watch the AI read the PR list and commits, then synthesise the relevant ones for your test area. The key insight: the AI isn't just searching by keyword — it understands what 'checkout tests' cares about and filters accordingly.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Demo — GitHub MCP server in action</h2>
+      <div class="chat-mock">
+        <div class="chat-msg user">
+          What's changed in the main branch in the last 7 days that might affect our checkout tests? Look at commits and merged PRs touching checkout-related files.
+        </div>
+        <div class="chat-msg ai">
+          Looking at recent commits and merged PRs touching checkout, payment, and cart files...
+          <br><br>
+          <strong>3 changes that could affect your checkout tests:</strong>
+          <br><br>
+          <strong>PR #847</strong> (merged Mon, 2 days ago): "Rename order button copy"<br>
+          Changed button text from "Place Order" to "Confirm Order" in <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">CheckoutSummary.tsx</code>. Your tests likely use the old text as a selector — check for <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">getByText("Place Order")</code>.
+          <br><br>
+          <strong>PR #851</strong> (merged Wed): "Async payment form validation"<br>
+          Payment validation now runs async. Tests may need explicit waits before asserting validation messages.
+          <br><br>
+          <strong>Commit a3f8c2</strong> (Thu): Removed avatar upload button from profile page<br>
+          Explains the failing test in <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">profile.spec.ts:45</code> — that button no longer exists.
+          <br><br>
+          Want me to suggest test fixes for any of these?
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — Demo: Playwright MCP Server — Setup ─── -->
+  <div class="slide" data-title="Demo: Playwright Server Setup" data-notes="The Playwright MCP server is the most impressive one for QA engineers. It gives AI control of an actual browser — not just generating test code, but actually operating the browser.&lt;br&gt;&lt;br&gt;Installation is simpler than the others — no token needed. Just register and restart. The server launches a Chromium instance when needed and controls it through the Playwright API.&lt;br&gt;&lt;br&gt;Note: make sure you have a recent version of Node.js installed. The @playwright/mcp package requires Node 18+.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Demo — Setting up the Playwright MCP server</h2>
+      <div style="display:grid;gap:14px;">
+        <div style="background:var(--bg-elevated);border-radius:10px;border:2px solid var(--accent);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">Register the Playwright server</div>
+          <div class="code-block" style="font-size:0.82rem;margin-bottom:10px;"><span class="cm"># The simplest MCP server to install — no token needed</span><br>claude mcp add playwright npx -y @playwright/mcp</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">Restart Claude Code after this command. That's all the setup required.</div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">What it gives Claude access to</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.8rem;color:var(--text-secondary);">
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Navigate to URLs</div>
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Click elements</div>
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Fill in forms</div>
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Take screenshots</div>
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Read page content</div>
+            <div style="display:flex;gap:6px;"><span style="color:var(--green);">✓</span> Execute JavaScript</div>
+          </div>
+        </div>
+        <div style="background:var(--accent-soft);border:1px solid rgba(232,168,72,0.2);border-radius:8px;padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
+          A browser window will open visibly when Claude uses this tool — you can watch it work in real time.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — Demo: Playwright In Action ─── -->
+  <div class="slide" data-title="Demo: Playwright In Action" data-notes="This is the demo that tends to get the most reaction — people watch an actual browser window open, navigate, click through a checkout flow, and report back with findings. It genuinely feels like watching an AI do exploratory testing.&lt;br&gt;&lt;br&gt;The practical use case: point it at a staging environment and ask it to explore a new feature. It can find UI issues, misaligned elements, broken flows — things that automated test scripts miss because they only check exactly what you told them to check.&lt;br&gt;&lt;br&gt;Important: always use staging environments, never production. The AI is taking real actions in the browser.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:16px;">Demo — Playwright MCP: AI-powered exploratory testing</h2>
+      <div class="chat-mock">
+        <div class="chat-msg user">
+          Navigate to staging.example.com and test the checkout flow: add any product to cart, proceed to checkout, use test card 4242 4242 4242 4242, and complete the order. Report any visual or functional issues you find along the way.
+        </div>
+        <div class="chat-msg ai">
+          Opening Chromium and navigating to staging.example.com...
+          <br><br>
+          Completed the full checkout flow. <strong>Found 2 issues:</strong>
+          <br><br>
+          <strong>Issue 1 — Visual (mobile):</strong> On viewport 375×812, the "Confirm Order" button overlaps the order total text. The button's z-index is higher than the total container. Screenshot attached: <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">checkout-mobile-overlap.png</code>
+          <br><br>
+          <strong>Issue 2 — Functional:</strong> After order confirmation, the success page shows "Thank you, undefined!" instead of the user's name. The <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">user.displayName</code> field appears to be null in the confirmation response.
+          <br><br>
+          Shall I write Playwright test cases for both issues?
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — Running Multiple MCP Servers Together ─── -->
+  <div class="slide" data-title="Using Multiple Servers Together" data-notes="The real power isn't using one server at a time — it's combining them. The JSON config can have as many servers as you need, and Claude can call multiple in a single conversation.&lt;br&gt;&lt;br&gt;The example on this slide is a realistic QA workflow: Claude reads test results (filesystem), checks what changed (GitHub), creates a ticket (Jira), and posts to Slack. All four servers active simultaneously. All triggered by one request from you.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">Running multiple MCP servers at once</h2>
+      <svg viewBox="0 0 700 340" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg">
+        <rect width="700" height="340" rx="12" fill="#13111d"/>
+        <!-- Hub: Claude center -->
+        <rect x="276" y="126" width="148" height="72" rx="12" fill="#2a1f0d" stroke="#e8a848" stroke-width="3"/>
+        <text x="350" y="157" font-family="IBM Plex Mono, monospace" font-size="18" font-weight="700" fill="#e8a848" text-anchor="middle">Claude</text>
+        <text x="350" y="178" font-family="IBM Plex Mono, monospace" font-size="11" fill="#a07030" text-anchor="middle">orchestrates all servers</text>
+
+        <!-- Top-left: Filesystem server -->
+        <rect x="30" y="28" width="150" height="64" rx="10" fill="#0d2010" stroke="#5ec269" stroke-width="2"/>
+        <text x="105" y="52" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#5ec269" text-anchor="middle">Filesystem server</text>
+        <text x="105" y="70" font-family="IBM Plex Mono, monospace" font-size="10" fill="#2a6030" text-anchor="middle">read/write project files</text>
+        <!-- Line to hub -->
+        <line x1="180" y1="76" x2="290" y2="148" stroke="#5ec269" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="218" y="110" font-family="IBM Plex Mono, monospace" font-size="10" fill="#5ec269" text-anchor="middle" transform="rotate(-30,218,110)">read_file</text>
+
+        <!-- Top-right: GitHub server -->
+        <rect x="520" y="28" width="148" height="64" rx="10" fill="#1a2840" stroke="#6fa3f7" stroke-width="2"/>
+        <text x="594" y="52" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#6fa3f7" text-anchor="middle">GitHub server</text>
+        <text x="594" y="70" font-family="IBM Plex Mono, monospace" font-size="10" fill="#3060a0" text-anchor="middle">create issues, list PRs</text>
+        <!-- Line to hub -->
+        <line x1="520" y1="76" x2="416" y2="148" stroke="#6fa3f7" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="480" y="104" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6fa3f7" text-anchor="middle" transform="rotate(30,480,104)">create_issue</text>
+
+        <!-- Right: Playwright server -->
+        <rect x="556" y="148" width="130" height="64" rx="10" fill="#1e1433" stroke="#b08cf5" stroke-width="2"/>
+        <text x="621" y="172" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#b08cf5" text-anchor="middle">Playwright</text>
+        <text x="621" y="187" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#b08cf5" text-anchor="middle">server</text>
+        <text x="621" y="203" font-family="IBM Plex Mono, monospace" font-size="10" fill="#7050b0" text-anchor="middle">run browser tests</text>
+        <!-- Line to hub -->
+        <line x1="556" y1="180" x2="424" y2="175" stroke="#b08cf5" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="498" y="168" font-family="IBM Plex Mono, monospace" font-size="10" fill="#b08cf5" text-anchor="middle">browser_click</text>
+
+        <!-- Bottom-right: Slack server -->
+        <rect x="516" y="248" width="148" height="64" rx="10" fill="#0d2828" stroke="#4ecdc4" stroke-width="2"/>
+        <text x="590" y="272" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#4ecdc4" text-anchor="middle">Slack server</text>
+        <text x="590" y="290" font-family="IBM Plex Mono, monospace" font-size="10" fill="#2a8080" text-anchor="middle">send notifications</text>
+        <!-- Line to hub -->
+        <line x1="516" y1="262" x2="416" y2="198" stroke="#4ecdc4" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="472" y="244" font-family="IBM Plex Mono, monospace" font-size="10" fill="#4ecdc4" text-anchor="middle">post_message</text>
+
+        <!-- Bottom-left: Custom QA server -->
+        <rect x="32" y="248" width="150" height="64" rx="10" fill="#13111d" stroke="#e8a848" stroke-width="2" stroke-dasharray="6 3"/>
+        <text x="107" y="272" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#e8a848" text-anchor="middle">Custom QA server</text>
+        <text x="107" y="290" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6a6090" text-anchor="middle">your own tools</text>
+        <!-- Line to hub -->
+        <line x1="182" y1="262" x2="286" y2="198" stroke="#e8a848" stroke-width="1.5" stroke-opacity="0.4" stroke-dasharray="5 3"/>
+        <text x="222" y="244" font-family="IBM Plex Mono, monospace" font-size="10" fill="#e8a848" text-anchor="middle">get_test_summary</text>
+
+        <!-- Footer note -->
+        <text x="350" y="323" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6a6090" text-anchor="middle">Claude orchestrates all servers in a single conversation — no switching tools</text>
+      </svg>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px;">Config with multiple servers</div>
+          <div class="code-block" style="font-size:0.76rem;line-height:1.8;">
+            <span class="str">"mcpServers"</span>: {{ '{' }}<br>
+            &nbsp;&nbsp;<span class="str">"filesystem"</span>: {{ '{' }}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"command"</span>: <span class="str">"npx"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@modelcontextprotocol/server-filesystem"</span>, <span class="str">"./tests"</span>]<br>
+            &nbsp;&nbsp;{{ '}' }},<br>
+            &nbsp;&nbsp;<span class="str">"github"</span>: {{ '{' }}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"command"</span>: <span class="str">"npx"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@modelcontextprotocol/server-github"</span>],<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"env"</span>: {{ '{' }} <span class="str">"GITHUB_TOKEN"</span>: <span class="str">"ghp_..."</span> {{ '}' }}<br>
+            &nbsp;&nbsp;{{ '}' }},<br>
+            &nbsp;&nbsp;<span class="str">"playwright"</span>: {{ '{' }}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"command"</span>: <span class="str">"npx"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"args"</span>: [<span class="str">"-y"</span>, <span class="str">"@playwright/mcp"</span>]<br>
+            &nbsp;&nbsp;{{ '}' }}<br>
+            {{ '}' }}
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">What one prompt can now do</div>
+          <div class="chat-mock" style="margin-bottom:0;">
+            <div class="chat-msg user" style="font-size:0.82em;">Our CI just failed. Read the test results, check what changed in the last 24 hours on GitHub that might have caused it, and give me a summary.</div>
+            <div class="chat-msg ai" style="font-size:0.82em;">Reading test results... checking GitHub commits and PRs... cross-referencing the failures with recent changes...
+            <br><br>
+            The 3 failures are all caused by PR #851 (merged yesterday): async validation added to the checkout form. Your tests don't await the validation response before asserting. Here's the fix for each test...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — QA-Specific MCP Patterns ─── -->
+  <div class="slide" data-title="QA Workflow Patterns" data-notes="Show these practical patterns. Each one is something a QA engineer would want to do regularly and that MCP makes significantly easier. The key message: these aren't futuristic — you can set these up today with the servers we just installed.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">QA workflows MCP transforms</h2>
+      <svg viewBox="0 0 700 320" style="width:100%;display:block;margin:12px auto 8px;" xmlns="http://www.w3.org/2000/svg">
+        <rect width="700" height="320" rx="12" fill="#13111d"/>
+
+        <!-- Step 1 -->
+        <rect x="30" y="20" width="448" height="46" rx="8" fill="#1e1433" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="46" y="48" font-family="IBM Plex Mono, monospace" font-size="13" fill="#d0d0e8" text-anchor="start">Test run fails in CI — Claude reads test results</text>
+        <!-- Badge -->
+        <rect x="496" y="24" width="174" height="38" rx="8" fill="#0d2010" stroke="#5ec269" stroke-width="1.5"/>
+        <text x="583" y="47" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="700" fill="#5ec269" text-anchor="middle">Filesystem server</text>
+
+        <!-- Arrow -->
+        <line x1="350" y1="66" x2="350" y2="82" stroke="#4a4570" stroke-width="2"/>
+        <polygon points="345,82 350,92 355,82" fill="#4a4570"/>
+
+        <!-- Step 2 -->
+        <rect x="30" y="92" width="448" height="46" rx="8" fill="#1e1433" stroke="#b08cf5" stroke-width="1.5"/>
+        <text x="46" y="120" font-family="IBM Plex Mono, monospace" font-size="13" fill="#d0d0e8" text-anchor="start">Identifies root cause — reads the failing test code</text>
+        <!-- Badge -->
+        <rect x="496" y="96" width="174" height="38" rx="8" fill="#0d2010" stroke="#5ec269" stroke-width="1.5"/>
+        <text x="583" y="119" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="700" fill="#5ec269" text-anchor="middle">Filesystem server</text>
+
+        <!-- Arrow -->
+        <line x1="350" y1="138" x2="350" y2="154" stroke="#4a4570" stroke-width="2"/>
+        <polygon points="345,154 350,164 355,154" fill="#4a4570"/>
+
+        <!-- Step 3 -->
+        <rect x="30" y="164" width="448" height="46" rx="8" fill="#1a2840" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="46" y="192" font-family="IBM Plex Mono, monospace" font-size="13" fill="#d0d0e8" text-anchor="start">Checks recent commits — queries git log for changes</text>
+        <!-- Badge -->
+        <rect x="496" y="168" width="174" height="38" rx="8" fill="#1a2840" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="583" y="191" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="700" fill="#6fa3f7" text-anchor="middle">GitHub server</text>
+
+        <!-- Arrow -->
+        <line x1="350" y1="210" x2="350" y2="226" stroke="#4a4570" stroke-width="2"/>
+        <polygon points="345,226 350,236 355,226" fill="#4a4570"/>
+
+        <!-- Step 4 -->
+        <rect x="30" y="236" width="448" height="46" rx="8" fill="#1a2840" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="46" y="264" font-family="IBM Plex Mono, monospace" font-size="13" fill="#d0d0e8" text-anchor="start">Creates a bug ticket — GitHub issue with full context</text>
+        <!-- Badge -->
+        <rect x="496" y="240" width="174" height="38" rx="8" fill="#1a2840" stroke="#6fa3f7" stroke-width="1.5"/>
+        <text x="583" y="263" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="700" fill="#6fa3f7" text-anchor="middle">GitHub server</text>
+
+        <!-- Arrow -->
+        <line x1="350" y1="282" x2="350" y2="287" stroke="#4a4570" stroke-width="2"/>
+
+        <!-- Step labels on left -->
+        <text x="18" y="48" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6a6090" text-anchor="middle">1</text>
+        <text x="18" y="120" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6a6090" text-anchor="middle">2</text>
+        <text x="18" y="192" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6a6090" text-anchor="middle">3</text>
+        <text x="18" y="264" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6a6090" text-anchor="middle">4</text>
+        <text x="18" y="307" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6a6090" text-anchor="middle">5</text>
+
+        <!-- Step 5 - Slack -->
+        <rect x="30" y="292" width="448" height="20" rx="8" fill="#0d2828" stroke="#4ecdc4" stroke-width="1.5"/>
+        <text x="46" y="307" font-family="IBM Plex Mono, monospace" font-size="12" fill="#d0d0e8" text-anchor="start">Notifies the team — posts to Slack channel</text>
+        <rect x="496" y="292" width="174" height="20" rx="8" fill="#0d2828" stroke="#4ecdc4" stroke-width="1.5"/>
+        <text x="583" y="307" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#4ecdc4" text-anchor="middle">Slack server</text>
+      </svg>
+      <div style="display:grid;gap:10px;">
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🔄</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Post-CI triage</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">After a CI run: AI reads results (filesystem MCP) → checks what changed (GitHub MCP) → creates Jira tickets for new failures (Jira MCP) → posts summary to Slack (Slack MCP). One prompt, four systems.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">📋</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Release readiness check</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">AI reads all merged PRs for this release (GitHub), checks open bugs assigned to this sprint (Jira), reads test coverage summary (filesystem) — returns a "ready to release?" report.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🔍</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Exploratory testing sessions</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Point Playwright MCP at a new feature, ask AI to explore it with a test charter. AI navigates, clicks, screenshots, and reports issues — faster first-pass than manual testing alone.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">📊</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Realistic test data generation</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Database MCP gives AI access to real production-like records — generate tests using actual product IDs, real user edge cases, and valid data combinations from your system.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 13 — Troubleshooting MCP ─── -->
+  <div class="slide" data-title="Troubleshooting MCP" data-notes="MCP can be finicky to set up. These are the most common issues and how to diagnose them. Walk through each one — most people will hit at least one of these.&lt;br&gt;&lt;br&gt;The most common issue by far: forgetting to restart Claude Code after adding a server. Always restart first when debugging a connection issue.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:18px;">When MCP connections fail — what to check</h2>
+      <div style="display:grid;gap:10px;">
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🔄</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Server not appearing — check restart first</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Always restart Claude Code after adding a server. Run <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">claude mcp list</code> to confirm it's registered. This fixes 80% of connection problems.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🔑</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Authentication errors</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Check environment variables are set correctly. Run <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">echo $GITHUB_TOKEN</code> to verify. The token may have expired — generate a new one.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">📦</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">npx can't find the package</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Always use the <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">-y</code> flag with npx. Or pre-install: <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">npm install -g @modelcontextprotocol/server-filesystem</code></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">📝</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">JSON syntax error in config</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Open <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">~/.claude.json</code> in VS Code — it highlights JSON errors. A missing comma or bracket will silently break all servers.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;padding:14px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:1.2rem;flex-shrink:0;">🛡️</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--text-primary);">Permission denied errors</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Filesystem server needs access to the paths you specified. Check the path exists and you have read permissions: <code style="font-family:'IBM Plex Mono',monospace;font-size:0.85em;background:var(--code-bg);padding:1px 4px;border-radius:3px;">ls -la ./tests</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 14 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="The big shift this session represents: AI tools go from working with data you provide to working with live data from your actual systems. That's genuinely different — and it's what makes AI go from useful to transformative for real workflows.">
+    <div class="slide-inner">
+      <h2 style="font-size:1.8rem;margin-bottom:24px;">Key takeaways</h2>
+      <div class="takeaway-list">
+        <div class="takeaway-item">
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Configuration is straightforward — one command or a JSON block</div>
+            <div class="takeaway-desc">One CLI command or a JSON config entry. Most community servers are npx packages — no separate install needed. The hardest part is usually the restart.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Start with filesystem, then add more as you need them</div>
+            <div class="takeaway-desc">The filesystem server is the lowest friction starting point and immediately useful. Add GitHub, Playwright, and others when you identify a specific workflow that needs them.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Playwright MCP = AI-powered exploratory testing</div>
+            <div class="takeaway-desc">An AI with browser control can explore new features, find UI bugs, and report issues — it's genuinely useful for first-pass coverage of features your automated tests haven't reached yet.</div>
+          </div>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-body">
+            <div class="takeaway-title">Multiple servers unlock end-to-end QA workflows</div>
+            <div class="takeaway-desc">Test results → AI analysis → ticket creation → Slack notification. MCP connects the steps without manual copy-pasting between systems. Session 15 shows you how to build custom ones.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 15 — Bridge to Session 15 ─── -->
+  <div class="slide" data-title="What's Next" data-notes="Session 15 is where we build our own MCP server. Now that we've used community servers, it's time to learn how to create one for something specific to our team's needs — a custom QA tool that no community server provides.">
+    <div class="slide-inner" style="text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:3px;color:var(--text-dim);margin-bottom:24px;">Session 14 Complete</div>
+      <h2 style="font-size:2rem;margin-bottom:14px;">Up next: <span style="color:var(--accent)">Session 15</span></h2>
+      <p style="color:var(--text-secondary);font-size:0.95rem;max-width:460px;margin:0 auto 32px;line-height:1.7;">Building Your First MCP Server — creating a custom integration for your team's specific needs, with full code walkthroughs</p>
+      <div style="background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border);padding:20px;max-width:420px;margin:0 auto;text-align:left;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">What we'll build in Session 15</div>
+        <ul style="list-style:none;display:grid;gap:8px;font-size:0.85rem;color:var(--text-secondary);">
+          <li>· Set up the project and install dependencies</li>
+          <li>· Walk through every import and line of the server file</li>
+          <li>· Write a real test-results summary tool</li>
+          <li>· Explain the tool definition schema line by line</li>
+          <li>· Connect the finished server to Claude Code and verify it</li>
+        </ul>
+      </div>
+    </div>
+  </div>
