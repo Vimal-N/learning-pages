@@ -95,8 +95,65 @@ body::before { opacity: 0.35; }
 .phase-block:nth-child(3) { animation-delay: 0.26s; }
 .phase-block:nth-child(4) { animation-delay: 0.34s; }
 .phase-block:nth-child(5) { animation-delay: 0.42s; }
+
+/* ─── Phase collapse/expand toggle ─── */
+.phase-header { cursor: pointer; user-select: none; }
+.phase-header::after {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: rotate(45deg);
+  transition: transform 0.22s ease;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+.phase-block.collapsed .phase-header::after { transform: rotate(-45deg); }
+.phase-block.collapsed .session-grid {
+  display: none;
+}
 </style>
 {% endblock %}
 
 
 {{ content | safe }}
+
+<script>
+  (function () {
+    const phases = document.querySelectorAll('.phase-block');
+    const STORAGE_KEY = 'phase-state-' + location.pathname.replace(/\//g, '-').replace(/^-|-$/g, '');
+
+    // Detect navigation from the home page (same origin, not a /topics/ page)
+    let fromHome = false;
+    if (document.referrer) {
+      try {
+        const ref = new URL(document.referrer);
+        fromHome = ref.origin === location.origin && !ref.pathname.includes('/topics/');
+      } catch (_) {}
+    }
+
+    // Load saved per-phase state (array of booleans, true = collapsed)
+    let saved = null;
+    if (!fromHome) {
+      try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch (_) {}
+    }
+
+    phases.forEach(function (block, i) {
+      // From home → collapse all; otherwise restore saved state (default: expanded)
+      if (fromHome ? true : (saved ? saved[i] : false)) {
+        block.classList.add('collapsed');
+      }
+
+      block.querySelector('.phase-header').addEventListener('click', function () {
+        block.classList.toggle('collapsed');
+        // Persist current state of all phases
+        const state = Array.from(phases).map(function (b) {
+          return b.classList.contains('collapsed');
+        });
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+      });
+    });
+  })();
+</script>
