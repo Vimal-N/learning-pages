@@ -22,5 +22,6 @@ module.exports = function (eleventyConfig) {
       layouts: "_layouts",
     },
     htmlTemplateEngine: "njk",
+    markdownTemplateEngine: false,
   };
 };

@@ -1,0 +1,26 @@
+---
+layout: base.njk
+---
+{% block head %}
+<style>
+@media print {
+  .ch-topbar, .ch-print-btn { display: none !important; }
+  .chapter-body { padding: 0; max-width: 100%; }
+  body { font-size: 11pt; background: #fff; }
+  .chapter-panel { page-break-inside: avoid; }
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="ch-topbar">
+  <a href="{{ topicUrl | default('/') }}" class="ch-back">← {{ topicName | default('Back') }}</a>
+  <span class="ch-topbar-sep">/</span>
+  <div class="ch-topbar-title">{{ sessionTitle | default(title) }}</div>
+  <div class="ch-topbar-badge">Session {{ sessionNumber }}</div>
+</div>
+
+<div class="chapter-body">
+  {{ content | safe }}
+</div>
+{% endblock %}

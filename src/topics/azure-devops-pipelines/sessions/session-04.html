@@ -1,0 +1,276 @@
+---
+layout: chapter.njk
+title: "Session 04 — Azure DevOps: The Whole Suite"
+sessionNumber: "04"
+sessionTitle: "Azure DevOps: The Whole Suite"
+phase: "Phase 2: CI/CD Market Survey"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 2 · CI/CD Market Survey</div>
+  <h1>Azure DevOps: The Whole Suite</h1>
+  <p class="ch-lead">Azure Pipelines is one product inside Azure DevOps — a larger suite of five integrated services. Understanding what surrounds Pipelines explains why ADO workflows feel cohesive and why integrations that would require plugins elsewhere just work out of the box.</p>
+</div>
+
+<div class="cp-section-label">The five services</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">overview</div>
+  <div class="cp-title">Azure DevOps is a suite of five services under one roof</div>
+  <p class="cp-lead">Each service covers a distinct phase of the software delivery lifecycle. They share the same organisation, the same IAM, and the same project structure — no stitching required.</p>
+  <div class="cp-icon-grid">
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="4" height="9" rx="1"/><rect x="10" y="3" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="6" rx="1"/><line x1="3" y1="21" x2="21" y2="21"/></svg></div>
+      <div class="cp-icon-name">Azure Boards</div>
+      <div class="cp-icon-desc">Work items, epics, user stories, sprints, and backlogs. Kanban and Scrum boards built in.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><path d="M6 8v8M8 6h6a4 4 0 0 1 4 4v0"/></svg></div>
+      <div class="cp-icon-name">Azure Repos</div>
+      <div class="cp-icon-desc">Git repositories hosted inside ADO. Branch policies, PR reviews, and required builds live here.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="5" height="6" rx="1"/><rect x="9" y="9" width="5" height="6" rx="1"/><rect x="17" y="9" width="5" height="6" rx="1"/><line x1="7" y1="12" x2="9" y2="12"/><line x1="14" y1="12" x2="17" y2="12"/><polyline points="15.5 10.5 17 12 15.5 13.5"/></svg></div>
+      <div class="cp-icon-name">Azure Pipelines</div>
+      <div class="cp-icon-desc">CI/CD engine. Build, test, and deploy using YAML pipelines on hosted or self-hosted agents.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5" rx="1"/><line x1="10" y1="12" x2="14" y2="12"/></svg></div>
+      <div class="cp-icon-name">Azure Artifacts</div>
+      <div class="cp-icon-desc">A private store for shared code libraries your team builds and reuses across projects.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M9 3v8l-4 9h14l-4-9V3"/><line x1="6" y1="14" x2="18" y2="14"/></svg></div>
+      <div class="cp-icon-name">Azure Test Plans</div>
+      <div class="cp-icon-desc">Manual and exploratory test management. Test cases, test runs, and results link directly to pipeline results.</div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">what is a package?</div>
+  <div class="cp-title">A package is a bundle of reusable code someone else already wrote</div>
+  <p class="cp-lead">Every time you run <code>npm install playwright</code> or <code>npm ci</code>, you're downloading packages — zip files containing code your project depends on, published to a central registry. You don't write that code; you just declare you need it and the tool fetches it.</p>
+  <ul class="cp-list">
+    <li>A package has a name, a version number, and a list of its own dependencies</li>
+    <li><strong>npm</strong> is the public registry for JavaScript packages — millions of open-source libraries live there</li>
+    <li><strong>NuGet</strong> is the equivalent for .NET — Microsoft and the community publish packages there</li>
+    <li>Most projects depend on dozens or hundreds of packages fetched automatically on build</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">why Azure Artifacts?</div>
+  <div class="cp-title">Some packages are too sensitive or too specific to publish publicly</div>
+  <p class="cp-lead">Your team might build a shared login library, a test utilities module, or an internal API client that shouldn't be published to npm for the world to see. Azure Artifacts is your private package registry — your team publishes to it, and only your organisation can consume from it.</p>
+  <ul class="cp-list">
+    <li>Think of npm as the public library — anyone can borrow any book</li>
+    <li>Azure Artifacts is your team's private bookshelf — your custom books, internal use only</li>
+    <li>Your pipeline publishes a new version to Artifacts when the build passes; other pipelines consume it</li>
+    <li>For most QE engineers: you consume packages (via <code>npm ci</code>) but rarely publish them — knowing Artifacts exists explains where internal libraries come from</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">context</div>
+  <div class="cp-title">Pipelines connects to everything else</div>
+  <p class="cp-lead">When a pipeline runs tests, the results flow automatically into Azure Test Plans. When it publishes a package, that package goes to Azure Artifacts. Branch policies in Azure Repos can require a pipeline to pass before a PR can merge. These connections come for free — they don't need configuration.</p>
+  <ul class="cp-list">
+    <li>A branch policy in Repos can block merges until a linked pipeline passes</li>
+    <li>Test results published with <code>PublishTestResults@2</code> appear in the Tests tab and in Test Plans</li>
+    <li>Packages published with <code>NuGetCommand@2</code> or <code>Npm@1</code> land in the project's Artifacts feed</li>
+    <li>Work items in Boards can be linked to specific pipeline runs</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Reading YAML — the format pipelines are written in</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">foundation</div>
+  <div class="cp-title">YAML is a structured way to write configuration — like a very strict outline</div>
+  <p class="cp-lead">YAML stands for "YAML Ain't Markup Language." You do not need to remember that. What matters is this: YAML is how Azure Pipelines definitions are written. It is a text format where indentation controls structure — the number of spaces at the start of a line determines what belongs to what. There are three things to know to read any YAML file.</p>
+  <div class="cp-grid-2">
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">The three YAML building blocks</div>
+      <ul class="cp-list">
+        <li><strong>Key-value pair:</strong> <code>vmImage: 'ubuntu-latest'</code> — a property name, a colon, a space, then the value. This is the most common pattern.</li>
+        <li><strong>List item:</strong> <code>- main</code> — a dash followed by a space starts a list item. A list of branches, a list of steps, a list of stages.</li>
+        <li><strong>Nested structure:</strong> Indentation (always spaces, never tabs) creates hierarchy. A property indented under another belongs to it.</li>
+      </ul>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">The one rule that catches everyone</div>
+      <ul class="cp-list">
+        <li>Indentation in YAML is not decorative — it is structural. Two spaces vs four spaces means different things.</li>
+        <li>A single wrong indent can make a valid pipeline invalid. If a pipeline fails to start with an error about "mapping" or "unexpected key," indentation is almost always the cause.</li>
+        <li>Every code example in this course is correctly indented. When in doubt, copy the indentation exactly.</li>
+        <li>Use a code editor (VS Code) that shows you indentation guides — it makes misalignment immediately visible.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">reading skill</div>
+  <div class="cp-title">How to approach a pipeline YAML file you have never seen before</div>
+  <p class="cp-lead">When you open your product team's pipeline file and it looks like 80 lines of unfamiliar structure, use this approach. It works for any pipeline in any team.</p>
+  <div class="cp-step-flow">
+    <div class="cp-step">
+      <div class="cp-step-num">1</div>
+      <div class="cp-step-label">Find the top-level keys</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">2</div>
+      <div class="cp-step-label">Read the stages in order</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">3</div>
+      <div class="cp-step-label">Follow template references</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">4</div>
+      <div class="cp-step-label">Trace variable references</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">5</div>
+      <div class="cp-step-label">Look up unknown tasks</div>
+    </div>
+  </div>
+  <ul class="cp-list" style="margin-top:16px;">
+    <li><strong>Step 1 — Top-level keys:</strong> <code>trigger</code>, <code>pool</code>, <code>variables</code>, <code>stages</code> — these are the outer shape of every pipeline. Find them first. They tell you what triggers the pipeline, where it runs, what variables it uses, and what phases it has.</li>
+    <li><strong>Step 2 — Stages in order:</strong> Each stage is a named phase (Build, Test, Deploy). Read the <code>displayName</code> of each — it tells you what that phase does without reading the implementation.</li>
+    <li><strong>Step 3 — Template references:</strong> When you see <code>- template: path/to/file.yml@alias</code>, the actual steps are in another file. The <code>parameters:</code> block below it shows what is being customised. Session 08 and 09 cover this in full.</li>
+    <li><strong>Step 4 — Variable references:</strong> <code>$(variableName)</code> is a runtime value — find where it is defined (in the <code>variables:</code> block, a variable group, or a matrix). That is what it resolves to when the pipeline runs.</li>
+    <li><strong>Step 5 — Unknown tasks:</strong> A task like <code>PublishTestResults@2</code> or <code>NodeTool@0</code> — the name before <code>@</code> is the task name, the number after is the version. Search ADO's task documentation or your team's wiki for details.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Classic vs YAML pipelines</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">formats</div>
+  <div class="cp-title">Classic (GUI) pipelines vs YAML pipelines</div>
+  <p class="cp-lead">ADO supports two pipeline formats. Classic pipelines are built in the portal using a visual editor. YAML pipelines are defined in a file in your repository. Both produce the same outcome — but YAML is the modern approach and should be used for all new work.</p>
+  <div class="cp-grid-2">
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Classic (GUI) pipelines</div>
+      <ul class="cp-list">
+        <li>Configured in the ADO portal — no file in the repo</li>
+        <li>Drag-and-drop task editor</li>
+        <li>Cannot be code-reviewed or version-controlled</li>
+        <li>Changes aren't auditable without portal logs</li>
+        <li>Still used in some legacy projects</li>
+      </ul>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">YAML pipelines (modern)</div>
+      <ul class="cp-list">
+        <li>Defined in <code>azure-pipelines.yml</code> in your repo</li>
+        <li>Versioned with your code — PRs, history, blame</li>
+        <li>Can be reviewed before it runs</li>
+        <li>Supports templates, reuse, and parameters</li>
+        <li>Use this for all new pipelines</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">minimal-pipeline.yml — the smallest valid pipeline</div>
+  <div class="code-block" style="font-size:0.83rem;line-height:1.85;">
+    <span style="color:var(--code-comment)"># Triggers on every push to main</span><br>
+    <span style="color:var(--code-keyword)">trigger</span>:<br>
+    &nbsp;&nbsp;- main<br>
+    <br>
+    <span style="color:var(--code-comment)"># Use a Microsoft-hosted Ubuntu agent</span><br>
+    <span style="color:var(--code-keyword)">pool</span>:<br>
+    &nbsp;&nbsp;<span style="color:var(--code-property)">vmImage</span>: <span style="color:var(--code-string)">'ubuntu-latest'</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">steps</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">checkout</span>: self<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm ci</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Install dependencies'</span><br>
+    &nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm test</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Run tests'</span>
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">line by line</div>
+  <div class="cp-title">What every line in that minimal pipeline does</div>
+  <p class="cp-lead">Every line above does a specific, necessary thing. Nothing is boilerplate you can ignore.</p>
+  <ul class="cp-list">
+    <li><code>trigger: - main</code> — "run this pipeline automatically whenever code is pushed to the main branch." Without a trigger, the pipeline only runs when someone manually starts it.</li>
+    <li><code>pool: vmImage: 'ubuntu-latest'</code> — "run this pipeline on a Microsoft-hosted Ubuntu virtual machine." This machine is created fresh for this run and destroyed when it finishes. Session 05 explains exactly what this means.</li>
+    <li><code>steps:</code> — the list of things to do on that machine, in order.</li>
+    <li><code>- checkout: self</code> — "download the code from this repository onto the machine." Without this, the machine has no code to work with. <code>self</code> means "this repository" — the one containing this pipeline file.</li>
+    <li><code>script: npm ci</code> — run the shell command <code>npm ci</code>, which installs the exact package versions from the lock file. <code>npm</code> is Node's package manager. <code>ci</code> stands for "clean install" — it guarantees a reproducible installation.</li>
+    <li><code>script: npm test</code> — run the shell command <code>npm test</code>, which executes whatever test script is defined in the project's <code>package.json</code>.</li>
+    <li><code>displayName</code> — the human-readable label shown in the ADO portal for this step. It does not affect what the step does.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Organisation structure</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">hierarchy</div>
+  <div class="cp-title">Organisation → Project → Pipeline → Run</div>
+  <p class="cp-lead">ADO is structured in a four-level hierarchy. Understanding this helps you navigate the portal and reason about permissions, billing, and shared resources.</p>
+  <div class="cp-step-flow">
+    <div class="cp-step">
+      <div class="cp-step-num">1</div>
+      <div class="cp-step-label">Organisation</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">2</div>
+      <div class="cp-step-label">Project</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">3</div>
+      <div class="cp-step-label">Pipeline</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">4</div>
+      <div class="cp-step-label">Run</div>
+    </div>
+  </div>
+  <ul class="cp-list" style="margin-top:16px;">
+    <li><strong>Organisation</strong> — your company's ADO account (e.g. <code>dev.azure.com/mycompany</code>). One billing account.</li>
+    <li><strong>Project</strong> — a logical grouping for a team or product. Has its own Repos, Boards, Pipelines, and Artifacts.</li>
+    <li><strong>Pipeline</strong> — a YAML file linked to a specific repo. Defines all the stages, jobs, and steps.</li>
+    <li><strong>Run</strong> — one execution of the pipeline, triggered by a push, a PR, or manually.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"YAML is the format our pipelines are written in — it uses indentation to show structure, and every level of indentation must use spaces, not tabs."</strong> — when someone asks what format the pipeline file uses, or when explaining why a pipeline edit broke something</li>
+    <li><strong>"The <code>trigger: - main</code> line means the pipeline fires automatically on every push to main — nobody has to remember to run it."</strong> — when explaining how pipelines get triggered, or when investigating why a pipeline did or did not run after a merge</li>
+    <li><strong>"The <code>checkout: self</code> step is what puts our code onto the agent machine — without it, the machine has nothing to work with."</strong> — when reading through a pipeline together and someone asks what that line does</li>
+    <li><strong>"A <code>$(variableName)</code> in a pipeline is a placeholder — the actual value comes from the variables section, a variable group, or the matrix configuration."</strong> — when reviewing a pipeline and someone asks what a <code>$()</code> expression resolves to</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 04</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li>Azure DevOps is five services: Boards, Repos, Pipelines, Artifacts, and Test Plans — Pipelines is one piece</li>
+    <li>Classic GUI pipelines are legacy. Use YAML pipelines for all new work.</li>
+    <li>YAML pipelines live in your repo — they're versioned, reviewable, and auditable</li>
+    <li>YAML uses indentation as structure — read it top to bottom, outermost keys first, then drill into each section</li>
+    <li>The hierarchy is: Organisation → Project → Pipeline → Run</li>
+  </ul>
+</div>

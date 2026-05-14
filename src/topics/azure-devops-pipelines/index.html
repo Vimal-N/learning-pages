@@ -1,0 +1,226 @@
+---
+layout: topic.njk
+title: "Azure DevOps Pipelines — Learning Hub"
+---
+
+<div class="breadcrumb">
+  <a href="/">Learning Hub</a>
+  <span class="sep">/</span>
+  <span class="current">Azure DevOps Pipelines</span>
+</div>
+
+<div class="topic-hero">
+  <div class="session-badge" style="--topic-accent:#0078d4">Azure DevOps Pipelines</div>
+  <h1>From <em>Why</em> to <em>How</em>: CI/CD Pipelines for QA Teams</h1>
+  <p class="topic-hero-sub">
+    A 10-session series for QA engineers who want to understand what CI/CD pipelines really are, why they matter for test automation, and how to build production-quality Azure Pipelines that run, report, and scale.
+  </p>
+  <div class="topic-stats">
+    <div class="topic-stat">
+      <div class="topic-stat-num">12</div>
+      <div class="topic-stat-label">Sessions</div>
+    </div>
+    <div class="topic-stat">
+      <div class="topic-stat-num">4</div>
+      <div class="topic-stat-label">Phases</div>
+    </div>
+    <div class="topic-stat">
+      <div class="topic-stat-num">0</div>
+      <div class="topic-stat-label">Prerequisites</div>
+    </div>
+  </div>
+</div>
+
+<div class="phases-container">
+
+  <!-- ═══ PHASE 1 ═══ -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 1</span>
+      <span class="phase-title">Why Pipelines Exist</span>
+      <span class="phase-level beginner">Beginner</span>
+      <span class="phase-meta">Sessions 01 – 02</span>
+    </div>
+    <div class="session-grid">
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-01/" class="session-link available">
+        <div class="s-num">01</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">The Build That Worked on My Machine</span>
+            <span class="s-level beginner">Beginner</span>
+          </div>
+          <div class="s-desc">A story-first session. Follow Jordan — a developer whose local tests were green, but a concurrent dependency bump caused a release failure the next morning. Understand why the conflict only surfaces in a clean shared environment, and what CI would have changed.</div>
+        </div>
+      </a>
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-02/" class="session-link available">
+        <div class="s-num">02</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">Every Merge Should Be a Safe Bet</span>
+            <span class="s-level beginner">Beginner</span>
+          </div>
+          <div class="s-desc">What CI/CD actually promises — consistent, automated, trustworthy feedback on every change. Understand the feedback loop and why QE teams are specifically invested in running tests in pipelines.</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 2 ═══ -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 2</span>
+      <span class="phase-title">The Landscape and ADO Introduction</span>
+      <span class="phase-level beginner">Beginner</span>
+      <span class="phase-level intermediate">Intermediate</span>
+      <span class="phase-meta">Sessions 03 – 04</span>
+    </div>
+    <div class="session-grid">
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-03/" class="session-link available">
+        <div class="s-num">03</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">The CI/CD Tool Market in 20 Minutes</span>
+            <span class="s-level beginner">Beginner</span>
+          </div>
+          <div class="s-desc">A rapid-fire survey of the major CI/CD tools — GitHub Actions, Jenkins, GitLab CI, and CircleCI. Understand the three tool categories, what mental model transfers across all of them, and why Azure DevOps is the right fit for teams on the Microsoft stack.</div>
+        </div>
+      </a>
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-04/" class="session-link available">
+        <div class="s-num">04</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">Azure DevOps: The Whole Suite, Then the One Thing We're Learning</span>
+            <span class="s-level intermediate">Intermediate</span>
+          </div>
+          <div class="s-desc">Azure DevOps is more than pipelines — it's a full delivery platform. Map the entire ADO product (Boards, Repos, Pipelines, Artifacts, Test Plans), then zoom into Pipelines specifically and understand the YAML-first approach.</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 3 ═══ -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 3</span>
+      <span class="phase-title">Inside a Pipeline</span>
+      <span class="phase-level intermediate">Intermediate</span>
+      <span class="phase-meta">Sessions 05 – 07</span>
+    </div>
+    <div class="session-grid">
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-05/" class="session-link available">
+        <div class="s-num">05</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">What Happens When a Pipeline Runs</span>
+            <span class="s-level intermediate">Intermediate</span>
+          </div>
+          <div class="s-desc">Open the hood on a pipeline execution. What is a build agent? What does it do? Understand steps, jobs, and stages — and the YAML hierarchy that ties them together.</div>
+        </div>
+      </a>
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-06/" class="session-link available">
+        <div class="s-num">06</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">Flow Control: Making Your Pipeline Smart</span>
+            <span class="s-level intermediate">Intermediate</span>
+          </div>
+          <div class="s-desc">Give your pipeline decision-making ability. Learn dependsOn for stage ordering, the four built-in condition functions, the continueOnError and always() pattern for reliable test publishing, and how to build a Test stage that blocks deployment on failure.</div>
+        </div>
+      </a>
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-07/" class="session-link available">
+        <div class="s-num">07</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">Reading a Build: Summary Page, Artifacts, and the Full Playwright Pipeline</span>
+            <span class="s-level intermediate">Intermediate</span>
+          </div>
+          <div class="s-desc">A guided tour of the ADO build summary page — Timeline, Tests, Artifacts, Logs tabs — plus a complete, annotated Playwright pipeline you can read and adapt line by line.</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 4 ═══ -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 4</span>
+      <span class="phase-title">Patterns You'll See in Your Team's Pipelines</span>
+      <span class="phase-level intermediate">Intermediate</span>
+      <span class="phase-level advanced">Advanced</span>
+      <span class="phase-meta">Sessions 08 – 12</span>
+    </div>
+    <div class="session-grid">
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-08/" class="session-link available">
+        <div class="s-num">08</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">Templates: Write Once, Run Everywhere</span>
+            <span class="s-level intermediate">Intermediate</span>
+          </div>
+          <div class="s-desc">Stop copy-pasting pipeline YAML between projects. Learn step, job, and stage templates — first in-repo, then from a shared template repository that any pipeline in your org can reference.</div>
+        </div>
+      </a>
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-09/" class="session-link available">
+        <div class="s-num">09</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">Reading and Reusing Your Organisation's Shared Template Library</span>
+            <span class="s-level intermediate">Intermediate</span>
+          </div>
+          <div class="s-desc">Your product team's pipeline already calls templates from a shared repository your organisation maintains. Learn how to find that repository in ADO, read its parameters block, and write your own QE-owned nightly pipeline that uses those templates — in under 22 lines of YAML.</div>
+        </div>
+      </a>
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-10/" class="session-link available">
+        <div class="s-num">10</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">Matrix Strategy: One Job, Many Configurations</span>
+            <span class="s-level intermediate">Intermediate</span>
+          </div>
+          <div class="s-desc">If you have opened your team's pipeline and seen a <code>strategy: matrix:</code> block, this session explains it completely. Understand how matrix runs one job across multiple browsers, environments, or OS configurations in parallel — and how to read the Tests tab when matrix is in play.</div>
+        </div>
+      </a>
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-11/" class="session-link available">
+        <div class="s-num">11</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">Stages as a Report: Aggregating Results Across Jobs</span>
+            <span class="s-level advanced">Advanced</span>
+          </div>
+          <div class="s-desc">Run Playwright tests in parallel shards across multiple agents, then aggregate results into a single Tests tab. Learn how this pattern differs from matrix strategy, and when sharding is the right tool for cutting a long suite down to a fast PR check.</div>
+        </div>
+      </a>
+
+      <a href="/topics/azure-devops-pipelines/sessions/session-12/" class="session-link available">
+        <div class="s-num">12</div>
+        <div class="s-body">
+          <div class="s-head">
+            <span class="s-title">BrowserStack: Running Tests on Real Browsers in Your Pipeline</span>
+            <span class="s-level advanced">Advanced</span>
+          </div>
+          <div class="s-desc">Connect Playwright to BrowserStack Automate and run tests on real browsers through Azure Pipelines. Covers the two-tier architecture, storing credentials in variable groups, reading the playwright.config.ts connection pattern, and how results appear in both ADO and the BrowserStack dashboard.</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <p>Learning Hub · Azure DevOps Pipelines · 12 sessions · 4 phases</p>
+</footer>

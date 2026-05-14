@@ -1,0 +1,173 @@
+---
+layout: chapter.njk
+title: "Session 06 — Flow Control: Making Your Pipeline Smart"
+sessionNumber: "06"
+sessionTitle: "Flow Control: Making Your Pipeline Smart"
+phase: "Phase 3: Pipeline Internals"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 3 · Pipeline Internals</div>
+  <h1>Flow Control: Making Your Pipeline Smart</h1>
+  <p class="ch-lead">A pipeline that runs every step unconditionally — even when earlier steps fail — produces misleading results. This session covers the mechanisms that give your pipeline decision-making ability: stage dependencies, built-in conditions, and the patterns used to build reliable quality gates.</p>
+</div>
+
+<div class="cp-section-label">Stage dependencies</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">dependsOn</div>
+  <div class="cp-title">Controlling the order stages run in</div>
+  <p class="cp-lead">By default, stages in a YAML pipeline run sequentially in the order they're declared. You can make this explicit — and conditional — using <code>dependsOn</code>.</p>
+  <ul class="cp-list">
+    <li><code>dependsOn: Build</code> means "this stage only starts after the Build stage completes successfully"</li>
+    <li>If you omit <code>dependsOn</code>, ADO infers sequential order from position in the file</li>
+    <li>Multiple dependencies: <code>dependsOn: [Build, SecurityScan]</code> — both must succeed</li>
+    <li>To run a stage in parallel with another: set <code>dependsOn: []</code> (empty array)</li>
+    <li>A downstream stage will not run if its upstream dependency fails — unless you add a condition</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">dependsOn — explicit stage ordering</div>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.85;">
+    <span style="color:var(--code-keyword)">stages</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">stage</span>: Build<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># runs first — no dependsOn needed</span><br>
+    <br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">stage</span>: Test<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">dependsOn</span>: Build<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># only runs if Build succeeded</span><br>
+    <br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">stage</span>: Deploy<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">dependsOn</span>: Test<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># only runs if Test succeeded</span>
+  </div>
+</div>
+
+<div class="cp-section-label">Conditions</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">built-in conditions</div>
+  <div class="cp-title">Four expressions that control when a step or stage runs</div>
+  <p class="cp-lead">Every step and stage has an implicit condition: <code>succeeded()</code>. You can override this with any of the four built-in condition functions. Understanding these four is enough to handle almost every flow-control scenario.</p>
+  <div class="cp-icon-grid">
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg></div>
+      <div class="cp-icon-name">succeeded()</div>
+      <div class="cp-icon-desc">Run only if all previous steps/stages succeeded. This is the default.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+      <div class="cp-icon-name">failed()</div>
+      <div class="cp-icon-desc">Run only if at least one previous step/stage failed. Useful for cleanup or notification on failure.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg></div>
+      <div class="cp-icon-name">always()</div>
+      <div class="cp-icon-desc">Run regardless of success or failure. Used for teardown and reporting steps that must never be skipped.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg></div>
+      <div class="cp-icon-name">canceled()</div>
+      <div class="cp-icon-desc">Run only if the pipeline was manually cancelled. Rarely used — mostly for cleanup of long-running operations.</div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">always() — publish results even when tests fail</div>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.85;">
+    <span style="color:var(--code-keyword)">steps</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">checkout</span>: self<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm ci && npx playwright test</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Run Playwright tests'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">continueOnError</span>: <span style="color:var(--code-number)">true</span><br>
+    <br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">task</span>: PublishTestResults@2<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">condition</span>: <span style="color:var(--code-string)">always()</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">inputs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testResultsFormat</span>: <span style="color:var(--code-string)">'JUnit'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testResultsFiles</span>: <span style="color:var(--code-string)">'test-results/*.xml'</span>
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">pattern</div>
+  <div class="cp-title">Why <code>continueOnError</code> + <code>always()</code> is the standard test pattern</div>
+  <p class="cp-lead">If your test step fails and doesn't have <code>continueOnError: true</code>, the pipeline stops and never reaches the publish step. You get a failed pipeline with no test results — the worst of both worlds.</p>
+  <ul class="cp-list">
+    <li><code>continueOnError: true</code> on the test step: the pipeline continues even if tests fail</li>
+    <li><code>condition: always()</code> on the publish step: results are always uploaded</li>
+    <li>The pipeline still ends as "failed" — but the Tests tab shows which tests failed</li>
+    <li>Without this pattern: failed tests produce a failed pipeline with no actionable detail</li>
+    <li>With this pattern: the failure tells you exactly which tests failed and why</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">The quality gate pattern</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">visual</div>
+  <div class="cp-title">Build → Test → Deploy: the gate in action</div>
+  <p class="cp-lead">The flow diagram below shows how the quality gate works at the stage level. Each arrow represents a dependency. The Deploy stage cannot start unless the Test stage reports success.</p>
+  <div class="cp-step-flow">
+    <div class="cp-step">
+      <div class="cp-step-num">1</div>
+      <div class="cp-step-label">Build stage</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">2</div>
+      <div class="cp-step-label">Test stage</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">✓</div>
+      <div class="cp-step-label">Tests pass</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">3</div>
+      <div class="cp-step-label">Deploy stage</div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">the QE identity moment</div>
+  <div class="cp-title">This is what you own</div>
+  <p class="cp-lead">The quality gate pattern is the single most important thing a QE engineer can build into a pipeline. When configured correctly, no code can reach production with failing tests — not because a developer remembered to check, not because a manager approved a release, but because the pipeline you configured will not allow the deploy stage to run unless the test stage passed. That enforcement is automatic. That standard is yours.</p>
+  <ul class="cp-list">
+    <li>The deploy stage has <code>dependsOn: Test</code>. If Test fails, Deploy is skipped — automatically, every time, without exception</li>
+    <li>No approval workflow, no ticket, no Slack message — the pipeline decides based on test results</li>
+    <li>QE teams define what "pass" means: which tests run, which failures are blocking, what threshold triggers a stop</li>
+    <li>When someone asks "how do we ensure quality before deployment?" — this is the answer you can point to and say "I built that"</li>
+    <li>This is not a DevOps feature. This is quality engineering with teeth.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"The deploy stage is blocked because the test stage failed — <code>dependsOn</code> means it will not start unless Test succeeded."</strong> — when explaining why a deployment did not happen after a pipeline ran</li>
+    <li><strong>"We use <code>continueOnError: true</code> on the test step so that even when tests fail, the pipeline continues to publish the results. Otherwise we get a failed pipeline with no test detail."</strong> — when someone asks why the pipeline is configured the way it is</li>
+    <li><strong>"The <code>condition: always()</code> on the publish step means it runs regardless of whether the tests passed or failed — we always want the results uploaded."</strong> — when walking someone through the test reporting setup</li>
+    <li><strong>"The pipeline is the quality gate — it does not let code deploy if tests fail. That is by design."</strong> — when someone questions why a deployment was blocked</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 06</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li><code>dependsOn</code> controls which stages run and in what order — with implicit "must succeed" semantics</li>
+    <li>The four conditions: <code>succeeded()</code> (default), <code>failed()</code>, <code>always()</code>, <code>canceled()</code></li>
+    <li>Always pair <code>continueOnError: true</code> with <code>condition: always()</code> on your PublishTestResults step</li>
+    <li>Blocking deployment on test failure is a pipeline-enforced quality gate — the most important pattern in QE-owned pipelines</li>
+    <li>The quality gate pattern — Test stage required before Deploy stage — is the pipeline enforcing your team's quality standard automatically</li>
+  </ul>
+</div>

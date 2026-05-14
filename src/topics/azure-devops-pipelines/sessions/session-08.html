@@ -1,0 +1,204 @@
+---
+layout: chapter.njk
+title: "Session 08 — Templates: Write Once, Run Everywhere"
+sessionNumber: "08"
+sessionTitle: "Templates: Write Once, Run Everywhere"
+phase: "Phase 4: Patterns You'll See in Your Team's Pipelines"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 4 · Patterns You'll See in Your Team's Pipelines</div>
+  <h1>Templates: Write Once, Run Everywhere</h1>
+  <p class="ch-lead">Your product team's pipeline almost certainly uses templates — you have probably seen a line like <code>- template: templates/test/playwright-e2e.yml@templates</code> without knowing what it does. This session explains what templates are, how to recognise a template call in a pipeline you did not write, and how reusing your organisation's shared templates is different from writing your own. The next session covers the shared template library your organisation maintains — the one your team already uses.</p>
+</div>
+
+<div class="cp-section-label">The problem templates solve</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">before</div>
+  <div class="cp-title">The copy-paste pipeline problem</div>
+  <p class="cp-lead">Most teams start by copying their working pipeline into a second project when they need the same setup. Then a third. Soon there are eight slightly-different versions of the same Node install + test pattern across eight repositories.</p>
+  <ul class="cp-list">
+    <li>Upgrading Node 18 → 20: find and edit 8 files across 8 repos</li>
+    <li>Adding a security scan step: do it 8 times, hope they're all consistent</li>
+    <li>Finding a bug in the lint configuration: patch 8 files, open 8 PRs</li>
+    <li>Auditing whether all pipelines comply with the team's standards: check 8 files manually</li>
+    <li>Templates collapse this to: edit the template once, all consumers are updated</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">types</div>
+  <div class="cp-title">Three kinds of templates</div>
+  <p class="cp-lead">ADO templates can operate at three levels of granularity. Choose based on how much you want to reuse: individual steps, whole jobs, or entire stages.</p>
+  <div class="cp-icon-grid">
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="11" x2="20" y2="11"/><line x1="8" y1="16" x2="20" y2="16"/><circle cx="4" cy="11" r="1.5" fill="#0078d4" stroke="none"/><circle cx="4" cy="16" r="1.5" fill="#0078d4" stroke="none"/></svg></div>
+      <div class="cp-icon-name">Step template</div>
+      <div class="cp-icon-desc">Reuse a sequence of steps. Insert into any job's <code>steps:</code> list. Most granular.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><rect x="6" y="9" width="12" height="6" rx="1"/></svg></div>
+      <div class="cp-icon-name">Job template</div>
+      <div class="cp-icon-desc">Reuse an entire job definition — pool, variables, and steps. Insert into any stage's <code>jobs:</code> list.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg></div>
+      <div class="cp-icon-name">Stage template</div>
+      <div class="cp-icon-desc">Reuse a complete stage with all its jobs. Insert into a pipeline's <code>stages:</code> list. Most powerful.</div>
+    </div>
+  </div>
+</div>
+
+<div class="cp-section-label">Reading a template call — when you see it in someone else's YAML</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">consumer perspective</div>
+  <div class="cp-title">What to do when you see <code>- template:</code> in a pipeline file</div>
+  <p class="cp-lead">When you open a pipeline file and see a template call, your job is not to understand its internals — it is to understand what it does and what parameters control it. Here is a template reference annotated completely:</p>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.9;margin-top:12px;">
+    <span style="color:var(--code-comment)"># This block declares an external repository of templates</span><br>
+    <span style="color:var(--code-keyword)">resources</span>:<br>
+    &nbsp;&nbsp;<span style="color:var(--code-keyword)">repositories</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">repository</span>: templates&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># alias — used below as @templates</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">type</span>: git&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># it is a Git repository</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">name</span>: <span style="color:var(--code-string)">'MyOrg/ado-pipeline-library'</span>&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># Organisation/RepositoryName in ADO</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">ref</span>: <span style="color:var(--code-string)">'refs/tags/v4.1.0'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># pinned version — safe to copy from team's pipeline</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">stages</span>:<br>
+    &nbsp;&nbsp;<span style="color:var(--code-comment)"># The template file path inside the repo  @alias from resources.repositories</span><br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">template</span>: templates/test/playwright-e2e.yml<span style="color:var(--code-keyword)">@templates</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">parameters</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">nodeVersion</span>: <span style="color:var(--code-string)">'20'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># customise the template behaviour here</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testFilter</span>: <span style="color:var(--code-string)">'@regression'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># these come from the template's parameters block</span>
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">three things to know</div>
+  <div class="cp-title">Decoding any template reference in three steps</div>
+  <ul class="cp-list">
+    <li><strong>The alias (<code>@templates</code>):</strong> This is the short name given to the repository in the <code>resources.repositories</code> block. It could be <code>@shared</code>, <code>@central</code>, or anything. Look up at the <code>resources</code> block to find which actual repository it points to.</li>
+    <li><strong>The path (<code>templates/test/playwright-e2e.yml</code>):</strong> This is the file path inside the external repository. To read what the template actually does, navigate to that repository in ADO and open this file at this path. Session 09 shows exactly how to do this for your organisation's shared library.</li>
+    <li><strong>The parameters block:</strong> These are the values being passed to customise the template. To know what parameters are available — what you can change and what is optional — open the template file and read its <code>parameters:</code> block at the top. That block is the full list of what you can control.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">In-repo templates</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">in-repo</div>
+  <div class="cp-title">Reusing steps within the same repository</div>
+  <p class="cp-lead">The simplest template use-case: extract a repeated step sequence into a YAML file within the same repo, then reference it from your main pipeline. Parameters let callers customise it.</p>
+</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">templates/install-node.yml — reusable step template</div>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.85;">
+    {% raw %}<span style="color:var(--code-keyword)">parameters</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-property)">name</span>: nodeVersion<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">type</span>: string<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">default</span>: <span style="color:var(--code-string)">'20'</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">steps</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">task</span>: NodeTool@0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">inputs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">versionSpec</span>: <span style="color:var(--code-string)">'${{ parameters.nodeVersion }}'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Set Node ${{ parameters.nodeVersion }}'</span><br>
+    &nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm ci</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'npm ci (clean install)'</span>{% endraw %}
+  </div>
+</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">azure-pipelines.yml — calling the template</div>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.85;">
+    {% raw %}<span style="color:var(--code-keyword)">stages</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">stage</span>: Test<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">jobs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">job</span>: RunTests<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">steps</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">checkout</span>: self<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># Call the template — pass nodeVersion as a parameter</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">template</span>: templates/install-node.yml<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">parameters</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">nodeVersion</span>: <span style="color:var(--code-string)">'20'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npx playwright test</span>{% endraw %}
+  </div>
+</div>
+
+<div class="cp-section-label">External template repositories</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">cross-repo</div>
+  <div class="cp-title">Sharing templates across repositories</div>
+  <p class="cp-lead">In-repo templates are only usable within one repository. To share a template across multiple projects or teams, store the templates in a dedicated repository and reference it from consumer pipelines. This is how platform or DevOps teams govern pipelines at scale.</p>
+  <ul class="cp-list">
+    <li>Create a dedicated repo: e.g. <code>pipeline-templates</code> in your ADO organisation</li>
+    <li>Store templates there: <code>templates/run-playwright.yml</code>, <code>templates/deploy-webapp.yml</code></li>
+    <li>Consumer pipelines reference the template repo using a <code>resources.repositories</code> block</li>
+    <li>ADO checks out the template repo at a specific ref (branch or tag) before parsing the caller's YAML</li>
+    <li>Template versioning: pin consumers to a tag like <code>v2.1.0</code> to avoid unplanned updates</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">azure-pipelines.yml — consuming a template from another repo</div>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.85;">
+    {% raw %}<span style="color:var(--code-keyword)">resources</span>:<br>
+    &nbsp;&nbsp;<span style="color:var(--code-keyword)">repositories</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">repository</span>: templates<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">type</span>: git<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">name</span>: <span style="color:var(--code-string)">'MyOrg/pipeline-templates'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">ref</span>: <span style="color:var(--code-string)">'refs/tags/v2.1.0'</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">stages</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">template</span>: templates/run-playwright.yml@templates<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">parameters</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">nodeVersion</span>: <span style="color:var(--code-string)">'20'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testFilter</span>: <span style="color:var(--code-string)">'@smoke'</span>{% endraw %}
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">governance</div>
+  <div class="cp-title">Templates as a governance mechanism</div>
+  <p class="cp-lead">For QE and DevOps teams responsible for pipeline standards, external templates are a governance tool — not just a convenience. If every project calls your template, you control what every pipeline does, from one place.</p>
+  <ul class="cp-list">
+    <li>Update Node version for all teams: change one line in the template repo</li>
+    <li>Add a mandatory security scan: add one step to the template — every caller gets it</li>
+    <li>Enforce consistent test reporting: the PublishTestResults step lives in the template, not in each project</li>
+    <li>Audit compliance: one file to review instead of dozens</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">coming next</div>
+  <div class="cp-title">Your organisation already has a shared template library — Session 09 shows you how to use it</div>
+  <p class="cp-lead">Most organisations that use Azure Pipelines at scale maintain a dedicated repository of shared templates — a library that every team's pipeline pulls from. Your product team is almost certainly already using it. In Session 09, you will learn how to find that repository in ADO, read its templates, understand the parameters they accept, and write your own QE pipeline that calls those templates for a nightly regression run.</p>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"This pipeline uses a template from our shared template library — the actual steps are defined in the <code>ado-pipeline-library</code> repo, not in this file."</strong> — when explaining why a pipeline file looks short or incomplete</li>
+    <li><strong>"The <code>@templates</code> at the end of the template path is the alias for the shared repository — you can find the real repo name in the <code>resources.repositories</code> block at the top."</strong> — when someone asks what <code>@templates</code> means</li>
+    <li><strong>"The parameters block below the template call is what customises it for this specific project — change <code>testFilter</code> to change which tests run."</strong> — when your team wants to run a different test subset without touching the template itself</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 08</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li>Templates solve the copy-paste pipeline problem: one definition, called from many pipelines</li>
+    <li>Three template types: step (reuse steps), job (reuse a full job), stage (reuse a full stage)</li>
+    <li>Parameters make templates flexible — callers pass values, the template adapts</li>
+    <li>In-repo templates are local to one repo. External template repos share definitions across the entire organisation.</li>
+    <li>For QE and platform teams, templates are a governance mechanism — centrally controlled, consistently applied</li>
+  </ul>
+</div>

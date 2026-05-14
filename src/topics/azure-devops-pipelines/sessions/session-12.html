@@ -1,0 +1,242 @@
+---
+layout: chapter.njk
+title: "Session 12 — BrowserStack: Running Tests on Real Browsers Through Your Pipeline"
+sessionNumber: "12"
+sessionTitle: "BrowserStack: Running Tests on Real Browsers Through Your Pipeline"
+phase: "Phase 4: Patterns You'll See in Your Team's Pipelines"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 4 · Patterns You'll See in Your Team's Pipelines</div>
+  <h1>BrowserStack: Running Tests on Real Browsers Through Your Pipeline</h1>
+  <p class="ch-lead">Running Playwright on a CI agent tests on one browser, on one operating system. BrowserStack gives you a real device and browser matrix — Chrome on Windows 11, Safari on macOS 14, Edge on Windows 10 — without managing any of those machines yourself. This session shows how to connect BrowserStack to Azure Pipelines, how to store credentials securely, and how to read a BrowserStack-enabled pipeline when you see one in your team's codebase.</p>
+</div>
+
+<div class="cp-section-label">What BrowserStack is and what it provides</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">what it is</div>
+  <div class="cp-title">A cloud of real browsers on real operating systems</div>
+  <p class="cp-lead">BrowserStack Automate is a cloud platform that hosts real browsers on real operating systems, accessible over an API. You connect to it through Playwright's configuration and your tests run there — on BrowserStack's infrastructure, not on the CI agent.</p>
+  <ul class="cp-list">
+    <li>Over 3,000 real browser and OS combinations: Chrome, Firefox, Edge, and Safari across Windows, macOS, Android, and iOS</li>
+    <li>No virtual machines to provision — BrowserStack manages the underlying infrastructure entirely</li>
+    <li>Test results, video recordings, screenshots, and network logs appear in the BrowserStack dashboard after each run</li>
+    <li>The ADO agent becomes a thin coordinator — it sends test commands to BrowserStack and collects results, but does not run the browser itself</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">architecture</div>
+  <div class="cp-title">Two-tier execution: ADO agent → BrowserStack</div>
+  <p class="cp-lead">Your pipeline runs on an ADO-hosted agent as usual — but instead of launching a browser locally, Playwright connects to BrowserStack's remote endpoint. The tests run there, on real hardware.</p>
+  <div class="cp-step-flow">
+    <div class="cp-step">
+      <div class="cp-step-num">1</div>
+      <div class="cp-step-label">ADO triggers pipeline</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">2</div>
+      <div class="cp-step-label">Agent runs Playwright</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">3</div>
+      <div class="cp-step-label">Playwright connects to BrowserStack CDP</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">4</div>
+      <div class="cp-step-label">Tests run on real browser</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">5</div>
+      <div class="cp-step-label">Results in ADO + BrowserStack</div>
+    </div>
+  </div>
+  <p class="cp-lead" style="margin-top:16px;"><strong>What CDP means:</strong> CDP stands for Chrome DevTools Protocol — it is the communication standard that Playwright uses to control browsers. When you run Playwright locally, it uses CDP to control a browser installed on your machine. When you run Playwright against BrowserStack, it uses CDP over a secure WebSocket connection to control a browser running on BrowserStack's servers. The protocol is the same; the browser is in a different location.</p>
+</div>
+
+<div class="cp-section-label">Storing credentials securely — variable groups</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">secrets</div>
+  <div class="cp-title">BrowserStack credentials must never appear in your pipeline YAML</div>
+  <p class="cp-lead">BrowserStack authentication requires a username and an access key. These are sensitive values — if they appear in your YAML file, anyone who can read the repository can use your BrowserStack account and exhaust your test quota. Store them in an ADO variable group and reference the group by name.</p>
+  <ul class="cp-list">
+    <li>In ADO: go to Pipelines → Library → Variable Groups → New variable group</li>
+    <li>Add two variables: <code>BROWSERSTACK_USERNAME</code> and <code>BROWSERSTACK_ACCESS_KEY</code></li>
+    <li>Mark both as secret using the padlock icon — the values will be masked in all pipeline logs</li>
+    <li>Optionally link the group to Azure Key Vault to store the secrets outside ADO entirely, with rotation managed centrally</li>
+    <li>Reference the group in your pipeline YAML with <code>group: BrowserStack-Credentials</code> under the <code>variables:</code> block</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Configuration — connecting Playwright to BrowserStack</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">playwright.config.ts</div>
+  <div class="cp-title">What the Playwright configuration file is and how it controls where tests run</div>
+  <p class="cp-lead">Playwright reads its runtime configuration from a file called <code>playwright.config.ts</code> (or <code>playwright.config.js</code>) in your repository root. This is where you tell Playwright whether to run tests locally using an installed browser or remotely using BrowserStack's cloud. When you see this file in your team's repository, the <code>use:</code> section at the top is what determines the target.</p>
+  <p class="cp-lead">You do not need to write TypeScript to read this file. The key parts are the <code>use:</code> object and the condition that switches between local and remote execution.</p>
+</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">playwright.config.ts — switching between local and BrowserStack</div>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.85;">
+    <span style="color:var(--code-keyword)">import</span> { defineConfig } <span style="color:var(--code-keyword)">from</span> <span style="color:var(--code-string)">'@playwright/test'</span>;<br>
+    <br>
+    <span style="color:var(--code-comment)">// Check whether BrowserStack credentials are present in the environment</span><br>
+    <span style="color:var(--code-keyword)">const</span> <span style="color:var(--code-property)">isCI</span> = process.env.<span style="color:var(--code-property)">BROWSERSTACK_USERNAME</span>;<br>
+    <br>
+    <span style="color:var(--code-keyword)">export default</span> defineConfig({<br>
+    &nbsp;&nbsp;<span style="color:var(--code-property)">use</span>: isCI ? {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">// BrowserStack remote endpoint — used when credentials are in the environment</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">connectOptions</span>: {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">wsEndpoint</span>: <span style="color:var(--code-string)">`wss://cdp.browserstack.com/playwright?caps=</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-string)">{"browser":"chrome","os":"Windows","osVersion":"11",</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-string)">"userName":"${process.env.BROWSERSTACK_USERNAME}",</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-string)">"accessKey":"${process.env.BROWSERSTACK_ACCESS_KEY}"}`</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    &nbsp;&nbsp;} : {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">// Local run — use the installed Chromium browser</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">channel</span>: <span style="color:var(--code-string)">'chromium'</span><br>
+    &nbsp;&nbsp;},<br>
+    &nbsp;&nbsp;<span style="color:var(--code-property)">reporter</span>: [[<span style="color:var(--code-string)">'junit'</span>, { <span style="color:var(--code-property)">outputFile</span>: <span style="color:var(--code-string)">'test-results/junit.xml'</span> }]]<br>
+    });
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">reading it</div>
+  <div class="cp-title">What that configuration file does — without needing to know TypeScript</div>
+  <ul class="cp-list">
+    <li><strong><code>const isCI = process.env.BROWSERSTACK_USERNAME</code></strong> — this checks whether the <code>BROWSERSTACK_USERNAME</code> environment variable exists in the current process. If the pipeline injected it from the variable group, <code>isCI</code> holds that value and is treated as true. If you are running locally with no BrowserStack credentials, it is undefined and treated as false.</li>
+    <li><strong><code>use: isCI ? {...} : {...}</code></strong> — this is a conditional expression (the ternary operator). It means: "if BrowserStack credentials are available, use the remote endpoint; otherwise, use local Chromium." The <code>?</code> separates the condition from the true branch; the <code>:</code> introduces the false branch.</li>
+    <li><strong><code>wsEndpoint</code></strong> — the WebSocket URL that Playwright connects to for remote browser control. It encodes the browser, operating system, and credentials as part of the URL. The credentials come from environment variables injected by the pipeline — they never appear hardcoded in the file.</li>
+    <li><strong>Local vs CI behaviour:</strong> when a developer runs tests locally with no <code>BROWSERSTACK_USERNAME</code> in their environment, Playwright uses local Chromium. When the pipeline runs with the variable group injected, it connects to BrowserStack automatically. The same configuration file handles both cases.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">azure-pipelines.yml — BrowserStack-enabled pipeline using stages</div>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.85;">
+    <span style="color:var(--code-keyword)">trigger</span>:<br>
+    &nbsp;&nbsp;- main<br>
+    <br>
+    <span style="color:var(--code-keyword)">pool</span>:<br>
+    &nbsp;&nbsp;<span style="color:var(--code-property)">vmImage</span>: <span style="color:var(--code-string)">'ubuntu-latest'</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">variables</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-property)">group</span>: BrowserStack-Credentials&nbsp;&nbsp;<span style="color:var(--code-comment)"># injects BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">stages</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">stage</span>: Test<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Cross-browser tests on BrowserStack'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">jobs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">job</span>: BrowserStackTests<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">steps</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">checkout</span>: self<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">task</span>: NodeTool@0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">inputs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">versionSpec</span>: <span style="color:var(--code-string)">'20'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm ci</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Install dependencies'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npx playwright test</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Run tests on BrowserStack'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">continueOnError</span>: <span style="color:var(--code-number)">true</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">env</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># These inject the variable group values as environment variables</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># playwright.config.ts picks them up via process.env</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">BROWSERSTACK_USERNAME</span>: $(<span style="color:var(--code-property)">BROWSERSTACK_USERNAME</span>)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">BROWSERSTACK_ACCESS_KEY</span>: $(<span style="color:var(--code-property)">BROWSERSTACK_ACCESS_KEY</span>)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">task</span>: PublishTestResults@2<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">condition</span>: <span style="color:var(--code-string)">always()</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">inputs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testResultsFormat</span>: <span style="color:var(--code-string)">'JUnit'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testResultsFiles</span>: <span style="color:var(--code-string)">'test-results/junit.xml'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testRunTitle</span>: <span style="color:var(--code-string)">'BrowserStack — Chrome on Windows 11'</span>
+  </div>
+</div>
+
+<div class="cp-section-label">Two result surfaces — ADO and BrowserStack</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">two dashboards</div>
+  <div class="cp-title">Results appear in both ADO and the BrowserStack dashboard — here is what each shows</div>
+  <p class="cp-lead">When tests run via BrowserStack, results appear in two places. You do not need to choose — both are available after every run.</p>
+  <ul class="cp-list">
+    <li><strong>ADO Tests tab:</strong> shows pass and fail counts by test name, populated from the JUnit XML file published by <code>PublishTestResults@2</code>. Filter by test name, view the stack trace inline, and track trends across runs. This is the primary view for QE reporting within your team's workflow.</li>
+    <li><strong>BrowserStack dashboard:</strong> shows a richer view — a video recording of the test session, the network waterfall showing every HTTP request, browser console logs, and a screenshot captured at every step. This is the primary view for debugging browser-specific failures where the error message alone is not enough.</li>
+    <li><strong>Recommended workflow:</strong> check the ADO Tests tab first to identify which tests failed. Go to the BrowserStack dashboard for the visual evidence of what the browser actually did during those tests.</li>
+    <li><strong>Finding a session in BrowserStack:</strong> log in to your BrowserStack account, go to Automate, and look for the session that matches the timestamp of your pipeline run. The <code>testRunTitle</code> value you set in the pipeline helps identify the correct session in the list.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Decision framework — when BrowserStack makes sense</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">when to use</div>
+  <div class="cp-title">BrowserStack in your pipeline — when it makes sense and when it does not</div>
+  <div class="cp-grid-2">
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Good fit for BrowserStack</div>
+      <ul class="cp-list">
+        <li>You need to verify behaviour on Safari or Internet Explorer — browsers not available on Linux CI agents</li>
+        <li>You have cross-browser compatibility requirements as part of your quality definition</li>
+        <li>Your team already has a BrowserStack Automate licence with sufficient parallel session capacity</li>
+        <li>Cross-browser runs are part of your release acceptance criteria and must pass before deployment</li>
+      </ul>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">When local agents are enough</div>
+      <ul class="cp-list">
+        <li>Tests only need to run on Chromium — which covers the rendering behaviour of the vast majority of web applications</li>
+        <li>You are testing APIs, JSON payloads, or backend logic — nothing that involves rendering</li>
+        <li>Budget constraints — BrowserStack licences add monthly cost per parallel session</li>
+        <li>Speed is the priority — local agent browser launches are faster than establishing a remote connection</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">series close</div>
+  <div class="cp-title">What you have built over 12 sessions</div>
+  <p class="cp-lead">You started with a story about a Friday morning release failure and a QE engineer who could not answer "why didn't the tests catch this?" You are ending with a complete toolkit: you can read any pipeline YAML your team uses, understand every pattern in it, configure a nightly regression run using your organisation's shared templates, and contribute to every CI/CD conversation with confidence. That gap is closed.</p>
+  <ul class="cp-list">
+    <li><strong>Sessions 01–02:</strong> CI solves the environment and feedback loop problem. Tests mean something when they run in a reproducible, automatic context. The QE engineer owns that context.</li>
+    <li><strong>Sessions 03–04:</strong> The CI/CD market uses the same concepts across all tools. ADO is the right fit for the Microsoft ecosystem. YAML is a structured format you can read with five simple rules.</li>
+    <li><strong>Sessions 05–07:</strong> Agents are ephemeral. Steps, jobs, and stages give you structure. The build summary page is your diagnostic tool. When a pipeline fails, you now know exactly where to look.</li>
+    <li><strong>Sessions 08–09:</strong> Templates remove duplication. Your organisation's shared template library is a browsable repository — you can find it, read its parameters, and call it in your own pipeline for a nightly run.</li>
+    <li><strong>Sessions 10–12:</strong> Matrix strategy runs one job across many configurations. Sharding cuts wall-clock time. BrowserStack removes the "works on my browser" problem.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"This pipeline uses BrowserStack — the tests run on real browsers in BrowserStack's cloud, not on the CI agent's local machine."</strong> — when explaining why the pipeline connects to an external service during the test step</li>
+    <li><strong>"The BrowserStack credentials are stored in a variable group, not in the YAML. The <code>env:</code> block injects them at runtime."</strong> — when someone asks why the YAML does not contain any passwords or API keys</li>
+    <li><strong>"For this failure I can see which test failed in the ADO Tests tab. For the visual evidence of what the browser did, I'll look in the BrowserStack dashboard."</strong> — when triaging a cross-browser failure with a developer</li>
+    <li><strong>"BrowserStack makes sense here because we have Safari compatibility requirements — we cannot test Safari on a Linux agent."</strong> — when justifying the use of BrowserStack in a new pipeline</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 12</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li>BrowserStack Automate provides real browsers on real OS combinations — no virtual machines to provision or manage</li>
+    <li>Playwright connects to BrowserStack via a CDP WebSocket URL configured in <code>playwright.config.ts</code>. The config switches between local and remote based on whether BrowserStack credentials are present in the environment.</li>
+    <li>Store <code>BROWSERSTACK_USERNAME</code> and <code>BROWSERSTACK_ACCESS_KEY</code> in an ADO variable group, not in YAML. Inject them into the test step via the <code>env:</code> block.</li>
+    <li>Results appear in both ADO (Tests tab — pass/fail counts and stack traces) and BrowserStack (dashboard — video, screenshots, and network logs). Use both: ADO for identification, BrowserStack for investigation.</li>
+    <li>Choose BrowserStack when cross-browser coverage is a release requirement. Skip it when Chromium-only testing is sufficient and speed or cost are constraints.</li>
+  </ul>
+</div>

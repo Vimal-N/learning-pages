@@ -1,0 +1,202 @@
+---
+layout: chapter.njk
+title: "Session 01 — The Build That Worked on My Machine"
+sessionNumber: "01"
+sessionTitle: "The Build That Worked on My Machine"
+phase: "Phase 1: Why Pipelines Exist"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 1 · Why Pipelines Exist</div>
+  <h1>The Build That Worked on My Machine</h1>
+  <p class="ch-lead">A story about a Friday morning release failure — and the process gap that caused it. CI stands for Continuous Integration. It is an automated system that runs your tests on every code change, in a clean shared environment, before the change is allowed to merge. By the end of this session you will understand exactly what that means and why it matters specifically for QE teams.</p>
+</div>
+
+<div class="chapter-panel cp-story">
+  <div class="cp-label">before you start</div>
+  <div class="cp-title">This course starts from zero — and that is intentional</div>
+  <p class="cp-lead">If you have sat in a standup or a sprint review while CI/CD pipelines were being discussed and felt like everyone else understood something you did not — this course is built for exactly that situation. There is no assumed knowledge here. Every concept is explained when it first appears. Every acronym is spelled out. Every code example is annotated line by line.</p>
+  <ul class="cp-list">
+    <li>You do not need to have written a pipeline before. You do not need to know what YAML is.</li>
+    <li>You do not need to have used Azure DevOps before. Start here, start fresh.</li>
+    <li>If something is unclear, that is a signal the explanation needs to be better — not that you are missing something obvious.</li>
+    <li>By the end of Session 10, you will be able to read any pipeline YAML your team uses, understand what it does, and write your own pipeline for nightly regression runs.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">The story</div>
+
+<div class="chapter-panel cp-story">
+  <div class="cp-label">Thursday afternoon</div>
+  <div class="cp-title">A developer merges a feature branch</div>
+  <p class="cp-lead">Jordan is a developer on a product team. He's just finished a new checkout feature and the accompanying tests. He runs everything locally — green. He opens a pull request and merges it before end of day.</p>
+  <ul class="cp-list">
+    <li>Local environment: Node 18.12, <code>node_modules</code> installed 3 weeks ago</li>
+    <li>All tests pass — 47 green, 0 failed</li>
+    <li>A colleague merges a separate dependency upgrade at nearly the same time</li>
+    <li>The upgrade bumps a date-picker library: <code>3.1.4 → 3.2.0</code></li>
+    <li>Jordan's tests use a DOM selector that was renamed in <code>3.2.0</code></li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-story">
+  <div class="cp-label">also Thursday afternoon</div>
+  <div class="cp-title">A QE engineer wraps up for the day</div>
+  <p class="cp-lead">Sam is a QE engineer on the same team. Her regression suite ran that afternoon — green across the board. She notes it in the team channel and signs off for the day. She has no reason to think Friday morning will be anything other than a normal release day.</p>
+  <ul class="cp-list">
+    <li>Her tests passed — because they ran in her local environment against her locally-installed packages</li>
+    <li>She has no visibility into what Jordan or the other developer merged at end of day</li>
+    <li>There is no system that runs both changes together in a shared environment overnight</li>
+    <li>The conflict between Jordan's selector and the updated library exists in the codebase — but nobody knows yet</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-story">
+  <div class="cp-label">Friday morning</div>
+  <div class="cp-title">The release pipeline fails</div>
+  <p class="cp-lead">At 9:14 AM, the team's scheduled release build breaks. The failure takes two hours to trace back to a selector mismatch between Jordan's test and the updated library version.</p>
+  <ul class="cp-list">
+    <li>By the time the root cause is found, the release window has passed</li>
+    <li>The deployment is delayed by a full day</li>
+    <li>In the post-mortem, someone asks: <strong>"Why didn't the tests catch this?"</strong></li>
+    <li>The uncomfortable answer: the tests <em>did</em> catch it — just too late, in the wrong environment</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-story">
+  <div class="cp-label">Friday morning — for the QE engineer</div>
+  <div class="cp-title">Sam is asked a question she cannot answer</div>
+  <p class="cp-lead">In the post-mortem that follows the failed release, someone turns to Sam and asks: "Why didn't the tests catch this?" It is the most uncomfortable question in the room. The honest answer — "the tests did run, they just ran in the wrong environment" — requires an explanation nobody has a good framework for yet.</p>
+  <ul class="cp-list">
+    <li>Sam's tests ran. They passed. They were measuring the wrong thing — not the application in a shared environment, but the application on her machine with her installed packages.</li>
+    <li>The question "why didn't the tests catch this?" is the right question — it just needs the right answer: <em>the tests ran, but not in a place where the conflict could surface</em></li>
+    <li>CI is the answer to that question. This course is about understanding it — and owning it</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">root cause</div>
+  <div class="cp-title">Two merges, two environments, no shared ground truth</div>
+  <p class="cp-lead">The conflict between Jordan's selector and the updated library only surfaces in a <em>clean, shared</em> environment that installs exact dependency versions from the lock file. Neither developer's local machine was that environment.</p>
+  <ul class="cp-list">
+    <li>Jordan's <code>node_modules</code> was cached from before the upgrade — his local run never saw <code>3.2.0</code></li>
+    <li>The two PRs were both "green locally" — but they conflicted with each other</li>
+    <li>No shared pipeline ran both together before merge</li>
+    <li>The release pipeline was the first "neutral" environment either PR touched</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">the rewind</div>
+  <div class="cp-title">What CI would have changed</div>
+  <p class="cp-lead">If Jordan's PR had triggered an automated pipeline — a clean Ubuntu agent, fresh <code>npm ci</code>, exact lock-file versions — the selector failure would have appeared in <strong>his PR on Thursday afternoon</strong>. Not in the release on Friday morning.</p>
+  <ul class="cp-list">
+    <li>Same test, same failure — but caught 18 hours earlier, in the PR context</li>
+    <li>Jordan still has full context: he knows what he just changed</li>
+    <li>The fix takes 10 minutes, not a 2-hour investigation</li>
+    <li>The release goes out on time</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">The insight</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">contrast</div>
+  <div class="cp-title">Local execution vs pipeline execution</div>
+  <div class="comparison" style="margin-top:14px;">
+    <div class="comp-col negative">
+      <div class="comp-label">Running locally</div>
+      <ul class="cp-list">
+        <li>Your stale <code>node_modules</code> — weeks old</li>
+        <li>Your Node version — installed whenever</li>
+        <li>Only runs when you remember</li>
+        <li>Results visible only to you</li>
+        <li>Proves it works on your machine</li>
+      </ul>
+    </div>
+    <div class="comp-col positive">
+      <div class="comp-label">Running in a pipeline</div>
+      <ul class="cp-list">
+        <li>Fresh install from <code>package-lock.json</code> every run</li>
+        <li>Pinned Node version — same for everyone</li>
+        <li>Runs automatically on every push</li>
+        <li>Results visible to the whole team</li>
+        <li>Proves it works in a reproducible environment</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">why it matters for QE</div>
+  <div class="cp-title">Quality signals need a trustworthy stage — and you are the one who builds it</div>
+  <p class="cp-lead">QE teams are the ones asked "are we confident enough to release?" That question only has a meaningful answer if your tests ran in a reproducible, shared environment — not on whoever's laptop happened to run them last.</p>
+  <ul class="cp-list">
+    <li>A test that always passes locally, regardless of what changed, isn't measuring the application</li>
+    <li>A test that runs in CI, on every PR, in a clean environment — that's a quality signal</li>
+    <li>CI doesn't add new tests. It gives existing tests a trustworthy stage to run on</li>
+    <li>When you own the CI pipeline for your team's tests, the answer to "why didn't the tests catch this?" changes forever — because now the tests run automatically, in a clean environment, on every change. You built that.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Visual summary</div>
+
+<div class="chapter-panel" style="border-left-color: var(--border-subtle);">
+  <div class="cp-title" style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;">The Friday timeline — without CI</div>
+  <div class="timeline">
+    <div class="tl-node">
+      <div class="tl-dot" style="background:#0078d4;"></div>
+      <div>
+        <strong>Thursday 4pm</strong><br>
+        <span style="font-size:0.8rem;color:var(--text-muted);">Jordan merges. Tests green locally. Dependency bump also merges.</span>
+      </div>
+    </div>
+    <div class="tl-node">
+      <div class="tl-dot" style="background:var(--text-dim);"></div>
+      <div>
+        <strong>Thursday 5pm – Friday 9am</strong><br>
+        <span style="font-size:0.8rem;color:var(--text-muted);">Conflict exists in the codebase. Nobody knows.</span>
+      </div>
+    </div>
+    <div class="tl-node">
+      <div class="tl-dot" style="background:#e85c5c;"></div>
+      <div>
+        <strong>Friday 9:14am</strong><br>
+        <span style="font-size:0.8rem;color:var(--text-muted);">Release pipeline fails. Investigation begins. Release delayed.</span>
+      </div>
+    </div>
+    <div class="tl-node">
+      <div class="tl-dot" style="background:var(--green);"></div>
+      <div>
+        <strong>With CI: Thursday 4:05pm</strong><br>
+        <span style="font-size:0.8rem;color:var(--text-muted);">Jordan's PR pipeline fails in 5 minutes. Conflict caught before merge.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"The tests ran locally but the conflict only surfaces in a shared, clean environment — that is why CI exists."</strong> — when someone asks why local test results were not enough to catch a bug.</li>
+    <li><strong>"CI would have caught this in the PR before it merged — the failure would have appeared within minutes of the push."</strong> — when a bug reached production or a release and the team is asking how to prevent recurrence.</li>
+    <li><strong>"Tests passing locally proves your machine is configured correctly, not that the application works for everyone."</strong> — when a developer says their tests were green before they merged.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 01</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li>"Tests pass locally" proves your machine is configured correctly — not that the application works</li>
+    <li>Conflicts between concurrent changes only surface in a shared, clean environment</li>
+    <li>CI moves test execution to a neutral machine that runs on every push, automatically</li>
+    <li>The earlier a failure is caught, the cheaper it is to fix — PR context vs release context is a massive difference</li>
+    <li>CI doesn't add new tests — it gives your existing tests a stage where the results actually mean something</li>
+    <li>Sam's question — "why didn't the tests catch this?" — has a clear answer once CI is in place: because now tests run automatically, in a shared environment, on every change.</li>
+  </ul>
+</div>

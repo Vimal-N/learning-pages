@@ -1,0 +1,172 @@
+---
+layout: chapter.njk
+title: "Session 03 — The CI/CD Tool Market in 20 Minutes"
+sessionNumber: "03"
+sessionTitle: "The CI/CD Tool Market in 20 Minutes"
+phase: "Phase 2: CI/CD Market Survey"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 2 · CI/CD Market Survey</div>
+  <h1>The CI/CD Tool Market in 20 Minutes</h1>
+  <p class="ch-lead">Before going deep on Azure Pipelines, it helps to know what else is out there — because you will hear these names in team conversations, job descriptions, and migration discussions. This session gives you enough context to follow those conversations and ask good questions. The deeper insight: every CI/CD tool implements the same underlying structure. Once you understand Azure Pipelines, you can read a GitHub Actions or GitLab CI file and immediately recognise the equivalent concepts.</p>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">why this matters</div>
+  <div class="cp-title">You will hear these names — here is what they mean</div>
+  <p class="cp-lead">CI/CD tools come up in conversations all the time: "we migrated from Jenkins to GitHub Actions," "this repo uses GitLab CI," "we are looking at CircleCI for the frontend team." You do not need to be an expert in every tool. But knowing what category each tool belongs to — and what the equivalent concepts are in Azure Pipelines — means you can follow those conversations and contribute to them.</p>
+  <ul class="cp-list">
+    <li>You are not selecting a CI/CD tool in this session — your team has already chosen Azure Pipelines</li>
+    <li>You are building a mental map so that no tool name catches you off guard</li>
+    <li>The most important panel in this session is the portability table at the end — everything maps to a concept you will learn in ADO</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Three categories of tools</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">landscape</div>
+  <div class="cp-title">CI/CD tools fall into three categories</div>
+  <p class="cp-lead">Despite dozens of products, the market clusters around three delivery models. Understanding the category tells you most of what you need to know about the trade-offs before reading any documentation.</p>
+  <div class="cp-icon-grid">
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+      <div class="cp-icon-name">Cloud SaaS</div>
+      <div class="cp-icon-desc">Hosted, no infrastructure to manage. You bring the code; the platform brings the runners. Examples: GitHub Actions, CircleCI, Travis CI.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="18" cy="6" r="1" fill="#0078d4"/><circle cx="18" cy="18" r="1" fill="#0078d4"/></svg></div>
+      <div class="cp-icon-name">Self-hosted</div>
+      <div class="cp-icon-desc">You own the server, the agents, and the maintenance. Full control over the environment. Example: Jenkins.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <div class="cp-icon-name">Platform-embedded</div>
+      <div class="cp-icon-desc">CI/CD built into a broader DevOps suite. Pipelines share an organisation, repo, boards, and artifact store. Examples: Azure DevOps, GitLab CI/CD.</div>
+    </div>
+  </div>
+</div>
+
+<div class="cp-section-label">Major tools at a glance</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">github actions</div>
+  <div class="cp-title">GitHub Actions — the ecosystem play</div>
+  <p class="cp-lead">Tightly integrated with GitHub. Workflows live in <code>.github/workflows/</code>, trigger on GitHub events, and can call thousands of community-built "Actions" from the GitHub Marketplace.</p>
+  <ul class="cp-list">
+    <li>YAML-based, event-driven triggers (push, PR, issue, release, schedule)</li>
+    <li>Free tier generous; scales with GitHub billing</li>
+    <li>Best fit: open-source projects or teams already on GitHub</li>
+    <li>ADO comparison: very similar YAML syntax — <code>jobs</code>, <code>steps</code>, <code>uses</code> vs ADO's <code>task</code></li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">jenkins</div>
+  <div class="cp-title">Jenkins — the original, still everywhere</div>
+  <p class="cp-lead">Open-source, self-hosted, and been around since 2004. Every enterprise CI/CD concept was either invented here or implemented here first. It's verbose and high-maintenance, but it goes anywhere.</p>
+  <ul class="cp-list">
+    <li>Pipelines defined in Groovy (Jenkinsfile) — older than YAML pipelines</li>
+    <li>Massive plugin ecosystem (1,800+ plugins)</li>
+    <li>You own the controller, the agents, the upgrades, and the crashes</li>
+    <li>Best fit: teams with custom infrastructure requirements or legacy migration paths</li>
+    <li>ADO comparison: Jenkins "stages" ≈ ADO "jobs"; Jenkins "steps" ≈ ADO "steps"</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">gitlab ci/cd</div>
+  <div class="cp-title">GitLab CI/CD — the integrated alternative</div>
+  <p class="cp-lead">GitLab bakes CI/CD directly into its platform — same idea as ADO. Pipelines are defined in <code>.gitlab-ci.yml</code>. If your organisation self-hosts GitLab, you get all of this on-premise.</p>
+  <ul class="cp-list">
+    <li>YAML-based, pipeline runs triggered on push, MR (merge request), schedule</li>
+    <li><code>stages:</code>, <code>jobs:</code>, <code>artifacts:</code> — nearly identical mental model to ADO</li>
+    <li>Strong compliance features, good for regulated industries</li>
+    <li>ADO comparison: GitLab MR pipelines ≈ ADO PR validation; GitLab runners ≈ ADO agents</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">circleci</div>
+  <div class="cp-title">CircleCI — fast loops for smaller teams</div>
+  <p class="cp-lead">A cloud-native CI/CD service known for speed optimisations: test parallelism, intelligent caching, and fast spin-up times. Popular in start-ups and product teams that need quick CI cycles.</p>
+  <ul class="cp-list">
+    <li>YAML-based (<code>.circleci/config.yml</code>), Docker-first execution</li>
+    <li>Built-in test splitting and parallel job execution</li>
+    <li>Usage-based pricing — can get expensive at scale</li>
+    <li>ADO comparison: CircleCI parallel test splitting ≈ ADO parallel jobs — same concept, different syntax.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Concepts that transfer</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">portability</div>
+  <div class="cp-title">The mental model is the same across all tools</div>
+  <p class="cp-lead">This table is the most important takeaway in this session. Once you know these equivalences, no CI/CD tool is entirely foreign — you are always mapping new vocabulary to concepts you already understand.</p>
+  <div class="cp-grid-2">
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Universal CI/CD concept</div>
+      <ul class="cp-list">
+        <li>Pipeline / Workflow</li>
+        <li>Job / Stage</li>
+        <li>Step / Task</li>
+        <li>Agent / Runner</li>
+        <li>Trigger</li>
+        <li>Artefact</li>
+        <li>Reusable config</li>
+      </ul>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">ADO equivalent name</div>
+      <ul class="cp-list">
+        <li>Pipeline</li>
+        <li>Stage / Job</li>
+        <li>Step / Task</li>
+        <li>Agent</li>
+        <li>Trigger / PR policy</li>
+        <li>Pipeline artifact</li>
+        <li>Template</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">why Azure DevOps</div>
+  <div class="cp-title">ADO is the right tool for enterprise teams on Microsoft's stack</div>
+  <p class="cp-lead">If your organisation uses Azure cloud resources, Microsoft-hosted build agents, Azure Repos, and Azure Test Plans — ADO Pipelines is the natural choice. Everything is in the same portal, under the same IAM, billed on the same account.</p>
+  <ul class="cp-list">
+    <li>Native integration with Azure Repos, Azure Boards, Azure Artifacts, and Azure Test Plans</li>
+    <li>Microsoft-hosted agents for Windows, Linux, and macOS — no infrastructure to provision</li>
+    <li>Service connections to Azure subscriptions, Kubernetes clusters, and App Services</li>
+    <li>Variable groups link directly to Azure Key Vault secrets</li>
+    <li>For QE teams: the Tests tab in the pipeline summary integrates directly with Azure Test Plans</li>
+  </ul>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"We are on Azure Pipelines — it is the platform-embedded CI/CD tool in the Microsoft ecosystem, same category as GitLab CI."</strong> — when someone asks what CI/CD tool your team uses, or when comparing tooling across teams</li>
+    <li><strong>"Jenkins is self-hosted — you own the server and the maintenance. ADO uses Microsoft-hosted agents, so we do not manage any infrastructure."</strong> — when someone mentions a Jenkins migration or asks why your team chose ADO over Jenkins</li>
+    <li><strong>"GitHub Actions workflows and Azure Pipelines use very similar concepts — both have triggers, agents, jobs, and steps. The syntax is different but the structure is the same."</strong> — when a developer from a GitHub background joins the team, or when reading a GitHub Actions example that someone shared</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 03</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li>CI/CD tools fall into three categories: cloud SaaS, self-hosted, and platform-embedded</li>
+    <li>Every tool implements the same concepts: trigger → agent → steps → artefact</li>
+    <li>GitHub Actions and GitLab CI are the closest analogues to ADO — YAML-based, stage/job/step structure</li>
+    <li>Jenkins is the most powerful but most expensive to operate; it's where enterprise CI/CD conventions were established</li>
+    <li>ADO is the right fit when you're already inside the Microsoft ecosystem — Azure, Visual Studio, Windows, and regulated enterprise environments</li>
+  </ul>
+</div>

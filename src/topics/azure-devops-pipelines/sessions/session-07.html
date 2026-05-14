@@ -1,0 +1,246 @@
+---
+layout: chapter.njk
+title: "Session 07 — Reading a Build: Summary Page + Full Playwright Pipeline"
+sessionNumber: "07"
+sessionTitle: "Reading a Build: Summary Page + Full Playwright Pipeline"
+phase: "Phase 3: Pipeline Internals"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 3 · Pipeline Internals</div>
+  <h1>Reading a Build: Summary Page + Full Playwright Pipeline</h1>
+  <p class="ch-lead">Knowing how to read a pipeline run is as important as knowing how to write one. This session walks through the ADO build summary page — its five tabs, what each one tells you — then shows a complete, production-quality Playwright pipeline from trigger to published results.</p>
+</div>
+
+<div class="cp-section-label">The build summary page</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">navigation</div>
+  <div class="cp-title">Five tabs, five different answers</div>
+  <p class="cp-lead">When a pipeline run completes (or fails), ADO's build summary page is where you go to understand what happened. Each tab answers a different question.</p>
+  <div class="cp-icon-grid">
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg></div>
+      <div class="cp-icon-name">Summary</div>
+      <div class="cp-icon-desc">High-level view: stages, pass/fail, duration, and triggered by whom. First stop.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M9 3v8l-4 9h14l-4-9V3"/><line x1="6" y1="14" x2="18" y2="14"/></svg></div>
+      <div class="cp-icon-name">Tests</div>
+      <div class="cp-icon-desc">All test results published by this run. Filter by pass/fail, search by name, see stack traces.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5" rx="1"/><line x1="10" y1="12" x2="14" y2="12"/></svg></div>
+      <div class="cp-icon-name">Artifacts</div>
+      <div class="cp-icon-desc">Files published by the pipeline — reports, screenshots, build output, packages.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="14" y2="17"/></svg></div>
+      <div class="cp-icon-name">Logs</div>
+      <div class="cp-icon-desc">Full stdout/stderr for every step in every job. Click the step in the timeline to jump to its log.</div>
+    </div>
+    <div class="cp-icon-card">
+      <div class="cp-icon-glyph"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0078d4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="cp-icon-name">Timeline</div>
+      <div class="cp-icon-desc">Visual Gantt chart of all stages and jobs, with per-step timing. Identifies where time was spent.</div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">tests tab</div>
+  <div class="cp-title">What the Tests tab shows — and how results get there</div>
+  <p class="cp-lead">Test results don't appear automatically. They have to be explicitly published using the <code>PublishTestResults@2</code> task. Without this task, the Tests tab is empty even if your tests ran.</p>
+  <ul class="cp-list">
+    <li>Playwright (with a JUnit reporter) writes results to <code>test-results/*.xml</code></li>
+    <li><code>PublishTestResults@2</code> reads the XML and uploads it to ADO</li>
+    <li>The Tests tab shows: total tests, pass %, failed count, and individual test names</li>
+    <li>Failed tests show the error message and stack trace inline — no digging through logs</li>
+    <li>Results from multiple jobs in the same run are merged into a single Tests tab</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">artifacts tab</div>
+  <div class="cp-title">Pipeline artefacts — publishing files for later use</div>
+  <p class="cp-lead">The Artifacts tab holds anything your pipeline publishes using <code>PublishPipelineArtifact@1</code>. This includes Playwright HTML reports, screenshots, trace files, build outputs, and coverage reports.</p>
+  <ul class="cp-list">
+    <li>Artefacts persist after the VM is destroyed — they're uploaded to ADO's storage</li>
+    <li>Can be downloaded manually from the Artifacts tab, or downloaded by a later job using <code>DownloadPipelineArtifact@2</code></li>
+    <li>Playwright's HTML report is the most valuable artefact for QE: full traces, screenshots, and video</li>
+    <li>Always publish artefacts with <code>condition: always()</code> — you want them even when the run fails</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">When a pipeline fails — what to do</div>
+
+<div class="chapter-panel cp-story">
+  <div class="cp-label">scenario</div>
+  <div class="cp-title">A developer messages you: "The pipeline failed — can you take a look?"</div>
+  <p class="cp-lead">This will happen. Here is the exact sequence of steps to go from "pipeline failed" to "here is what went wrong and who should fix it" in under five minutes.</p>
+  <div class="cp-step-flow">
+    <div class="cp-step">
+      <div class="cp-step-num">1</div>
+      <div class="cp-step-label">Open the pipeline run</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">2</div>
+      <div class="cp-step-label">Identify which stage failed</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">3</div>
+      <div class="cp-step-label">Go to the right tab</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">4</div>
+      <div class="cp-step-label">Find the specific failure</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">5</div>
+      <div class="cp-step-label">Route it to the right person</div>
+    </div>
+  </div>
+  <ul class="cp-list" style="margin-top:16px;">
+    <li><strong>Step 1 — Open the pipeline run.</strong> In ADO, go to Pipelines → the pipeline name → the failed run (it has a red X). Click it.</li>
+    <li><strong>Step 2 — Identify which stage failed.</strong> The Summary tab shows all stages as a row. The red stage is where the failure is. If the Build stage is red, the failure is in compilation or linting — nothing to do with tests. If the Test stage is red, tests ran but something failed.</li>
+    <li><strong>Step 3 — Go to the right tab based on the failing stage.</strong> Test stage failure → Tests tab. Other failure → Logs tab. Artifacts missing → Artifacts tab.</li>
+    <li><strong>Step 4 — Find the specific failure.</strong> In the Tests tab: filter by Failed, click a failing test, read the error message and stack trace. In the Logs tab: click the red step in the timeline, scroll to the first error line — that is usually the root cause, not the lines after it.</li>
+    <li><strong>Step 5 — Route it.</strong> Test failure with a clear assertion error → route to the developer who changed that feature. Test failure with a connection error → environment issue, route to DevOps or infrastructure. Build failure (lint/compile) → route to the developer who pushed the change.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">the html report</div>
+  <div class="cp-title">Downloading the Playwright report for deeper investigation</div>
+  <p class="cp-lead">The Tests tab in ADO shows pass/fail at the test name level. The Playwright HTML report — published as a pipeline artifact — shows screenshots, traces, and video for every failing test. When the error message alone is not enough, the HTML report is where you find out exactly what the browser saw.</p>
+  <ul class="cp-list">
+    <li>Go to the Artifacts tab of the failed pipeline run</li>
+    <li>Find the artifact named <code>playwright-html-report</code> (or similar)</li>
+    <li>Download it and open <code>index.html</code> in your browser</li>
+    <li>Click any failing test to see: the exact error, a screenshot at the point of failure, a trace timeline showing every network request and DOM action, and optionally a video of the full test run</li>
+    <li>This is the most detailed debugging tool available — and it is always there if the pipeline published it with <code>condition: always()</code></li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Full Playwright pipeline</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">playwright-pipeline.yml — production-quality CI pipeline</div>
+  <div class="code-block" style="font-size:0.8rem;line-height:1.85;">
+    <span style="color:var(--code-comment)"># Fires on PRs and pushes to main</span><br>
+    <span style="color:var(--code-keyword)">trigger</span>:<br>
+    &nbsp;&nbsp;- main<br>
+    <span style="color:var(--code-keyword)">pr</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-string)">'*'</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">pool</span>:<br>
+    &nbsp;&nbsp;<span style="color:var(--code-property)">vmImage</span>: <span style="color:var(--code-string)">'ubuntu-latest'</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">variables</span>:<br>
+    &nbsp;&nbsp;<span style="color:var(--code-property)">NODE_VERSION</span>: <span style="color:var(--code-string)">'20'</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">stages</span>:<br>
+    <br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">stage</span>: Build<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Build'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">jobs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">job</span>: InstallAndLint<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">steps</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">checkout</span>: self<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">task</span>: NodeTool@0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">inputs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">versionSpec</span>: <span style="color:var(--code-string)">'$(NODE_VERSION)'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm ci</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Install dependencies'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm run lint</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Lint'</span><br>
+    <br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">stage</span>: Test<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">dependsOn</span>: Build<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Test'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">jobs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">job</span>: PlaywrightTests<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">steps</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">checkout</span>: self<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">task</span>: NodeTool@0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">inputs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">versionSpec</span>: <span style="color:var(--code-string)">'$(NODE_VERSION)'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm ci</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Install dependencies'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npx playwright install --with-deps chromium</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Install Playwright browsers'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npx playwright test --reporter=junit,html</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Run Playwright tests'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">continueOnError</span>: <span style="color:var(--code-number)">true</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">task</span>: PublishTestResults@2<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">condition</span>: <span style="color:var(--code-string)">always()</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">inputs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testResultsFormat</span>: <span style="color:var(--code-string)">'JUnit'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testResultsFiles</span>: <span style="color:var(--code-string)">'test-results/junit*.xml'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">mergeTestResults</span>: <span style="color:var(--code-number)">true</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testRunTitle</span>: <span style="color:var(--code-string)">'Playwright E2E'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">task</span>: PublishPipelineArtifact@1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">condition</span>: <span style="color:var(--code-string)">always()</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">inputs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">targetPath</span>: <span style="color:var(--code-string)">'playwright-report'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">artifact</span>: <span style="color:var(--code-string)">'playwright-html-report'</span>
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">walkthrough</div>
+  <div class="cp-title">What the pipeline above does — step by step</div>
+  <p class="cp-lead">Seven things happen in this pipeline on every push. Understanding each one helps you diagnose failures and extend the pipeline later.</p>
+  <ul class="cp-list">
+    <li><strong>Triggers:</strong> Fires on every push to main and every open PR — CI and a merge trigger in one file</li>
+    <li><strong>Build stage:</strong> Installs exact dependency versions from the lock file (<code>npm ci</code>), then runs the linter to catch syntax and style issues before tests</li>
+    <li><strong>Why a separate Build stage?</strong> Each stage runs on a fresh agent — Build's agent and Test's agent are two different machines. Separating Build from Test means: if linting fails, we never spin up a second agent for tests. We catch the cheapest failure (lint) before paying for the expensive one (test execution). It also means the pipeline summary shows you exactly which phase failed at a glance.</li>
+    <li><strong>Test stage:</strong> Only starts if Build passed. Gets a fresh agent — separate from Build's agent</li>
+    <li><strong>Browser install:</strong> <code>npx playwright install --with-deps chromium</code> downloads Chromium and its OS-level dependencies. This is not in <code>npm ci</code> — it must be an explicit step</li>
+    <li><strong>Test run:</strong> Playwright runs all tests and writes JUnit XML + HTML report. <code>continueOnError: true</code> ensures the pipeline continues even if tests fail</li>
+    <li><strong>PublishTestResults:</strong> <code>condition: always()</code> ensures results are uploaded even if tests failed. The Tests tab in ADO is populated from this</li>
+    <li><strong>PublishPipelineArtifact:</strong> The HTML report (with screenshots and traces) is published as an artefact. Download it from the Artifacts tab to debug failures</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">what comes next</div>
+  <div class="cp-title">You can read and run a pipeline — Phase 4 is about patterns you will see in your team's files</div>
+  <p class="cp-lead">You now understand what a pipeline is, how it runs, and how to read its results. Phase 4 moves from principles to patterns — the specific structures your product team's pipelines already use. You will learn to read template references, understand matrix strategies, and write your own QE-owned nightly pipeline using your organisation's shared template library.</p>
+  <ul class="cp-list">
+    <li><strong>Session 08:</strong> Templates — what they are, how to recognise a template call in a pipeline file you did not write</li>
+    <li><strong>Session 09:</strong> Your organisation's shared template repository — how to find it, read it, and use it for a nightly run</li>
+    <li><strong>Session 10:</strong> Matrix strategy — how to read the <code>strategy: matrix:</code> block that appears in almost every product team's test pipeline</li>
+    <li>Every session from here builds directly on what you have already learned. Nothing requires starting over.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"The Test stage is red but the Build stage is green — so the code compiled fine, it is a test failure, not a build issue."</strong> — when triaging a failed pipeline and clarifying where the problem lies</li>
+    <li><strong>"I can see in the Tests tab which specific tests failed and what the error message is — let me pull that and send it to you."</strong> — when a developer asks you what failed</li>
+    <li><strong>"The Playwright HTML report is in the Artifacts tab — it has screenshots and traces for every failing test."</strong> — when someone needs more detail than the Tests tab provides</li>
+    <li><strong>"The pipeline always publishes test results even when tests fail, because we use <code>condition: always()</code> — so the Tests tab will show what happened even in a failed run."</strong> — when explaining why results are visible despite the pipeline being red</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 07</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li>The build summary page has five tabs: Summary, Tests, Artifacts, Logs, and Timeline — each answers a different question</li>
+    <li>Test results only appear in the Tests tab if you include a <code>PublishTestResults@2</code> task</li>
+    <li>The Playwright HTML report goes into Artifacts via <code>PublishPipelineArtifact@1</code> — always with <code>condition: always()</code></li>
+    <li>Always pair <code>continueOnError: true</code> on the test step with <code>condition: always()</code> on the publish steps</li>
+    <li>Each job gets a fresh agent — the Test stage reinstalls dependencies even though Build already did</li>
+  </ul>
+</div>

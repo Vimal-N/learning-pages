@@ -1,0 +1,212 @@
+---
+layout: chapter.njk
+title: "Session 11 — Parallel Sharding: Splitting a Large Suite"
+sessionNumber: "11"
+sessionTitle: "Parallel Sharding: Splitting a Large Suite"
+phase: "Phase 4: Patterns You'll See in Your Team's Pipelines"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 4 · Patterns You'll See in Your Team's Pipelines</div>
+  <h1>Parallel Sharding: Splitting a Large Suite</h1>
+  <p class="ch-lead">Running 300 Playwright tests sequentially takes 18 minutes. Running them across 3 parallel agents takes 6. This session shows how to split tests across multiple jobs using Playwright's built-in shard flag, how ADO automatically merges the results into a single Tests tab, and when this pattern is worth the added complexity. If you have seen multiple jobs in a Test stage that look nearly identical, your team is probably already using sharding.</p>
+</div>
+
+<div class="cp-section-label">The time problem — long suites break the feedback loop</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">problem</div>
+  <div class="cp-title">Long test suites break the CI feedback loop</div>
+  <p class="cp-lead">The whole point of CI is fast feedback. If your test suite takes 20 minutes, developers have stopped thinking about the change that triggered it. Parallelism brings the loop back under 10 minutes.</p>
+  <ul class="cp-list">
+    <li>A 300-test suite at approximately 3.6 seconds per test runs for 18 minutes on a single agent</li>
+    <li>Split across 3 agents: each agent runs 100 tests, finishing in approximately 6 minutes total</li>
+    <li>Same infrastructure cost: three agents run concurrently, not sequentially — you are not paying for three times the time</li>
+    <li>The developer gets a result before they have had time to start on the next task</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">stat</div>
+  <div class="cp-title">What sharding buys you</div>
+  <p class="cp-lead">Same tests. Same results. Three agents running at the same time instead of one running three times over.</p>
+  <div class="cp-stat-row">
+    <div class="cp-stat-item">
+      <div class="cp-stat-num">18 min</div>
+      <div class="cp-stat-label">1 agent</div>
+    </div>
+    <div class="cp-stat-arrow">→</div>
+    <div class="cp-stat-item">
+      <div class="cp-stat-num">6 min</div>
+      <div class="cp-stat-label">3 agents</div>
+    </div>
+    <div class="cp-stat-arrow">→</div>
+    <div class="cp-stat-item">
+      <div class="cp-stat-num">67%</div>
+      <div class="cp-stat-label">faster feedback</div>
+    </div>
+  </div>
+</div>
+
+<div class="cp-section-label">Playwright sharding — the --shard flag</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">playwright flag</div>
+  <div class="cp-title">The <code>--shard</code> flag splits tests by file across agents</div>
+  <p class="cp-lead">Playwright has built-in support for sharding — you tell it which shard this agent is and how many total shards there are. Playwright handles the division automatically.</p>
+  <ul class="cp-list">
+    <li><code>npx playwright test --shard=1/3</code> runs the first third of all test files on this agent</li>
+    <li><code>npx playwright test --shard=2/3</code> runs the middle third on a second agent</li>
+    <li><code>npx playwright test --shard=3/3</code> runs the last third on a third agent</li>
+    <li>Playwright distributes by file, not by individual test — each file goes to exactly one shard</li>
+    <li>No code changes needed — the flag is the only configuration required</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">parallel-shards.yml — three jobs running simultaneously</div>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.85;">
+    <span style="color:var(--code-keyword)">stages</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">stage</span>: Test<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Run tests across 3 parallel shards'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">jobs</span>:<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># Shard 1 of 3 — runs the first third of all test files</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">job</span>: Shard1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Playwright — Shard 1/3'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">pool</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">vmImage</span>: <span style="color:var(--code-string)">'ubuntu-latest'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">steps</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">checkout</span>: self<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm ci && npx playwright install --with-deps chromium</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Install dependencies and browsers'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npx playwright test --shard=1/3 --reporter=junit</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Run tests — shard 1/3'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">continueOnError</span>: <span style="color:var(--code-number)">true</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">task</span>: PublishTestResults@2<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">condition</span>: <span style="color:var(--code-string)">always()</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">inputs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testResultsFormat</span>: <span style="color:var(--code-string)">'JUnit'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testResultsFiles</span>: <span style="color:var(--code-string)">'test-results/junit.xml'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testRunTitle</span>: <span style="color:var(--code-string)">'Shard 1'</span><br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># Shard2 and Shard3 are identical jobs — only the --shard=N/3 flag changes</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">job</span>: Shard2<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Playwright — Shard 2/3'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># same steps as Shard1 — only --shard=2/3 and testRunTitle: 'Shard 2' differ</span><br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">job</span>: Shard3<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Playwright — Shard 3/3'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># same steps as Shard1 — only --shard=3/3 and testRunTitle: 'Shard 3' differ</span>
+  </div>
+</div>
+
+<div class="cp-section-label">ADO result aggregation — one Tests tab from three jobs</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">aggregation</div>
+  <div class="cp-title">ADO merges all shard results into one Tests tab</div>
+  <p class="cp-lead">Each shard job independently publishes its results using <code>PublishTestResults@2</code>. ADO automatically aggregates results from all jobs in the same pipeline run into a single Tests tab.</p>
+  <ul class="cp-list">
+    <li>Each job's <code>testRunTitle</code> ('Shard 1', 'Shard 2', 'Shard 3') labels the results separately so you can tell which shard a test ran on</li>
+    <li>The Tests tab shows the total pass and fail count across all three shards combined</li>
+    <li>A single failing test in Shard 2 is visible and searchable in the same view as passing tests from Shard 1 and Shard 3</li>
+    <li>The stage-level result is the union: if any shard job has a failing test, the Test stage is marked as failed</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">quality gate</div>
+  <div class="cp-title">The Test stage as a combined quality gate</div>
+  <p class="cp-lead">With all three shards inside the same stage, the stage itself becomes the pass/fail decision point for everything downstream.</p>
+  <ul class="cp-list">
+    <li>A downstream Deploy stage with <code>dependsOn: Test</code> will not start unless all three shard jobs pass</li>
+    <li>Any shard job failing causes the Test stage to fail</li>
+    <li>A failed Test stage blocks any downstream stage that depends on it</li>
+    <li>No additional configuration needed — stage-level rollup is how ADO works by default</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Sharding vs matrix strategy — knowing the difference</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">comparison</div>
+  <div class="cp-title">Sharding and matrix are both parallel patterns — they solve different problems</div>
+  <div class="cp-grid-2">
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Sharding — for speed</div>
+      <ul class="cp-list">
+        <li>Same tests, same configuration — too many to run in time on one agent</li>
+        <li>Each shard runs a subset of the test files</li>
+        <li>All shards produce equivalent results</li>
+        <li>Use when the suite takes 10 or more minutes on a single agent</li>
+        <li>Results in the Tests tab are labelled by shard number</li>
+      </ul>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Matrix — for coverage</div>
+      <ul class="cp-list">
+        <li>Same tests, different configurations — browser, environment, or OS</li>
+        <li>Each matrix job runs the full suite (or a filtered subset) against a different target</li>
+        <li>Results differ meaningfully between configurations</li>
+        <li>Use when you have cross-browser or cross-environment requirements</li>
+        <li>Results in the Tests tab are labelled by configuration name</li>
+      </ul>
+    </div>
+  </div>
+  <p class="cp-lead" style="margin-top:16px;">Session 10 covers matrix strategy in full. You can combine both patterns: use matrix for browsers and sharding within each browser job for speed.</p>
+</div>
+
+<div class="cp-section-label">When sharding is worth the added complexity</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">when to use</div>
+  <div class="cp-title">When sharding is worth the complexity — and when it is not</div>
+  <div class="cp-grid-2">
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Good reasons to shard</div>
+      <ul class="cp-list">
+        <li>Suite takes longer than 10 minutes on a single agent</li>
+        <li>Feedback delay is causing developers to context-switch away from the change</li>
+        <li>You have parallel agent capacity available in your ADO organisation tier</li>
+        <li>Tests are independent and do not share state or external resources</li>
+      </ul>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">When NOT to shard</div>
+      <ul class="cp-list">
+        <li>Suite takes under 5 minutes — the added complexity is not worth it</li>
+        <li>Tests share a database or external state — shard conflicts will cause intermittent failures</li>
+        <li>Parallel agent capacity is not available in your organisation's tier</li>
+        <li>Tests are not yet deterministic — fix flakiness before adding parallelism</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"The Test stage has three shard jobs — they run in parallel, each handling a third of the test files. Total time is the duration of the slowest shard, not the sum."</strong> — when explaining why the pipeline has three nearly-identical jobs in the Test stage</li>
+    <li><strong>"Each shard publishes its own results to the Tests tab — ADO merges them automatically. You see all 300 tests in one view."</strong> — when someone asks how the results get combined</li>
+    <li><strong>"If any shard fails, the Test stage fails and deployment is blocked. All three have to pass."</strong> — when explaining the quality gate behaviour</li>
+    <li><strong>"The difference between sharding and matrix: sharding splits the same tests for speed, matrix runs the same tests in different configurations for coverage."</strong> — when clarifying which pattern is being used and why</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 11</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li>Playwright's <code>--shard=N/M</code> flag splits test files across M agents — no code changes required, just a flag</li>
+    <li>Each shard is a separate job in the same stage; jobs run in parallel on separate agents</li>
+    <li>Each shard publishes its own <code>PublishTestResults@2</code>; ADO aggregates them into one Tests tab automatically</li>
+    <li>The Test stage fails if any shard job fails — this makes the stage the combined quality gate for all downstream stages</li>
+    <li>Sharding is for speed with one configuration. Matrix (Session 10) is for coverage across multiple configurations. Combine both for maximum parallelism.</li>
+    <li>Shard when the suite takes 10 or more minutes. Skip it when tests share state or the suite is already fast.</li>
+  </ul>
+</div>

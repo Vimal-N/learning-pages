@@ -1,0 +1,221 @@
+---
+layout: chapter.njk
+title: "Session 10 — Matrix Strategy: One Job, Many Configurations"
+sessionNumber: "10"
+sessionTitle: "Matrix Strategy: One Job, Many Configurations"
+phase: "Phase 4: Patterns You'll See in Your Team's Pipelines"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 4 · Patterns You'll See in Your Team's Pipelines</div>
+  <h1>Matrix Strategy: One Job, Many Configurations</h1>
+  <p class="ch-lead">If you have opened your product team's pipeline and seen a <code>strategy: matrix:</code> block, you have encountered one of the most common patterns in team pipelines. Matrix strategy runs the same job multiple times, each time with a different set of variable values — across browsers, across environments, across operating systems. This session gives you a complete framework for reading any matrix configuration, understanding what it produces in ADO, and knowing when your team is using matrix instead of writing separate jobs.</p>
+</div>
+
+<div class="cp-section-label">What matrix strategy is — and why teams use it</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">the concept</div>
+  <div class="cp-title">Matrix runs one job definition many times, each time with different variable values</div>
+  <p class="cp-lead">Instead of writing three identical jobs — one for Chrome, one for Firefox, one for Safari — you write the job once and let the matrix populate the variable values. ADO (Azure DevOps) creates one job instance per matrix configuration and runs them all. The result is N jobs from one definition.</p>
+  <ul class="cp-list">
+    <li><strong>Without matrix:</strong> three separate job definitions in the YAML, each 15 lines long, differing only in one variable value. When you need to change the Node version, you change it in three places.</li>
+    <li><strong>With matrix:</strong> one job definition, a matrix block above it with three named configurations. Change the Node version in one place. The three jobs update automatically.</li>
+    <li><strong>Teams use matrix for:</strong> running tests across multiple browsers (Chrome, Firefox, Safari), across multiple environments (dev, QA, staging), across multiple operating systems (Ubuntu, Windows, macOS), or across multiple dependency versions.</li>
+    <li><strong>Parallel by default:</strong> the matrix configurations run in parallel — three browser configurations run simultaneously, not sequentially. The total pipeline time is the duration of the slowest configuration, not the sum of all three.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">common uses</div>
+  <div class="cp-title">Three patterns where you will see matrix in your team's pipelines</div>
+  <div class="cp-grid-2">
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Cross-browser testing</div>
+      <p>Running the same Playwright suite against Chrome, Firefox, and Safari. Each browser configuration is a matrix entry. Each runs simultaneously on its own agent — a dedicated virtual machine spun up and torn down for that job only.</p>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Cross-environment testing</div>
+      <p>Running the same smoke suite against dev, QA, and staging environments after a deployment. The environment URL comes from the matrix variable — the same test steps hit a different base URL for each matrix configuration.</p>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Cross-OS builds</div>
+      <p>Building a desktop application on Windows, macOS, and Ubuntu to verify it compiles cleanly on all supported platforms. The matrix variable controls which agent image each job runs on.</p>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Cross-version testing</div>
+      <p>Testing against Node 18 and Node 20 to verify backward compatibility before upgrading. Each Node version is a matrix configuration — one job installs and tests with 18, the other with 20.</p>
+    </div>
+  </div>
+</div>
+
+<div class="cp-section-label">Reading a matrix block — annotated completely</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">cross-browser-matrix.yml — a real matrix configuration, every line explained</div>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.9;margin-top:12px;">
+    <span style="color:var(--code-keyword)">jobs</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">job</span>: <span style="color:var(--code-string)">E2ETests</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">strategy</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">matrix</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">Chrome_Windows</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># matrix key — this becomes the job display name</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">browser</span>: <span style="color:var(--code-string)">chrome</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># variable set for this configuration</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">os</span>: <span style="color:var(--code-string)">windows-latest</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># second variable for this configuration</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">Firefox_Linux</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># second configuration — creates a second job</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">browser</span>: <span style="color:var(--code-string)">firefox</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">os</span>: <span style="color:var(--code-string)">ubuntu-latest</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">Safari_Mac</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># third configuration — creates a third job</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">browser</span>: <span style="color:var(--code-string)">safari</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">os</span>: <span style="color:var(--code-string)">macos-latest</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">maxParallel</span>: <span style="color:var(--code-number)">3</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># all three run at the same time</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">pool</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">vmImage</span>: <span style="color:var(--code-string)">$(os)</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># $(os) resolves to the matrix variable for this job</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">steps</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">checkout</span>: self<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">script</span>: <span style="color:var(--code-string)">npm ci</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">script</span>: <span style="color:var(--code-string)">npx playwright test --project=$(browser)</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># $(browser) resolves to 'chrome', 'firefox', or 'safari' for each job</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">continueOnError</span>: <span style="color:var(--code-number)">true</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">task</span>: PublishTestResults@2<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">condition</span>: <span style="color:var(--code-string)">always()</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">inputs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testResultsFormat</span>: <span style="color:var(--code-string)">'JUnit'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testResultsFiles</span>: <span style="color:var(--code-string)">'test-results/*.xml'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testRunTitle</span>: <span style="color:var(--code-string)">'$(browser) on $(os)'</span>&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># appears in Tests tab as the run label</span>
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">decoding it</div>
+  <div class="cp-title">The five things to understand in any matrix block</div>
+  <ul class="cp-list">
+    <li><strong>The matrix keys (<code>Chrome_Windows:</code>, <code>Firefox_Linux:</code>, <code>Safari_Mac:</code>)</strong> are display names. They appear as job names in the ADO pipeline summary and in the Tests tab. You can name them anything descriptive. ADO creates one job for each key.</li>
+    <li><strong>The variables beneath each key</strong> (<code>browser: chrome</code>, <code>os: windows-latest</code>) are pipeline variables scoped to that specific job instance. They are available as <code>$(browser)</code> and <code>$(os)</code> anywhere in the job's steps, pool, and conditions.</li>
+    <li><strong><code>$(variableName)</code> in a step resolves to the matrix variable value for the current job.</strong> When the Chrome_Windows job runs, <code>$(browser)</code> is <code>chrome</code>. When the Firefox_Linux job runs, <code>$(browser)</code> is <code>firefox</code>. The step definition is written once; the matrix supplies the variable.</li>
+    <li><strong><code>maxParallel: 3</code></strong> means all three configurations run simultaneously. Set it to <code>1</code> to run them sequentially. Set it to <code>2</code> to run two at a time. When agent parallelism is limited (the free tier provides 1,800 minutes per month), reducing <code>maxParallel</code> conserves capacity.</li>
+    <li><strong><code>testRunTitle: '$(browser) on $(os)'</code></strong> names each test run in the Tests tab. Without this, all three runs appear with the same default name and are hard to distinguish. Always include a descriptive <code>testRunTitle</code> that incorporates a matrix variable.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">What matrix produces in ADO — the pipeline summary and Tests tab</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">pipeline summary</div>
+  <div class="cp-title">The pipeline summary shows one job per matrix configuration</div>
+  <p class="cp-lead">When a pipeline with a matrix strategy runs, the ADO pipeline summary shows multiple jobs within the same stage — one for each matrix configuration. This is normal and expected.</p>
+  <ul class="cp-list">
+    <li>The Test stage in the summary expands to show: <code>E2ETests (Chrome_Windows)</code>, <code>E2ETests (Firefox_Linux)</code>, <code>E2ETests (Safari_Mac)</code> — one row per matrix key.</li>
+    <li>Each job has its own duration, its own status (pass/fail), and its own log output. Clicking into any job row opens the logs and steps for that specific configuration only.</li>
+    <li>If you open the Timeline tab, you see all three jobs starting at approximately the same time and running in parallel on separate agents.</li>
+    <li>A developer or QE engineer looking at this summary can immediately see which browser configuration (if any) failed — without needing to read logs or decode a combined output.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">tests tab</div>
+  <div class="cp-title">The Tests tab aggregates all matrix runs — with run labels to distinguish them</div>
+  <p class="cp-lead">Each matrix job publishes its own test results. ADO aggregates all of them into a single Tests tab for the pipeline run.</p>
+  <ul class="cp-list">
+    <li>The Tests tab shows all tests from all matrix configurations in one view — you see the total pass/fail count for all browsers combined.</li>
+    <li>Each test run is labelled with the <code>testRunTitle</code> value — <code>Chrome on windows-latest</code>, <code>Firefox on ubuntu-latest</code>, <code>Safari on macos-latest</code>.</li>
+    <li>You can filter the Tests tab by run title to see results for a specific browser only.</li>
+    <li>A test that fails on Safari but passes on Chrome will appear once in the failed list, under the Safari run. It is immediately visible which configuration is the problem.</li>
+    <li>If all three configurations publish their results with a unique <code>testRunTitle</code>, you will always be able to identify which browser, OS, or environment produced a failure.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">quality gate</div>
+  <div class="cp-title">When the stage fails — one failing matrix job fails the whole stage</div>
+  <p class="cp-lead">The stage-level result is the union of all matrix job results. If any matrix job fails, the Test stage fails.</p>
+  <ul class="cp-list">
+    <li>A single failing test in the Safari configuration causes the <code>E2ETests (Safari_Mac)</code> job to fail.</li>
+    <li>A failed job causes the Test stage to fail.</li>
+    <li>A failed Test stage blocks any downstream stage with <code>dependsOn: Test</code> — including a Deploy stage.</li>
+    <li>This means three browser configurations, running in parallel, still produce a single pass/fail verdict at the stage level. All three must pass for the stage to pass.</li>
+    <li>You do not need extra configuration for this. Stage-level rollup is how ADO works by default — it is not something your team had to set up.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Matrix vs parallel sharding — which pattern to use</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">decision</div>
+  <div class="cp-title">Matrix and sharding solve different problems — here is how to tell them apart</div>
+  <p class="cp-lead">Both matrix strategy and parallel sharding (covered in Session 11) run multiple agents in parallel. But they answer different questions.</p>
+  <div class="cp-grid-2">
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Use matrix when</div>
+      <ul class="cp-list">
+        <li>You need to run the same tests in different configurations (browsers, environments, OS)</li>
+        <li>Each configuration produces a meaningfully different result — a Safari failure is different from a Chrome failure</li>
+        <li>You want the Tests tab to show results labelled by configuration</li>
+        <li>Your team has cross-browser or cross-environment requirements in the definition of quality</li>
+      </ul>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Use sharding when</div>
+      <ul class="cp-list">
+        <li>You have one configuration but too many tests to run in time</li>
+        <li>All agents run the same browser on the same OS — they split the test files between them</li>
+        <li>You want to cut wall-clock time from 18 minutes to 6 minutes</li>
+        <li>You do not need to differentiate results by configuration — all results are equivalent regardless of which agent ran them</li>
+      </ul>
+    </div>
+  </div>
+  <p class="cp-lead" style="margin-top:16px;">You can combine both. A matrix with three browser configurations, each sharded across two agents, produces six parallel jobs total. Session 11 covers sharding in detail.</p>
+</div>
+
+<div class="cp-section-label">Practical guidance — reading and diagnosing matrix pipelines</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">reading an unfamiliar matrix</div>
+  <div class="cp-title">Four questions to ask when you see a matrix block you did not write</div>
+  <p class="cp-lead">When you encounter a matrix in a pipeline your team already has, these four questions give you a complete picture.</p>
+  <ul class="cp-list">
+    <li><strong>What are the matrix keys?</strong> List them: <code>Chrome_Windows</code>, <code>Firefox_Linux</code>, <code>Safari_Mac</code>. Each key is one job instance. Count the keys to know how many parallel jobs this produces.</li>
+    <li><strong>What variables does each key define?</strong> Look at the indented properties under each key (<code>browser: chrome</code>, <code>os: windows-latest</code>). These are the values that change between job instances.</li>
+    <li><strong>Where are those variables used?</strong> Search for <code>$(variableName)</code> in the pool, steps, and inputs. Every occurrence is a place where the value changes between job instances.</li>
+    <li><strong>What is <code>maxParallel</code> set to?</strong> If it is not set, all configurations run simultaneously. If it is set to a number lower than the configuration count, some will queue behind others.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">when a matrix job fails</div>
+  <div class="cp-title">Diagnosing a matrix failure — which configuration, which test, what error</div>
+  <p class="cp-lead">When a matrix pipeline fails, the first question is always: which configuration? The ADO summary makes this visible immediately.</p>
+  <ul class="cp-list">
+    <li>In the pipeline summary, find the Test stage and expand it. The failing job will be labelled with its matrix key — for example, <code>E2ETests (Safari_Mac)</code>.</li>
+    <li>Go to the Tests tab and filter by the run title for that configuration — for example, <code>Safari on macos-latest</code>.</li>
+    <li>The failing test name, error message, and stack trace are there. If the test passes on Chrome and Firefox but fails on Safari, that is a browser-specific compatibility issue — route it to the developer with: "The <code>[test name]</code> test is failing on Safari only, error: [paste message]."</li>
+    <li>If the same test fails on all three configurations, it is not a browser-specific issue. It is likely a change to the application or a test environment problem — investigate the most recent deployment or environment change.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"This pipeline uses a matrix strategy — it runs the same job three times, once for each browser, in parallel."</strong> — when explaining what the <code>strategy: matrix:</code> block does to someone who has not seen it before</li>
+    <li><strong>"The matrix key <code>Chrome_Windows</code> is the display name for that job instance — it appears in the summary and the Tests tab."</strong> — when someone asks why the job is named that way in ADO</li>
+    <li><strong>"The <code>$(browser)</code> in the test command resolves to whatever value the current matrix configuration sets for <code>browser</code> — <code>chrome</code> for the Chrome job, <code>firefox</code> for the Firefox job."</strong> — when explaining how one step definition runs different commands for each matrix job</li>
+    <li><strong>"The Safari matrix job failed — I can see it in the summary. The other two configurations passed. This looks like a Safari-specific issue."</strong> — when reporting a cross-browser test failure in a standup or incident channel</li>
+    <li><strong>"We have <code>maxParallel: 3</code> so all three browser configurations run at the same time — the total pipeline time is the duration of the slowest one, not the sum."</strong> — when explaining why a three-browser matrix does not triple the pipeline duration</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 10</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li>Matrix strategy runs one job definition multiple times, each time with a different set of variable values — one job instance per matrix key</li>
+    <li>Matrix keys are display names that appear in the ADO pipeline summary and Tests tab — name them descriptively so failures are immediately identifiable</li>
+    <li><code>$(variableName)</code> inside the job resolves to the matrix variable value for the current job instance — the step definition is written once and the matrix supplies the variation</li>
+    <li><code>maxParallel</code> controls how many matrix jobs run simultaneously — default is all of them at once; reduce it to conserve agent minutes on limited plans</li>
+    <li>The Test stage fails if any matrix job fails — one failing browser configuration blocks the whole stage and any downstream Deploy stage</li>
+    <li>Use matrix for different configurations (browsers, environments, OS). Use sharding for the same configuration with too many tests. Combine both for maximum parallelism.</li>
+  </ul>
+</div>

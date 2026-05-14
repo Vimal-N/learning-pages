@@ -1,0 +1,293 @@
+---
+layout: chapter.njk
+title: "Session 09 — Reading and Reusing Your Organisation's Shared Template Library"
+sessionNumber: "09"
+sessionTitle: "Reading and Reusing Your Organisation's Shared Template Library"
+phase: "Phase 4: Patterns You'll See in Your Team's Pipelines"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 4 · Patterns You'll See in Your Team's Pipelines</div>
+  <h1>Reading and Reusing Your Organisation's Shared Template Library</h1>
+  <p class="ch-lead">Your product team's pipeline almost certainly calls templates from a shared repository your organisation maintains. You have probably seen lines like <code>- template: templates/test/playwright-e2e.yml@templates</code> without knowing where that file lives or what it does. This session shows you how to find that repository, read its templates, understand the parameters they accept, and write your own QE pipeline that uses them — for a nightly regression run or a daily smoke run — without reinventing anything your organisation has already built.</p>
+</div>
+
+<div class="cp-section-label">What the shared template repository is</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">the library</div>
+  <div class="cp-title">Your organisation's shared template repository is the pipeline standard</div>
+  <p class="cp-lead">Most organisations that use Azure Pipelines at scale maintain one dedicated repository containing standardised pipeline definitions. Every product team's pipeline references this repository rather than writing the same patterns from scratch. QE engineers see references to it in every team pipeline but rarely know it exists as a named, browsable repository in ADO.</p>
+  <ul class="cp-list">
+    <li>The repository has a name — commonly <code>ado-pipeline-library</code>, <code>pipeline-templates</code>, <code>devops-templates</code>, or similar. Ask your platform team or DevOps lead if you are not sure what yours is called.</li>
+    <li>It is a normal ADO (Azure DevOps) repository — you can browse it, read its files, and see its history in ADO Repos, exactly like any other codebase.</li>
+    <li>It is owned and maintained by a platform or DevOps team. QE engineers consume it — you are not expected to modify it.</li>
+    <li>Templates inside it are organised by function: <code>templates/build/</code>, <code>templates/test/</code>, <code>templates/deploy/</code>. The test templates are the ones most relevant to QE work.</li>
+    <li>Understanding what is in this repository is the difference between feeling like pipeline YAML is a black box and knowing exactly what your team's pipeline is doing.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">folder structure</div>
+  <div class="cp-title">What a shared template repository typically looks like inside</div>
+  <p class="cp-lead">When you browse the repository in ADO Repos, you will find a folder structure organised by pipeline phase. The exact names vary by organisation, but the pattern is consistent across most teams that use shared templates.</p>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.9;margin-top:12px;">
+    ado-pipeline-library/<br>
+    ├── templates/<br>
+    │&nbsp;&nbsp; ├── build/<br>
+    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── install-and-lint.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">← compiles, lints, sets up Node</span><br>
+    │&nbsp;&nbsp; │&nbsp;&nbsp; └── dotnet-build.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">← builds .NET solutions</span><br>
+    │&nbsp;&nbsp; ├── test/<br>
+    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── playwright-e2e.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">← runs Playwright tests (the one you want)</span><br>
+    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── jest-unit.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">← runs Jest unit tests</span><br>
+    │&nbsp;&nbsp; │&nbsp;&nbsp; └── api-contract-tests.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">← runs API contract tests</span><br>
+    │&nbsp;&nbsp; └── deploy/<br>
+    │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ├── azure-webapp.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">← deploys to Azure App Service</span><br>
+    │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; └── kubernetes.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">← deploys to AKS (Azure Kubernetes Service)</span><br>
+    └── tasks/<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;├── publish-results.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">← publishes test results to ADO</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;└── notify-teams.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">← sends Teams notification on failure</span>
+  </div>
+  <ul class="cp-list" style="margin-top:16px;">
+    <li>The <code>templates/test/</code> folder is where QE-relevant templates live. Start there when exploring the shared library for the first time.</li>
+    <li>Each template file is self-contained — it defines a stage, a job, or a set of steps that accomplishes a specific task from start to finish.</li>
+    <li>The <code>tasks/</code> folder contains smaller reusable step definitions — often called from within the larger templates to avoid duplicating common actions like publishing results.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Decoding a template reference — reading what your team's pipeline already uses</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">anatomy</div>
+  <div class="cp-title">Every template reference has three parts — here is what each one means</div>
+  <p class="cp-lead">When you see a template call in a product team's pipeline, you can read it completely by understanding three separate pieces. Here is a fully annotated example:</p>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.9;margin-top:12px;">
+    <span style="color:var(--code-keyword)">resources</span>:<br>
+    &nbsp;&nbsp;<span style="color:var(--code-keyword)">repositories</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">repository</span>: templates&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># alias — used as @templates below</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">type</span>: git&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># it is a Git repository</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">name</span>: <span style="color:var(--code-string)">'MyOrg/ado-pipeline-library'</span>&nbsp;&nbsp;<span style="color:var(--code-comment)"># Organisation/RepositoryName in ADO</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">ref</span>: <span style="color:var(--code-string)">'refs/tags/v4.1.0'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># pinned version — safe to copy from team's pipeline</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">stages</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">template</span>: templates/test/playwright-e2e.yml<span style="color:var(--code-keyword)">@templates</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)">#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; └─ file path inside the repo ──────────────┘└─ alias ─┘</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">parameters</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">nodeVersion</span>: <span style="color:var(--code-string)">'20'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># values passed to customise the template</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testFilter</span>: <span style="color:var(--code-string)">'@regression'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># these parameter names come from the template file</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">environment</span>: <span style="color:var(--code-string)">'qa'</span>
+  </div>
+  <ul class="cp-list" style="margin-top:16px;">
+    <li><strong>The alias (<code>@templates</code>):</strong> This is the short name assigned to the repository in the <code>resources.repositories</code> block. It could be <code>@shared</code>, <code>@central</code>, or anything else your organisation chose. Look up at the <code>resources</code> block to see which actual repository that alias refers to.</li>
+    <li><strong>The path (<code>templates/test/playwright-e2e.yml</code>):</strong> This is the file path inside the external repository. To read what this template actually does, navigate to that repository in ADO Repos and open this file. The next section shows exactly how.</li>
+    <li><strong>The parameters block:</strong> These are the values being passed to customise the template for this specific pipeline. To know what parameters are available — which ones are optional, which are required — open the template file and read its <code>parameters:</code> block at the top.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">ref versions</div>
+  <div class="cp-title">Understanding the <code>ref</code> — which version of the template library you are using</div>
+  <p class="cp-lead">The <code>ref</code> field tells ADO exactly which snapshot of the shared template repository to use when it runs your pipeline. It is one of the most important lines in any pipeline that references an external template repo.</p>
+  <ul class="cp-list">
+    <li><code>refs/tags/v4.1.0</code> means the pipeline is using the version of the shared repository tagged as <code>v4.1.0</code>. This is a snapshot — even if the templates are updated tomorrow, this pipeline keeps using v4.1.0 until someone deliberately changes the ref.</li>
+    <li>Teams pin to a specific tag so that template updates from the platform team do not unexpectedly break their pipeline. This is the correct approach — it gives you stability and control over when you take on changes.</li>
+    <li><code>refs/heads/main</code> means "always use the latest version of the main branch" — this is less stable and should only be used if the platform team explicitly recommends it, because any breaking change they push immediately affects your pipeline.</li>
+    <li><strong>What to use when writing a new pipeline:</strong> Copy the <code>ref</code> value from your product team's existing pipeline. That version is known to work. You can update it later when the platform team releases a new version.</li>
+    <li>If you are not sure what tag to use, ask the platform or DevOps team what the current stable version is. They maintain a changelog — usually a <code>CHANGELOG.md</code> in the shared repo root or a dedicated Teams channel.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Finding the template file — navigating ADO Repos</div>
+
+<div class="chapter-panel cp-story">
+  <div class="cp-label">navigation</div>
+  <div class="cp-title">From template path to actual file — five steps in ADO</div>
+  <p class="cp-lead">When you see a template path in your team's pipeline, you can find the actual file in under a minute. Here is the exact navigation.</p>
+  <div class="cp-step-flow">
+    <div class="cp-step">
+      <div class="cp-step-num">1</div>
+      <div class="cp-step-label">Open ADO</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">2</div>
+      <div class="cp-step-label">Find the project</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">3</div>
+      <div class="cp-step-label">Go to Repos</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">4</div>
+      <div class="cp-step-label">Switch to the tag</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">5</div>
+      <div class="cp-step-label">Navigate to the file</div>
+    </div>
+  </div>
+  <ul class="cp-list" style="margin-top:20px;">
+    <li><strong>Step 1 — Open ADO:</strong> Go to your organisation's top-level URL, for example <code>dev.azure.com/YourOrg</code>. This is the starting point for finding any repository in your organisation.</li>
+    <li><strong>Step 2 — Find the project:</strong> Look for the ADO project that houses the shared templates. It is often named <code>Platform</code>, <code>DevOps</code>, <code>Infrastructure</code>, or the same name as the repository itself. Ask your DevOps lead if you are not sure which project to look in — this is a perfectly reasonable question.</li>
+    <li><strong>Step 3 — Go to Repos:</strong> Inside that project, click <strong>Repos</strong> in the left navigation and select the template repository (e.g. <code>ado-pipeline-library</code>) from the repository dropdown.</li>
+    <li><strong>Step 4 — Switch to the tag:</strong> In the branch dropdown near the top of the file browser, switch to the tag that matches the <code>ref</code> in your pipeline (e.g. <code>v4.1.0</code>). Look in the <strong>Tags</strong> section of the dropdown, not the Branches section — they are separate lists.</li>
+    <li><strong>Step 5 — Navigate to the file:</strong> Click through the folders to reach the file path from the template call: for example, <code>templates/test/playwright-e2e.yml</code>. Click the filename to open and read the template.</li>
+  </ul>
+  <p style="margin-top:16px;">You are now reading the exact template that your team's pipeline calls. Bookmark this file — you will come back to it when you need to understand what the template does or what parameters you can use.</p>
+</div>
+
+<div class="cp-section-label">Reading a template file — the parameters block is the contract</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">parameters block</div>
+  <div class="cp-title">The <code>parameters:</code> block at the top of every template is the complete list of what you can control</div>
+  <p class="cp-lead">When you open a template file, go straight to the top. The <code>parameters:</code> block tells you everything a caller can customise. You do not need to read the rest of the file to know how to use the template.</p>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.9;margin-top:12px;">
+    <span style="color:var(--code-keyword)">parameters</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-property)">name</span>: nodeVersion&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># the parameter name — use this in your pipeline's parameters block</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">type</span>: string<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">default</span>: <span style="color:var(--code-string)">'20'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># optional — if you omit this, '20' is used</span><br>
+    <br>
+    &nbsp;&nbsp;- <span style="color:var(--code-property)">name</span>: testFilter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># no default — this is required, you must pass a value</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">type</span>: string<br>
+    <br>
+    &nbsp;&nbsp;- <span style="color:var(--code-property)">name</span>: environment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># optional with a default</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">type</span>: string<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">default</span>: <span style="color:var(--code-string)">'qa'</span><br>
+    <br>
+    &nbsp;&nbsp;- <span style="color:var(--code-property)">name</span>: publishResults&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># boolean parameter</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">type</span>: boolean<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">default</span>: <span style="color:var(--code-number)">true</span>
+  </div>
+  <ul class="cp-list" style="margin-top:16px;">
+    <li><strong>Has a <code>default</code> → optional.</strong> You can omit this parameter in your pipeline and the template uses the default value. Most parameters have sensible defaults that work for the common case.</li>
+    <li><strong>No <code>default</code> → required.</strong> You must pass a value or the pipeline will fail to start with a validation error before any step runs.</li>
+    <li>The parameter names here (<code>nodeVersion</code>, <code>testFilter</code>, <code>environment</code>) are exactly what you write in the <code>parameters:</code> block of your template call — no guessing required.</li>
+    <li>You do not need to read the rest of the template file to use it correctly. The <code>parameters:</code> block is the complete user interface for the template.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">when you need more</div>
+  <div class="cp-title">Reading the template body — only when you need to understand what a step actually does</div>
+  <p class="cp-lead">Occasionally you need to understand not just what parameters exist but what the template does with them — for debugging a failure, for understanding why a step takes a certain amount of time, or for verifying that a required step (like publishing test results) is already handled inside the template so you do not add it twice.</p>
+  <ul class="cp-list">
+    <li>Scan for recognisable task names: <code>PublishTestResults@2</code>, <code>PublishPipelineArtifact@1</code>, <code>NodeTool@0</code>. If you see <code>PublishTestResults@2</code> in the template body, you do not need to add it to your own pipeline — the template already handles it.</li>
+    <li>Look for <code>condition: always()</code> on the publish steps — if it is there, results will be published even when tests fail, which is the behaviour you need for a useful failure report.</li>
+    <li>If you see <code>continueOnError: true</code> on the test step, the template is already handling the "publish even on failure" pattern correctly and you do not need to add anything.</li>
+    <li>If you cannot work out what the template does from reading it, ask the platform team. The question "does the playwright-e2e template publish the HTML report as an artifact?" is a clear, well-formed question that any platform engineer can answer in 30 seconds.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Writing your own pipeline that uses shared templates</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">the goal</div>
+  <div class="cp-title">A QE-owned nightly regression pipeline — using your organisation's templates</div>
+  <p class="cp-lead">You do not need to write the install steps, the browser installation, the test runner command, or the publish steps. Your organisation's template already does all of that correctly, and the platform team maintains it. Your job is to call the template with the right parameters and add a schedule. Here is what that looks like.</p>
+</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">nightly-regression.yml — a complete QE-owned pipeline using shared templates</div>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.9;margin-top:12px;">
+    <span style="color:var(--code-comment)"># QE-owned nightly regression pipeline</span><br>
+    <span style="color:var(--code-comment)"># Runs every weeknight at midnight against the QA environment</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">schedules</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-property)">cron</span>: <span style="color:var(--code-string)">'0 0 * * 1-5'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># midnight, Monday–Friday</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">displayName</span>: <span style="color:var(--code-string)">'Nightly regression — QA'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">branches</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">include</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- main<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">always</span>: <span style="color:var(--code-number)">true</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># run even if no new commits since last run</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">resources</span>:<br>
+    &nbsp;&nbsp;<span style="color:var(--code-keyword)">repositories</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">repository</span>: templates<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">type</span>: git<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">name</span>: <span style="color:var(--code-string)">'MyOrg/ado-pipeline-library'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">ref</span>: <span style="color:var(--code-string)">'refs/tags/v4.1.0'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># copy this from your product team's pipeline</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">variables</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">group</span>: QA-Environment-Credentials&nbsp;&nbsp;<span style="color:var(--code-comment)"># variable group with env URLs and credentials</span><br>
+    <br>
+    <span style="color:var(--code-keyword)">stages</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">template</span>: templates/test/playwright-e2e.yml<span style="color:var(--code-keyword)">@templates</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">parameters</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">nodeVersion</span>: <span style="color:var(--code-string)">'20'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">testFilter</span>: <span style="color:var(--code-string)">'@regression'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># runs the full regression suite</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">environment</span>: <span style="color:var(--code-string)">'qa'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># targets the QA environment</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">publishResults</span>: <span style="color:var(--code-number)">true</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-comment)"># publishes results to ADO Tests tab</span>
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">line by line</div>
+  <div class="cp-title">What every section of that pipeline does</div>
+  <ul class="cp-list">
+    <li><strong><code>schedules:</code></strong> — defines when the pipeline runs automatically. <code>cron: '0 0 * * 1-5'</code> means midnight every Monday–Friday. <code>always: true</code> means it runs even if no new code was pushed since the last run — important for a nightly regression suite that should always verify the application's state.</li>
+    <li><strong><code>resources.repositories:</code></strong> — declares the shared template repository so the pipeline can reference files from it. Copy this block from your product team's pipeline, changing only the <code>ref</code> if you need a different version.</li>
+    <li><strong><code>variables: - group:</code></strong> — pulls in a variable group from ADO Library. A variable group is a named collection of secrets and configuration values stored securely in ADO — things like environment base URLs and service account credentials. Ask your DevOps team what variable group to use for QA environment access.</li>
+    <li><strong><code>stages: - template:</code></strong> — calls one template from the shared library, passing four parameters. The template does all the actual work: installing Node, installing browsers, running Playwright, publishing results, and publishing the HTML report as a pipeline artifact.</li>
+    <li>This entire file is 22 lines. A pipeline written from scratch to do the same thing would be 60–80 lines. The shared template does the rest — and the platform team is responsible for keeping it correct and current.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-grid-2">
+  <div class="cp-label">which ref to use</div>
+  <div class="cp-title">Choosing the right version of the shared template library</div>
+  <div class="cp-grid-item">
+    <div class="cp-grid-item-label">The safe starting point</div>
+    Copy the <code>ref</code> value from your product team's existing pipeline. That version is proven — your team's pipeline runs every day on it. Using the same ref guarantees compatibility between the template version and the environment configuration your team already uses.
+  </div>
+  <div class="cp-grid-item">
+    <div class="cp-grid-item-label">Staying current</div>
+    When the platform team releases a new version, they will communicate it. Check the shared repo's Tags page and any release notes (often in a <code>CHANGELOG.md</code> file in the repo root or a dedicated Teams channel). Update the ref in your pipeline after verifying the new version does not change behaviour you depend on.
+  </div>
+  <div class="cp-grid-item" style="grid-column: 1 / -1;">
+    <div class="cp-grid-item-label">What not to do</div>
+    Do not use <code>ref: refs/heads/main</code>. Pinning to the main branch means any breaking change the platform team pushes will silently break your nightly pipeline at the next scheduled run, with no warning and no way to roll back without changing the ref anyway.
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">when to ask for help</div>
+  <div class="cp-title">You are not expected to understand every line — here is who to ask and what to ask</div>
+  <p class="cp-lead">The platform team maintains the shared template library and expects questions from consuming teams. Asking a specific question about a template is not a sign of not knowing enough — it is correct use of the system. Here are examples of well-formed questions you can ask right now:</p>
+  <ul class="cp-list">
+    <li><strong>"Does <code>playwright-e2e.yml</code> publish the HTML report as an artifact, or do I need to add that step myself?"</strong></li>
+    <li><strong>"The nightly run is failing with a <code>testFilter</code> validation error — what format does that parameter expect? Can I pass multiple tags like <code>@regression,@smoke</code>?"</strong></li>
+    <li><strong>"We are on <code>v4.1.0</code>. The changelog says <code>v4.2.0</code> adds browser caching. How do I update my pipeline's ref safely?"</strong></li>
+    <li><strong>"Our QA environment requires VPN access. Does the template support self-hosted agents, or is it Microsoft-hosted only?"</strong></li>
+    <li>These questions are specific, clear, and answerable in a short conversation. They demonstrate that you understand the system well enough to know exactly what you do not know — which is exactly the right place to be.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"This pipeline calls a template from our shared library — the actual install and test steps are defined in <code>ado-pipeline-library</code>, not in this file."</strong> — when explaining why a pipeline file looks short or why someone cannot find the test runner command in it</li>
+    <li><strong>"The <code>ref: refs/tags/v4.1.0</code> means we are pinned to version 4.1.0 of the shared template repo — we will not pick up any changes until we update that ref."</strong> — when the team asks why a template update from the platform team has not taken effect yet</li>
+    <li><strong>"I checked the template's <code>parameters:</code> block — <code>testFilter</code> is required with no default, so we have to pass a value. <code>publishResults</code> is optional and defaults to true."</strong> — when discussing what needs to be configured before running a new pipeline</li>
+    <li><strong>"I set the schedule to midnight Monday–Friday with <code>always: true</code> — it runs every night regardless of whether new code was pushed."</strong> — when explaining the nightly pipeline behaviour to the team</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 09</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li>Your organisation's shared template repository is a browsable ADO repo — find it in the platform or DevOps team's ADO project, under Repos. It is not hidden; you just need to know which project to look in.</li>
+    <li>A template reference has three parts: the alias (which repo), the path (which file), and the parameters (what to customise). The <code>parameters:</code> block in the template file is the complete list of what you can control — required parameters have no default, optional ones do.</li>
+    <li>A <code>ref</code> value pins the pipeline to a specific version of the shared library — copy it from your product team's pipeline and update it deliberately, not automatically. Never pin to <code>refs/heads/main</code>.</li>
+    <li>A QE-owned nightly pipeline can be as short as 22 lines when it calls shared templates — you configure the schedule, the environment, and the test filter; the template does the rest.</li>
+    <li>When you do not understand something about a shared template, ask the platform team a specific question. "Does this template publish the HTML report?" is always the right question — it is clear, answerable, and shows you know how the system is structured.</li>
+  </ul>
+</div>

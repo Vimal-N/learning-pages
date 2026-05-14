@@ -1,0 +1,205 @@
+---
+layout: chapter.njk
+title: "Session 02 — Every Merge Should Be a Safe Bet"
+sessionNumber: "02"
+sessionTitle: "Every Merge Should Be a Safe Bet"
+phase: "Phase 1: Why Pipelines Exist"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 1 · Why Pipelines Exist</div>
+  <h1>Every Merge Should Be a Safe Bet</h1>
+  <p class="ch-lead">The goal of CI is not to run your tests on a different machine — it is to shorten the time between "writing code" and "hearing about a problem" so that every merge carries a meaningful, trustworthy signal. This session explains why that feedback loop matters, introduces the distinction between CI and CD, and shows how QE teams use pipelines to start every morning with answers, not questions.</p>
+</div>
+
+<div class="cp-section-label">The feedback loop</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">context</div>
+  <div class="cp-title">The cost of delayed feedback</div>
+  <p class="cp-lead">When a test fails, the time between "writing the code" and "hearing about it" determines how expensive the fix is. Not because the bug is harder to fix — but because the developer has moved on. Context evaporates quickly.</p>
+  <ul class="cp-list">
+    <li>Fix within 10 minutes: you still have the exact change in your head</li>
+    <li>Fix within an hour: you need to re-read what you wrote</li>
+    <li>Fix the next morning: you're starting nearly from scratch</li>
+    <li>Fix after a release freeze: now it's a patch, a regression, a post-mortem</li>
+    <li>CI compresses the loop — from "days later" to "minutes after you push"</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">visual</div>
+  <div class="cp-title">The CI feedback loop — five steps</div>
+  <p class="cp-lead">Every pipeline run follows the same sequence. The goal is for step 5 to reach you while step 1 is still fresh.</p>
+  <div class="cp-step-flow">
+    <div class="cp-step">
+      <div class="cp-step-num">1</div>
+      <div class="cp-step-label">Push / PR opened</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">2</div>
+      <div class="cp-step-label">Pipeline triggered</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">3</div>
+      <div class="cp-step-label">Clean agent runs tests</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">4</div>
+      <div class="cp-step-label">Result posted to PR</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">5</div>
+      <div class="cp-step-label">Fix while context is fresh</div>
+    </div>
+  </div>
+</div>
+
+<div class="cp-section-label">CI vs CD</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">distinction</div>
+  <div class="cp-title">Continuous Integration vs Continuous Delivery</div>
+  <p class="cp-lead">These two terms appear together so often that people assume they're one thing. They're not — they solve different problems and operate at different points in the lifecycle.</p>
+  <div class="cp-grid-2">
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">CI — Continuous Integration</div>
+      <ul class="cp-list">
+        <li>Fires on every push / PR</li>
+        <li>Goal: verify the change doesn't break anything</li>
+        <li>Runs build + test + lint</li>
+        <li>Fast — ideally under 10 minutes</li>
+        <li>Output: pass/fail signal in the PR</li>
+      </ul>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">CD — Continuous Delivery</div>
+      <ul class="cp-list">
+        <li>Fires after a merge to main (or on a schedule)</li>
+        <li>Goal: produce a deployable artefact and optionally ship it</li>
+        <li>Runs build + package + deploy</li>
+        <li>May include environment promotion gates</li>
+        <li>Output: a deployed release</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">nuance</div>
+  <div class="cp-title">The same YAML file can do both</div>
+  <p class="cp-lead">In Azure Pipelines, CI and CD are not separate products — they're different triggers and stages inside the same pipeline definition. A PR validation stage runs CI. A deployment stage after merge runs CD. One file, two jobs.</p>
+  <ul class="cp-list">
+    <li><code>trigger: - main</code> fires after merge (CD stage)</li>
+    <li><code>pr: - '*'</code> fires on every open pull request (CI stage)</li>
+    <li>Both can exist in the same <code>azure-pipelines.yml</code></li>
+    <li>The same pipeline definition can act as a CI check on a PR and a delivery trigger on merge — the triggers control what runs and when.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">What "tests passing" means</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">precision</div>
+  <div class="cp-title">A pass in CI means something. A pass locally means less.</div>
+  <p class="cp-lead">Both can report green — but they answer different questions. Local green means "it works in my configuration, right now." CI green means "it works in the shared, reproducible configuration used by this team, on this commit."</p>
+  <ul class="cp-list">
+    <li>Local: stale packages, personal environment variables, dev-only tools installed</li>
+    <li>CI: fresh install from lock file, pinned runtime, no ambient state</li>
+    <li>A flaky test that passes locally 9 times in 10 will be exposed in CI over dozens of PRs</li>
+    <li>A test that passes locally but fails in CI is telling you something important about your setup assumptions</li>
+    <li>QE teams should treat CI green as the authoritative signal — not local runs</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">for QE teams</div>
+  <div class="cp-title">Why this matters specifically for quality engineering</div>
+  <p class="cp-lead">QE teams are responsible for answering "are we confident enough to release?" That question has no meaningful answer if the test results feeding it aren't trustworthy. CI is what makes test results trustworthy.</p>
+  <ul class="cp-list">
+    <li>Without CI: tests run whenever someone remembers, in whatever environment they happen to be in</li>
+    <li>With CI: tests run on every PR, in a controlled environment, with results attached to the specific change</li>
+    <li>CI turns testing from a manual activity into an automatic quality gate</li>
+    <li>The pipeline is the stage — your tests are the actors. A good stage produces a credible performance.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">The overnight baker</div>
+
+<div class="chapter-panel cp-story">
+  <div class="cp-label">the good morning</div>
+  <div class="cp-title">The bread is already there</div>
+  <p class="cp-lead">You walk into your favourite bakery at 8am. The shelves are full — sourdough, rye, wholemeal, all baked overnight. You take a moment to look, pick the loaf you want, pay, and you're out the door in five minutes. The baker did the work while you were asleep. Your morning is yours.</p>
+  <ul class="cp-list">
+    <li>Work happened before you arrived — you benefit from it the moment you walk in</li>
+    <li>No waiting, no uncertainty, no delay before your day can start</li>
+    <li>The baker's schedule and your schedule don't have to overlap for you to get fresh bread</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-story">
+  <div class="cp-label">the other experience</div>
+  <div class="cp-title">Waiting for the bake</div>
+  <p class="cp-lead">Same bakery — different model. You walk in, tell the baker exactly what you want, and wait. Mixing, proving, baking. Two and a half hours later, the bread is ready. The morning is half gone. You've been standing there, unable to do anything else, while someone else did work you needed before yours could start.</p>
+  <ul class="cp-list">
+    <li>Your morning didn't start when you arrived — it started when the bread finished</li>
+    <li>The loaf is just as good. But the lost time isn't recoverable.</li>
+    <li>And this happens every single morning you want fresh bread</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">analogy — nightly runs</div>
+  <div class="cp-title">The pipeline is the overnight baker</div>
+  <p class="cp-lead">A scheduled nightly pipeline runs your full regression suite while the team sleeps. When QE engineers arrive in the morning, the results are already there — not waiting to be triggered. That's the difference between a morning that starts with clarity and one that starts with a queue.</p>
+  <ul class="cp-list">
+    <li>Pipeline scheduled at midnight: 300 tests run, results published, HTML report attached</li>
+    <li>9am: engineer opens ADO, sees 298 passed, 2 failed</li>
+    <li>5-minute investigation: identifies the failing area, routes it to the right developer</li>
+    <li>Feature work for the day begins with full situational awareness — not with a waiting spinner</li>
+    <li>Without a nightly run: first task every morning is triggering the suite manually and waiting — work can't start until it finishes</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">practical pattern</div>
+  <div class="cp-title">Configuring a pipeline to run automatically overnight</div>
+  <p class="cp-lead">A pipeline can be configured to run on a schedule — not just when someone pushes code. You write a schedule into the pipeline definition: "run every weeknight at midnight." The pipeline does the rest. When QE engineers arrive in the morning, the results are already published. No one had to remember to trigger it. No one had to wait.</p>
+  <ul class="cp-list">
+    <li>The schedule is defined in the pipeline file alongside everything else — one place, version-controlled</li>
+    <li>You can have a nightly scheduled run AND a PR-triggered run in the same pipeline definition</li>
+    <li>Session 04 shows exactly what the scheduling configuration looks like in YAML — once you have the YAML foundation to read it</li>
+  </ul>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"The CI feedback loop means the developer hears about the failure while they still remember what they changed — not the next morning after context is gone."</strong> — when someone questions whether CI is worth the setup overhead.</li>
+    <li><strong>"CI and CD are different things. CI is the check that runs on every PR — verify nothing is broken. CD is the step that runs after a merge — build and ship the change."</strong> — when CI and CD are being used interchangeably in a conversation.</li>
+    <li><strong>"A CI pass is authoritative. A local pass is personal. We treat the pipeline result as the one that counts."</strong> — when a developer says their tests were green and cannot understand why the pipeline disagrees.</li>
+    <li><strong>"We have a nightly run that runs the full regression suite automatically — the results are waiting when we arrive in the morning."</strong> — when explaining your team's testing practice to someone outside the team.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 02</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li>The purpose of CI is to shorten the feedback loop — from days to minutes</li>
+    <li>CI (verify on PR) and CD (deliver after merge) solve different problems and live at different points in the pipeline</li>
+    <li>A CI pass is authoritative. A local pass is personal.</li>
+    <li>For QE teams, CI is what turns a collection of tests into a reliable quality gate</li>
+    <li>Trust accrues gradually through consistent, automatic test runs — not through one big manual pass</li>
+    <li>A scheduled nightly pipeline gives QE teams results before the working day starts — the pipeline bakes the bread while you sleep</li>
+    <li>QE engineers own the quality gate — and CI is the mechanism that makes that gate automatic and trustworthy rather than manual and inconsistent.</li>
+  </ul>
+</div>

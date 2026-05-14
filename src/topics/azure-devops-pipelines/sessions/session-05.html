@@ -1,0 +1,186 @@
+---
+layout: chapter.njk
+title: "Session 05 — What Happens When a Pipeline Runs"
+sessionNumber: "05"
+sessionTitle: "What Happens When a Pipeline Runs"
+phase: "Phase 3: Pipeline Internals"
+topicName: "Azure DevOps Pipelines"
+topicUrl: "/topics/azure-devops-pipelines/"
+---
+
+<div class="chapter-hero">
+  <div class="ch-phase">Phase 3 · Pipeline Internals</div>
+  <h1>What Happens When a Pipeline Runs</h1>
+  <p class="ch-lead">Push a commit and a pipeline fires — but what actually happens between that push and the test results appearing in your PR? This session walks through every step: agent provisioning, checkout, execution, result publishing, and teardown. Then we look at how steps, jobs, and stages nest together into a coherent structure.</p>
+</div>
+
+<div class="cp-section-label">The agent lifecycle</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">analogy</div>
+  <div class="cp-title">The borrowed laptop</div>
+  <p class="cp-lead">Every pipeline job is handed a brand-new laptop that has never been used before. Your code appears on it. Your tasks run on it. When the job finishes, the laptop is destroyed. No state persists. No one else's build history is on it. This is the core of reproducibility.</p>
+  <ul class="cp-list">
+    <li>Each job gets a clean virtual machine — no shared state between runs</li>
+    <li>Software is pre-installed (Node, .NET, Python, Git, Docker) but your packages are not</li>
+    <li>After the job ends, the VM is deallocated — nothing you wrote persists</li>
+    <li>This is why <code>npm ci</code> (not <code>npm install</code>) matters — you need a fresh, exact install every time</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">visual</div>
+  <div class="cp-title">The agent lifecycle — every job, every time</div>
+  <p class="cp-lead">From the moment a pipeline run starts to the moment results appear, the agent goes through five phases in sequence.</p>
+  <div class="cp-step-flow">
+    <div class="cp-step">
+      <div class="cp-step-num">1</div>
+      <div class="cp-step-label">Provision VM</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">2</div>
+      <div class="cp-step-label">Checkout code</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">3</div>
+      <div class="cp-step-label">Execute steps</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">4</div>
+      <div class="cp-step-label">Publish results</div>
+    </div>
+    <div class="cp-step-arrow">→</div>
+    <div class="cp-step">
+      <div class="cp-step-num">5</div>
+      <div class="cp-step-label">VM destroyed</div>
+    </div>
+  </div>
+  <ul class="cp-list" style="margin-top:16px;">
+    <li><strong>Provision:</strong> ADO allocates a hosted VM from the pool. Typically takes 20–60 seconds.</li>
+    <li><strong>Checkout:</strong> The agent runs <code>git clone</code> and checks out your commit. This is the <code>checkout: self</code> step.</li>
+    <li><strong>Execute:</strong> Each step in your YAML runs in order. If a step fails, subsequent steps are skipped by default.</li>
+    <li><strong>Publish:</strong> Test results, logs, and artefacts are uploaded to ADO before the VM shuts down.</li>
+    <li><strong>Destroyed:</strong> The VM is gone. Nothing you installed or wrote persists to the next run.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">agent types</div>
+  <div class="cp-title">Microsoft-hosted vs self-hosted agents</div>
+  <p class="cp-lead">You choose which type of agent runs each job. Microsoft-hosted agents are the default for most teams — zero setup, fresh every time. Self-hosted agents are for teams that need custom environments or access to private networks.</p>
+  <div class="cp-grid-2">
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Microsoft-hosted</div>
+      <ul class="cp-list">
+        <li>Pre-configured VMs managed by Microsoft</li>
+        <li>Always fresh — no state between runs</li>
+        <li>Choose: <code>ubuntu-latest</code>, <code>windows-latest</code>, <code>macos-latest</code></li>
+        <li>Free tier: 1,800 min/month</li>
+        <li>Can't access private subnets or on-premise systems</li>
+      </ul>
+    </div>
+    <div class="cp-grid-item">
+      <div class="cp-grid-item-label">Self-hosted</div>
+      <ul class="cp-list">
+        <li>Your machine, registered to your ADO organisation</li>
+        <li>Can run inside a private network</li>
+        <li>Access to internal databases, APIs, artefact stores</li>
+        <li>State persists between runs (good and bad)</li>
+        <li>You own maintenance, capacity, and uptime</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="cp-section-label">Steps, jobs, and stages</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">hierarchy</div>
+  <div class="cp-title">Three levels of structure: steps, jobs, and stages</div>
+  <p class="cp-lead">A pipeline isn't just a flat list of commands. It has three nesting levels that control parallelism, dependencies, and which machine things run on.</p>
+  <ul class="cp-list">
+    <li><strong>Step</strong> — the smallest unit. A single task or script command. Steps run sequentially within a job, on the same agent.</li>
+    <li><strong>Job</strong> — a collection of steps. Each job gets its own agent. Jobs within a stage run in parallel by default (unless you add <code>dependsOn</code>).</li>
+    <li><strong>Stage</strong> — a collection of jobs. Stages run sequentially by default. Used to model phases: Build → Test → Deploy. Each stage appears as a column in the pipeline summary.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-code">
+  <div class="cp-title">stages-jobs-steps.yml — three levels of structure</div>
+  <div class="code-block" style="font-size:0.82rem;line-height:1.85;">
+    <span style="color:var(--code-keyword)">stages</span>:<br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">stage</span>: Build<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">jobs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">job</span>: CompileAndLint<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">pool</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">vmImage</span>: <span style="color:var(--code-string)">'ubuntu-latest'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">steps</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">checkout</span>: self<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm ci</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm run lint</span><br>
+    <br>
+    &nbsp;&nbsp;- <span style="color:var(--code-keyword)">stage</span>: Test<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">dependsOn</span>: Build<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">jobs</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">job</span>: RunTests<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">pool</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-property)">vmImage</span>: <span style="color:var(--code-string)">'ubuntu-latest'</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--code-keyword)">steps</span>:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-keyword)">checkout</span>: self<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:var(--code-property)">script</span>: <span style="color:var(--code-string)">npm ci && npm test</span>
+  </div>
+</div>
+
+<div class="chapter-panel cp-analogy">
+  <div class="cp-label">checkpoint</div>
+  <div class="cp-title">What you can do right now</div>
+  <p class="cp-lead">Before moving into flow control and more complex patterns, take a moment to recognise what you have just built. At this point in the course you can:</p>
+  <ul class="cp-list">
+    <li><strong>Describe what happens between a push and a test result</strong> — agent provisions, code checks out, steps run, results publish, machine is destroyed. You can explain this to a developer or a manager.</li>
+    <li><strong>Read a pipeline YAML and understand its shape</strong> — you can identify the stages, jobs, and steps, and know which runs on which agent and in what order.</li>
+    <li><strong>Explain why CI results are more trustworthy than local results</strong> — fresh environment, exact lock-file versions, no ambient state, reproducible every time.</li>
+    <li><strong>Distinguish between Microsoft-hosted and self-hosted agents</strong> — and know when you would need each type.</li>
+    <li>These are not small things. Most people in your organisation who work adjacent to pipelines cannot articulate all four of these clearly.</li>
+  </ul>
+</div>
+
+<div class="cp-section-label">Common pitfalls</div>
+
+<div class="chapter-panel">
+  <div class="cp-label">watch out</div>
+  <div class="cp-title">The four mistakes that trip up new pipeline authors</div>
+  <p class="cp-lead">Most early pipeline problems come from forgetting that each job is isolated — nothing is shared between jobs unless you explicitly pass it.</p>
+  <ul class="cp-list">
+    <li><strong>Forgetting <code>checkout: self</code></strong> — the agent starts with an empty disk. <code>checkout: self</code> tells the agent to download this repository's code. The word <code>self</code> means "this repository — the one that contains this pipeline file." You can also check out other repositories by name, but <code>self</code> is by far the most common. Without <code>checkout: self</code>, every subsequent step fails silently because there are no files to work with.</li>
+    <li><strong>Using <code>npm install</code> instead of <code>npm ci</code></strong> — <code>npm install</code> can upgrade packages and update the lock file. <code>npm ci</code> installs exactly what's in <code>package-lock.json</code>. Always use <code>npm ci</code> in CI.</li>
+    <li><strong>Assuming files carry over between jobs</strong> — each job gets a fresh agent. If job A builds a binary, job B cannot see it unless job A publishes it as a pipeline artefact first.</li>
+    <li><strong>Ignoring agent queuing time</strong> — pipeline duration includes the time waiting for an available agent. If your pipeline seems slow, check the provisioning time vs execution time in the job logs.</li>
+  </ul>
+</div>
+
+<div class="chapter-panel" style="border-left-color: var(--green);">
+  <div class="cp-label">in conversation</div>
+  <div class="cp-title">Words to use in your next standup</div>
+  <p class="cp-lead">You now have language for these situations:</p>
+  <ul class="cp-list">
+    <li><strong>"The pipeline is queued — the agent hasn't provisioned yet. We are waiting for a VM to become available."</strong> — when a pipeline run is taking longer than expected to start</li>
+    <li><strong>"Each job gets a fresh agent — nothing from the Build job carries over to the Test job unless we explicitly publish it as an artifact."</strong> — when explaining why a file from a previous step isn't available</li>
+    <li><strong>"We use <code>npm ci</code> in the pipeline, not <code>npm install</code> — <code>ci</code> does a clean install from the lock file every time, which is what makes the results reproducible."</strong> — when someone asks why the pipeline uses a different install command</li>
+    <li><strong>"The <code>checkout: self</code> step is what puts our code on the agent — it is the first step in every job that needs to work with our files."</strong> — when explaining pipeline setup or debugging a missing-file error</li>
+  </ul>
+</div>
+
+<div class="chapter-panel cp-takeaways">
+  <div class="cp-label">session 05</div>
+  <div class="cp-title">Key takeaways</div>
+  <ul class="cp-list">
+    <li>Every job runs on a fresh, ephemeral VM — no state persists between runs or between jobs</li>
+    <li>The agent lifecycle: Provision → Checkout → Execute → Publish → Destroy</li>
+    <li>Steps run sequentially on one agent. Jobs run in parallel by default (on separate agents). Stages run sequentially.</li>
+    <li>Microsoft-hosted agents are zero-maintenance and always fresh. Self-hosted agents have network access but require you to manage them.</li>
+    <li>Always use <code>npm ci</code> (not <code>npm install</code>) and always include <code>checkout: self</code></li>
+  </ul>
+</div>
