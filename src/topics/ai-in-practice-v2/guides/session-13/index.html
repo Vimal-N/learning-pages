@@ -1,0 +1,266 @@
+---
+layout: guide.njk
+title: "Session 13 Full Guide — Working Effectively with Terminal Agents"
+sessionNumber: "13"
+sessionTitle: "Working Effectively with Terminal Agents"
+phase: "Phase 4: Terminal Agents & Agentic Tools"
+topicName: "AI in Practice V2"
+topicUrl: "/topics/ai-in-practice-v2/"
+slidesUrl: "/topics/ai-in-practice-v2/sessions/session-13/"
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Working Effectively <em>with Terminal Agents</em></h2>
+      <p class="v2-section-sub">The GCSV task prompt formula, managing the agent decision loop, and how to decompose large tasks so they stay safe and reviewable.</p>
+    </div>
+
+<div class="v2-version-stamp" custom-style="version-stamp">Session 13 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools &nbsp;·&nbsp; Intermediate</div>
+
+<div class="v2-quickstart" custom-style="quick-start">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 13 you will have a task prompt formula you can apply to any agent task, a strategy for decomposing large work into safe chunks, and a clear mental model for when to let the agent continue versus when to redirect it.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>From Sessions 10–12:</strong> You know what terminal agents are, the mental shifts required to work with them, and how to set up a context file. This session is about the day-to-day craft of giving agents tasks — the prompting and oversight that makes the difference between a session that produces usable work and one that wastes your time.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The GCSV Formula">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The GCSV <em>Task Prompt Formula</em></h2>
+      <p class="v2-section-sub">Goal · Context · Scope · Verification — four elements that make any agent task prompt clear and safe.</p>
+    </div>
+    <p>A good agent task prompt answers four questions before the agent starts. Missing any one leads to a common failure: the agent completes something — just not quite what you wanted.</p>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">G</div>
+    <div>
+      <div class="v2-step-title">Goal — what does "done" look like?</div>
+      <div class="v2-step-body">State the outcome, not the steps. "Add three Playwright tests for the checkout flow" is a goal. "First read checkout.spec.ts, then look at the Page Object, then write…" is you doing the agent's planning — let it plan.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">C</div>
+    <div>
+      <div class="v2-step-title">Context — what does the agent need to know?</div>
+      <div class="v2-step-body">Anything not in your CLAUDE.md that's specific to this task: a particular selector, an edge case to handle, a constraint that applies only to this work. Don't repeat what's already in the context file — add only what's new for this task.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">S</div>
+    <div>
+      <div class="v2-step-title">Scope — what's in and what's out?</div>
+      <div class="v2-step-body">Explicitly state what the agent should and should not touch. "Only create new files — don't modify any existing tests." "Only changes in tests/checkout/ — don't touch auth tests." Scope limits prevent the most disruptive mistakes.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">V</div>
+    <div>
+      <div class="v2-step-title">Verification — how will you know it worked?</div>
+      <div class="v2-step-body">Tell the agent how to verify its own work: "Run the tests and confirm all pass." "Run the linter after." "Don't ask me to review — run them yourself and report the outcome." This closes the loop inside the session rather than leaving it open.</div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="GCSV in Practice">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">GCSV <em>in Practice</em></h2>
+      <p class="v2-section-sub">Three example task prompts — before (vague) and after (GCSV-structured).</p>
+    </div>
+
+<h4>Scenario: Adding tests for a new feature</h4>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col bad">
+    <div class="v2-col-label">Vague</div>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;">"Add tests for the discount code feature."</p>
+  </div>
+  <div class="v2-col good">
+    <div class="v2-col-label">GCSV</div>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;"><strong>G:</strong> Add Playwright tests for applying a discount code at checkout.<br><strong>C:</strong> Valid codes show a green badge and reduce the total. Invalid codes show <code>span[data-testid="promo-error"]</code> with "Invalid code".<br><strong>S:</strong> Create <code>tests/checkout/discount.spec.ts</code> only — don't modify existing checkout tests.<br><strong>V:</strong> Run the new spec and confirm all tests pass before finishing.</p>
+  </div>
+</div>
+
+<h4>Scenario: Refactoring to remove duplication</h4>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col bad">
+    <div class="v2-col-label">Vague</div>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;">"Refactor the login tests to use the Page Object."</p>
+  </div>
+  <div class="v2-col good">
+    <div class="v2-col-label">GCSV</div>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;"><strong>G:</strong> Update <code>tests/auth/login.spec.ts</code> to use the existing <code>LoginPage</code> PO instead of inline selectors.<br><strong>C:</strong> <code>LoginPage</code> is in <code>tests/pages/login.page.ts</code>. All needed methods already exist — don't add new ones.<br><strong>S:</strong> Only modify <code>login.spec.ts</code>. Don't change the PO or any other spec.<br><strong>V:</strong> Run <code>npx playwright test tests/auth/login.spec.ts</code> — all tests must pass.</p>
+  </div>
+</div>
+
+<h4>Scenario: Investigating a problem (read-only)</h4>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col bad">
+    <div class="v2-col-label">Vague</div>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;">"Why are the checkout tests failing?"</p>
+  </div>
+  <div class="v2-col good">
+    <div class="v2-col-label">GCSV</div>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;"><strong>G:</strong> Diagnose why <code>tests/checkout/order.spec.ts</code> is failing in CI but passing locally.<br><strong>C:</strong> The error is: [paste error]. Tests pass when run alone but fail in the full suite.<br><strong>S:</strong> Investigation only — don't modify any files. Just report your findings.<br><strong>V:</strong> Provide a written diagnosis with the most likely root cause and the recommended fix.</p>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Task Decomposition">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Task Decomposition — <em>Staying Safe on Large Work</em></h2>
+      <p class="v2-section-sub">How to break a large piece of work into agent tasks that are each reviewable and recoverable.</p>
+    </div>
+    <p>The most dangerous agent sessions are the ones where the agent makes many changes across many files before you review anything. The solution is decomposing large work into tasks where each one ends with a <code>git diff</code> review and a test run before the next begins.</p>
+
+<h3>The decomposition rule</h3>
+<p>A task is the right size when you can answer yes to all three:</p>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">Can I verify it's done in under 5 minutes?</strong> — If reviewing the output takes longer than 5 minutes, the task is too large. Split it.</div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">If I discard everything, have I lost less than 30 minutes of work?</strong> — If a task goes wrong and you run <code>git checkout .</code>, the cost should be small. Large tasks that go wrong are expensive.</div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">Does this task have a clear pass/fail condition?</strong> — "The tests run and pass" is a clear condition. "The code looks better" is not. Tasks without clear verification conditions are harder to review.</div>
+  </div>
+</div>
+
+<h3>Example: Refactoring a full suite</h3>
+
+<div class="v2-card-list" custom-style="row-card-list">
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">TASK 1</div>
+      <div class="v2-era-name">Extract CheckoutPage PO</div>
+    </div>
+    <div class="v2-card-body">Goal: extract a Page Object from checkout.spec.ts. Scope: create the PO only — don't update the spec yet. Verify: PO file created, TypeScript compiles. → review diff → proceed.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">TASK 2</div>
+      <div class="v2-era-name">Update checkout spec</div>
+    </div>
+    <div class="v2-card-body">Goal: update checkout.spec.ts to use the new PO. Scope: only this spec file. Verify: all checkout tests pass. → review diff → run tests → proceed.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">TASK 3</div>
+      <div class="v2-era-name">Add new tests</div>
+    </div>
+    <div class="v2-card-body">Goal: add 3 tests for the discount code feature using the new PO. Scope: new spec file only. Verify: new tests pass. → review diff → commit.</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Managing the Decision Loop">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Managing the <em>Decision Loop</em></h2>
+      <p class="v2-section-sub">When to let the agent proceed, when to redirect, and when to stop and restart.</p>
+    </div>
+
+<div class="v2-decision-grid" custom-style="decision-grid">
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Agent is reading files and planning — output looks reasonable</div>
+    <div class="v2-decision-use">Let it proceed — this is the normal explore phase</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Agent proposes a file write you didn't expect</div>
+    <div class="v2-decision-use">Ask "why are you modifying [file]?" before approving</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Agent proposes running a destructive command (rm, drop table, git reset)</div>
+    <div class="v2-decision-use">Deny it, explain the constraint, re-task more carefully</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Agent fails the same test 3 times in a row</div>
+    <div class="v2-decision-use">Interrupt, provide the missing context it's clearly lacking</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Agent completes the task but tests still fail</div>
+    <div class="v2-decision-use">Check the error output yourself — the agent may have missed something obvious</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Agent seems to be going in circles, switching approaches</div>
+    <div class="v2-decision-use">Stop, run git checkout . to reset, start with a smaller more specific task</div>
+  </div>
+</div>
+
+<div class="v2-callout warning" custom-style="callout-warning">
+  <p><strong>The "just one more try" trap:</strong> Agents are persuasive. When one approach fails, they confidently propose another. After the third failed approach, the agent is guessing — and you're accumulating file changes that will be harder to untangle. Stop earlier than feels necessary.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Try This">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Try This — <em>GCSV on a Real Task</em></h2>
+      <p class="v2-section-sub">Apply the GCSV formula to your next agent task.</p>
+    </div>
+
+<div class="v2-try-this" custom-style="try-this">
+  <div class="v2-try-label">Try This — 20 minutes</div>
+  <p>Pick a real piece of work — adding a test, debugging a failure, or a small refactor — and write the task prompt using the GCSV formula before opening your terminal agent.</p>
+  <p><strong>Step 1 (5 min):</strong> Write your GCSV prompt on paper or in a text file before you open the terminal. Don't start the agent until you've answered all four letters. If you can't answer V ("how will I know it worked?"), the task isn't well-defined enough yet.</p>
+  <p><strong>Step 2 (10 min):</strong> Run the agent. Watch the output. When it finishes, run <code>git diff</code> and your test suite.</p>
+  <p><strong>Step 3 (5 min):</strong> Compare what you got against your G (goal). Was it done? Was scope respected? Did V (verification) pass? Note where the GCSV formula helped and where you needed more detail.</p>
+</div>
+
+<span class="v2-progressive-marker" custom-style="progress-marker">▲ Builds on Session 12 Context Files — GCSV works best on top of a good CLAUDE.md</span>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I can do this" — before moving to Session 14.</p>
+    </div>
+<div class="v2-self-check" custom-style="self-assessment">
+  <div class="v2-self-check-title">Session 13 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I can do this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can write a GCSV task prompt for a real piece of work — all four elements present</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain what each letter in GCSV adds to the task prompt and what fails without it</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know the three questions that tell me whether a task is the right size</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I understand why large undivided tasks are risky and can decompose them into reviewable chunks</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know when to let the agent continue vs. when to redirect mid-session</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I have used GCSV on a real task and reviewed the outcome against the goal</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-14/" style="color:var(--accent);">Session 14 — Comparing Your AI Toolkit →</a></p>
+  </div>
+</div>
