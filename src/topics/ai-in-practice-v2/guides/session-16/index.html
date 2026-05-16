@@ -1,0 +1,255 @@
+---
+layout: guide.njk
+title: "Session 16 Full Guide — What Is MCP? Understanding the Model Context Protocol"
+sessionNumber: "16"
+sessionTitle: "What Is MCP? Understanding the Model Context Protocol"
+phase: "Phase 5: MCP, Agents & AI-Powered Workflows"
+topicName: "AI in Practice V2"
+topicUrl: "/topics/ai-in-practice-v2/"
+slidesUrl: "/topics/ai-in-practice-v2/sessions/session-16/"
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">What Is MCP? — <em>Understanding the Model Context Protocol</em></h2>
+      <p class="v2-section-sub">The protocol that lets AI agents connect to external tools — and why it matters more than the buzzword suggests.</p>
+    </div>
+
+<div class="v2-version-stamp" custom-style="version-stamp">Session 16 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows &nbsp;·&nbsp; Advanced</div>
+
+<div class="v2-quickstart" custom-style="quick-start">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 16 you will understand what MCP is and the problem it solves, be able to read a basic MCP message exchange, and know which MCP servers are most useful for QA engineering work.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>From Sessions 10–15:</strong> You've run terminal agents that read your filesystem and run shell commands. MCP extends that capability — it lets an agent connect to external services (browsers, databases, APIs, ticketing systems) using a standardised protocol, without custom integration code.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The Problem MCP Solves">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Problem <em>MCP Solves</em></h2>
+      <p class="v2-section-sub">Before MCP, connecting an AI agent to an external tool required custom integration code for every combination. MCP standardises the interface.</p>
+    </div>
+    <p>Every AI agent — Claude Code, Copilot Agent Mode, any LLM with tools — can call functions. But each agent had its own way of defining and calling external tools. If you wanted Claude to read your Jira tickets, you needed Anthropic-specific integration code. If you wanted GPT-4 to do the same, you needed a different implementation. Two agents, two codebases, same capability.</p>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col bad">
+    <div class="v2-col-label">Before MCP</div>
+    <ul>
+      <li>Every AI tool required bespoke integration per external service</li>
+      <li>"Jira + Claude" and "Jira + Copilot" were separate engineering efforts</li>
+      <li>No reuse between agent frameworks</li>
+      <li>External tool providers had to build one connector per AI platform</li>
+    </ul>
+  </div>
+  <div class="v2-col good">
+    <div class="v2-col-label">With MCP</div>
+    <ul>
+      <li>One MCP server for Jira — works with any MCP-compatible agent</li>
+      <li>Claude Code, Cursor, Claude Desktop — all read the same server</li>
+      <li>Tool providers build once, support all clients</li>
+      <li>You configure, not code — point your agent at the server</li>
+    </ul>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>The analogy:</strong> MCP is to AI tools what USB is to hardware peripherals. Before USB, every device needed a custom port and driver. After USB, one standard plug worked everywhere. MCP is that standard plug for AI agent capabilities.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="How MCP Works">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">How MCP <em>Works</em></h2>
+      <p class="v2-section-sub">Client, server, and the message exchange — without needing to know the implementation details.</p>
+    </div>
+    <p>MCP uses a client-server model over a simple message protocol (JSON-RPC). The AI agent is the <strong>client</strong>. The external capability (filesystem access, browser control, database read) is provided by an <strong>MCP server</strong>. The client asks the server what tools it offers, then calls those tools by sending structured messages.</p>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">1</div>
+    <div>
+      <div class="v2-step-title">Discovery — "what can you do?"</div>
+      <div class="v2-step-body">When the agent starts, it sends a <code>tools/list</code> request to each configured MCP server. Each server responds with a list of tools it provides: name, description, and the input parameters it accepts.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">2</div>
+    <div>
+      <div class="v2-step-title">Decision — the LLM decides which tool to call</div>
+      <div class="v2-step-body">The LLM sees the tool list as part of its context. When it determines a tool would help complete the user's task, it generates a <code>tools/call</code> request with the tool name and input parameters.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">3</div>
+    <div>
+      <div class="v2-step-title">Execution — the server runs it</div>
+      <div class="v2-step-body">The MCP server receives the call, executes the tool (runs a search, reads a database row, controls a browser), and returns the result as structured data.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">4</div>
+    <div>
+      <div class="v2-step-title">Response — result goes back to the LLM</div>
+      <div class="v2-step-body">The tool result is added to the LLM's context. The LLM uses it to generate its next response or decide what to do next in the loop.</div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The Message Exchange">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Message Exchange — <em>Annotated</em></h2>
+      <p class="v2-section-sub">What the actual JSON-RPC messages look like — and what each field means.</p>
+    </div>
+    <p>You don't need to write these messages — your MCP client generates them. But reading them demystifies what's happening when an agent "uses an MCP server."</p>
+
+<h3>1. Agent discovers tools</h3>
+<div class="v2-code-wrap" custom-style="code-block">
+  <button class="v2-copy-btn">copy</button>
+  <div class="code-block"><pre>// Agent → MCP server: "what tools do you have?"
+{ "jsonrpc": "2.0", "method": "tools/list", "id": 1 }
+
+// MCP server → Agent: "here are my tools"
+{
+  "result": {
+    "tools": [{
+      "name": "search_jira_tickets",
+      "description": "Search Jira for tickets matching a query string",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string", "description": "JQL query or keyword" },
+          "project": { "type": "string", "description": "Project key (e.g. QA)" }
+        },
+        "required": ["query"]
+      }
+    }]
+  }
+}</pre></div>
+</div>
+
+<h3>2. Agent calls a tool</h3>
+<div class="v2-code-wrap" custom-style="code-block">
+  <button class="v2-copy-btn">copy</button>
+  <div class="code-block"><pre>// Agent → MCP server: "run this tool"
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "search_jira_tickets",
+    "arguments": { "query": "failing checkout tests", "project": "QA" }
+  },
+  "id": 2
+}
+
+// MCP server → Agent: "here is the result"
+{
+  "result": {
+    "content": [{ "type": "text", "text": "QA-1042: Checkout test fails on Safari\nQA-1039: Payment timeout test flaky..." }]
+  }
+}</pre></div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="MCP Servers for QA">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">MCP Servers <em>for QA Engineering</em></h2>
+      <p class="v2-section-sub">The servers most useful for QA work — what they do, how to install them, and a concrete use case for each.</p>
+    </div>
+
+<div class="v2-card-list" custom-style="era-card-list">
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">SERVER</span>
+      <span class="v2-era-name">Playwright MCP</span>
+    </div>
+    <div class="v2-card-body">Gives the agent a live browser it can navigate, click, fill forms, and take screenshots — without writing Playwright code. The agent controls the browser directly via MCP tools.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">QA use case</div>
+      <div class="v2-example-text"><em>"Navigate to /checkout, fill in test payment details, submit the order, and screenshot the confirmation page."</em> The agent uses the browser MCP server to do this — no test file written, no Playwright API, just a task prompt. Useful for exploratory testing and one-off verification.</div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">SERVER</span>
+      <span class="v2-era-name">Filesystem MCP</span>
+    </div>
+    <div class="v2-card-body">Gives the agent structured read/write access to specific directories. More explicit than the agent's native file access — you configure exactly which paths it can reach.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">QA use case</div>
+      <div class="v2-example-text">Restrict the agent to <code>tests/</code> only — even if it wanted to touch <code>src/</code>, it can't via the filesystem MCP server. Useful when you want stricter scope control than CLAUDE.md provides.</div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">SERVER</span>
+      <span class="v2-era-name">GitHub MCP</span>
+    </div>
+    <div class="v2-card-body">Gives the agent access to GitHub: read issues, pull requests, code, comments. Can create issues or add PR comments.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">QA use case</div>
+      <div class="v2-example-text"><em>"Read the failing CI run on PR #442, identify which test failed and why, and add a review comment explaining the failure."</em> The agent reads GitHub, diagnoses the failure, and posts the comment — without you leaving your terminal.</div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">SERVER</span>
+      <span class="v2-era-name">Fetch / Web Search MCP</span>
+    </div>
+    <div class="v2-card-body">Gives the agent the ability to fetch URLs or run web searches — pulling in current documentation, Playwright release notes, or Stack Overflow answers as context.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">QA use case</div>
+      <div class="v2-example-text"><em>"Search for the Playwright 1.50 changelog and tell me if any assertion APIs changed that could affect our existing tests."</em> Agent fetches the changelog, reads it, and gives you a targeted summary — no manual searching.</div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I understand this" — before moving to Session 17.</p>
+    </div>
+<div class="v2-self-check" custom-style="self-assessment">
+  <div class="v2-self-check-title">Session 16 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I understand this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain what problem MCP solves — in the "USB standard" analogy or my own words</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know the difference between an MCP client (the AI agent) and an MCP server (the capability provider)</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can describe the four-step MCP interaction loop: discovery → decision → execution → response</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can read a <code>tools/list</code> and <code>tools/call</code> JSON-RPC message and explain what each field does</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know at least two MCP servers relevant to QA work and a concrete use case for each</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I understand why "configure, not code" is the key practical benefit of MCP for most engineers</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-17/" style="color:var(--accent);">Session 17 — Using MCP Servers in Your Workflow →</a></p>
+  </div>
+</div>

@@ -1,0 +1,316 @@
+---
+layout: guide.njk
+title: "Session 17 Full Guide — Using MCP Servers in Your Workflow"
+sessionNumber: "17"
+sessionTitle: "Using MCP Servers in Your Workflow"
+phase: "Phase 5: MCP, Agents & AI-Powered Workflows"
+topicName: "AI in Practice V2"
+topicUrl: "/topics/ai-in-practice-v2/"
+slidesUrl: "/topics/ai-in-practice-v2/sessions/session-17/"
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Using MCP Servers <em>in Your Workflow</em></h2>
+      <p class="v2-section-sub">How to install and configure MCP servers for Claude Code, Claude Desktop, and VS Code — and what to do when they don't connect.</p>
+    </div>
+
+<div class="v2-version-stamp" custom-style="version-stamp">Session 17 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows &nbsp;·&nbsp; Advanced</div>
+
+<div class="v2-quickstart" custom-style="quick-start">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 17 you will have at least one MCP server running in your agent, understand the config file format for each client, and know how to diagnose and fix the four most common connection failures.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>From Session 16:</strong> You understand what MCP is and the client-server model. This session is the practical "how to actually set it up" — config files, install commands, and the troubleshooting steps that most documentation skips.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Where Config Files Live">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Where Config Files <em>Live</em></h2>
+      <p class="v2-section-sub">Each client reads its MCP configuration from a different location. Get this wrong and nothing connects.</p>
+    </div>
+
+<div class="v2-card-list" custom-style="info-card-list">
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">Claude Desktop</div>
+      <div class="v2-tool-mode">Mac / Windows app</div>
+    </div>
+    <div class="v2-card-body">
+      Mac: <code>~/Library/Application Support/Claude/claude_desktop_config.json</code><br>
+      Windows: <code>%APPDATA%\Claude\claude_desktop_config.json</code><br>
+      Restart Claude Desktop after editing. Changes don't take effect until restart.
+    </div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">Claude Code (CLI)</div>
+      <div class="v2-tool-mode">Terminal agent</div>
+    </div>
+    <div class="v2-card-body">
+      Project-level: <code>.claude/settings.json</code> in your project root (checked into version control — shared with team).<br>
+      User-level: <code>~/.claude/settings.json</code> (applies to all projects on your machine).
+    </div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">VS Code (Copilot)</div>
+      <div class="v2-tool-mode">Editor extension</div>
+    </div>
+    <div class="v2-card-body">
+      <code>.vscode/mcp.json</code> in your project root, or user settings via VS Code settings UI (<em>MCP Servers</em>). The project-level file is team-shareable; user settings are machine-local.
+    </div>
+  </div>
+</div>
+
+<div class="v2-callout warning" custom-style="callout-warning">
+  <p><strong>The most common setup mistake:</strong> Adding the config to the wrong file or the wrong location. Verify the path before debugging the server. A config in the right format at the wrong path silently does nothing.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Config File Format">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Config File Format — <em>Annotated Side by Side</em></h2>
+      <p class="v2-section-sub">The format is similar across clients — the key differences are the top-level key name and where environment variables go.</p>
+    </div>
+
+<h3>Claude Desktop — <code>claude_desktop_config.json</code></h3>
+<div class="v2-code-wrap" custom-style="code-block">
+  <button class="v2-copy-btn">copy</button>
+  <div class="code-block"><pre>{
+  "mcpServers": {
+    "playwright": {                          // ← your name for this server
+      "command": "npx",                      // ← how to start the server
+      "args": ["@playwright/mcp@latest"],    // ← the package / command args
+      "env": {                               // ← environment variables (optional)
+        "PLAYWRIGHT_BROWSER": "chromium"
+      }
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
+      }
+    }
+  }
+}</pre></div>
+</div>
+
+<h3>Claude Code — <code>.claude/settings.json</code></h3>
+<div class="v2-code-wrap" custom-style="code-block">
+  <button class="v2-copy-btn">copy</button>
+  <div class="code-block"><pre>{
+  "mcpServers": {                            // ← same key as Claude Desktop
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+      // env vars go here too, same format
+    }
+  }
+}</pre></div>
+</div>
+
+<h3>VS Code — <code>.vscode/mcp.json</code></h3>
+<div class="v2-code-wrap" custom-style="code-block">
+  <button class="v2-copy-btn">copy</button>
+  <div class="code-block"><pre>{
+  "servers": {                               // ← different key: "servers" not "mcpServers"
+    "playwright": {
+      "type": "stdio",                       // ← VS Code requires explicit type
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  }
+}</pre></div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>Key difference to remember:</strong> Claude Desktop and Claude Code use <code>"mcpServers"</code>. VS Code uses <code>"servers"</code>. VS Code also requires <code>"type": "stdio"</code> for most servers. Mixing these up is a common copy-paste error.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Installing an MCP Server">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Installing <em>an MCP Server</em></h2>
+      <p class="v2-section-sub">Most servers are npm packages. The install is the config — no separate install step needed for <code>npx</code>-based servers.</p>
+    </div>
+    <p>Most published MCP servers are npm packages. When you use <code>"command": "npx"</code> with <code>"args": ["@package/name"]</code>, npx downloads and runs the package automatically — no separate <code>npm install</code> needed. Alternatively, install globally first for faster startup.</p>
+
+<h3>Three server install patterns</h3>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">npx (no install needed)</strong> — Use <code>"command": "npx", "args": ["-y", "@package/name"]</code>. The <code>-y</code> flag skips the "are you sure?" prompt. Downloads on first use; cached after that.</div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">Global install (faster startup)</strong> — Run <code>npm install -g @package/name</code> first, then use <code>"command": "mcp-server-name"</code> directly in config. Avoids the npx download on every session start.</div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">Local/custom server</strong> — For a server you've built yourself (Session 18), use <code>"command": "node", "args": ["./path/to/server.js"]</code>. Or if it's a Python server: <code>"command": "python", "args": ["./server.py"]</code>.</div>
+  </div>
+</div>
+
+<h3>Installing the Playwright MCP server — full walkthrough</h3>
+<div class="v2-code-wrap" custom-style="code-block">
+  <button class="v2-copy-btn">copy</button>
+  <div class="code-block"><pre># Option 1: Add to Claude Code project config (creates the file if absent)
+# .claude/settings.json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  }
+}
+
+# Option 2: Add via CLI (Claude Code)
+claude mcp add playwright -- npx @playwright/mcp@latest
+
+# Verify the server is recognised
+claude mcp list</pre></div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Troubleshooting — 4 Common Failures">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Troubleshooting — <em>4 Common Failures</em></h2>
+      <p class="v2-section-sub">Most MCP connection problems fall into one of four categories. Here's how to identify and fix each.</p>
+    </div>
+
+<div class="v2-card-list" custom-style="era-card-list">
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">FAIL 1</span>
+      <span class="v2-era-name">Server not found / command not recognised</span>
+    </div>
+    <div class="v2-card-body"><strong>Symptom:</strong> Agent starts but the MCP tool isn't available. Error may say "command not found" or the tool simply doesn't appear in the agent's tool list.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Fix</div>
+      <div class="v2-example-text">Check the config file path — is it in the right location for this client? Check the package name is spelled correctly. Try running the command manually in your terminal: <code>npx @playwright/mcp@latest</code>. If that fails, the problem is the package, not the config.</div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">FAIL 2</span>
+      <span class="v2-era-name">Server starts but immediately exits</span>
+    </div>
+    <div class="v2-card-body"><strong>Symptom:</strong> The agent reports the server connected briefly then disconnected. Tools may appear then disappear.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Fix</div>
+      <div class="v2-example-text">Run the server command directly in a terminal and watch the output: <code>npx @package/name</code>. If it exits immediately, the server likely needs an environment variable (API key, config path) that's missing. Check the server's README for required env vars and add them to your config's <code>"env"</code> block.</div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">FAIL 3</span>
+      <span class="v2-era-name">Auth / permissions error</span>
+    </div>
+    <div class="v2-card-body"><strong>Symptom:</strong> Server connects but tool calls fail with 401, 403, or "invalid token" errors. Filesystem servers may return "permission denied".</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Fix</div>
+      <div class="v2-example-text">For API-based servers (GitHub, Jira): verify the token is valid and has the required scopes. For filesystem servers: check the allowed paths in the server config match what you're actually trying to access. Tokens set in <code>"env"</code> in the config file are not shell environment variables — they're passed to the server process specifically.</div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">FAIL 4</span>
+      <span class="v2-era-name">Config JSON is malformed</span>
+    </div>
+    <div class="v2-card-body"><strong>Symptom:</strong> Client ignores the config entirely — no MCP servers appear. No error message, just silence.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Fix</div>
+      <div class="v2-example-text">Validate your JSON. Paste it into a JSON validator (or run <code>node -e "JSON.parse(require('fs').readFileSync('./file.json','utf8'))"</code>). Common culprits: trailing commas (invalid in JSON), mismatched braces, and unescaped backslashes in Windows paths. Use forward slashes or escaped backslashes in path strings.</div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="MCP in a QA Workflow">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">MCP in a <em>Real QA Workflow</em></h2>
+      <p class="v2-section-sub">What a session looks like when the agent has MCP servers available — combining browser, filesystem, and GitHub.</p>
+    </div>
+    <p>With MCP servers connected, an agent task can span multiple systems in a single session. Here's what that looks like for a QA engineer investigating a reported bug:</p>
+
+<div class="v2-transcript" custom-style="transcript-card">
+  <div class="v2-transcript-header">Agent session with Playwright + GitHub MCP servers</div>
+  <div class="v2-turn" custom-style="transcript-turn">
+    <div class="v2-turn-role user">You</div>
+    <div class="v2-turn-text">GitHub issue #88 says the promo code field accepts negative values. Verify if this is reproducible and add a regression test for it.</div>
+  </div>
+  <div class="v2-turn" custom-style="transcript-turn">
+    <div class="v2-turn-role agent">Agent</div>
+    <div class="v2-turn-text"><em>[GitHub MCP] Reading issue #88…</em> The issue describes entering "-10" in the promo field which applies a negative discount, increasing the total. Let me verify this in the browser.</div>
+  </div>
+  <div class="v2-turn" custom-style="transcript-turn">
+    <div class="v2-turn-role agent">Agent</div>
+    <div class="v2-turn-text"><em>[Playwright MCP] Navigating to /checkout…</em> <em>[Playwright MCP] Filling promo-code field with "-10"…</em> <em>[Playwright MCP] Clicking Apply…</em> Confirmed: the field accepted "-10" and the order total increased by £10. Screenshot attached. Now writing the regression test.</div>
+  </div>
+  <div class="v2-turn" custom-style="transcript-turn">
+    <div class="v2-turn-role agent">Agent</div>
+    <div class="v2-turn-text"><em>[Filesystem] Writing tests/checkout/promo-validation.spec.ts…</em> Test written: verifies that negative values in the promo field are rejected with a validation error. The test currently fails (as expected — bug is open). Run with <code>--grep "negative promo"</code> to see the failure before the fix.</div>
+  </div>
+</div>
+
+<div class="v2-try-this" custom-style="try-this">
+  <div class="v2-try-label">Try This — 20 minutes</div>
+  <p>Install one MCP server and use it on a real task. Good starting points: <strong>Playwright MCP</strong> (<code>@playwright/mcp@latest</code>) for live browser control, or <strong>Fetch MCP</strong> (<code>@modelcontextprotocol/server-fetch</code>) for fetching documentation or changelogs. Configure it for your preferred client, verify it connects (<code>claude mcp list</code> or check the VS Code MCP panel), and give the agent a task that uses it.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I can do this" — before moving to Session 18.</p>
+    </div>
+<div class="v2-self-check" custom-style="self-assessment">
+  <div class="v2-self-check-title">Session 17 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I can do this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know where the MCP config file lives for Claude Desktop, Claude Code, and VS Code</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can write a valid config entry for a new MCP server — including env vars if needed</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know the key format difference between Claude config (<code>mcpServers</code>) and VS Code config (<code>servers</code>)</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can diagnose each of the four common MCP connection failures</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I have at least one MCP server running in my agent and have used it on a real task</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I understand how combining multiple MCP servers enables multi-system agent tasks</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-18/" style="color:var(--accent);">Session 18 — Building Your First MCP Server →</a></p>
+  </div>
+</div>

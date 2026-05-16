@@ -1,0 +1,316 @@
+---
+layout: guide.njk
+title: "Session 19 Full Guide — Agents, Subagents & Building AI Workflows"
+sessionNumber: "19"
+sessionTitle: "Agents, Subagents & Building AI Workflows"
+phase: "Phase 5: MCP, Agents & AI-Powered Workflows"
+topicName: "AI in Practice V2"
+topicUrl: "/topics/ai-in-practice-v2/"
+slidesUrl: "/topics/ai-in-practice-v2/sessions/session-19/"
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Agents, Subagents &amp; <em>Building AI Workflows</em></h2>
+      <p class="v2-section-sub">How orchestrated multi-agent workflows work — with a step-by-step storyboard showing the exact prompts each agent receives.</p>
+    </div>
+
+<div class="v2-version-stamp" custom-style="version-stamp">Session 19 &nbsp;·&nbsp; Phase 5: MCP, Agents &amp; AI-Powered Workflows &nbsp;·&nbsp; Advanced</div>
+
+<div class="v2-quickstart" custom-style="quick-start">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 19 you will understand how multi-agent workflows are structured, be able to design a simple orchestrated QA workflow, and know when the complexity of a multi-agent setup is justified versus when a single well-prompted agent is sufficient.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>From Sessions 10–18:</strong> You've run single agents on single tasks. Multi-agent workflows orchestrate several agents — each specialised, each with its own context and tools — to accomplish work that would be impractical as a single session. This is the final piece of the AI capability stack.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="What Is a Subagent?">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">What Is a <em>Subagent?</em></h2>
+      <p class="v2-section-sub">A subagent is an agent spawned by another agent to handle a bounded piece of work — then report back.</p>
+    </div>
+    <p>In a multi-agent workflow, there is typically one <strong>orchestrator</strong> (the coordinator agent) and one or more <strong>subagents</strong> (specialist agents). The orchestrator receives the high-level goal, breaks it into tasks, spawns subagents to handle each task, collects their results, and synthesises a final response.</p>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col neutral">
+    <div class="v2-col-label">Single agent</div>
+    <ul>
+      <li>One LLM handles everything in sequence</li>
+      <li>Context window fills up on large tasks</li>
+      <li>Can't do two things simultaneously</li>
+      <li>Good for focused, single-domain tasks</li>
+      <li>Simpler to debug — one conversation to inspect</li>
+    </ul>
+  </div>
+  <div class="v2-col good">
+    <div class="v2-col-label">Orchestrated subagents</div>
+    <ul>
+      <li>Each subagent has a fresh, focused context</li>
+      <li>Subagents can run in parallel (where supported)</li>
+      <li>Specialist subagents perform better on their domain</li>
+      <li>Good for large, multi-domain tasks</li>
+      <li>More complex — more moving parts to debug</li>
+    </ul>
+  </div>
+</div>
+
+<div class="v2-callout warning" custom-style="callout-warning">
+  <p><strong>Don't reach for multi-agent by default.</strong> A single well-prompted terminal agent handles most QA tasks better than a complex orchestrated workflow. Multi-agent is worth it when tasks are genuinely parallel, when context window limits are a real constraint, or when specialist domain separation produces measurably better output.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The Orchestrator Pattern">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Orchestrator <em>Pattern</em></h2>
+      <p class="v2-section-sub">How the coordinator and subagent relationship works — what each sees and what each does.</p>
+    </div>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">1</div>
+    <div>
+      <div class="v2-step-title">You give the orchestrator a high-level goal</div>
+      <div class="v2-step-body">The orchestrator's job is decomposition and coordination — not doing the work itself. It receives your goal, reads the available context, and decides what tasks need doing and in what order.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">2</div>
+    <div>
+      <div class="v2-step-title">Orchestrator spawns subagents with specific prompts</div>
+      <div class="v2-step-body">Each subagent receives a focused prompt: the task, the relevant context, the scope constraints, and the expected output format. The subagent doesn't know the broader goal — it only knows its task.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">3</div>
+    <div>
+      <div class="v2-step-title">Subagents complete their tasks and return results</div>
+      <div class="v2-step-body">Each subagent works independently, using its own tools and context. When done, it returns a structured result to the orchestrator — not to you directly.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">4</div>
+    <div>
+      <div class="v2-step-title">Orchestrator synthesises and reports</div>
+      <div class="v2-step-body">The orchestrator collects all subagent results, resolves any conflicts, and produces the final output. You review this — not each individual subagent session.</div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Workflow Storyboard">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Workflow Storyboard — <em>Multi-Agent QA Regression Run</em></h2>
+      <p class="v2-section-sub">Step-by-step: the exact prompts each agent receives in a real QA workflow. Not just the architecture — the actual text.</p>
+    </div>
+    <p><strong>Goal:</strong> After a deploy, run a full regression check, diagnose any new failures, and produce a signed-off test report.</p>
+
+<div class="v2-card-list" custom-style="era-card-list">
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">STEP 1</span>
+      <span class="v2-era-name">You → Orchestrator</span>
+    </div>
+    <div class="v2-card-body">You give the orchestrator a single high-level prompt. It decides the subagent tasks.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Your prompt to the orchestrator</div>
+      <div class="v2-example-text"><em>"A new build was deployed 10 minutes ago. Run the full regression suite, diagnose any failures, and produce a test report summarising what passed, what failed, and whether the failures are new or pre-existing."</em></div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">STEP 2</span>
+      <span class="v2-era-name">Orchestrator → Test Runner Subagent</span>
+    </div>
+    <div class="v2-card-body">Orchestrator spawns a subagent to run the tests and return raw results.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Prompt sent to the subagent</div>
+      <div class="v2-example-text"><em>"Run the full Playwright test suite against BASE_URL=https://staging.app.com. Command: npx playwright test. Wait for completion. Return: total tests, passed count, failed count, and the full text of any failure messages. Do not interpret the results — just return the raw data."</em></div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">STEP 3</span>
+      <span class="v2-era-name">Orchestrator → Diagnosis Subagent</span>
+    </div>
+    <div class="v2-card-body">Orchestrator passes the failure data to a second subagent specialised in diagnosis.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Prompt sent to the subagent</div>
+      <div class="v2-example-text"><em>"Here are the test failures from the latest run: [failure list from Step 2]. Here is the list of failures from the previous run: [previous results from git/CI]. Classify each current failure as: NEW (not seen before), REGRESSION (was passing, now failing), or PRE-EXISTING (was failing before too). For NEW and REGRESSION failures, provide a likely root cause based on the error message and test name."</em></div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">STEP 4</span>
+      <span class="v2-era-name">Orchestrator → Report Subagent</span>
+    </div>
+    <div class="v2-card-body">Final subagent formats the synthesised data into a shareable report.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Prompt sent to the subagent</div>
+      <div class="v2-example-text"><em>"Using this data: [test results + diagnosis], write a test report in markdown. Structure: Executive Summary (3 bullet points), Test Results Table (pass/fail/skip counts), Failures by Category (new / regression / pre-existing), Recommended Actions. Tone: factual, no hedging. Save as TEST-REPORT-[date].md."</em></div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Designing Your Own Workflow">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Designing <em>Your Own Workflow</em></h2>
+      <p class="v2-section-sub">The questions to answer before building any multi-agent workflow.</p>
+    </div>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">1</div>
+    <div>
+      <div class="v2-step-title">Does this actually need multiple agents?</div>
+      <div class="v2-step-body">Ask: can a single agent with a good GCSV prompt and a CLAUDE.md do this? If yes, do that instead. Multi-agent is worth it for parallelism (run 5 things at once) or when the combined context would exceed a single agent's window.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">2</div>
+    <div>
+      <div class="v2-step-title">What are the natural task boundaries?</div>
+      <div class="v2-step-body">Good subagent boundaries: tasks with different tools, tasks that can run in parallel, tasks that need a "clean slate" context. Bad boundaries: arbitrary splits that create unnecessary handoff complexity.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">3</div>
+    <div>
+      <div class="v2-step-title">What does each subagent need in its prompt?</div>
+      <div class="v2-step-body">Every subagent starts with no context. Its prompt must include: its specific task, all the data it needs (passed from the orchestrator), the output format it should return, and any constraints on scope. It cannot ask follow-up questions.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">4</div>
+    <div>
+      <div class="v2-step-title">How will you review the workflow's output?</div>
+      <div class="v2-step-body">You can't review every subagent's work in a multi-agent run. Design the workflow so the orchestrator's final output is itself reviewable — a report, a test result, a git diff you can check. The orchestrator is your review gate.</div>
+    </div>
+  </div>
+</div>
+
+<div class="v2-decision-grid" custom-style="decision-grid">
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Task fits in one context window and can be done sequentially</div>
+    <div class="v2-decision-use">Single agent — simpler, easier to debug</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Multiple independent tasks that could run at the same time</div>
+    <div class="v2-decision-use">Parallel subagents — real time savings</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Task requires specialist tools at different stages</div>
+    <div class="v2-decision-use">Sequential subagents — each with its own MCP servers</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">You're not sure if it needs multiple agents</div>
+    <div class="v2-decision-use">Start with one — add orchestration only when you hit a real limit</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The Full Picture">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Full Picture — <em>Where You've Got To</em></h2>
+      <p class="v2-section-sub">A map of the 19-session journey — from first chat to multi-agent QA workflows.</p>
+    </div>
+
+<div class="v2-card-list" custom-style="row-card-list">
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">PHASE 1</div>
+      <div class="v2-era-name">AI Foundations</div>
+      <div class="v2-era-date">Sessions 01–03</div>
+    </div>
+    <div class="v2-card-body">How LLMs work, the five eras of AI tools, and the four-element prompt framework. The mental model that every later session builds on.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">PHASE 2</div>
+      <div class="v2-era-name">GitHub Copilot Mastery</div>
+      <div class="v2-era-date">Sessions 04–06</div>
+    </div>
+    <div class="v2-card-body">Setup, inline completions, Chat, and Agent Mode. The first real productivity gains — tests written faster, debugging accelerated, repetitive work delegated.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">PHASE 3</div>
+      <div class="v2-era-name">AI for Test Automation</div>
+      <div class="v2-era-date">Sessions 07–09</div>
+    </div>
+    <div class="v2-card-body">The three-step test writing workflow, AI-assisted debugging, and refactoring. Applied AI for the core QA craft — not just faster, but better-structured test suites.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">PHASE 4</div>
+      <div class="v2-era-name">Terminal Agents</div>
+      <div class="v2-era-date">Sessions 10–15</div>
+    </div>
+    <div class="v2-card-body">Claude Code, Opencode, context files, the GCSV formula, and the full toolkit comparison. Autonomous agents working on your project — with the oversight model to match.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">PHASE 5</div>
+      <div class="v2-era-name">MCP &amp; Workflows</div>
+      <div class="v2-era-date">Sessions 16–19</div>
+    </div>
+    <div class="v2-card-body">MCP protocol, server configuration, building custom servers, and orchestrated multi-agent workflows. The full capability stack — agents connected to external systems, working in parallel, coordinated toward complex goals.</div>
+  </div>
+</div>
+
+<div class="v2-callout success" custom-style="callout-success">
+  <p><strong>You've completed AI in Practice V2.</strong> The skills in this course compound: better prompts make better agent tasks, better agent tasks make better workflows, better workflows make better QA engineers. Keep going — the next step is applying what you've learned on a real project, identifying what breaks, and coming back to improve it.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">The final checkpoint — tick each one when you can genuinely say "yes, I understand this."</p>
+    </div>
+<div class="v2-self-check" custom-style="self-assessment">
+  <div class="v2-self-check-title">Session 19 — Final Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I understand this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain the orchestrator/subagent pattern and describe what each role does</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know why a subagent's prompt must be self-contained — it has no prior context</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can identify the four task decomposition questions before designing a multi-agent workflow</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know when multi-agent is worth the complexity and when a single agent is better</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can trace the complete AI capability stack from inline completions to orchestrated workflows</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I have identified at least one real workflow in my QA work that could benefit from AI orchestration</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;"><a href="/topics/ai-in-practice-v2/" style="color:var(--accent);">← Back to AI in Practice V2 — Course Overview</a></p>
+  </div>
+</div>
