@@ -1,0 +1,304 @@
+---
+layout: guide.njk
+title: "Session 03 Full Guide — How to Talk to AI: Prompting That Actually Works"
+sessionNumber: "03"
+sessionTitle: "How to Talk to AI — Prompting That Actually Works"
+phase: "Phase 1: AI Foundations"
+topicName: "AI in Practice V2"
+topicUrl: "/topics/ai-in-practice-v2/"
+slidesUrl: "/topics/ai-in-practice-v2/sessions/session-03/"
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">How to Talk to AI — <em>Prompting That Works</em></h2>
+      <p class="v2-section-sub">A four-element prompt framework with QA examples, 8 copy-ready templates, and how to iterate when the first result isn't right.</p>
+    </div>
+
+<div class="v2-version-stamp">Session 03 &nbsp;·&nbsp; Phase 1: AI Foundations &nbsp;·&nbsp; Beginner</div>
+
+<div class="v2-quickstart">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 03 you will have a four-element framework for writing prompts, 8 copy-ready templates for common QA tasks, and a strategy for iterating when the first response isn't what you needed.</div>
+  </div>
+</div>
+
+<div class="v2-callout info">
+  <p><strong>From Sessions 01–02:</strong> You know LLMs predict tokens and can't read your mind. This session gives you the structured approach to writing prompts that gets you good results without relying on trial and error.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Why Prompting Matters">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Why Prompting <em>Matters</em></h2>
+      <p class="v2-section-sub">The same model, the same question — very different results depending on how you ask.</p>
+    </div>
+    <p>The model doesn't change based on how you phrase your question. Your description of the task is the only input it has. If your description is vague, the model fills in the gaps with its best guess — and those guesses often miss what you actually needed.</p>
+
+<div style="display:grid;gap:10px;margin:14px 0;">
+  <div style="padding:13px 16px;background:rgba(232,92,92,0.06);border-radius:8px;border-left:3px solid var(--danger);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--danger);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;">Vague prompt → useless output</div>
+    <div style="font-size:0.86rem;color:var(--text-primary);margin-bottom:6px;"><strong>Prompt:</strong> <em>"Write me some tests."</em></div>
+    <div style="font-size:0.83rem;color:var(--text-muted);">Result: generic unit tests for made-up functions, wrong framework, no relevance to your actual app. Not usable.</div>
+  </div>
+  <div style="padding:13px 16px;background:rgba(94,194,105,0.06);border-radius:8px;border-left:3px solid var(--success);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--success);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;">Specific prompt → usable output</div>
+    <div style="font-size:0.86rem;color:var(--text-primary);margin-bottom:6px;"><strong>Prompt:</strong> <em>"Act as a Playwright TypeScript test engineer. I have a login page at /login with #email, #password, and button[type=submit]. Write three tests: successful login, wrong password, and empty fields. Use page.fill() and expect(page).toHaveURL(). Add a descriptive test.describe block."</em></div>
+    <div style="font-size:0.83rem;color:var(--text-muted);">Result: three runnable tests, correct selectors, correct assertions, correct structure. Ready to adapt.</div>
+  </div>
+</div>
+
+<p>The difference is not knowing a secret formula. It's providing: a role, context about your project, a specific task, and constraints about how you want it done.</p>
+  </div>
+</div>
+
+<div class="slide" data-title="The Four-Element Framework">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Four-Element <em>Framework</em></h2>
+      <p class="v2-section-sub">Role, Context, Task, Constraints — the four things a good prompt always answers.</p>
+    </div>
+
+<div style="display:grid;gap:10px;margin:14px 0;">
+  <div style="display:grid;grid-template-columns:100px 1fr;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);border-left:3px solid var(--accent);">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--accent);font-weight:700;letter-spacing:0.5px;">ELEMENT 1</div>
+      <div style="font-size:0.95rem;font-weight:700;color:var(--text-primary);margin-top:3px;">Role</div>
+    </div>
+    <div>
+      <div style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:4px;">Tell the AI what kind of expert to behave as. This shapes the vocabulary, style, and depth of the response.</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);font-style:italic;">Example: "Act as a senior Playwright test engineer who follows the Page Object Model pattern."</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:100px 1fr;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);border-left:3px solid var(--accent);">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--accent);font-weight:700;letter-spacing:0.5px;">ELEMENT 2</div>
+      <div style="font-size:0.95rem;font-weight:700;color:var(--text-primary);margin-top:3px;">Context</div>
+    </div>
+    <div>
+      <div style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:4px;">Tell it what's specific about your situation: which framework, what your selectors are, what already exists in the project.</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);font-style:italic;">Example: "I'm working on a TypeScript Playwright project. The login page has #email, #password, and button[type=submit]. I already have a LoginPage PO in pages/login.page.ts."</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:100px 1fr;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);border-left:3px solid var(--accent);">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--accent);font-weight:700;letter-spacing:0.5px;">ELEMENT 3</div>
+      <div style="font-size:0.95rem;font-weight:700;color:var(--text-primary);margin-top:3px;">Task</div>
+    </div>
+    <div>
+      <div style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:4px;">Be specific about what you actually want. "Write tests" is weak. Naming the test scenarios, the assertions, the edge cases is strong.</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);font-style:italic;">Example: "Write three test cases: (1) successful login redirects to /dashboard, (2) wrong password shows 'Invalid credentials', (3) empty email shows 'Email is required'."</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:100px 1fr;gap:14px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);border-left:3px solid var(--accent);">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--accent);font-weight:700;letter-spacing:0.5px;">ELEMENT 4</div>
+      <div style="font-size:0.95rem;font-weight:700;color:var(--text-primary);margin-top:3px;">Constraints</div>
+    </div>
+    <div>
+      <div style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:4px;">Specify what the output must or must not include: format, length, structure, what to avoid.</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);font-style:italic;">Example: "Use page.fill() not page.locator().fill(). Add a test.describe block. Don't use beforeEach — each test should be self-contained."</div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Framework in Action">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Framework <em>in Action</em></h2>
+      <p class="v2-section-sub">A complete prompt assembled from all four elements — and why each part earns its place.</p>
+    </div>
+
+<div class="v2-code-wrap">
+<pre>Act as a senior Playwright TypeScript test engineer who follows the Page Object Model pattern.
+
+I'm working on a TypeScript Playwright project. The login page is at /login.
+Selectors: #email, #password, button[type=submit].
+On success it redirects to /dashboard.
+On wrong password it shows a div.error-message with text "Invalid credentials".
+I already have LoginPage in pages/login.page.ts — don't rewrite it.
+
+Write three new test cases in tests/auth/login.spec.ts:
+1. Successful login redirects to /dashboard
+2. Wrong password shows "Invalid credentials" error
+3. Empty email field shows "Email is required" validation
+
+Use page.fill() style. Wrap in test.describe("Login"). Each test must be self-contained — no shared beforeEach.</pre>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0;">
+  <div style="padding:10px;background:rgba(111,163,247,0.08);border-radius:6px;border:1px solid rgba(111,163,247,0.2);">
+    <div style="font-size:0.7rem;font-weight:700;color:#6fa3f7;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px;">Role</div>
+    <div style="font-size:0.78rem;color:var(--text-secondary);">"Act as a senior Playwright TS engineer who follows POM"</div>
+  </div>
+  <div style="padding:10px;background:rgba(176,140,245,0.08);border-radius:6px;border:1px solid rgba(176,140,245,0.2);">
+    <div style="font-size:0.7rem;font-weight:700;color:#b08cf5;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px;">Context</div>
+    <div style="font-size:0.78rem;color:var(--text-secondary);">URL, selectors, error messages, existing LoginPage PO</div>
+  </div>
+  <div style="padding:10px;background:rgba(94,194,105,0.08);border-radius:6px;border:1px solid rgba(94,194,105,0.2);">
+    <div style="font-size:0.7rem;font-weight:700;color:var(--success);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px;">Task</div>
+    <div style="font-size:0.78rem;color:var(--text-secondary);">Three named test cases with specific assertions</div>
+  </div>
+  <div style="padding:10px;background:rgba(232,176,92,0.08);border-radius:6px;border:1px solid rgba(232,176,92,0.2);">
+    <div style="font-size:0.7rem;font-weight:700;color:#e8b05c;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px;">Constraints</div>
+    <div style="font-size:0.78rem;color:var(--text-secondary);">page.fill() style, test.describe wrapper, self-contained tests</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Prompt Library">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Prompt Library — <em>8 QA Templates</em></h2>
+      <p class="v2-section-sub">Copy, adapt, and use these prompts in Copilot Chat, ChatGPT, or Claude. Replace the bracketed placeholders with your specifics.</p>
+    </div>
+
+<div style="display:grid;gap:8px;margin:10px 0;">
+  <div style="padding:11px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--accent);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:5px;">1 — Generate test cases from acceptance criteria</div>
+    <code style="font-size:0.8rem;color:var(--text-primary);line-height:1.6;display:block;">"Act as a QA engineer. Given this acceptance criteria: [paste AC here]. Generate a list of test cases covering happy path, error states, boundary values, and edge cases. Format as numbered list with Given/When/Then structure."</code>
+  </div>
+  <div style="padding:11px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--accent);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:5px;">2 — Write a Playwright test from description</div>
+    <code style="font-size:0.8rem;color:var(--text-primary);line-height:1.6;display:block;">"Using Playwright and TypeScript, write a test that navigates to [URL], [actions: fill/click/select], and asserts [expected result]. Use page.fill(), page.click(), expect(locator).toBeVisible(). Wrap in test.describe('[describe name]')."</code>
+  </div>
+  <div style="padding:11px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--accent);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:5px;">3 — Explain a test failure</div>
+    <code style="font-size:0.8rem;color:var(--text-primary);line-height:1.6;display:block;">"This Playwright test is failing with the error: [paste error]. Here is the test code: [paste code]. Explain why it might be failing and suggest a fix. Tell me if the issue is likely a selector problem, a timing problem, or something else."</code>
+  </div>
+  <div style="padding:11px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--accent);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:5px;">4 — Generate test data</div>
+    <code style="font-size:0.8rem;color:var(--text-primary);line-height:1.6;display:block;">"Generate 10 variations of test data for a [field type, e.g. email address / UK phone number / postcode] field. Include: valid examples, invalid format examples, boundary length examples, and special character examples. Return as a TypeScript array."</code>
+  </div>
+  <div style="padding:11px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--accent);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:5px;">5 — Review a test for weaknesses</div>
+    <code style="font-size:0.8rem;color:var(--text-primary);line-height:1.6;display:block;">"Review this test for quality issues: [paste test]. Check for: fragile selectors, race conditions, missing assertions, tests that could pass even when the feature is broken, and any Playwright anti-patterns. List issues with severity (high/medium/low)."</code>
+  </div>
+  <div style="padding:11px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--accent);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:5px;">6 — Refactor duplicated tests</div>
+    <code style="font-size:0.8rem;color:var(--text-primary);line-height:1.6;display:block;">"Refactor these tests to remove duplication using a Page Object: [paste tests]. Extract repeated selectors and actions into a class. Keep each test file readable — the Page Object should not be called in beforeEach. Return the PO class and refactored tests separately."</code>
+  </div>
+  <div style="padding:11px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--accent);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:5px;">7 — Explain unfamiliar code</div>
+    <code style="font-size:0.8rem;color:var(--text-primary);line-height:1.6;display:block;">"Explain what this code does, line by line, as if talking to someone who understands testing but isn't a developer: [paste code]. Focus on what the test is checking and why each step matters. Highlight anything that might be a risk or gotcha."</code>
+  </div>
+  <div style="padding:11px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--accent);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:5px;">8 — Identify coverage gaps</div>
+    <code style="font-size:0.8rem;color:var(--text-primary);line-height:1.6;display:block;">"Here is a list of my existing test cases for [feature]: [paste list]. Here is the acceptance criteria: [paste AC]. What scenarios are missing? Pay particular attention to: error paths, boundary values, concurrent actions, and session/auth edge cases."</code>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Iterating on Results">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Iterating <em>When Results Aren't Right</em></h2>
+      <p class="v2-section-sub">The first response is a starting point, not a final answer. Here's how to steer it.</p>
+    </div>
+    <p>Getting good AI output is rarely one shot. The effective approach is to treat the conversation as a refinement loop — get something out, then steer it towards what you actually need.</p>
+
+<div style="display:grid;gap:8px;margin:14px 0;">
+  <div style="display:grid;grid-template-columns:32px 1fr;gap:10px;padding:12px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);font-weight:700;padding-top:2px;">1</div>
+    <div>
+      <div style="font-size:0.88rem;font-weight:600;margin-bottom:4px;">Be specific about what's wrong</div>
+      <div style="font-size:0.83rem;color:var(--text-secondary);">"That's not quite right" doesn't help. Say what's wrong: <em>"The selector you used (div.login-btn) doesn't match my app. My submit button is button[type=submit]. Update just that selector."</em></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:32px 1fr;gap:10px;padding:12px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);font-weight:700;padding-top:2px;">2</div>
+    <div>
+      <div style="font-size:0.88rem;font-weight:600;margin-bottom:4px;">Ask for alternatives when you're unsure</div>
+      <div style="font-size:0.83rem;color:var(--text-secondary);">If you're not sure which approach is better: <em>"Show me two ways to handle this — one with beforeEach and one without — and explain the trade-off."</em></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:32px 1fr;gap:10px;padding:12px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);font-weight:700;padding-top:2px;">3</div>
+    <div>
+      <div style="font-size:0.88rem;font-weight:600;margin-bottom:4px;">Add a constraint to fix a pattern issue</div>
+      <div style="font-size:0.83rem;color:var(--text-secondary);">If it keeps using a pattern you don't want: <em>"Never use page.waitForTimeout(). If you're waiting for something, use expect(locator).toBeVisible() instead."</em></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:32px 1fr;gap:10px;padding:12px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent);font-weight:700;padding-top:2px;">4</div>
+    <div>
+      <div style="font-size:0.88rem;font-weight:600;margin-bottom:4px;">Start a new chat if the context is muddled</div>
+      <div style="font-size:0.83rem;color:var(--text-secondary);">Long conversations with many corrections confuse the model. If it stops making progress, paste your best result into a fresh chat with a clean prompt rather than continuing to patch a broken thread.</div>
+    </div>
+  </div>
+</div>
+
+<div class="v2-callout info">
+  <p><strong>The "show me your existing code" technique:</strong> Paste one example of what you want the output to look like — an existing test from your project — and say "Generate a new test in this exact style." The model will match your patterns far more reliably than following abstract instructions.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Prompting in Copilot Chat">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Prompting in <em>Copilot Chat</em></h2>
+      <p class="v2-section-sub">How the four-element framework adapts when you're working inside VS Code.</p>
+    </div>
+    <p>In Copilot Chat, the context element of your prompt is partially handled by the <code>@</code> and <code>#</code> references you attach. This means your prompts can be shorter — because you're letting Copilot read the relevant files rather than pasting them manually.</p>
+
+<div style="display:grid;gap:8px;margin:14px 0;">
+  <div style="padding:12px 14px;background:var(--bg-elevated);border-radius:7px;border:1px solid var(--border);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--text-muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;">Standalone prompt (ChatGPT / Claude)</div>
+    <code style="font-size:0.82rem;color:var(--text-primary);line-height:1.6;display:block;">"Act as a Playwright engineer. I have a test file [paste 60 lines of code]. My login page has selectors #email, #password. Add a test for the session expiry scenario..."</code>
+  </div>
+  <div style="padding:12px 14px;background:rgba(94,194,105,0.06);border-radius:7px;border:1px solid rgba(94,194,105,0.3);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--success);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;">Copilot Chat version (shorter — context via references)</div>
+    <code style="font-size:0.82rem;color:var(--text-primary);line-height:1.6;display:block;">"#file:login.spec.ts Add a new test case for session expiry — the user should be redirected to /login with a 'Session expired' message. Match the style of the existing tests."</code>
+  </div>
+</div>
+
+<p>The <code>#file:</code> reference tells Copilot to read <code>login.spec.ts</code> and use it as the Context element — so you don't have to paste the code. The task and constraint are still explicit in your message.</p>
+
+<div class="v2-try-this">
+  <div class="v2-try-label">Try This — 5 minutes</div>
+  <p>Open Copilot Chat in VS Code. Pick one of the 8 templates from the previous slide that matches something you're working on right now. Fill in the bracketed placeholders with real details from your project. Send it. Then use the iteration strategies from this slide to refine the result. The goal isn't a perfect prompt — it's getting something useful faster than writing from scratch.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I can do this" — before moving to Session 04.</p>
+    </div>
+<div class="v2-self-check">
+  <div class="v2-self-check-title">Session 03 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I can do this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can name the four elements of the prompt framework and explain what each one does</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain why a vague prompt produces unusable output — in terms of what information the model was missing</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I have used at least one prompt template from the library on a real task (not just read it)</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know how to iterate on a response that's partially wrong — using specific correction, not just "try again"</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I understand how Copilot Chat's #file: reference replaces the Context element of the framework</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know when to start a fresh chat versus continuing to refine an existing one</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-04/" style="color:var(--accent);">Session 04 — Setting Up GitHub Copilot &amp; Understanding What It Can Do →</a></p>
+  </div>
+</div>

@@ -1,0 +1,429 @@
+---
+layout: guide.njk
+title: "Session 06 Full Guide — Copilot Agent Mode: Your First Taste of Autonomous AI"
+sessionNumber: "06"
+sessionTitle: "Copilot Agent Mode — Your First Taste of Autonomous AI"
+phase: "Phase 2: GitHub Copilot Mastery"
+topicName: "AI in Practice V2"
+topicUrl: "/topics/ai-in-practice-v2/"
+slidesUrl: "/topics/ai-in-practice-v2/sessions/session-06/"
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Copilot Agent Mode <em>— Your First Taste of Autonomous AI</em></h2>
+      <p class="v2-section-sub">A 7-step transcript, constraint vocabulary, a recovery playbook, and a decision tree for choosing the right tool.</p>
+    </div>
+    <div class="v2-version-stamp">Last verified: May 2026 &nbsp;·&nbsp; GitHub Copilot Chat &nbsp;·&nbsp; Agent Mode requires paid Copilot plan</div>
+    <div class="v2-quickstart">
+      <div class="v2-qs-icon">⚡</div>
+      <div>
+        <div class="v2-qs-label">Quick Start</div>
+        <div class="v2-qs-text">Open Copilot Chat (<kbd class="kbd">Ctrl+Alt+I</kbd>) → click the mode dropdown at the top → select <strong>Agent</strong> → give it a goal that spans multiple files. Watch it read your project before writing anything. That reading phase is the key difference from Chat.</div>
+      </div>
+    </div>
+    <div class="v2-callout info">
+      <p><strong>Built on Sessions 04 and 05:</strong> Agent Mode uses everything from those sessions. The context references (@workspace, #file:), the prompt structure, and the "always check selectors" rule from <a href="/topics/ai-in-practice-v2/guides/session-05/" class="v2-cross-link">Session 05 →</a> all apply here — the stakes are just higher because the agent is touching multiple files at once.</p>
+    </div>
+    <div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Chat vs Agent Mode">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">What Makes Agent Mode <em>Different from Chat</em></h2>
+      <p class="v2-section-sub">Chat is reactive. Agent Mode is goal-directed. Here's what that means in practice.</p>
+    </div>
+    <p>Copilot Chat (standard mode) is reactive: you send a message, it responds, you copy code and apply it manually. You orchestrate every step.</p>
+    <p>Agent Mode changes the operational model. You give it a <strong>goal</strong> — a description of the desired end state — and it works through the steps to get there. It can:</p>
+    <ul>
+      <li>Read your project files to understand existing patterns before generating anything</li>
+      <li>Create new files and edit existing ones</li>
+      <li>Run terminal commands (like <code>npx playwright test</code>) and read the output</li>
+      <li>See if a test fails, diagnose the failure, and correct it — without you prompting each step</li>
+    </ul>
+    <p>The key distinction: in Chat, you steer every turn. In Agent Mode, you describe the destination and supervise the journey.</p>
+    <div class="v2-two-col">
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Copilot Chat (normal mode)</div>
+        <ul style="font-size:0.86rem;margin:0;">
+          <li>You ask a question or give a task</li>
+          <li>Copilot generates a response</li>
+          <li>You copy, paste, apply manually</li>
+          <li>You ask the next step</li>
+          <li>Complete manual control — complete manual effort</li>
+        </ul>
+      </div>
+      <div class="v2-col good">
+        <div class="v2-col-label">Agent Mode</div>
+        <ul style="font-size:0.86rem;margin:0;">
+          <li>You give a goal, not a sequence of steps</li>
+          <li>Agent reads your project to understand patterns</li>
+          <li>Edits multiple files, runs tests, reads errors</li>
+          <li>Self-corrects without you prompting each step</li>
+          <li>Shows diffs for approval — you stay in control</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Enabling Agent Mode">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">How to Enable Agent Mode</h2>
+      <p class="v2-section-sub">Four steps to switch from Chat to Agent — and what to check if you can't see the option.</p>
+    </div>
+    <ol>
+      <li>Open Copilot Chat: click the chat icon in the VS Code sidebar or press <kbd class="kbd">Ctrl+Alt+I</kbd> / <kbd class="kbd">Cmd+Shift+I</kbd></li>
+      <li>Look for the mode dropdown at the top of the chat panel (it may say "Chat" or "Ask")</li>
+      <li>Select <strong>Agent</strong> from the dropdown</li>
+      <li>Type your goal (not a question — a desired outcome)</li>
+    </ol>
+    <div class="v2-callout warning">
+      <p><strong>Requires a paid plan.</strong> Agent Mode is not available on the free Copilot tier as of 2025. If you don't see "Agent" in the dropdown, check your plan at github.com → Settings → Copilot. Business and Enterprise plans both include it.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Walkthrough: Steps 1–3">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Agent Mode Transcript <em>— Steps 1 to 3</em></h2>
+      <p class="v2-section-sub">Goal setting, the reading phase, and your first approval checkpoint.</p>
+    </div>
+    <p>Here's a real-world Agent Mode session: adding Playwright tests for a payment step. Seven turns, from goal to passing tests. Every turn is annotated so you know what to watch for at each stage.</p>
+    <div class="v2-transcript">
+      <div class="v2-transcript-header">Agent Mode Transcript — 7 steps from goal to passing tests</div>
+
+      <div class="v2-turn">
+        <div class="v2-turn-role user">You</div>
+        <div class="v2-turn-text">
+          <strong>Goal:</strong> Add Playwright TypeScript E2E tests for the payment step of the checkout flow.<br><br>
+          <strong>Context:</strong> Checkout starts at /cart. Payment page at /checkout/payment. Stripe test cards are in tests/fixtures/stripe.ts. Existing checkout tests: tests/checkout/cart.spec.ts — use the same Page Object and fixture pattern.<br><br>
+          <strong>Constraints:</strong><br>
+          — Create new files only in tests/checkout/<br>
+          — Do not modify any existing test files or Page Objects<br>
+          — Use only selectors from tests/pages/checkoutPage.ts — no raw selectors in the spec file<br><br>
+          <strong>Verification:</strong> Run npx playwright test tests/checkout/payment.spec.ts and confirm all tests pass.
+        </div>
+      </div>
+
+      <div class="v2-turn">
+        <div class="v2-turn-role agent">Agent</div>
+        <div class="v2-turn-text">
+          <em>[Reading phase — this is normal and important]</em><br><br>
+          Reading <code>tests/checkout/cart.spec.ts</code> to understand the test structure...<br>
+          Reading <code>tests/pages/checkoutPage.ts</code> to understand available Page Object methods...<br>
+          Reading <code>tests/fixtures/stripe.ts</code> to understand test card data...<br><br>
+          I can see the tests use a <code>checkoutPage</code> fixture from <code>tests/fixtures.ts</code> and the Page Object pattern with methods like <code>checkoutPage.proceedToPayment()</code>. I'll follow this pattern. Creating plan: 1) Add payment methods to CheckoutPage, 2) Create payment.spec.ts with 3 test cases (valid card, declined card, 3DS auth).
+        </div>
+      </div>
+
+      <div class="v2-turn">
+        <div class="v2-turn-role system">Approval</div>
+        <div class="v2-turn-text">
+          <strong>Review the plan before continuing.</strong> Does it match your intent?<br>
+          — Is it reading the right files (cart.spec.ts, checkoutPage.ts, stripe.ts)? ✓<br>
+          — Is the scope correct (only tests/checkout/, no existing file modifications)? ✓<br>
+          — Does the plan make sense (Page Object methods + spec file)? ✓<br>
+          If yes, continue. If the plan reads something unexpected, reject and add a constraint now rather than after files are created.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Walkthrough: Steps 4–7">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Agent Mode Transcript <em>— Steps 4 to 7</em></h2>
+      <p class="v2-section-sub">File creation, diff review, test run, self-correction, and verification.</p>
+    </div>
+    <div class="v2-transcript">
+      <div class="v2-transcript-header">Agent Mode Transcript — 7 steps from goal to passing tests</div>
+
+      <div class="v2-turn">
+        <div class="v2-turn-role agent">Agent</div>
+        <div class="v2-turn-text">
+          Creating <code>tests/checkout/payment.spec.ts</code><br>
+          <em>[Diff shown — green = added lines]</em><br><br>
+          The file includes: <code>test('valid card completes payment')</code>, <code>test('declined card shows error message')</code>, <code>test('3DS authentication flow completes')</code>. All tests use <code>checkoutPage</code> fixture and methods from CheckoutPage. No raw selectors.
+        </div>
+      </div>
+
+      <div class="v2-turn">
+        <div class="v2-turn-role system">Approval</div>
+        <div class="v2-turn-text">
+          <strong>Review the diff before accepting.</strong> Check:<br>
+          — Are all selectors coming from the Page Object, not raw strings? ✓<br>
+          — Are the Stripe test cards from stripe.ts, not hardcoded? ✓<br>
+          — Do the assertions check actual payment outcomes (not just visibility)? Check this carefully — the most common weak spot.<br>
+          Accept the diff. Agent proceeds to run tests.
+        </div>
+      </div>
+
+      <div class="v2-turn">
+        <div class="v2-turn-role agent">Agent</div>
+        <div class="v2-turn-text">
+          Running: <code>npx playwright test tests/checkout/payment.spec.ts</code><br><br>
+          <em>Output:</em><br>
+          <code style="font-size:0.8em;">✓ valid card completes payment (2.3s)<br>✗ declined card shows error message (1.8s)<br>Error: expect(locator).toHaveText() — Expected: "Your card was declined." — Received: "Payment failed. Please try again."</code><br><br>
+          One test is failing. The error message text in the app doesn't match what I used. Reading the test more carefully...
+        </div>
+      </div>
+
+      <div class="v2-turn">
+        <div class="v2-turn-role agent">Agent</div>
+        <div class="v2-turn-text">
+          The actual error text is "Payment failed. Please try again." not "Your card was declined." I'll update the assertion.<br><br>
+          <em>[New diff shown — only the changed assertion line]</em><br><br>
+          Updated: <code>expect(page.getByText('Payment failed. Please try again.')).toBeVisible()</code>
+        </div>
+      </div>
+
+      <div class="v2-turn">
+        <div class="v2-turn-role system">Approval</div>
+        <div class="v2-turn-text">
+          <strong>Self-correction in action.</strong> The agent ran the tests, read the failure, identified the cause (wrong error string), and proposed a fix — without you having to do anything. Accept the small diff. The agent runs tests again.<br><br>
+          <code style="font-size:0.8em;">✓ valid card completes payment (2.3s)<br>✓ declined card shows error message (1.9s)<br>✓ 3DS authentication flow completes (4.1s)</code><br><br>
+          3/3 passing. Session complete.
+        </div>
+      </div>
+    </div>
+    <div class="v2-callout success">
+      <p><strong>What just happened:</strong> The agent read 3 files, created 1 new file, ran tests, diagnosed a failure, proposed a fix, and verified the fix — all in one session. You reviewed 2 diffs and approved a plan. That's the Agent Mode value: you provide oversight; the agent does the grunt work.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Writing Good Goals">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Writing Goals <em>That Work</em></h2>
+      <p class="v2-section-sub">Every effective Agent Mode goal has four components: Goal, Context, Constraints, Verification.</p>
+    </div>
+    <p>The most common reason Agent Mode produces disappointing results is an unclear goal. The agent needs to understand four things:</p>
+    <div style="display:grid;gap:8px;margin:14px 0;">
+      <div style="display:grid;grid-template-columns:85px 1fr;gap:12px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--accent);">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;padding-top:1px;">GOAL</div>
+        <div style="font-size:0.85rem;color:var(--text-secondary);">What you want the end result to be — in terms of the project state, not the steps to take. "Add E2E tests for the payment flow" not "create a file called payment.spec.ts with three tests."</div>
+      </div>
+      <div style="display:grid;grid-template-columns:85px 1fr;gap:12px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--blue);">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--blue);font-weight:700;padding-top:1px;">CONTEXT</div>
+        <div style="font-size:0.85rem;color:var(--text-secondary);">What the agent needs to know — relevant files, frameworks, patterns. "Use the pattern from tests/checkout/cart.spec.ts. Stripe test cards are in tests/fixtures/stripe.ts."</div>
+      </div>
+      <div style="display:grid;grid-template-columns:85px 1fr;gap:12px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--red);">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--red);font-weight:700;padding-top:1px;">CONSTRAINTS</div>
+        <div style="font-size:0.85rem;color:var(--text-secondary);">What the agent must not do — files to leave alone, scope limits, patterns to follow. Without this, the agent may helpfully "fix" files you didn't ask it to touch.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:85px 1fr;gap:12px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border-left:3px solid var(--green);">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--green);font-weight:700;padding-top:1px;">VERIFICATION</div>
+        <div style="font-size:0.85rem;color:var(--text-secondary);">How to confirm the task is done. "Run npx playwright test tests/checkout/payment.spec.ts and confirm all pass." This tells the agent how to close the loop.</div>
+      </div>
+    </div>
+    <div class="v2-callout danger">
+      <p><strong>Poor goal:</strong> "Add some tests for the checkout flow"</p>
+      <p style="margin-top:6px;"><strong>Why it fails:</strong> No scope (which part of checkout?), no pattern (which file to follow?), no constraints (can it touch existing files?), no verification (what counts as done?). The agent will make all these decisions itself — and they may not match what you wanted.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Constraint Phrases">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Constraint Vocabulary Guide</h2>
+      <p class="v2-section-sub">Five phrases to add to every goal prompt — learn these and use them every time.</p>
+    </div>
+    <p>These five constraint phrases are the most useful in Agent Mode. Learn them. Use them in every goal prompt.</p>
+    <div style="display:grid;gap:10px;margin:14px 0;">
+
+      <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+        <div class="v2-code-wrap" style="margin:0 0 8px;">
+          <div class="code-block" style="padding:6px 12px;"><pre style="margin:0;font-size:0.82rem;">"Only modify files in tests/checkout/"</pre></div>
+        </div>
+        <div style="font-size:0.84rem;color:var(--text-secondary);">Prevents the agent from touching files outside the specified directory. Without this, a helpful agent may "improve" files that were working fine. Be as specific as the task requires — a single directory, or even a single file.</div>
+      </div>
+
+      <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+        <div class="v2-code-wrap" style="margin:0 0 8px;">
+          <div class="code-block" style="padding:6px 12px;"><pre style="margin:0;font-size:0.82rem;">"Do not create new directories"</pre></div>
+        </div>
+        <div style="font-size:0.84rem;color:var(--text-secondary);">Agents sometimes decide your project needs a new folder structure. This constraint keeps everything in existing directories, preventing a rearrangement you didn't ask for.</div>
+      </div>
+
+      <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+        <div class="v2-code-wrap" style="margin:0 0 8px;">
+          <div class="code-block" style="padding:6px 12px;"><pre style="margin:0;font-size:0.82rem;">"Do not run commands that modify the database"</pre></div>
+        </div>
+        <div style="font-size:0.84rem;color:var(--text-secondary);">If your test setup involves database operations, this prevents the agent from running migrations, seeding scripts, or delete commands. Especially important on shared development environments.</div>
+      </div>
+
+      <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+        <div class="v2-code-wrap" style="margin:0 0 8px;">
+          <div class="code-block" style="padding:6px 12px;"><pre style="margin:0;font-size:0.82rem;">"Stop after creating files — I will run tests manually"</pre></div>
+        </div>
+        <div style="font-size:0.84rem;color:var(--text-secondary);">Prevents the agent from running any terminal commands. Use this when you want to review the generated files before any test execution — especially useful when tests touch a staging environment.</div>
+      </div>
+
+      <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+        <div class="v2-code-wrap" style="margin:0 0 8px;">
+          <div class="code-block" style="padding:6px 12px;"><pre style="margin:0;font-size:0.82rem;">"Match the existing Page Object pattern in tests/pages/"</pre></div>
+        </div>
+        <div style="font-size:0.84rem;color:var(--text-secondary);">Tells the agent to learn from and replicate your existing Page Object structure rather than inventing its own. Combine with <code>#file:tests/pages/loginPage.ts</code> to make the reference explicit.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Reviewing Changes">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Approval Workflow <em>— Why It's Not a Formality</em></h2>
+      <p class="v2-section-sub">Four phases of approval — plan, diff, command, verification. Here's what to look at in each.</p>
+    </div>
+    <p>Agent Mode shows you every file change as a diff before applying it. This is not a formality — it's the control mechanism that makes agent use safe. The sequence:</p>
+    <ol>
+      <li><strong>Plan phase:</strong> Agent describes what it intends to do. Read this. If the plan is reading the wrong files or proposes touching files you didn't expect, stop here and add constraints.</li>
+      <li><strong>Diff phase:</strong> Each file change appears as a coloured diff (green = added, red = removed). This is where you catch selector problems, wrong assertion patterns, and scope creep.</li>
+      <li><strong>Command phase:</strong> If the agent runs a terminal command, it shows you the command before executing. You can reject it.</li>
+      <li><strong>Verification phase:</strong> After changes, the agent may run tests and show you the output. A passing test is not proof the test is correct — check the assertions too.</li>
+    </ol>
+    <div class="v2-callout warning">
+      <p><strong>What to actually look at in each diff:</strong></p>
+      <ul style="margin-top:6px;font-size:0.87rem;">
+        <li><strong>Scope:</strong> Is it only touching the files you expected? If you see changes to files outside your constraint, reject and redirect.</li>
+        <li><strong>Selectors:</strong> Are they from your Page Object, or did the agent invent raw selectors? Invented selectors look plausible but often don't exist in your DOM.</li>
+        <li><strong>Assertions:</strong> Does the test actually verify the behaviour, or just that an element is visible?</li>
+        <li><strong>Imports:</strong> Are all imports valid for your project's installed dependencies?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="When Things Go Wrong">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Recovery Playbook <em>— When Agent Mode Goes Wrong</em></h2>
+      <p class="v2-section-sub">Five scenarios and exactly what to do in each one.</p>
+    </div>
+    <p>Things will go wrong. Here's what to do for each situation.</p>
+    <h3>The agent is going in the wrong direction mid-task</h3>
+    <p>You don't have to reject everything and start over. You can redirect in the approval step by typing a correction instead of accepting:</p>
+    <div class="v2-code-wrap">
+      <div class="code-block"><pre style="margin:0;font-size:0.82rem;white-space:pre-wrap;">Don't use page.goto() here — use the navigateToPayment() method
+from the checkoutPage Page Object instead. It handles the cart step first.</pre></div>
+    </div>
+    <p>The agent adjusts its approach and regenerates. This is faster than starting over with a new goal prompt.</p>
+    <h3>You accepted a diff you shouldn't have</h3>
+    <p>Run <code>git diff</code> to see exactly what changed. Use <code>git restore &lt;filename&gt;</code> to revert a specific file, or <code>git restore .</code> to revert everything since your last commit. Always work on a feature branch when using Agent Mode for this reason — reverting to a known-good commit is straightforward.</p>
+    <h3>The agent ran a command you didn't want</h3>
+    <p>If the command modified files, <code>git restore .</code> covers the file changes. If it modified a database or sent a request to an API, you'll need to undo that manually. This is why the constraint <em>"Do not run commands that modify the database"</em> exists — use it proactively, not reactively.</p>
+    <h3>The agent stopped partway through</h3>
+    <p>Click <strong>Stop</strong> in the Copilot Chat panel to halt the agent. Any diffs you already accepted remain applied — check <code>git diff</code> to see the state. You can continue with a new goal from where it stopped, or revert and restart with a tighter scope.</p>
+    <h3>The agent keeps looping on the same failure</h3>
+    <p>This happens when a test fails in a way the agent can't diagnose without more context (a selector that only exists in a running app, a race condition, an environment variable that's missing in CI). Redirect: <em>"Stop running tests. The test is failing because of [reason]. Update the assertion to [specific change] and do not run tests again."</em></p>
+  </div>
+</div>
+
+<div class="slide" data-title="Which Tool to Use">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Decision Framework <em>+ Common Mistakes</em></h2>
+      <p class="v2-section-sub">Which tool for which task — and five mistakes to avoid from day one.</p>
+    </div>
+    <p>Use this reference any time you're wondering whether to use Agent Mode or a simpler approach. The goal is to match the tool's power to the task's complexity.</p>
+    <div class="v2-decision-grid">
+      <div style="padding:9px 14px;background:var(--bg-elevated);border-radius:6px;border-bottom:1px solid var(--border);">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;font-weight:700;letter-spacing:2px;color:var(--text-dim);display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px;text-transform:uppercase;">
+          <span>When you want to...</span><span>Use...</span>
+        </div>
+      </div>
+      <div class="v2-decision-row">
+        <div class="v2-decision-when">Complete one test or finish a half-written function in the file you're editing</div>
+        <div class="v2-decision-use">Completions (Tab)</div>
+      </div>
+      <div class="v2-decision-row">
+        <div class="v2-decision-when">Ask a question, explain code, generate a single test, debug with context you provide</div>
+        <div class="v2-decision-use">Copilot Chat</div>
+      </div>
+      <div class="v2-decision-row">
+        <div class="v2-decision-when">Make an edit at the cursor without switching to the chat panel</div>
+        <div class="v2-decision-use">Inline Chat (Ctrl+I)</div>
+      </div>
+      <div class="v2-decision-row">
+        <div class="v2-decision-when">Build a complete test file, refactor a test suite, create multiple related files from a goal</div>
+        <div class="v2-decision-use">Agent Mode</div>
+      </div>
+      <div class="v2-decision-row">
+        <div class="v2-decision-when">Work across multiple directories, run git commands, long multi-session tasks, work that needs shell access</div>
+        <div class="v2-decision-use">Claude Code / Opencode <a href="/topics/ai-in-practice-v2/guides/session-10/" class="v2-cross-link">→ Session 10</a></div>
+      </div>
+    </div>
+    <h3>Common Mistakes Catalogue</h3>
+    <div style="display:grid;gap:10px;margin:14px 0;">
+      <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+        <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;">Vague goal → unpredictable scope</div>
+        <div style="font-size:0.84rem;color:var(--text-secondary);">"Improve our test coverage" has no boundary. The agent may start touching files across your entire project. Always specify the feature, directory, or files you mean.</div>
+      </div>
+      <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+        <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;">Clicking through diffs without reading them</div>
+        <div style="font-size:0.84rem;color:var(--text-secondary);">The agent is fast and confident. It's easy to click Accept on each diff assuming they're correct. A 30-second diff review is the difference between a high-quality session and a debugging session tomorrow.</div>
+      </div>
+      <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+        <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;">Trusting "tests pass" as proof of correctness</div>
+        <div style="font-size:0.84rem;color:var(--text-secondary);">Agent Mode can run tests and confirm they pass. But a test that always passes regardless of application state is a false positive. After any agent session, manually review the assertions — "does this test fail if the feature breaks in the way I care about?"</div>
+      </div>
+      <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+        <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;">Using Agent Mode for small tasks</div>
+        <div style="font-size:0.84rem;color:var(--text-secondary);">Agent Mode has overhead: it reads files, plans steps, asks for approvals at each stage. For a one-line fix, it's slower than Chat. Reserve it for tasks that genuinely span multiple files or require multiple sequential steps.</div>
+      </div>
+      <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+        <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;">No constraints → scope creep</div>
+        <div style="font-size:0.84rem;color:var(--text-secondary);">Without explicit constraints, the agent may helpfully "fix" files you didn't ask it to touch. It sees your whole project. Add at minimum: which directory to work in and which existing files not to modify.</div>
+      </div>
+    </div>
+    <div class="v2-try-this">
+      <div class="v2-try-label">Try This — 10 minutes</div>
+      <p>Open Copilot Chat. Switch to Agent mode. Give it this goal (fill in the blanks from your actual project):</p>
+      <p><em>"Goal: Add one new Playwright test to [your existing spec file] that covers [one scenario not yet tested]. Context: [your spec file path]. Constraints: Do not modify the existing tests. Do not create new directories. Stop after creating the test — I will run it manually."</em></p>
+      <p>Read the plan before accepting it. Read the diff carefully before accepting it. Run the test yourself. Was the assertion meaningful?</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I can do this" — this completes Phase 2.</p>
+    </div>
+    <div class="v2-self-check">
+      <div class="v2-self-check-title">Session 06 — Knowledge Check</div>
+      <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I can do this"</div>
+      <ul class="v2-check-list">
+        <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain the difference between Copilot Chat and Agent Mode in one sentence</li>
+        <li class="v2-check-item"><div class="v2-checkbox"></div>I can write a goal prompt with all four elements: Goal, Context, Constraints, Verification</li>
+        <li class="v2-check-item"><div class="v2-checkbox"></div>I know all five constraint phrases and when to use each one</li>
+        <li class="v2-check-item"><div class="v2-checkbox"></div>I know what to look at in each approval diff (scope, selectors, assertions, imports)</li>
+        <li class="v2-check-item"><div class="v2-checkbox"></div>I can recover from a bad agent session using git restore</li>
+        <li class="v2-check-item"><div class="v2-checkbox"></div>I know when Agent Mode is the right tool vs Chat vs Completions (used the decision framework)</li>
+      </ul>
+    </div>
+    <p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">This completes Phase 2. Next: <a href="/topics/ai-in-practice-v2/guides/session-07/" style="color:var(--accent);">Phase 3 — Session 07: Writing Test Cases with AI →</a> (coming soon)</p>
+  </div>
+</div>

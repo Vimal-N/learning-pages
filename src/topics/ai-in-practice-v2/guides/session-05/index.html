@@ -1,0 +1,1195 @@
+---
+layout: guide.njk
+title: "Session 05 Full Guide — Copilot in Your Daily Workflow"
+sessionNumber: "05"
+sessionTitle: "Copilot in Your Daily Workflow"
+phase: "Phase 2: GitHub Copilot Mastery"
+topicName: "AI in Practice V2"
+topicUrl: "/topics/ai-in-practice-v2/"
+slidesUrl: "/topics/ai-in-practice-v2/sessions/session-05/"
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Copilot in Your <em>Daily Workflow</em></h2>
+      <p class="v2-section-sub">
+        Eight practical patterns — each with a complete prompt, a review
+        checklist, and the one mistake people make.
+      </p>
+    </div>
+
+    <div class="v2-version-stamp">
+      Last verified: May 2026 &nbsp;·&nbsp; GitHub Copilot Chat &nbsp;·&nbsp;
+      Playwright 1.44+ &nbsp;·&nbsp; TypeScript 5.x
+    </div>
+
+    <div class="v2-quickstart">
+      <div class="v2-qs-icon">⚡</div>
+      <div>
+        <div class="v2-qs-label">Quick Start</div>
+        <div class="v2-qs-text">
+          Open Copilot Chat (<kbd class="kbd">Ctrl+Alt+I</kbd>). Type:
+          <em
+            >"I need a Playwright TypeScript test for the login page. The page
+            is at /login. Email field: #email. Password field: #password. Submit
+            button: #submit. On success, redirect to /dashboard."</em
+          >
+          Read what comes back, then verify the selectors exist in your actual
+          app before using it.
+        </div>
+      </div>
+    </div>
+
+    <div class="v2-callout info">
+      <p>
+        <strong>Prerequisite:</strong> Both extensions installed and Copilot
+        active. If you haven't done the setup from
+        <a
+          href="/topics/ai-in-practice-v2/guides/session-04/"
+          class="v2-cross-link"
+          >Session 04 →</a
+        >, do that first — especially installing GitHub Copilot Chat.
+      </p>
+    </div>
+
+    <div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The Right Mindset">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Right Mindset First</h2>
+      <p class="v2-section-sub">
+        Think of Copilot as a pair programmer who types fast but has never seen
+        your app.
+      </p>
+    </div>
+
+    <p>
+      Before the patterns, one mental model change. The biggest mistake with
+      Copilot: treating it as smarter autocomplete — only using completions,
+      accepting the first suggestion without looking, and giving vague context
+      expecting magic.
+    </p>
+
+    <p>
+      The better model:
+      <strong
+        >Copilot is a pair programmer who types faster than you, knows every
+        API, but has never seen your app before.</strong
+      >
+      Your job is to steer. Their job is to implement. The quality of the output
+      is directly proportional to the quality of your direction.
+    </p>
+
+    <p>
+      The 8 patterns that follow are drawn from real QA workflows. The
+      difference between a mediocre result and a useful one is usually in the
+      prompt structure.
+    </p>
+  </div>
+</div>
+
+<div class="slide" data-title="Writing Tests">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">
+        Pattern 1 <em>— Writing a Test from Scratch</em>
+      </h2>
+      <p class="v2-section-sub">
+        From acceptance criteria to a reviewable test in under 2 minutes.
+      </p>
+    </div>
+
+    <!-- ── PATTERN 1 ── -->
+    <div class="v2-pattern-card">
+      <div class="v2-pattern-num">Pattern 1</div>
+      <div class="v2-pattern-title">Writing a test from scratch</div>
+      <p
+        style="
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+          margin: 0 0 12px;
+        "
+      >
+        You have acceptance criteria and a blank file. The goal is to go from
+        ACs to a reviewable test in under 2 minutes.
+      </p>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">Complete Prompt</div>
+        <div class="v2-code-wrap">
+          <div class="code-block">
+            <pre
+              style="
+                margin: 0;
+                font-size: 0.82rem;
+                line-height: 1.75;
+                white-space: pre-wrap;
+              "
+            >
+I need Playwright TypeScript tests for user registration.
+
+Acceptance criteria:
+- Email must be unique — duplicate email shows error: "An account with this email already exists"
+- Password must be at least 8 characters with one uppercase and one number
+- On success, redirect to /dashboard and show "Welcome" banner
+- Submit button is disabled during the API call
+
+Use the Page Object pattern. Reference existing style: #file:tests/auth/login.spec.ts
+Output to: tests/registration/register.spec.ts
+Do not create additional files or modify existing ones.</pre
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">What Good Output Looks Like</div>
+        <p style="font-size: 0.86rem; color: var(--text-secondary)">
+          Copilot should produce a describe block with 4 test cases matching
+          your ACs, using <code>page.locator()</code> (not
+          <code>page.waitForSelector()</code>), assertions that check specific
+          text rather than just visibility, and imports that match your existing
+          pattern.
+        </p>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">
+          Review Checklist Before Using
+        </div>
+        <ul style="margin: 6px 0 0; font-size: 0.85rem">
+          <li>
+            Do the selectors (<code>#email</code>, <code>#password</code>, etc.)
+            actually exist in your DOM? Verify in browser DevTools.
+          </li>
+          <li>
+            Are assertions checking specific text ("An account with this email
+            already exists") or just <code>toBeVisible()</code>?
+          </li>
+          <li>
+            Does it use <code>page.locator()</code> not deprecated
+            <code>page.waitForSelector()</code>?
+          </li>
+          <li>Are the imports consistent with the file you referenced?</li>
+          <li>Run it. Does it pass on the real app or fail immediately?</li>
+        </ul>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">Common Mistake</div>
+        <div class="v2-callout danger" style="margin: 6px 0 0">
+          <p>
+            Not referencing an existing file with <code>#file:</code>. Without a
+            style reference, Copilot generates valid Playwright code but using
+            patterns that may not match your project's conventions — different
+            fixture setup, different assertion style, different naming. Adding
+            <code>#file:</code> to a similar spec takes 10 seconds and saves 20
+            minutes of cleanup.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Adding to a Suite">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">
+        Pattern 2 <em>— Adding to an Existing Test Suite</em>
+      </h2>
+      <p class="v2-section-sub">
+        Add new scenarios without breaking what's already there.
+      </p>
+    </div>
+
+    <!-- ── PATTERN 2 ── -->
+    <div class="v2-pattern-card">
+      <div class="v2-pattern-num">Pattern 2</div>
+      <div class="v2-pattern-title">Adding to an existing test suite</div>
+      <p
+        style="
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+          margin: 0 0 12px;
+        "
+      >
+        You have an existing spec file and need to add new scenarios without
+        breaking what's there.
+      </p>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">Complete Prompt</div>
+        <div class="v2-code-wrap">
+          <div class="code-block">
+            <pre
+              style="
+                margin: 0;
+                font-size: 0.82rem;
+                line-height: 1.75;
+                white-space: pre-wrap;
+              "
+            >
+Add 3 new test cases to #file:tests/checkout/checkout.spec.ts
+
+New scenarios:
+1. Guest checkout without creating an account
+2. Checkout with an expired promo code — should show "This code has expired" error
+3. Checkout when one item goes out of stock mid-session — cart should show stock warning
+
+Output only the new test() blocks. I will insert them manually.
+Match the existing fixture pattern and assertion style exactly.</pre
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">
+          Review Checklist Before Using
+        </div>
+        <ul style="margin: 6px 0 0; font-size: 0.85rem">
+          <li>
+            Did it output only the new <code>test()</code> blocks, or regenerate
+            the whole file? If the whole file, ask: "Output only the new test()
+            blocks, not the full file."
+          </li>
+          <li>
+            Do the new tests use the same fixture setup as existing tests?
+            Compare the <code>async ({ page, ... })</code> signature.
+          </li>
+          <li>
+            Are the error message strings exact? "This code has expired" vs
+            "Code has expired" will cause the test to always fail — Copilot
+            often invents error text.
+          </li>
+        </ul>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">Common Mistake</div>
+        <div class="v2-callout danger" style="margin: 6px 0 0">
+          <p>
+            Copilot regenerates the entire file when you wanted only the new
+            tests. It does this to "be helpful" — it may fix imports, reformat
+            existing tests, or reorganise describe blocks. Always say "output
+            only the new test() blocks" to prevent this.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Generating Test Data">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">
+        Pattern 3 <em>— Generating Test Data &amp; Fixtures</em>
+      </h2>
+      <p class="v2-section-sub">
+        Fixtures, boundary values, and realistic user data — quickly and
+        consistently.
+      </p>
+    </div>
+
+    <!-- ── PATTERN 3 ── -->
+    <div class="v2-pattern-card">
+      <div class="v2-pattern-num">Pattern 3</div>
+      <div class="v2-pattern-title">Generating test data and fixtures</div>
+      <p
+        style="
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+          margin: 0 0 12px;
+        "
+      >
+        Test data is tedious to write but important for meaningful tests.
+        Copilot handles this quickly and consistently.
+      </p>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">
+          Complete Prompt — User Fixtures
+        </div>
+        <div class="v2-code-wrap">
+          <div class="code-block">
+            <pre
+              style="
+                margin: 0;
+                font-size: 0.82rem;
+                line-height: 1.75;
+                white-space: pre-wrap;
+              "
+            >
+Generate a TypeScript file at tests/fixtures/users.ts with 10 test users.
+
+Cover these scenarios:
+- Standard active user
+- Admin user with all permissions
+- Read-only user
+- User with MFA enabled
+- User with expired password (must change on next login)
+- Locked account (failed too many login attempts)
+- New user, no profile completed
+- User with no profile photo
+
+Use realistic UK first names, surnames, email formats.
+Each user: { id, email, password, role, status, mfaEnabled, profileComplete }
+Export as: export const testUsers = [...] and individual named exports for each.
+Plain text passwords are fine — this is test data only.</pre
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">
+          Complete Prompt — Boundary Value Data
+        </div>
+        <div class="v2-code-wrap">
+          <div class="code-block">
+            <pre
+              style="
+                margin: 0;
+                font-size: 0.82rem;
+                line-height: 1.75;
+                white-space: pre-wrap;
+              "
+            >
+Create a TypeScript array for boundary-value testing on a date-of-birth field.
+
+Cover:
+- Valid adult (clearly 18+)
+- Exactly 18 years old today (lower boundary)
+- One day under 18 (fails validation)
+- Over 100 years old (upper boundary)
+- Future date
+- Invalid format: "13/32/1990", "1990-13-01", "not-a-date"
+- Empty string
+
+Type: Array&lt;{ input: string; expectedError: string | null }&gt;
+null = no error expected.</pre
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">Common Mistake</div>
+        <div class="v2-callout warning" style="margin: 6px 0 0">
+          <p>
+            Using hardcoded "today's date" in the output. For boundary cases
+            like "exactly 18 today", Copilot may generate a hardcoded date
+            string that will be wrong next year. Ask for it to compute the date
+            dynamically:
+            <em
+              >"Use JavaScript date arithmetic rather than a hardcoded date
+              string."</em
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Understanding Code">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">
+        Pattern 4 <em>— Understanding Unfamiliar Code</em>
+      </h2>
+      <p class="v2-section-sub">
+        Ask Copilot to explain before you trace through it manually.
+      </p>
+    </div>
+
+    <!-- ── PATTERN 4 ── -->
+    <div class="v2-pattern-card">
+      <div class="v2-pattern-num">Pattern 4</div>
+      <div class="v2-pattern-title">Understanding unfamiliar code</div>
+      <p
+        style="
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+          margin: 0 0 12px;
+        "
+      >
+        You're handed a test file, a helper, or a Page Object you've never seen.
+        Ask Copilot before you start trying to trace through it manually.
+      </p>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">Complete Prompt</div>
+        <div class="v2-code-wrap">
+          <div class="code-block">
+            <pre
+              style="
+                margin: 0;
+                font-size: 0.82rem;
+                line-height: 1.75;
+                white-space: pre-wrap;
+              "
+            >
+Explain #selection in plain English. Focus on:
+1. What inputs it expects and what it returns or does
+2. The main logic paths (normal flow + what happens when something's wrong)
+3. What could make it behave unexpectedly or produce a false positive in tests
+Do not include code in your response. Use plain sentences only.</pre
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">Why This Works</div>
+        <p style="font-size: 0.86rem; color: var(--text-secondary)">
+          Asking for "logic paths" and "what could make it behave unexpectedly"
+          directly maps to test scenarios. You get an explanation <em>and</em> a
+          mental map of what to test — in one request.
+        </p>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">Common Mistake</div>
+        <div class="v2-callout warning" style="margin: 6px 0 0">
+          <p>
+            Using <code>/explain</code> without selecting anything first, then
+            getting a generic explanation of the file rather than the specific
+            function you're confused about. Select the function, then ask.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Debugging Failures">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">
+        Pattern 5 <em>— Debugging a Failing Test</em>
+      </h2>
+      <p class="v2-section-sub">
+        The Debugging Brief — the single most useful structure you'll use with
+        Copilot.
+      </p>
+    </div>
+
+    <!-- ── PATTERN 5 ── -->
+    <div class="v2-pattern-card">
+      <div class="v2-pattern-num">Pattern 5</div>
+      <div class="v2-pattern-title">Debugging a failing test</div>
+      <p
+        style="
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+          margin: 0 0 12px;
+        "
+      >
+        Context is everything for debugging. The debugging brief below is the
+        single most useful structure you'll use with Copilot.
+      </p>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">
+          The Debugging Brief (copy and fill in)
+        </div>
+        <div class="v2-code-wrap">
+          <div class="code-block">
+            <pre
+              style="
+                margin: 0;
+                font-size: 0.82rem;
+                line-height: 1.75;
+                white-space: pre-wrap;
+              "
+            >
+Framework &amp; version: Playwright v1.44, TypeScript, headless Chromium
+Test file: tests/checkout/payment.spec.ts
+Test name: "should complete purchase with saved card"
+
+Error message:
+[paste the full error and stack trace here — all of it]
+
+Test code:
+[paste the relevant test or beforeEach here]
+
+When it fails: [local only / CI only / intermittent / always fails]
+What I've already tried: [be specific — "added waitForSelector" not just "tried waiting"]</pre
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">
+          Why "When it fails" is the most important field
+        </div>
+        <p style="font-size: 0.86rem; color: var(--text-secondary)">
+          Local-only failures usually mean an environment issue (credentials,
+          local config). CI-only failures usually mean timing, headless
+          rendering, or missing environment variables. Intermittent failures
+          suggest a race condition or flakiness. That one word ("CI only")
+          points Copilot's diagnosis in completely the right direction.
+        </p>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">Common Mistake</div>
+        <div class="v2-callout danger" style="margin: 6px 0 0">
+          <p>
+            Pasting only the final error line and not the full stack trace. The
+            stack trace shows exactly where in the execution the failure
+            occurred. Without it, Copilot is guessing from the error message
+            alone — and so are you.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Refactoring Tests">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">
+        Pattern 6 <em>— Refactoring Duplicated Test Code</em>
+      </h2>
+      <p class="v2-section-sub">
+        Get the extraction plan approved before you get the code.
+      </p>
+    </div>
+
+    <!-- ── PATTERN 6 ── -->
+    <div class="v2-pattern-card">
+      <div class="v2-pattern-num">Pattern 6</div>
+      <div class="v2-pattern-title">Refactoring duplicated test code</div>
+      <p
+        style="
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+          margin: 0 0 12px;
+        "
+      >
+        Test suites accumulate duplication: selectors repeated across 15 files,
+        the same login setup in every spec, fixture data hardcoded everywhere.
+        Get the plan before you get the code.
+      </p>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">
+          Complete Prompt — Identify First
+        </div>
+        <div class="v2-code-wrap">
+          <div class="code-block">
+            <pre
+              style="
+                margin: 0;
+                font-size: 0.82rem;
+                line-height: 1.75;
+                white-space: pre-wrap;
+              "
+            >
+Here are three test files: #file:tests/auth/login.spec.ts,
+#file:tests/auth/reset.spec.ts, #file:tests/profile/update.spec.ts
+
+Identify the duplicated patterns (selectors, setup logic, assertions).
+Suggest what should be extracted into a shared Page Object or helper.
+Do not generate the refactored code yet — just describe the extraction plan.</pre
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">
+          Then, once you've validated the plan
+        </div>
+        <div class="v2-code-wrap">
+          <div class="code-block">
+            <pre
+              style="
+                margin: 0;
+                font-size: 0.82rem;
+                line-height: 1.75;
+                white-space: pre-wrap;
+              "
+            >
+The extraction plan looks correct. Now:
+1. Create tests/pages/authPage.ts with the Page Object
+2. Show me the refactored login.spec.ts only — I'll apply the pattern to the other two files
+Do not modify reset.spec.ts or update.spec.ts.</pre
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">Common Mistake</div>
+        <div class="v2-callout warning" style="margin: 6px 0 0">
+          <p>
+            Asking for the refactored code directly without validating the plan
+            first. Copilot will produce a complete refactor — across all three
+            files, all at once — that you then have to unpick if its extraction
+            decisions don't match your project's architecture. Get the plan
+            approved first.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Completions &amp; Mode Choice">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">
+        Patterns 7 &amp; 8
+        <em>— Completions &amp; Knowing Which Mode to Use</em>
+      </h2>
+      <p class="v2-section-sub">
+        Improve completion quality and know when to switch between Chat and
+        Completions.
+      </p>
+    </div>
+
+    <!-- ── PATTERN 7 ── -->
+    <div class="v2-pattern-card">
+      <div class="v2-pattern-num">Pattern 7</div>
+      <div class="v2-pattern-title">Inline completions best practices</div>
+      <p
+        style="
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+          margin: 0 0 12px;
+        "
+      >
+        Completions are passive, but you can significantly improve their quality
+        with small habits.
+      </p>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">
+          What makes completions better
+        </div>
+        <ul style="margin: 6px 0 0; font-size: 0.85rem">
+          <li>
+            <strong>Write a descriptive test name before the body.</strong>
+            <code>loginWithExpiredPassword</code> signals the intent far better
+            than <code>test2</code>.
+          </li>
+          <li>
+            <strong>Write a comment above the function.</strong>
+            <code>// Verify rate limiting blocks after 5 failed attempts</code>
+            gives Copilot the scenario to generate.
+          </li>
+          <li>
+            <strong>Leave the cursor inside an incomplete structure.</strong>
+            Positioning inside
+            <code>test('...', async ({ page }) => {</code> after the opening
+            brace generates the entire body.
+          </li>
+          <li>
+            <strong>Accept word-by-word</strong> (<kbd class="kbd">Ctrl+→</kbd>
+            / <kbd class="kbd">Cmd+→</kbd>) when a suggestion is mostly right
+            but needs minor adjustments — you don't have to take it all or
+            nothing.
+          </li>
+          <li>
+            <strong>Open the file you want to match</strong> in another tab.
+            Copilot uses open files as context — if your Page Object file is
+            open, completions will use its method names.
+          </li>
+        </ul>
+      </div>
+
+      <div class="v2-pattern-section">
+        <div class="v2-pattern-section-label">Common Mistake</div>
+        <div class="v2-callout warning" style="margin: 6px 0 0">
+          <p>
+            Accepting completions without checking the selectors. The most
+            common Copilot failure mode: it generates
+            <code>page.click('#login-btn')</code> when your actual button is
+            <code>page.getByRole('button', { name: 'Sign in' })</code>. The test
+            will fail. Always verify against your real DOM.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PATTERN 8 ── -->
+    <div class="v2-pattern-card">
+      <div class="v2-pattern-num">Pattern 8</div>
+      <div class="v2-pattern-title">When to use Chat vs Completions</div>
+      <p
+        style="
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+          margin: 0 0 12px;
+        "
+      >
+        Using the wrong mode doesn't break anything, but it wastes time. Use
+        this as a quick reference.
+      </p>
+
+      <div class="v2-pattern-section">
+        <table style="margin: 6px 0 0">
+          <thead>
+            <tr>
+              <th>Use Completions when</th>
+              <th>Use Chat when</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>You're mid-flow and want a suggestion</td>
+              <td>You want to describe a task and get a full result</td>
+            </tr>
+            <tr>
+              <td>The code pattern is repetitive and predictable</td>
+              <td>You need to explain context before asking</td>
+            </tr>
+            <tr>
+              <td>You want short snippets or boilerplate</td>
+              <td>You need explanation, not just code</td>
+            </tr>
+            <tr>
+              <td>The surrounding file is enough context</td>
+              <td>You need to reference other files with #file:</td>
+            </tr>
+            <tr>
+              <td>Speed matters more than precision</td>
+              <td>You want to iterate with follow-up messages</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="v2-try-this">
+      <div class="v2-try-label">Try This — 5 minutes</div>
+      <p>
+        Pick any one of the 8 patterns above that's closest to something you're
+        working on right now. Use the exact prompt structure shown. Don't
+        simplify it. Notice whether the output is better than what you'd
+        normally get from a shorter, vaguer prompt.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Slash Commands">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Slash Commands <em>on the Same Test</em></h2>
+      <p class="v2-section-sub">
+        See what /explain, /fix, /tests, and /doc each produce from identical
+        input.
+      </p>
+    </div>
+
+    <p>
+      One of the best ways to understand what each slash command does
+      differently is to run all four on the same piece of code. Here's what each
+      produces when run on a simple login test:
+    </p>
+
+    <div class="v2-progressive-marker">
+      Same login test — four different outputs
+    </div>
+
+    <div class="v2-code-wrap">
+      <div class="code-block">
+        <pre
+          style="margin: 0; font-size: 0.82rem; line-height: 1.75"
+        ><span class="cm">// Select this entire test, then use each slash command</span>
+<span class="kw">test</span>(<span class="str">'user can log in with valid credentials'</span>, <span class="kw">async</span> ({ page }) => {
+  <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'/login'</span>);
+  <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="str">'#email'</span>, <span class="str">'user@example.com'</span>);
+  <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="str">'#password'</span>, <span class="str">'ValidPass1!'</span>);
+  <span class="kw">await</span> page.<span class="fn">click</span>(<span class="str">'#submit'</span>);
+  <span class="kw">await</span> expect(page).<span class="fn">toHaveURL</span>(<span class="str">'/dashboard'</span>);
+});</pre>
+      </div>
+    </div>
+
+    <div style="display: grid; gap: 10px; margin: 14px 0">
+      <div
+        style="
+          padding: 13px 16px;
+          background: var(--bg-elevated);
+          border-radius: 8px;
+          border-left: 3px solid var(--blue);
+        "
+      >
+        <div
+          style="
+            font-family: &quot;IBM Plex Mono&quot;, monospace;
+            font-size: 0.65rem;
+            color: var(--blue);
+            font-weight: 700;
+            margin-bottom: 5px;
+          "
+        >
+          /explain
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary)">
+          Returns a plain-English description: "This test navigates to /login,
+          fills the email and password fields using CSS ID selectors, clicks the
+          submit button, and asserts that the page redirects to /dashboard after
+          a successful login. It does not verify whether the user's session is
+          stored or whether the dashboard renders correctly."
+        </div>
+      </div>
+      <div
+        style="
+          padding: 13px 16px;
+          background: var(--bg-elevated);
+          border-radius: 8px;
+          border-left: 3px solid var(--accent);
+        "
+      >
+        <div
+          style="
+            font-family: &quot;IBM Plex Mono&quot;, monospace;
+            font-size: 0.65rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 5px;
+          "
+        >
+          /fix
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary)">
+          Suggests improvements: "Consider using
+          <code>page.locator()</code> instead of raw CSS selectors for better
+          resilience. The test only verifies the URL — consider adding a check
+          that a dashboard element is visible, since /dashboard could redirect
+          again."
+        </div>
+      </div>
+      <div
+        style="
+          padding: 13px 16px;
+          background: var(--bg-elevated);
+          border-radius: 8px;
+          border-left: 3px solid var(--green);
+        "
+      >
+        <div
+          style="
+            font-family: &quot;IBM Plex Mono&quot;, monospace;
+            font-size: 0.65rem;
+            color: var(--green);
+            font-weight: 700;
+            margin-bottom: 5px;
+          "
+        >
+          /tests
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary)">
+          Generates additional test cases based on this one: invalid email
+          format, wrong password, empty fields, account locked, session
+          persistence. Picks up the pattern from your existing test.
+        </div>
+      </div>
+      <div
+        style="
+          padding: 13px 16px;
+          background: var(--bg-elevated);
+          border-radius: 8px;
+          border-left: 3px solid var(--purple);
+        "
+      >
+        <div
+          style="
+            font-family: &quot;IBM Plex Mono&quot;, monospace;
+            font-size: 0.65rem;
+            color: var(--purple);
+            font-weight: 700;
+            margin-bottom: 5px;
+          "
+        >
+          /doc
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary)">
+          Adds a JSDoc comment above the test: selector assumptions,
+          preconditions (user account must exist with those credentials),
+          expected state after the test.
+        </div>
+      </div>
+    </div>
+
+    <div class="v2-try-this">
+      <div class="v2-try-label">Try This — 3 minutes</div>
+      <p>
+        Open any existing test. Select the whole test function. Open Chat (<kbd
+          class="kbd"
+          >Ctrl+Alt+I</kbd
+        >). Run <code>/explain</code>. Then run <code>/fix</code> on the same
+        selection. Compare the two responses — <code>/explain</code> describes
+        what it does; <code>/fix</code> describes what it should do differently.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="When It Goes Wrong">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">When Copilot <em>Gets It Wrong</em></h2>
+      <p class="v2-section-sub">
+        Three predictable failure modes — knowing them saves time and prevents
+        broken tests.
+      </p>
+    </div>
+
+    <p>
+      Copilot is confidently wrong in predictable ways. Knowing these patterns
+      saves time and prevents you committing broken tests.
+    </p>
+
+    <h3>Failure 1 — Inventing API methods that don't exist</h3>
+
+    <p>
+      Copilot may suggest <code>page.waitForStable()</code>. It sounds
+      completely plausible — there's a <code>waitForSelector</code>, a
+      <code>waitForURL</code>, a <code>waitForLoadState</code> — so the model
+      predicts <code>waitForStable</code> should exist too.
+    </p>
+
+    <p>
+      <strong>It doesn't.</strong> When you run the test, you get:
+      <code>TypeError: page.waitForStable is not a function</code>.
+    </p>
+
+    <p>
+      <strong>Fix:</strong> For any Playwright method Copilot suggests that
+      you're not sure about, check the
+      <a
+        href="https://playwright.dev/docs/api/class-page"
+        target="_blank"
+        rel="noopener"
+        style="color: var(--accent)"
+        >Playwright API docs</a
+      >. The official docs list every method. If it's not there, it doesn't
+      exist. The real equivalent for "wait until the page stops loading" is
+      <code>page.waitForLoadState('networkidle')</code> or
+      <code>page.waitForLoadState('domcontentloaded')</code>.
+    </p>
+
+    <h3>Failure 2 — Using Playwright v1.20 patterns in a v1.44 project</h3>
+
+    <p>
+      Copilot's training data contains Playwright code from many different
+      versions. It may suggest <code>page.waitForSelector('#submit')</code> when
+      you're using Playwright v1.44+ where the recommended pattern is
+      <code>page.locator('#submit').waitFor()</code> or simply using
+      <code>await page.locator('#submit').click()</code> (which auto-waits).
+    </p>
+
+    <p>
+      The old patterns still work — Playwright maintains backwards compatibility
+      — but they're deprecated and will generate warnings. More importantly,
+      they bypass Playwright's smart auto-waiting and can produce flaky tests.
+    </p>
+
+    <p>
+      <strong>Fix:</strong> Add a clear version constraint to your prompt:
+      <em
+        >"Use Playwright v1.44 patterns. Prefer page.locator() and
+        page.getByRole() over raw selectors. Do not use waitForSelector."</em
+      >
+    </p>
+
+    <h3>Failure 3 — Writing always-passing assertions</h3>
+
+    <p>Copilot generates this kind of test:</p>
+
+    <div class="v2-code-wrap">
+      <div class="code-block">
+        <pre
+          style="margin: 0; font-size: 0.82rem; line-height: 1.75"
+        ><span class="cm">// This test passes whether login works or not</span>
+<span class="kw">test</span>(<span class="str">'login page is visible'</span>, <span class="kw">async</span> ({ page }) => {
+  <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'/login'</span>);
+  <span class="kw">await</span> expect(page.<span class="fn">locator</span>(<span class="str">'#email'</span>)).<span class="fn">toBeVisible</span>();
+});</pre>
+      </div>
+    </div>
+
+    <p>
+      The email field is always visible — it's part of the static page
+      structure. This test passes even if the login form is completely broken.
+      It's testing that the page loaded, not that login works.
+    </p>
+
+    <p>
+      <strong>Fix:</strong> After generation, ask yourself: "If the feature I'm
+      testing broke, would this test fail?" If the answer is "not necessarily,"
+      the assertion needs strengthening. For login tests, assert on what happens
+      <em>after</em> you submit: redirect URL, dashboard content visible,
+      session cookie set.
+    </p>
+
+    <div class="v2-callout warning">
+      <p>
+        <strong>Rule of thumb:</strong> <code>toBeVisible()</code> on a static
+        element is almost never a meaningful assertion. Meaningful assertions
+        check: content (<code>toHaveText()</code>), state (<code
+          >toBeEnabled()</code
+        >
+        / <code>toBeDisabled()</code>), navigation (<code>toHaveURL()</code>),
+        or element count (<code>toHaveCount()</code>).
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="slide" data-title="Login Test: 3 Stages">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">
+        Progressive Example <em>— The Same Login Test, Four Ways</em>
+      </h2>
+      <p class="v2-section-sub">
+        Watch how AI assistance transforms a vague test into a production-ready
+        one.
+      </p>
+    </div>
+
+    <p>
+      Watch how the same test evolves as you apply AI assistance at each stage.
+    </p>
+
+    <div class="v2-progressive-marker">Stage 1 — Prompt → raw output</div>
+    <p
+      style="
+        font-size: 0.86rem;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+      "
+    >
+      You asked: "Write a Playwright test for login." Copilot generates:
+    </p>
+    <div class="v2-code-wrap">
+      <div class="code-block">
+        <pre
+          style="margin: 0; font-size: 0.82rem; line-height: 1.75"
+        ><span class="cm">// ⚠ Raw output — do not commit without review</span>
+<span class="kw">test</span>(<span class="str">'login'</span>, <span class="kw">async</span> ({ page }) => {
+  <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'/login'</span>);
+  <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="str">'input[type="email"]'</span>, <span class="str">'user@test.com'</span>);
+  <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="str">'input[type="password"]'</span>, <span class="str">'password'</span>);
+  <span class="kw">await</span> page.<span class="fn">click</span>(<span class="str">'button[type="submit"]'</span>);
+  <span class="kw">await</span> expect(page.<span class="fn">locator</span>(<span class="str">'.dashboard'</span>)).<span class="fn">toBeVisible</span>();
+});</pre>
+      </div>
+    </div>
+
+    <div class="v2-progressive-marker">
+      Stage 2 — After review: better selectors, stronger assertion
+    </div>
+    <p
+      style="
+        font-size: 0.86rem;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+      "
+    >
+      You asked Copilot: "Improve the selectors to use getByRole or getByLabel,
+      and strengthen the post-login assertion to check a specific dashboard
+      element." Result:
+    </p>
+    <div class="v2-code-wrap">
+      <div class="code-block">
+        <pre
+          style="margin: 0; font-size: 0.82rem; line-height: 1.75"
+        ><span class="kw">test</span>(<span class="str">'user can log in with valid credentials'</span>, <span class="kw">async</span> ({ page }) => {
+  <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'/login'</span>);
+  <span class="kw">await</span> page.<span class="fn">getByLabel</span>(<span class="str">'Email address'</span>).<span class="fn">fill</span>(<span class="str">'user@example.com'</span>);
+  <span class="kw">await</span> page.<span class="fn">getByLabel</span>(<span class="str">'Password'</span>).<span class="fn">fill</span>(<span class="str">'ValidPass1!'</span>);
+  <span class="kw">await</span> page.<span class="fn">getByRole</span>(<span class="str">'button'</span>, { name: <span class="str">'Sign in'</span> }).<span class="fn">click</span>();
+  <span class="kw">await</span> expect(page).<span class="fn">toHaveURL</span>(<span class="str">'/dashboard'</span>);
+  <span class="kw">await</span> expect(page.<span class="fn">getByRole</span>(<span class="str">'heading'</span>, { name: <span class="str">'Welcome back'</span> })).<span class="fn">toBeVisible</span>();
+});</pre>
+      </div>
+    </div>
+
+    <div class="v2-progressive-marker">
+      Stage 3 — Add to Page Object via Copilot
+    </div>
+    <p
+      style="
+        font-size: 0.86rem;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+      "
+    >
+      You asked: "Extract the login steps into a method on
+      #file:tests/pages/loginPage.ts." Copilot adds a
+      <code>login(email, password)</code> method to your Page Object. Then it
+      updates the spec:
+    </p>
+    <div class="v2-code-wrap">
+      <div class="code-block">
+        <pre
+          style="margin: 0; font-size: 0.82rem; line-height: 1.75"
+        ><span class="kw">import</span> { LoginPage } <span class="kw">from</span> <span class="str">'../pages/loginPage'</span>;
+
+<span class="kw">test</span>(<span class="str">'user can log in with valid credentials'</span>, <span class="kw">async</span> ({ page }) => {
+  <span class="kw">const</span> loginPage = <span class="kw">new</span> <span class="fn">LoginPage</span>(page);
+  <span class="kw">await</span> loginPage.<span class="fn">login</span>(<span class="str">'user@example.com'</span>, <span class="str">'ValidPass1!'</span>);
+  <span class="kw">await</span> expect(page).<span class="fn">toHaveURL</span>(<span class="str">'/dashboard'</span>);
+  <span class="kw">await</span> expect(page.<span class="fn">getByRole</span>(<span class="str">'heading'</span>, { name: <span class="str">'Welcome back'</span> })).<span class="fn">toBeVisible</span>();
+});</pre>
+      </div>
+    </div>
+
+    <p>
+      Three stages of improvement, each one a short focused Copilot interaction.
+      The final test is readable, resilient, and ready to commit.
+    </p>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I can do this" — before moving to Session 06.</p>
+    </div>
+<div class="v2-self-check">
+  <div class="v2-self-check-title">Session 05 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I can do this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can write a complete, well-structured Copilot Chat prompt for generating a test from acceptance criteria</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know to use <code>#file:</code> to reference an existing spec so Copilot matches my project's style</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can recognise the three "Copilot Gets It Wrong" failure types: invented API, old version patterns, always-passing assertions</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know the difference between <code>/explain</code>, <code>/fix</code>, <code>/tests</code>, and <code>/doc</code></li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I've run the Debugging Brief pattern at least once with a real failing test</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain why "toBeVisible() on a static element" is usually a weak assertion</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-06/" style="color:var(--accent);">Session 06 — Copilot Agent Mode →</a></p>
+  </div>
+</div>

@@ -1,0 +1,1222 @@
+---
+layout: base.njk
+title: "Card Style Samples"
+permalink: /style-pattern/
+---
+<style>
+body { background: var(--bg-primary); }
+
+.demo-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+.demo-header {
+  margin-bottom: 48px;
+}
+.demo-header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 6px;
+}
+.demo-header p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* ─── Option blocks ─── */
+.option-block {
+  margin-bottom: 56px;
+}
+.option-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.option-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 9px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.option-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.option-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-left: auto;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.card-section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  margin: 0 0 10px;
+}
+.cards-grid {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+/* ─── shared text inside cards ─── */
+.c-era-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+  display: inline-block;
+}
+.c-era-name { font-size: 0.8rem; font-weight: 700; color: var(--text-primary); margin-top: 6px; }
+.c-era-date { font-size: 0.74rem; color: var(--text-dim); margin-top: 2px; }
+.c-body { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.6; }
+.c-tool-name { font-size: 0.84rem; font-weight: 700; color: var(--text-primary); }
+.c-tool-mode { font-size: 0.72rem; color: var(--text-muted); margin-top: 3px; font-family: 'IBM Plex Mono', monospace; }
+
+/* ══════════════════════════════════════
+   OPTION A — Elevated White
+   ══════════════════════════════════════ */
+.a-row-card {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f6f8 100%);
+  border: 1.5px solid #999;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08), 0 6px 20px rgba(0,0,0,0.10);
+}
+.a-info-card {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f6f8 100%);
+  border: 1.5px solid #999;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08), 0 6px 20px rgba(0,0,0,0.10);
+}
+
+/* ══════════════════════════════════════
+   OPTION B — Frosted Glass
+   ══════════════════════════════════════ */
+.b-row-card {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.b-info-card {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+/* ══════════════════════════════════════
+   OPTION C — Dark Elevated + Accent
+   ══════════════════════════════════════ */
+.c-row-card {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+}
+.c-row-card.c2 { border-left-color: var(--blue); }
+.c-row-card.c3 { border-left-color: var(--purple); }
+.c-row-card.c4 { border-left-color: var(--cyan); }
+.c-row-card.c5 { border-left-color: var(--green); }
+
+.c-info-card {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+}
+.c-info-card.c2 { border-left-color: var(--blue); }
+.c-info-card.c3 { border-left-color: var(--purple); }
+.c-info-card.c4 { border-left-color: var(--cyan); }
+
+/* ══════════════════════════════════════
+   OPTION F — Frosted Glass + Amber Palette
+   ══════════════════════════════════════ */
+.f-row-card {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-left: 3px solid #f59e0b;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.f-row-card.p2 { border-left-color: #fb923c; }
+.f-row-card.p3 { border-left-color: #fcd34d; }
+.f-row-card.p4 { border-left-color: #4ade80; }
+.f-row-card.p5 { border-left-color: #a3e635; }
+
+.f-info-card {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-left: 3px solid #f59e0b;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.f-info-card.p2 { border-left-color: #fb923c; }
+.f-info-card.p3 { border-left-color: #fcd34d; }
+.f-info-card.p4 { border-left-color: #4ade80; }
+.f-info-card.p5 { border-left-color: #a3e635; }
+
+/* ══════════════════════════════════════
+   OPTION G — Frosted Glass + Uniform Amber Title
+   ══════════════════════════════════════ */
+.g-row-card {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.g-info-card {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.g-row-card .c-era-name  { color: #b07020; }
+.g-info-card .c-tool-name { color: #b07020; }
+
+/* ══════════════════════════════════════
+   COMPONENT REFERENCE — master section chrome
+   ══════════════════════════════════════ */
+.comp-ref-section {
+  margin-top: 72px;
+  padding-top: 56px;
+  border-top: 2px solid var(--border);
+}
+.comp-ref-hd {
+  margin-bottom: 40px;
+}
+.comp-ref-hd h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 6px;
+}
+.comp-ref-hd p {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  margin: 0;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.comp-group {
+  margin-bottom: 48px;
+}
+.comp-group-hd {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.comp-group-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 9px;
+  border-radius: 4px;
+}
+.comp-group-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.comp-item {
+  margin-bottom: 22px;
+}
+.comp-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.comp-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--purple);
+  background: var(--purple-soft);
+  border: 1px solid rgba(176,140,245,0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+.comp-usage {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+/* ─── V2 component styles (mirrored from guide.njk) ─── */
+.v2-section-hd {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap;
+}
+.v2-section-num {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim);
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  padding: 3px 9px; border-radius: 4px; white-space: nowrap;
+}
+.v2-section-title {
+  font-size: 1.5rem; font-weight: 700; color: var(--text-primary);
+  line-height: 1.2; margin: 0;
+}
+.v2-section-title em { font-style: normal; color: var(--accent); }
+.v2-section-sub {
+  width: 100%; font-size: 0.88rem; color: var(--text-muted);
+  margin: 2px 0 0; line-height: 1.6; font-weight: 300;
+}
+.v2-version-stamp {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem;
+  color: var(--text-dim); padding: 8px 0; letter-spacing: 0.5px;
+}
+.v2-quickstart {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--cyan-soft); border: 1px solid rgba(78,205,196,0.2);
+  border-left: 4px solid var(--cyan); border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+}
+.v2-qs-icon { font-size: 1.3rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+.v2-qs-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--cyan); margin-bottom: 5px;
+}
+.v2-qs-text { font-size: 0.88rem; color: var(--text-primary); line-height: 1.65; }
+.v2-try-this {
+  background: var(--cyan-soft); border: 1px solid rgba(78,205,196,0.2);
+  border-left: 4px solid var(--cyan); border-radius: 0 8px 8px 0; padding: 12px 18px;
+}
+.v2-try-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--cyan); margin-bottom: 6px;
+}
+.v2-try-this p { font-size: 0.88rem; color: var(--text-primary); margin: 3px 0 0; }
+.v2-callout {
+  padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 0;
+  font-size: 0.87rem; line-height: 1.65; color: var(--text-secondary);
+}
+.v2-callout p { margin: 0; font-size: 0.87rem; }
+.v2-callout.info    { background: var(--blue-soft);   border-left: 3px solid var(--blue); }
+.v2-callout.warning { background: var(--accent-soft); border-left: 3px solid var(--accent); }
+.v2-callout.danger  { background: var(--red-soft);    border-left: 3px solid var(--red); }
+.v2-callout.success { background: var(--green-soft);  border-left: 3px solid var(--green); }
+.v2-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.v2-col { padding: 14px; border-radius: 8px; border: 1px solid var(--border); }
+.v2-col.good    { background: var(--green-soft); border-color: rgba(94,194,105,0.2); }
+.v2-col.bad     { background: var(--red-soft);   border-color: rgba(232,92,92,0.15); }
+.v2-col.neutral { background: var(--bg-elevated); }
+.v2-col-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 9px;
+}
+.v2-col.good .v2-col-label    { color: var(--green); }
+.v2-col.bad .v2-col-label     { color: var(--red); }
+.v2-col.neutral .v2-col-label { color: var(--accent); }
+.v2-context-card {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 8px; padding: 14px 18px;
+}
+.v2-context-header { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; }
+.v2-context-tag {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; font-weight: 700;
+  color: var(--purple); background: var(--purple-soft); padding: 2px 9px; border-radius: 4px;
+}
+.v2-context-title { font-size: 0.86rem; font-weight: 600; color: var(--text-primary); }
+.v2-context-desc { font-size: 0.83rem; color: var(--text-secondary); margin-bottom: 9px; line-height: 1.6; }
+.v2-context-meta {
+  display: grid; grid-template-columns: 80px 1fr; gap: 5px 8px;
+  font-size: 0.81rem; padding-top: 9px; border-top: 1px solid var(--border-subtle);
+}
+.v2-context-key {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); padding-top: 2px;
+}
+.v2-context-val { color: var(--text-secondary); line-height: 1.5; font-size: 0.83rem; }
+.v2-pattern-card {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px 20px;
+}
+.v2-pattern-num {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 4px;
+}
+.v2-pattern-title { font-size: 0.98rem; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; }
+.v2-pattern-section { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-subtle); }
+.v2-pattern-section p { font-size: 0.84rem; color: var(--text-secondary); margin: 0; line-height: 1.6; }
+.v2-pattern-section-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.57rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); margin-bottom: 5px;
+}
+.v2-transcript {
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.v2-transcript-header {
+  padding: 8px 14px; background: var(--bg-elevated); border-bottom: 1px solid var(--border);
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim);
+}
+.v2-turn {
+  display: grid; grid-template-columns: 72px 1fr; gap: 10px;
+  padding: 10px 14px; border-bottom: 1px solid var(--border-subtle);
+}
+.v2-turn:last-child { border-bottom: none; }
+.v2-turn-role {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; padding-top: 2px;
+}
+.v2-turn-role.user   { color: var(--blue); }
+.v2-turn-role.agent  { color: var(--purple); }
+.v2-turn-role.system { color: var(--green); }
+.v2-turn-text { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.65; }
+.v2-turn-text code {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.82em;
+  background: var(--code-bg, var(--bg-elevated)); border: 1px solid var(--border-subtle);
+  padding: 1px 5px; border-radius: 3px; color: var(--text-primary);
+}
+.v2-decision-grid { display: grid; gap: 8px; }
+.v2-decision-row {
+  display: grid; grid-template-columns: 1fr auto; gap: 14px;
+  padding: 10px 14px; background: var(--bg-elevated);
+  border-radius: 6px; border: 1px solid var(--border); align-items: center;
+}
+.v2-decision-when { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; }
+.v2-decision-use {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; font-weight: 700;
+  color: var(--accent); white-space: nowrap;
+}
+.v2-self-check {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 8px; padding: 18px 22px;
+}
+.v2-self-check-title { font-size: 1.0rem; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+.v2-self-check-sub   { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px; }
+.v2-check-list { list-style: none; display: grid; gap: 8px; padding: 0; margin: 0; }
+.v2-check-item { display: flex; align-items: flex-start; gap: 9px; font-size: 0.89rem; color: var(--text-secondary); line-height: 1.5; }
+.v2-checkbox {
+  width: 17px; height: 17px; border: 2px solid var(--border); border-radius: 3px;
+  flex-shrink: 0; margin-top: 2px; cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 700; color: transparent;
+}
+.v2-checkbox:hover { border-color: var(--green); }
+/* Step List — named component for numbered/arrow step sequences */
+.v2-step-list { display: grid; gap: 6px; }
+.v2-step {
+  display: grid; grid-template-columns: 32px 1fr; gap: 10px;
+  padding: 10px 14px; background: var(--bg-elevated);
+  border-radius: 6px; border: 1px solid var(--border);
+}
+.v2-step-num {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+  color: var(--accent); font-weight: 700; padding-top: 1px;
+}
+.v2-step-body { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6; }
+.v2-step-body strong { color: var(--text-primary); font-weight: 600; }
+
+/* Subsection Heading (h3) and Scenario Block label (h4) */
+.v2-sub-heading {
+  font-size: 1.0rem; font-weight: 600; color: var(--text-primary);
+  margin: 0 0 8px; line-height: 1.4;
+}
+.v2-scenario-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--accent);
+  margin: 16px 0 5px;
+}
+.v2-scenario-body { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; margin: 0 0 6px; }
+.v2-scenario-block { margin-bottom: 4px; }
+
+/* Reference Table */
+.v2-ref-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+.v2-ref-table th {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim);
+  padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+.v2-ref-table td {
+  padding: 8px 12px; color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle);
+  line-height: 1.5; vertical-align: top;
+}
+.v2-ref-table tr:last-child td { border-bottom: none; }
+.v2-ref-table code {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.82em;
+  background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+  padding: 1px 5px; border-radius: 3px; color: var(--text-primary);
+}
+.v2-ref-table kbd {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.8em;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-bottom: 2px solid var(--border); padding: 1px 6px;
+  border-radius: 4px; color: var(--text-primary); white-space: nowrap;
+}
+
+/* Code Block */
+.v2-code-wrap { position: relative; }
+.code-block {
+  background: var(--code-bg, #1a1a2e); border-radius: 8px;
+  border: 1px solid var(--border); overflow: hidden;
+}
+.code-block pre {
+  margin: 0; padding: 14px 16px; font-size: 0.82rem; line-height: 1.75;
+  font-family: 'IBM Plex Mono', monospace; color: var(--text-secondary);
+  white-space: pre-wrap; overflow-x: auto;
+}
+
+/* Command Result Card */
+.v2-cmd-card {
+  padding: 13px 16px; background: var(--bg-elevated);
+  border-radius: 8px; border-left: 3px solid var(--border);
+}
+.v2-cmd-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; font-weight: 700;
+  text-transform: none; letter-spacing: 0.5px; margin-bottom: 5px;
+}
+.v2-cmd-body { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.65; }
+.v2-cmd-card.blue   { border-left-color: var(--blue); }
+.v2-cmd-card.blue   .v2-cmd-label { color: var(--blue); }
+.v2-cmd-card.amber  { border-left-color: var(--accent); }
+.v2-cmd-card.amber  .v2-cmd-label { color: var(--accent); }
+.v2-cmd-card.green  { border-left-color: var(--green); }
+.v2-cmd-card.green  .v2-cmd-label { color: var(--green); }
+.v2-cmd-card.purple { border-left-color: var(--purple); }
+.v2-cmd-card.purple .v2-cmd-label { color: var(--purple); }
+
+/* Progress Marker */
+.v2-progressive-marker {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1.5px; color: var(--purple);
+  background: var(--purple-soft); border: 1px solid rgba(176,140,245,0.2);
+  padding: 2px 9px; border-radius: 4px; margin-bottom: 5px; margin-top: 14px;
+  display: block;
+}
+
+/* Setting Card */
+.v2-setting-card {
+  padding: 13px 16px; background: var(--bg-elevated);
+  border-radius: 8px; border: 1px solid var(--border);
+}
+.v2-setting-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent); margin-bottom: 5px;
+}
+.v2-setting-body { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+
+</style>
+
+<div class="demo-shell">
+  <div class="demo-header">
+    <h1>Card Style Options</h1>
+    <p>Row cards (left) &nbsp;·&nbsp; Info cards (right) &nbsp;·&nbsp; Same content, four different styles</p>
+  </div>
+
+  <!-- ══ OPTION A ══ -->
+  <div class="option-block">
+    <div class="option-label">
+      <span class="option-num">A</span>
+      <span class="option-name">Elevated White</span>
+      <span class="option-desc">white gradient · dark grey border · layered shadow</span>
+    </div>
+
+    <p class="card-section-label">Row cards</p>
+    <div class="cards-grid">
+      <div class="a-row-card">
+        <div><div class="c-era-badge">ERA 1</div><div class="c-era-name">Rule-Based Bots</div><div class="c-era-date">~2010–2017</div></div>
+        <div class="c-body"><strong>If-then decision trees.</strong> FAQ bots. Could only respond to <strong>exact match phrases</strong>. Just <strong>branching logic</strong> dressed up as conversation.</div>
+      </div>
+      <div class="a-row-card">
+        <div><div class="c-era-badge">ERA 2</div><div class="c-era-name">Early NLP Models</div><div class="c-era-date">~2017–2020</div></div>
+        <div class="c-body">The first <strong>NLP (Natural Language Processing)</strong> models — could understand <strong>intent and context</strong> in a sentence. Limited to <strong>narrow, single-purpose tasks</strong>.</div>
+      </div>
+      <div class="a-row-card">
+        <div><div class="c-era-badge">ERA 3</div><div class="c-era-name">General LLMs</div><div class="c-era-date">~2020–2022</div></div>
+        <div class="c-body"><strong>GPT-3, Codex.</strong> Could hold <strong>open-ended conversations</strong>, write code. Still <strong>text-in, text-out</strong>. First era where <strong>non-developers</strong> got real value.</div>
+      </div>
+    </div>
+
+    <p class="card-section-label">Info cards</p>
+    <div class="cards-grid">
+      <div class="a-info-card">
+        <div><div class="c-tool-name">Inline Completions</div><div class="c-tool-mode">Passive</div></div>
+        <div class="c-body">Copilot ghost text. Suggests next tokens as you type. You accept or dismiss. <strong>Zero autonomy.</strong></div>
+      </div>
+      <div class="a-info-card">
+        <div><div class="c-tool-name">Copilot Agent Mode</div><div class="c-tool-mode">Semi-autonomous</div></div>
+        <div class="c-body">Reads files, writes edits across multiple files, runs terminal commands. <strong>Shows you proposed changes before applying.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ OPTION B ══ -->
+  <div class="option-block">
+    <div class="option-label">
+      <span class="option-num">B</span>
+      <span class="option-name">Frosted Glass</span>
+      <span class="option-desc">rgba white fill · translucent border · backdrop blur</span>
+    </div>
+
+    <p class="card-section-label">Row cards</p>
+    <div class="cards-grid">
+      <div class="b-row-card">
+        <div><div class="c-era-badge">ERA 1</div><div class="c-era-name">Rule-Based Bots</div><div class="c-era-date">~2010–2017</div></div>
+        <div class="c-body"><strong>If-then decision trees.</strong> FAQ bots. Could only respond to <strong>exact match phrases</strong>. Just <strong>branching logic</strong> dressed up as conversation.</div>
+      </div>
+      <div class="b-row-card">
+        <div><div class="c-era-badge">ERA 2</div><div class="c-era-name">Early NLP Models</div><div class="c-era-date">~2017–2020</div></div>
+        <div class="c-body">The first <strong>NLP (Natural Language Processing)</strong> models — could understand <strong>intent and context</strong> in a sentence. Limited to <strong>narrow, single-purpose tasks</strong>.</div>
+      </div>
+      <div class="b-row-card">
+        <div><div class="c-era-badge">ERA 3</div><div class="c-era-name">General LLMs</div><div class="c-era-date">~2020–2022</div></div>
+        <div class="c-body"><strong>GPT-3, Codex.</strong> Could hold <strong>open-ended conversations</strong>, write code. Still <strong>text-in, text-out</strong>. First era where <strong>non-developers</strong> got real value.</div>
+      </div>
+    </div>
+
+    <p class="card-section-label">Info cards</p>
+    <div class="cards-grid">
+      <div class="b-info-card">
+        <div><div class="c-tool-name">Inline Completions</div><div class="c-tool-mode">Passive</div></div>
+        <div class="c-body">Copilot ghost text. Suggests next tokens as you type. You accept or dismiss. <strong>Zero autonomy.</strong></div>
+      </div>
+      <div class="b-info-card">
+        <div><div class="c-tool-name">Copilot Agent Mode</div><div class="c-tool-mode">Semi-autonomous</div></div>
+        <div class="c-body">Reads files, writes edits across multiple files, runs terminal commands. <strong>Shows you proposed changes before applying.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ OPTION C ══ -->
+  <div class="option-block">
+    <div class="option-label">
+      <span class="option-num">C</span>
+      <span class="option-name">Dark Elevated + Accent</span>
+      <span class="option-desc">dark fill · rotating colour left-border · no shadow</span>
+    </div>
+
+    <p class="card-section-label">Row cards</p>
+    <div class="cards-grid">
+      <div class="c-row-card">
+        <div><div class="c-era-badge">ERA 1</div><div class="c-era-name">Rule-Based Bots</div><div class="c-era-date">~2010–2017</div></div>
+        <div class="c-body"><strong>If-then decision trees.</strong> FAQ bots. Could only respond to <strong>exact match phrases</strong>. Just <strong>branching logic</strong> dressed up as conversation.</div>
+      </div>
+      <div class="c-row-card c2">
+        <div><div class="c-era-badge">ERA 2</div><div class="c-era-name">Early NLP Models</div><div class="c-era-date">~2017–2020</div></div>
+        <div class="c-body">The first <strong>NLP (Natural Language Processing)</strong> models — could understand <strong>intent and context</strong> in a sentence. Limited to <strong>narrow, single-purpose tasks</strong>.</div>
+      </div>
+      <div class="c-row-card c3">
+        <div><div class="c-era-badge">ERA 3</div><div class="c-era-name">General LLMs</div><div class="c-era-date">~2020–2022</div></div>
+        <div class="c-body"><strong>GPT-3, Codex.</strong> Could hold <strong>open-ended conversations</strong>, write code. Still <strong>text-in, text-out</strong>. First era where <strong>non-developers</strong> got real value.</div>
+      </div>
+    </div>
+
+    <p class="card-section-label">Info cards</p>
+    <div class="cards-grid">
+      <div class="c-info-card c4">
+        <div><div class="c-tool-name">Inline Completions</div><div class="c-tool-mode">Passive</div></div>
+        <div class="c-body">Copilot ghost text. Suggests next tokens as you type. You accept or dismiss. <strong>Zero autonomy.</strong></div>
+      </div>
+      <div class="c-info-card c2">
+        <div><div class="c-tool-name">Copilot Agent Mode</div><div class="c-tool-mode">Semi-autonomous</div></div>
+        <div class="c-body">Reads files, writes edits across multiple files, runs terminal commands. <strong>Shows you proposed changes before applying.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ OPTION F ══ -->
+  <div class="option-block">
+    <div class="option-label">
+      <span class="option-num">F</span>
+      <span class="option-name">Frosted Glass + Amber Palette</span>
+      <span class="option-desc">frosted glass body · warm amber-family colours · matches site theme</span>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:6px;font-size:0.76rem;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;">
+        <span style="width:14px;height:14px;border-radius:3px;background:#f59e0b;display:inline-block;flex-shrink:0;"></span> Position 1 — Amber
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:0.76rem;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;">
+        <span style="width:14px;height:14px;border-radius:3px;background:#fb923c;display:inline-block;flex-shrink:0;"></span> Position 2 — Coral
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:0.76rem;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;">
+        <span style="width:14px;height:14px;border-radius:3px;background:#fcd34d;display:inline-block;flex-shrink:0;"></span> Position 3 — Gold
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:0.76rem;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;">
+        <span style="width:14px;height:14px;border-radius:3px;background:#4ade80;display:inline-block;flex-shrink:0;"></span> Position 4 — Emerald
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:0.76rem;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;">
+        <span style="width:14px;height:14px;border-radius:3px;background:#a3e635;display:inline-block;flex-shrink:0;"></span> Position 5 — Lime
+      </div>
+    </div>
+
+    <p class="card-section-label">Row cards — all 5 positions</p>
+    <div class="cards-grid">
+      <div class="f-row-card">
+        <div><div class="c-era-badge">ERA 1</div><div class="c-era-name">Rule-Based Bots</div><div class="c-era-date">~2010–2017</div></div>
+        <div class="c-body"><strong>If-then decision trees.</strong> FAQ bots. Could only respond to <strong>exact match phrases</strong>. Just <strong>branching logic</strong> dressed up as conversation.</div>
+      </div>
+      <div class="f-row-card p2">
+        <div><div class="c-era-badge">ERA 2</div><div class="c-era-name">Early NLP Models</div><div class="c-era-date">~2017–2020</div></div>
+        <div class="c-body">The first <strong>NLP (Natural Language Processing)</strong> models — could understand <strong>intent and context</strong> in a sentence. Limited to <strong>narrow, single-purpose tasks</strong>.</div>
+      </div>
+      <div class="f-row-card p3">
+        <div><div class="c-era-badge">ERA 3</div><div class="c-era-name">General LLMs</div><div class="c-era-date">~2020–2022</div></div>
+        <div class="c-body"><strong>GPT-3, Codex.</strong> Could hold <strong>open-ended conversations</strong>, write code. Still <strong>text-in, text-out</strong>. First era where <strong>non-developers</strong> got real value.</div>
+      </div>
+      <div class="f-row-card p4">
+        <div><div class="c-era-badge">ERA 4</div><div class="c-era-name">Coding Assistants</div><div class="c-era-date">~2022–2023</div></div>
+        <div class="c-body"><strong>GitHub Copilot, ChatGPT.</strong> <strong>LLMs</strong> <strong>embedded directly in your editor</strong>. <strong>Real-time suggestions</strong> as you type. The first time AI felt like a <strong>genuine co-worker</strong>.</div>
+      </div>
+      <div class="f-row-card p5">
+        <div><div class="c-era-badge">ERA 5</div><div class="c-era-name">Agents</div><div class="c-era-date">~2024–now</div></div>
+        <div class="c-body"><strong>Claude Code, Copilot Agent Mode, Cursor.</strong> LLMs that can <strong>take actions</strong> — read files, run code, call APIs — <strong>in a loop</strong> until a task is complete. The real <strong>productivity leap</strong>.</div>
+      </div>
+    </div>
+
+    <p class="card-section-label" style="margin-top:16px;">Info cards — positions 1–4</p>
+    <div class="cards-grid">
+      <div class="f-info-card">
+        <div><div class="c-tool-name">Inline Completions</div><div class="c-tool-mode">Passive</div></div>
+        <div class="c-body">Copilot ghost text. Suggests next tokens as you type. You accept or dismiss. <strong>Zero autonomy.</strong></div>
+      </div>
+      <div class="f-info-card p2">
+        <div><div class="c-tool-name">Chat</div><div class="c-tool-mode">Conversational</div></div>
+        <div class="c-body">Ask a question, get a text response. You copy code manually. <strong>One turn at a time.</strong></div>
+      </div>
+      <div class="f-info-card p3">
+        <div><div class="c-tool-name">Copilot Agent Mode</div><div class="c-tool-mode">Semi-autonomous</div></div>
+        <div class="c-body">Reads files, writes edits across multiple files, runs terminal commands. <strong>Shows you proposed changes before applying.</strong></div>
+      </div>
+      <div class="f-info-card p4">
+        <div><div class="c-tool-name">Claude Code / Opencode</div><div class="c-tool-mode">Fully autonomous</div></div>
+        <div class="c-body">Terminal-based agents. Full filesystem and shell access. Reads, writes, runs, iterates. <strong>Highest capability — and highest need for oversight.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ OPTION G ══ -->
+  <div class="option-block">
+    <div class="option-label">
+      <span class="option-num">G</span>
+      <span class="option-name">Frosted Glass + Uniform Amber Title</span>
+      <span class="option-desc">frosted glass body · no border accent · single amber colour on all titles</span>
+    </div>
+
+    <p class="card-section-label">Row cards</p>
+    <div class="cards-grid">
+      <div class="g-row-card">
+        <div><div class="c-era-badge">ERA 1</div><div class="c-era-name">Rule-Based Bots</div><div class="c-era-date">~2010–2017</div></div>
+        <div class="c-body"><strong>If-then decision trees.</strong> FAQ bots. Could only respond to <strong>exact match phrases</strong>. Just <strong>branching logic</strong> dressed up as conversation.</div>
+      </div>
+      <div class="g-row-card">
+        <div><div class="c-era-badge">ERA 2</div><div class="c-era-name">Early NLP Models</div><div class="c-era-date">~2017–2020</div></div>
+        <div class="c-body">The first <strong>NLP (Natural Language Processing)</strong> models — could understand <strong>intent and context</strong> in a sentence. Limited to <strong>narrow, single-purpose tasks</strong>.</div>
+      </div>
+      <div class="g-row-card">
+        <div><div class="c-era-badge">ERA 3</div><div class="c-era-name">General LLMs</div><div class="c-era-date">~2020–2022</div></div>
+        <div class="c-body"><strong>GPT-3, Codex.</strong> Could hold <strong>open-ended conversations</strong>, write code. Still <strong>text-in, text-out</strong>. First era where <strong>non-developers</strong> got real value.</div>
+      </div>
+      <div class="g-row-card">
+        <div><div class="c-era-badge">ERA 4</div><div class="c-era-name">Coding Assistants</div><div class="c-era-date">~2022–2023</div></div>
+        <div class="c-body"><strong>GitHub Copilot, ChatGPT.</strong> LLMs <strong>embedded directly in your editor</strong>. <strong>Real-time suggestions</strong> as you type. The first time AI felt like a <strong>genuine co-worker</strong>.</div>
+      </div>
+      <div class="g-row-card">
+        <div><div class="c-era-badge">ERA 5</div><div class="c-era-name">Agents</div><div class="c-era-date">~2024–now</div></div>
+        <div class="c-body"><strong>Claude Code, Copilot Agent Mode, Cursor.</strong> LLMs that can <strong>take actions</strong> — read files, run code, call APIs — <strong>in a loop</strong> until a task is complete. The real <strong>productivity leap</strong>.</div>
+      </div>
+    </div>
+
+    <p class="card-section-label" style="margin-top:16px;">Info cards</p>
+    <div class="cards-grid">
+      <div class="g-info-card">
+        <div><div class="c-tool-name">Inline Completions</div><div class="c-tool-mode">Passive</div></div>
+        <div class="c-body">Copilot ghost text. Suggests next tokens as you type. You accept or dismiss. <strong>Zero autonomy.</strong></div>
+      </div>
+      <div class="g-info-card">
+        <div><div class="c-tool-name">Chat</div><div class="c-tool-mode">Conversational</div></div>
+        <div class="c-body">Ask a question, get a text response. You copy code manually. <strong>One turn at a time.</strong></div>
+      </div>
+      <div class="g-info-card">
+        <div><div class="c-tool-name">Copilot Agent Mode</div><div class="c-tool-mode">Semi-autonomous</div></div>
+        <div class="c-body">Reads files, writes edits across multiple files, runs terminal commands. <strong>Shows you proposed changes before applying.</strong></div>
+      </div>
+      <div class="g-info-card">
+        <div><div class="c-tool-name">Claude Code / Opencode</div><div class="c-tool-mode">Fully autonomous</div></div>
+        <div class="c-body">Terminal-based agents. Full filesystem and shell access. Reads, writes, runs, iterates. <strong>Highest capability — and highest need for oversight.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ COMPONENT REFERENCE ══ -->
+  <div class="comp-ref-section">
+    <div class="comp-ref-hd">
+      <h2>V2 Component Reference</h2>
+      <p>Every named component used across V2 session pages · use these names when requesting content changes</p>
+    </div>
+
+    <!-- ══ GROUP 1: PAGE STRUCTURE ══ -->
+    <div class="comp-group">
+      <div class="comp-group-hd">
+        <span class="comp-group-name">Page Structure</span>
+        <span class="comp-group-desc">Components that frame every page — not content, but the layout anchors that appear on every slide</span>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Section Header</span><span class="comp-usage">Top of every page — section number · title with accent word · subtitle</span></div>
+        <div class="v2-section-hd">
+          <span class="v2-section-num">04 / 08</span>
+          <h2 class="v2-section-title">Agents <em>in Practice</em></h2>
+          <p class="v2-section-sub">What an agent actually does during a real task — step by step, annotated.</p>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Version Stamp</span><span class="comp-usage">Metadata line below the header — session · phase · verification date · tool version</span></div>
+        <div class="v2-version-stamp">Session 04 &nbsp;·&nbsp; Phase 2: GitHub Copilot Mastery &nbsp;·&nbsp; Last verified: May 2026 &nbsp;·&nbsp; Copilot Extension v1.290+</div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Quick Start Block</span><span class="comp-usage">Lightning bolt intro on the welcome slide — "What you'll get from this session"</span></div>
+        <div class="v2-quickstart">
+          <div class="v2-qs-icon">⚡</div>
+          <div>
+            <div class="v2-qs-label">What you'll get from this session</div>
+            <div class="v2-qs-text">By the end you will be able to trace how AI tools evolved from rule-based chatbots to autonomous agents, explain what the Transformer breakthrough changed, and use the word "agent" correctly.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ GROUP 2: CALLOUT CARDS ══ -->
+    <div class="comp-group">
+      <div class="comp-group-hd">
+        <span class="comp-group-name">Callout Cards</span>
+        <span class="comp-group-desc">Five variants — draw the reader's attention for different purposes, distinguished by colour and intent</span>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Welcome Callout</span><span class="comp-usage">Blue · first slide of each session · bridges from prior session content</span></div>
+        <div class="v2-callout info">
+          <p><strong>From Session 01:</strong> You know that LLMs predict tokens and can hallucinate. This session builds directly on that foundation — showing how that core technology evolved into progressively more powerful tools.</p>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Informational Callout</span><span class="comp-usage">Blue · supplementary context, prerequisites, useful-to-know details mid-page</span></div>
+        <div class="v2-callout info">
+          <p><strong>Note:</strong> The context window limit varies by Copilot plan. If you hit the limit mid-session, start a new chat rather than extending the current one — the model loses earlier context anyway.</p>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Critical Callout</span><span class="comp-usage">Amber · important warnings, mindset shifts, things that frequently trip people up</span></div>
+        <div class="v2-callout warning">
+          <p><strong>Critical point:</strong> An agent can modify files, run commands, and make decisions — all without asking you each time. This requires a different kind of oversight than Chat. You review what it did, not just what it said.</p>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">End of Chapter Callout</span><span class="comp-usage">Green · achievement summary at end of a page — what was accomplished</span></div>
+        <div class="v2-callout success">
+          <p><strong>What just happened:</strong> The agent read 3 files, created 1 new file, ran tests, diagnosed a failure, proposed a fix, and verified the fix — all in one session. You reviewed 2 diffs and approved a plan. That's the Agent Mode value.</p>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Danger Callout</span><span class="comp-usage">Red · "Common Mistake" inside Pattern Cards — something that has actively broken things</span></div>
+        <div class="v2-callout danger">
+          <p>Not referencing an existing file with <code style="font-family:'IBM Plex Mono',monospace;font-size:0.83em;background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">#file:</code>. Without a style reference, Copilot generates valid code using patterns that don't match your project's conventions. Adding <code style="font-family:'IBM Plex Mono',monospace;font-size:0.83em;background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">#file:</code> takes 10 seconds and saves 20 minutes of cleanup.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ GROUP 3: CONTENT CARDS ══ -->
+    <div class="comp-group">
+      <div class="comp-group-hd">
+        <span class="comp-group-name">Content Cards</span>
+        <span class="comp-group-desc">Structured card containers — each type has a distinct layout for a specific kind of content</span>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Row Card</span><span class="comp-usage">Era / timeline entry — badge · name · date · body · visual styles shown in Options A–G above</span></div>
+        <div class="g-row-card">
+          <div><div class="c-era-badge">ERA 3</div><div class="c-era-name">General LLMs</div><div class="c-era-date">~2020–2022</div></div>
+          <div class="c-body"><strong>GPT-3, Codex.</strong> Open-ended conversations, code generation. Still text-in, text-out. First era where non-developers got real value.</div>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Info Card</span><span class="comp-usage">Tool / concept entry — label · mode tag · body · visual styles shown in Options A–G above</span></div>
+        <div class="g-info-card">
+          <div><div class="c-tool-name">Copilot Agent Mode</div><div class="c-tool-mode">Semi-autonomous</div></div>
+          <div class="c-body">Reads files, writes edits across multiple files, runs terminal commands. Shows proposed changes before applying.</div>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Comparison Card</span><span class="comp-usage">Two-column contrast — before/after · good/bad · option A vs B · neutral/neutral</span></div>
+        <div class="v2-two-col">
+          <div class="v2-col neutral">
+            <div class="v2-col-label">Before Transformers (RNNs)</div>
+            <ul style="font-size:0.85rem;color:var(--text-secondary);margin:0;padding-left:16px;line-height:1.9;">
+              <li>Read text word by word, left to right</li>
+              <li>Earlier context "faded" in long sequences</li>
+              <li>Slow to train — couldn't parallelise</li>
+            </ul>
+          </div>
+          <div class="v2-col good">
+            <div class="v2-col-label">With Transformers</div>
+            <ul style="font-size:0.85rem;color:var(--text-secondary);margin:0;padding-left:16px;line-height:1.9;">
+              <li>Processes all tokens simultaneously</li>
+              <li>Attention mechanism learns what matters</li>
+              <li>Scales with more data and more compute</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Transcript Card</span><span class="comp-usage">Annotated multi-turn AI dialogue — role-labelled turns: You · Agent · Approval</span></div>
+        <div class="v2-transcript">
+          <div class="v2-transcript-header">Agent Mode Transcript — Goal to first approval checkpoint</div>
+          <div class="v2-turn">
+            <div class="v2-turn-role user">You</div>
+            <div class="v2-turn-text"><strong>Goal:</strong> Add Playwright tests for the payment step of the checkout flow.<br><strong>Constraints:</strong> Create files only in tests/checkout/ — do not modify existing files.</div>
+          </div>
+          <div class="v2-turn">
+            <div class="v2-turn-role agent">Agent</div>
+            <div class="v2-turn-text"><em>[Reading phase — this is normal and important]</em><br>Reading <code>tests/checkout/cart.spec.ts</code>... Reading <code>tests/pages/checkoutPage.ts</code>...<br>Plan: add payment methods to CheckoutPage, then create payment.spec.ts with 3 test cases.</div>
+          </div>
+          <div class="v2-turn">
+            <div class="v2-turn-role system">Approval</div>
+            <div class="v2-turn-text"><strong>Review the plan before continuing.</strong> Is it reading the right files? Does the scope match your intent — only tests/checkout/, no existing file modifications? If yes, continue. If not, add a constraint now.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Context Reference Card</span><span class="comp-usage">@reference or #file: syntax — tag · title · description · best-for / QA example / watch-out grid</span></div>
+        <div class="v2-context-card">
+          <div class="v2-context-header">
+            <span class="v2-context-tag">@workspace</span>
+            <span class="v2-context-title">Entire project context</span>
+          </div>
+          <div class="v2-context-desc">Gives Copilot access to your full project. It indexes your files and retrieves the most relevant sections automatically based on your prompt.</div>
+          <div class="v2-context-meta">
+            <span class="v2-context-key">Best for</span><span class="v2-context-val">Cross-file questions, generating code that fits project conventions</span>
+            <span class="v2-context-key">QA Example</span><span class="v2-context-val">"@workspace add a login failure test matching the style in auth.spec.ts"</span>
+            <span class="v2-context-key">Watch out</span><span class="v2-context-val">Large repos may exceed context limits — use #file: for precision</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Pattern Card</span><span class="comp-usage">Numbered reusable workflow — pattern name · labelled sections · common mistake</span></div>
+        <div class="v2-pattern-card">
+          <div class="v2-pattern-num">Pattern 1</div>
+          <div class="v2-pattern-title">Generate from comment + context</div>
+          <div class="v2-pattern-section">
+            <div class="v2-pattern-section-label">The pattern</div>
+            <p>Write a comment describing the test intent, add @workspace for project context, then let inline completions generate the test body.</p>
+          </div>
+          <div class="v2-pattern-section">
+            <div class="v2-pattern-section-label">When to use</div>
+            <p>New test files, boilerplate-heavy tests, when you want Copilot to match existing test style.</p>
+          </div>
+          <div class="v2-pattern-section">
+            <div class="v2-pattern-section-label">Common mistake</div>
+            <p>Accepting completions without checking selectors. Generated selectors are often plausible but wrong — always verify against your Page Object.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Command Result Card</span><span class="comp-usage">Coloured left border · monospace command label · plain-English result — one card per command or output</span></div>
+        <div style="display:grid;gap:8px;">
+          <div class="v2-cmd-card blue">
+            <div class="v2-cmd-label">/explain</div>
+            <div class="v2-cmd-body">Returns a plain-English description: what the code does, what selectors it uses, what it asserts, and what it does <em>not</em> verify.</div>
+          </div>
+          <div class="v2-cmd-card amber">
+            <div class="v2-cmd-label">/fix</div>
+            <div class="v2-cmd-body">Suggests improvements: prefer <code style="font-family:'IBM Plex Mono',monospace;font-size:0.83em;background:var(--bg-elevated);border:1px solid var(--border-subtle);padding:1px 4px;border-radius:3px;">page.locator()</code> over raw CSS selectors; strengthen assertions to check specific dashboard elements.</div>
+          </div>
+          <div class="v2-cmd-card green">
+            <div class="v2-cmd-label">/tests</div>
+            <div class="v2-cmd-body">Generates additional test cases based on this one: invalid email format, wrong password, empty fields, account locked, session persistence.</div>
+          </div>
+          <div class="v2-cmd-card purple">
+            <div class="v2-cmd-label">/doc</div>
+            <div class="v2-cmd-body">Adds a JSDoc comment above the test: selector assumptions, preconditions (user account must exist), expected state after the test completes.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Setting Card</span><span class="comp-usage">Configuration option — monospace setting key on top · plain-English description below</span></div>
+        <div style="display:grid;gap:8px;">
+          <div class="v2-setting-card">
+            <div class="v2-setting-label">Inline Suggestions: Enable</div>
+            <div class="v2-setting-body">Global on/off toggle. Leave on. If you want to disable for a specific project, use the per-workspace setting instead of the global one.</div>
+          </div>
+          <div class="v2-setting-card">
+            <div class="v2-setting-label">Chat: Preferred Model</div>
+            <div class="v2-setting-body">Choose which model backs Copilot Chat (GPT-4o, Claude Sonnet, etc. — depending on your plan). For complex test generation, a more capable model produces better results.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ GROUP 4: LISTS, STEPS & DECISIONS ══ -->
+    <div class="comp-group">
+      <div class="comp-group-hd">
+        <span class="comp-group-name">Lists, Steps &amp; Decisions</span>
+        <span class="comp-group-desc">Sequential and choice-based content — numbered steps, decision frameworks, and progression markers</span>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Step List</span><span class="comp-usage">Numbered action sequence — step number · bold label · description</span></div>
+        <div class="v2-step-list">
+          <div class="v2-step">
+            <div class="v2-step-num">1</div>
+            <div class="v2-step-body"><strong>Read existing tests</strong> — scans your test files to understand naming conventions, assertions, and Page Object patterns</div>
+          </div>
+          <div class="v2-step">
+            <div class="v2-step-num">2</div>
+            <div class="v2-step-body"><strong>Write the test</strong> — generates a test file that matches your project's style, using the patterns it found</div>
+          </div>
+          <div class="v2-step">
+            <div class="v2-step-num">3</div>
+            <div class="v2-step-body"><strong>Run and fix</strong> — executes the test, reads the error output if it fails, iterates until passing</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Decision Grid</span><span class="comp-usage">"When to use what" framework — scenario on the left · tool or answer on the right</span></div>
+        <div class="v2-decision-grid">
+          <div class="v2-decision-row">
+            <div class="v2-decision-when">You want to generate a new test that matches existing project patterns</div>
+            <div class="v2-decision-use">Chat + @workspace</div>
+          </div>
+          <div class="v2-decision-row">
+            <div class="v2-decision-when">You want to add a test, run it, fix failures, and verify — without stepping through each action manually</div>
+            <div class="v2-decision-use">Agent Mode</div>
+          </div>
+          <div class="v2-decision-row">
+            <div class="v2-decision-when">You want a quick single-function or boilerplate completion while writing code</div>
+            <div class="v2-decision-use">Inline completions</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Progress Marker</span><span class="comp-usage">Purple pill divider — labels each stage in a multi-step progression example before its code block</span></div>
+        <div class="v2-progressive-marker">Stage 1 — Prompt → raw output</div>
+        <div class="v2-code-wrap" style="margin-top:6px;">
+          <div class="code-block">
+            <pre style="margin:0;font-size:0.82rem;line-height:1.75;">// ⚠ Raw output — review before using
+test('login', async ({ page }) => {
+  await page.goto('/login');
+  await page.fill('input[type="email"]', 'user@test.com');
+  await page.click('button[type="submit"]');
+});</pre>
+          </div>
+        </div>
+        <div class="v2-progressive-marker">Stage 2 — After review: better selectors, stronger assertions</div>
+        <div class="v2-code-wrap" style="margin-top:6px;">
+          <div class="code-block">
+            <pre style="margin:0;font-size:0.82rem;line-height:1.75;">test('user can log in with valid credentials', async ({ page }) => {
+  await page.getByLabel('Email address').fill('user@example.com');
+  await page.getByRole('button', { name: 'Sign in' }).click();
+  await expect(page).toHaveURL('/dashboard');
+});</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ GROUP 5: TEXT STRUCTURE ══ -->
+    <div class="comp-group">
+      <div class="comp-group-hd">
+        <span class="comp-group-name">Text Structure</span>
+        <span class="comp-group-desc">Heading hierarchy within a page — groups related content and labels individual items or scenarios</span>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Subsection Heading</span><span class="comp-usage">h3 — introduces a named group of items within a single page</span></div>
+        <p class="v2-sub-heading">Four Inline Chat scenarios you'll use every week</p>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Scenario Block</span><span class="comp-usage">h4 label + paragraphs — one named scenario, use case, or technique with explanation</span></div>
+        <div class="v2-scenario-block">
+          <div class="v2-scenario-label">Scenario 1 — Explain a specific assertion</div>
+          <p class="v2-scenario-body">Select an assertion you don't recognise → press <kbd style="font-family:'IBM Plex Mono',monospace;font-size:0.8em;background:var(--bg-elevated);border:1px solid var(--border);border-bottom:2px solid var(--border);padding:1px 6px;border-radius:4px;">Ctrl+I</kbd> → type: <em>"Explain exactly what this assertion is checking and when it would fail."</em></p>
+          <p class="v2-scenario-body" style="color:var(--text-dim);">Why this beats Chat: the context is exact — just the lines you selected, nothing to copy-paste.</p>
+        </div>
+        <div class="v2-scenario-block" style="margin-top:10px;">
+          <div class="v2-scenario-label">Scenario 2 — Generate a test body at the cursor</div>
+          <p class="v2-scenario-body">Position your cursor inside an empty test function body → <kbd style="font-family:'IBM Plex Mono',monospace;font-size:0.8em;background:var(--bg-elevated);border:1px solid var(--border);border-bottom:2px solid var(--border);padding:1px 6px;border-radius:4px;">Ctrl+I</kbd> → type the implementation instruction. Copilot generates the body inline as a diff.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ GROUP 6: CODE & REFERENCE ══ -->
+    <div class="comp-group">
+      <div class="comp-group-hd">
+        <span class="comp-group-name">Code &amp; Reference</span>
+        <span class="comp-group-desc">Technical content blocks — code display, prompt templates, and lookup tables</span>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Code Block</span><span class="comp-usage">Monospace pre-formatted display — prompt templates, code samples, debugging briefs</span></div>
+        <div class="v2-code-wrap">
+          <div class="code-block">
+            <pre style="margin:0;font-size:0.82rem;line-height:1.75;white-space:pre-wrap;">I need Playwright TypeScript tests for user registration.
+
+Acceptance criteria:
+- Email must be unique — duplicate shows error: "An account with this email already exists"
+- Password: minimum 8 chars, one uppercase, one number
+- On success, redirect to /dashboard
+
+Use the Page Object pattern. Reference: #file:tests/auth/login.spec.ts
+Output to: tests/registration/register.spec.ts</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Reference Table</span><span class="comp-usage">Command or shortcut lookup — monospace header row · code or kbd cells in the body</span></div>
+        <table class="v2-ref-table">
+          <thead><tr><th>Command</th><th>What it does</th><th>Best used on</th></tr></thead>
+          <tbody>
+            <tr><td><code>/explain</code></td><td>Plain-English explanation of selected or referenced code</td><td>Unfamiliar code, inherited test suites</td></tr>
+            <tr><td><code>/fix</code></td><td>Suggests a fix for broken or failing code</td><td>Selected failing test or error-producing function</td></tr>
+            <tr><td><code>/tests</code></td><td>Generates tests for the selected code or referenced file</td><td>Source functions you want to add test coverage for</td></tr>
+            <tr><td><code>/doc</code></td><td>Writes JSDoc/TSDoc for selected code</td><td>Page Object methods, utility functions</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Reference Table</span><span class="comp-usage">Keyboard shortcut variant — action · Windows/Linux · Mac columns with kbd cells</span></div>
+        <table class="v2-ref-table">
+          <thead><tr><th>Action</th><th>Windows / Linux</th><th>Mac</th></tr></thead>
+          <tbody>
+            <tr><td>Accept inline suggestion</td><td><kbd>Tab</kbd></td><td><kbd>Tab</kbd></td></tr>
+            <tr><td>Dismiss inline suggestion</td><td><kbd>Esc</kbd></td><td><kbd>Esc</kbd></td></tr>
+            <tr><td>Open Chat panel</td><td><kbd>Ctrl+Alt+I</kbd></td><td><kbd>Cmd+Shift+I</kbd></td></tr>
+            <tr><td>Inline Chat at cursor</td><td><kbd>Ctrl+I</kbd></td><td><kbd>Cmd+I</kbd></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ GROUP 7: INTERACTIVE BLOCKS ══ -->
+    <div class="comp-group">
+      <div class="comp-group-hd">
+        <span class="comp-group-name">Interactive Blocks</span>
+        <span class="comp-group-desc">Learner-facing interaction — self-assessment checkboxes and hands-on activity prompts</span>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Self-Assessment Block</span><span class="comp-usage">Knowledge check — clickable checkboxes the learner ticks before moving on</span></div>
+        <div class="v2-self-check">
+          <div class="v2-self-check-title">Session 02 — Knowledge Check</div>
+          <div class="v2-self-check-sub">Tick each one before moving on. If you can't, re-read that section.</div>
+          <ul class="v2-check-list">
+            <li class="v2-check-item"><div class="v2-checkbox"></div>I can name the five eras of AI tools and what changed at each stage</li>
+            <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain what the Transformer architecture changed and why it mattered</li>
+            <li class="v2-check-item"><div class="v2-checkbox"></div>I can use the word "agent" correctly — LLM + tools + loop</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="comp-item">
+        <div class="comp-name-row"><span class="comp-name">Try This Block</span><span class="comp-usage">Hands-on activity — time estimate · specific instruction the learner can do right now</span></div>
+        <div class="v2-try-this">
+          <div class="v2-try-label">Try This — 5 minutes</div>
+          <p>Open VS Code, create a new file called <code style="font-family:'IBM Plex Mono',monospace;font-size:0.84em;background:var(--bg-elevated);border:1px solid var(--border-subtle);padding:1px 5px;border-radius:3px;">practice.spec.ts</code> and type a comment describing a login test. Pause after the opening brace and watch Copilot's ghost text appear. Accept with Tab — then check every selector it generated against your actual page.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /comp-ref-section -->
+
+</div>
