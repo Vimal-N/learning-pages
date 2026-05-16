@@ -518,10 +518,11 @@ body { overflow: hidden; }
   text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); margin-bottom: 5px;
 }
 
-.v2-code-wrap { position: relative; margin: 10px 0; }
+.v2-code-wrap { display: flex; flex-direction: column; margin: 10px 0; }
 .v2-code-wrap .code-block { margin: 0; }
+.v2-code-wrap pre { white-space: pre-wrap; word-break: break-word; overflow-wrap: break-word; }
 .v2-copy-btn {
-  position: absolute; top: 8px; right: 8px;
+  align-self: flex-end; margin-bottom: 4px;
   font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 600;
   text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);
   background: var(--bg-elevated); border: 1px solid var(--border);
@@ -833,7 +834,7 @@ a.v2-cross-link:hover { border-bottom-style: solid; }
     var btn = document.createElement('button');
     btn.className = 'v2-copy-btn';
     btn.textContent = 'Copy';
-    wrap.appendChild(btn);
+    wrap.insertBefore(btn, wrap.firstChild);
     btn.addEventListener('click', function () {
       var pre = wrap.querySelector('pre');
       if (!pre) return;

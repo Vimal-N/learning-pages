@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100%" viewBox="0 0 680 1720" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>How text processing evolved — from Bag of Words to Transformer, enabling ERA 2 through ERA 5</title>
+<desc>Three-era comparison showing Bag of Words, RNN sequential processing, and Transformer attention mechanism applied to the phrase "Chocolate is good"</desc>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;display=swap');
+
+  text { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; }
+  .th { font-size: 14px; font-weight: 500; }
+  .ts { font-size: 12px; font-weight: 400; }
+  .t  { font-size: 14px; font-weight: 400; }
+
+  /* Light mode defaults */
+  .th { fill: #1a1a1a; }
+  .ts { fill: #666; }
+  .t  { fill: #1a1a1a; }
+
+  /* Color ramps - light mode fills and strokes */
+  .c-gray > rect    { fill: #F1EFE8; stroke: #5F5E5A; }
+  .c-gray .th        { fill: #2C2C2A; }
+  .c-gray .ts        { fill: #5F5E5A; }
+
+  .c-coral > rect   { fill: #FAECE7; stroke: #993C1D; }
+  .c-coral .th       { fill: #4A1B0C; }
+  .c-coral .ts       { fill: #993C1D; }
+
+  .c-amber > rect   { fill: #FAEEDA; stroke: #854F0B; }
+  .c-amber .th       { fill: #412402; }
+  .c-amber .ts       { fill: #854F0B; }
+
+  .c-red > rect     { fill: #FCEBEB; stroke: #A32D2D; }
+  .c-red .th         { fill: #501313; }
+  .c-red .ts         { fill: #A32D2D; }
+
+  .c-teal > rect    { fill: #E1F5EE; stroke: #0F6E56; }
+  .c-teal .th        { fill: #04342C; }
+  .c-teal .ts        { fill: #0F6E56; }
+
+  .c-purple > rect  { fill: #EEEDFE; stroke: #534AB7; }
+  .c-purple .th      { fill: #26215C; }
+  .c-purple .ts      { fill: #534AB7; }
+
+  .c-green > rect   { fill: #EAF3DE; stroke: #3B6D11; }
+  .c-green .th       { fill: #173404; }
+  .c-green .ts       { fill: #3B6D11; }
+
+  /* Arrows and lines */
+  .arr { stroke: #888780; stroke-width: 1.5; }
+
+  @media (prefers-color-scheme: dark) {
+    .th { fill: #e8e6df; }
+    .ts { fill: #9c9a92; }
+    .t  { fill: #e8e6df; }
+
+    .c-gray > rect    { fill: #2C2C2A; stroke: #B4B2A9; }
+    .c-gray .th        { fill: #F1EFE8; }
+    .c-gray .ts        { fill: #D3D1C7; }
+
+    .c-coral > rect   { fill: #712B13; stroke: #F0997B; }
+    .c-coral .th       { fill: #FAECE7; }
+    .c-coral .ts       { fill: #F5C4B3; }
+
+    .c-amber > rect   { fill: #633806; stroke: #FAC775; }
+    .c-amber .th       { fill: #FAEEDA; }
+    .c-amber .ts       { fill: #FAC775; }
+
+    .c-red > rect     { fill: #791F1F; stroke: #F09595; }
+    .c-red .th         { fill: #FCEBEB; }
+    .c-red .ts         { fill: #F7C1C1; }
+
+    .c-teal > rect    { fill: #085041; stroke: #5DCAA5; }
+    .c-teal .th        { fill: #E1F5EE; }
+    .c-teal .ts        { fill: #9FE1CB; }
+
+    .c-purple > rect  { fill: #3C3489; stroke: #AFA9EC; }
+    .c-purple .th      { fill: #EEEDFE; }
+    .c-purple .ts      { fill: #CECBF6; }
+
+    .c-green > rect   { fill: #27500A; stroke: #97C459; }
+    .c-green .th       { fill: #EAF3DE; }
+    .c-green .ts       { fill: #C0DD97; }
+
+    .arr { stroke: #B4B2A9; }
+  }
+</style>
+
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+</defs>
+
+<!-- ════════════════════════════════════════ -->
+<!-- ERA 1: BAG OF WORDS                      -->
+<!-- ════════════════════════════════════════ -->
+<g class="c-gray">
+<rect x="40" y="30" width="600" height="300" rx="16" stroke-width="0.5"/>
+<text class="th" x="340" y="58" text-anchor="middle">The Old Approach: Bag of Words</text>
+<text class="ts" x="340" y="76" text-anchor="middle">No structure, no order — just counting</text>
+</g>
+
+<text class="th" x="340" y="110" text-anchor="middle">"Chocolate is good"</text>
+
+<line x1="340" y1="118" x2="340" y2="145" class="arr" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<g class="c-coral">
+<rect x="240" y="145" width="200" height="40" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="165" text-anchor="middle" dominant-baseline="central">Tokenize + count</text>
+</g>
+
+<line x1="340" y1="185" x2="340" y2="210" class="arr" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<g class="c-amber">
+<rect x="80" y="210" width="140" height="50" rx="8" stroke-width="0.5"/>
+<text class="th" x="150" y="230" text-anchor="middle" dominant-baseline="central">chocolate</text>
+<text class="ts" x="150" y="248" text-anchor="middle" dominant-baseline="central">count: 1</text>
+</g>
+<g class="c-amber">
+<rect x="270" y="210" width="140" height="50" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="230" text-anchor="middle" dominant-baseline="central">is</text>
+<text class="ts" x="340" y="248" text-anchor="middle" dominant-baseline="central">count: 1</text>
+</g>
+<g class="c-amber">
+<rect x="460" y="210" width="140" height="50" rx="8" stroke-width="0.5"/>
+<text class="th" x="530" y="230" text-anchor="middle" dominant-baseline="central">good</text>
+<text class="ts" x="530" y="248" text-anchor="middle" dominant-baseline="central">count: 1</text>
+</g>
+
+<g class="c-red">
+<rect x="120" y="280" width="440" height="36" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="298" text-anchor="middle" dominant-baseline="central">"Chocolate is good" = "Good is chocolate"</text>
+</g>
+
+<!-- ════════════════════════════════════════ -->
+<!-- ERA 2: RNN / LSTM                        -->
+<!-- ════════════════════════════════════════ -->
+<g class="c-gray">
+<rect x="40" y="370" width="600" height="540" rx="16" stroke-width="0.5"/>
+<text class="th" x="340" y="398" text-anchor="middle">Before 2017: RNN / LSTM</text>
+<text class="ts" x="340" y="416" text-anchor="middle">Sequential — reads one word at a time, left to right</text>
+</g>
+
+<text class="ts" x="100" y="448" text-anchor="start">Step 1</text>
+<g class="c-teal">
+<rect x="80" y="456" width="520" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="476" text-anchor="middle" dominant-baseline="central">Read "Chocolate"</text>
+<text class="ts" x="340" y="496" text-anchor="middle" dominant-baseline="central">Memory: [chocolate ●●●●●]</text>
+</g>
+
+<line x1="340" y1="512" x2="340" y2="530" class="arr" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<text class="ts" x="100" y="544" text-anchor="start">Step 2</text>
+<g class="c-teal">
+<rect x="80" y="552" width="520" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="572" text-anchor="middle" dominant-baseline="central">Read "is"</text>
+<text class="ts" x="340" y="592" text-anchor="middle" dominant-baseline="central">Memory: [chocolate ●●●○○ + is ●●●●●]</text>
+</g>
+
+<line x1="340" y1="608" x2="340" y2="626" class="arr" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<text class="ts" x="100" y="640" text-anchor="start">Step 3</text>
+<g class="c-teal">
+<rect x="80" y="648" width="520" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="668" text-anchor="middle" dominant-baseline="central">Read "good"</text>
+<text class="ts" x="340" y="688" text-anchor="middle" dominant-baseline="central">Memory: [chocolate ●○○○○ + is ●●○○○ + good ●●●●●]</text>
+</g>
+
+<line x1="340" y1="704" x2="340" y2="730" class="arr" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<g class="c-red">
+<rect x="80" y="730" width="520" height="44" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="752" text-anchor="middle" dominant-baseline="central">3 words? Fine. 25 words? "Chocolate" fades away.</text>
+</g>
+
+<text class="ts" x="340" y="800" text-anchor="middle">Now imagine a real sentence...</text>
+
+<g class="c-coral">
+<rect x="60" y="812" width="560" height="80" rx="8" stroke-width="0.5"/>
+<text class="ts" x="340" y="834" text-anchor="middle">"The chocolate that my grandmother bought</text>
+<text class="ts" x="340" y="852" text-anchor="middle">from the Belgian shop on her trip to Brussels</text>
+<text class="ts" x="340" y="870" text-anchor="middle">last summer is good."</text>
+</g>
+
+<!-- ════════════════════════════════════════ -->
+<!-- ERA 3: TRANSFORMER                       -->
+<!-- ════════════════════════════════════════ -->
+<g class="c-gray">
+<rect x="40" y="940" width="600" height="520" rx="16" stroke-width="0.5"/>
+<text class="th" x="340" y="968" text-anchor="middle">The 2017 Breakthrough: Transformer</text>
+<text class="ts" x="340" y="986" text-anchor="middle">Sees all words at once — what powers ERA 2 through ERA 5</text>
+</g>
+
+<g class="c-purple">
+<rect x="80" y="1010" width="140" height="50" rx="8" stroke-width="0.5"/>
+<text class="th" x="150" y="1030" text-anchor="middle" dominant-baseline="central">Chocolate</text>
+<text class="ts" x="150" y="1048" text-anchor="middle" dominant-baseline="central">token 1</text>
+</g>
+<g class="c-purple">
+<rect x="270" y="1010" width="140" height="50" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="1030" text-anchor="middle" dominant-baseline="central">is</text>
+<text class="ts" x="340" y="1048" text-anchor="middle" dominant-baseline="central">token 2</text>
+</g>
+<g class="c-purple">
+<rect x="460" y="1010" width="140" height="50" rx="8" stroke-width="0.5"/>
+<text class="th" x="530" y="1030" text-anchor="middle" dominant-baseline="central">good</text>
+<text class="ts" x="530" y="1048" text-anchor="middle" dominant-baseline="central">token 3</text>
+</g>
+
+<path d="M 195 1060 Q 340 1130 485 1060" fill="none" stroke="#D85A30" stroke-width="3" opacity="0.9"/>
+<text class="ts" x="340" y="1116" text-anchor="middle" fill="#D85A30" font-weight="500">strong attention</text>
+
+<path d="M 175 1060 Q 240 1100 295 1060" fill="none" stroke="#B4B2A9" stroke-width="1" opacity="0.5"/>
+<text class="ts" x="222" y="1094" text-anchor="middle">weak</text>
+
+<path d="M 385 1060 Q 438 1100 485 1060" fill="none" stroke="#1D9E75" stroke-width="2" opacity="0.7"/>
+<text class="ts" x="440" y="1094" text-anchor="middle">medium</text>
+
+<g class="c-green">
+<rect x="80" y="1150" width="520" height="44" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="1172" text-anchor="middle" dominant-baseline="central">"good" directly attends to "chocolate"</text>
+</g>
+
+<line x1="340" y1="1194" x2="340" y2="1216" class="arr" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<text class="ts" x="340" y="1236" text-anchor="middle">Same long sentence — transformers handle it:</text>
+
+<g class="c-teal">
+<rect x="60" y="1250" width="560" height="110" rx="8" stroke-width="0.5"/>
+<text class="ts" x="340" y="1276" text-anchor="middle">"The chocolate that my grandmother bought</text>
+<text class="ts" x="340" y="1294" text-anchor="middle">from the Belgian shop on her trip to Brussels</text>
+<text class="ts" x="340" y="1312" text-anchor="middle">last summer is good."</text>
+<text class="th" x="340" y="1342" text-anchor="middle">Distance doesn't matter — attention connects directly</text>
+</g>
+
+<g class="c-amber">
+<rect x="80" y="1390" width="520" height="50" rx="8" stroke-width="0.5"/>
+<text class="th" x="340" y="1408" text-anchor="middle" dominant-baseline="central">22 words apart? No problem.</text>
+<text class="ts" x="340" y="1428" text-anchor="middle" dominant-baseline="central">Attention computes all relationships at once</text>
+</g>
+
+<!-- ════════════════════════════════════════ -->
+<!-- BOTTOM SUMMARY                           -->
+<!-- ════════════════════════════════════════ -->
+<text class="th" x="340" y="1510" text-anchor="middle">The evolution at a glance</text>
+
+<g class="c-coral">
+<rect x="40" y="1530" width="180" height="66" rx="8" stroke-width="0.5"/>
+<text class="th" x="130" y="1554" text-anchor="middle" dominant-baseline="central">Bag of words</text>
+<text class="ts" x="130" y="1576" text-anchor="middle" dominant-baseline="central">Counts. No order.</text>
+</g>
+
+<line x1="220" y1="1563" x2="256" y2="1563" class="arr" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<g class="c-teal">
+<rect x="256" y="1530" width="150" height="66" rx="8" stroke-width="0.5"/>
+<text class="th" x="331" y="1554" text-anchor="middle" dominant-baseline="central">RNN / LSTM</text>
+<text class="ts" x="331" y="1576" text-anchor="middle" dominant-baseline="central">Order, but forgets.</text>
+</g>
+
+<line x1="406" y1="1563" x2="442" y2="1563" class="arr" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<g class="c-purple">
+<rect x="442" y="1530" width="198" height="66" rx="8" stroke-width="0.5"/>
+<text class="th" x="541" y="1554" text-anchor="middle" dominant-baseline="central">Transformer</text>
+<text class="ts" x="541" y="1576" text-anchor="middle" dominant-baseline="central">Everything at once.</text>
+</g>
+
+<g class="c-green">
+<rect x="80" y="1630" width="520" height="56" rx="12" stroke-width="0.5"/>
+<text class="th" x="340" y="1650" text-anchor="middle" dominant-baseline="central">Why ERA 3, 4 and 5 are different</text>
+<text class="ts" x="340" y="1670" text-anchor="middle" dominant-baseline="central">Copilot connects line 45's assertion to line 3's setup — because transformers.</text>
+</g>
+
+</svg>

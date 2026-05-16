@@ -1,0 +1,422 @@
+---
+layout: guide.njk
+title: "Session 07 Full Guide — Writing Test Cases with AI: From Scratch to Suite"
+sessionNumber: "07"
+sessionTitle: "Writing Test Cases with AI — From Scratch to Suite"
+phase: "Phase 3: AI for Test Automation & Debugging"
+topicName: "AI in Practice V2"
+topicUrl: "/topics/ai-in-practice-v2/"
+slidesUrl: "/topics/ai-in-practice-v2/sessions/session-07/"
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Writing Tests with AI — <em>From Scratch to Suite</em></h2>
+      <p class="v2-section-sub">A repeatable three-step workflow for turning acceptance criteria into a working Playwright test suite — with AI doing the heavy lifting.</p>
+    </div>
+
+<div class="v2-version-stamp" custom-style="version-stamp">Session 07 &nbsp;·&nbsp; Phase 3: AI for Test Automation &amp; Debugging &nbsp;·&nbsp; Intermediate</div>
+
+<div class="v2-quickstart" custom-style="quick-start">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 07 you will have a three-step workflow for generating tests from acceptance criteria, know how to get AI to match your project's existing style, and have a review checklist for catching the mistakes AI makes most often.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>From Sessions 01–06:</strong> You know how LLMs work, the four-element prompt framework, and how Copilot's context references work. This session applies all of that directly to test writing — your most repeated task as a QA engineer.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The Workflow">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Three-Step <em>AI Test Workflow</em></h2>
+      <p class="v2-section-sub">Don't ask AI to write code first. Get the test cases right, then generate the code.</p>
+    </div>
+    <p>The most common mistake is going straight from a feature description to a prompt like "write me some tests." That skips the step where you — the QA engineer — decide what to test. AI writes what you describe; if you describe nothing, it guesses.</p>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">1</div>
+    <div>
+      <div class="v2-step-title">Extract test cases from acceptance criteria</div>
+      <div class="v2-step-body">Use AI to turn your AC into a structured list of test scenarios — happy path, error states, boundary values, edge cases. You review and trim this list. This is still your decision.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">2</div>
+    <div>
+      <div class="v2-step-title">Generate code from the test case list</div>
+      <div class="v2-step-body">Feed AI your approved test case list plus context about your project (framework, selectors, existing test style). It writes the Playwright code. You review it before committing anything.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">3</div>
+    <div>
+      <div class="v2-step-title">Verify, run, and fix</div>
+      <div class="v2-step-body">Run the generated tests. Check the four most common AI mistakes (covered later in this session). Fix selectors, assertions, or timing issues before the tests go into your suite.</div>
+    </div>
+  </div>
+</div>
+
+<div class="v2-callout warning" custom-style="callout-warning">
+  <p><strong>The key mindset shift:</strong> AI writes the code. You decide what to test. Never hand over the decision about coverage to the model — it doesn't know your product, your risk areas, or your users.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Step 1 — AC to Test Cases">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Step 1 — <em>AC to Test Cases</em></h2>
+      <p class="v2-section-sub">Paste in your acceptance criteria. Ask AI to enumerate what needs to be tested. Then review the list before writing a single line of code.</p>
+    </div>
+
+<h3>The prompt</h3>
+
+<div class="v2-code-wrap" custom-style="code-block">
+  <button class="v2-copy-btn">copy</button>
+  <div class="code-block"><pre>Act as a senior QA engineer.
+
+Here is the acceptance criteria for a checkout feature:
+[PASTE YOUR AC HERE]
+
+Generate a complete list of test cases covering:
+1. Happy path (all valid inputs, expected success)
+2. Error states (invalid input, payment failure, network error)
+3. Boundary values (minimum/maximum quantities, character limits)
+4. Edge cases (empty cart, session expiry mid-checkout, duplicate submission)
+
+Format each test case as: Given [state] / When [action] / Then [expected result].
+Flag any ambiguities in the AC that I should clarify before testing.</pre></div>
+</div>
+
+<h3>What AI does well here</h3>
+<p>It finds error states and boundary values you might have missed. It asks about ambiguities in the AC — things like "what happens if the user applies a discount code after adding an item to the cart?" These are real test coverage gaps.</p>
+
+<h3>Your job</h3>
+<p>Review the list. Remove tests that aren't worth automating (highly manual flow, unlikely edge case). Add anything AI missed that you know from product knowledge. The list you approve is the list that becomes code.</p>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>Pro tip:</strong> Ask AI to flag AC ambiguities explicitly. These become questions for your developer or product owner <em>before</em> you write tests, not after the sprint ends.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Step 2 — Test Cases to Code">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Step 2 — <em>Test Cases to Code</em></h2>
+      <p class="v2-section-sub">Now give AI your approved test list plus enough context to write code that actually fits your project.</p>
+    </div>
+
+<h3>What context to provide</h3>
+
+<div class="v2-card-list" custom-style="info-card-list">
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">Selectors</div>
+      <div class="v2-tool-mode">Required</div>
+    </div>
+    <div class="v2-card-body">List the actual element IDs, data-testid values, or CSS selectors for your feature. AI can't inspect your app — if you don't provide selectors, it invents them and the tests will fail immediately.</div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">Existing test example</div>
+      <div class="v2-tool-mode">Strongly recommended</div>
+    </div>
+    <div class="v2-card-body">Paste one complete test from your project and say "match this style." AI will replicate your naming conventions, import structure, POM patterns, and assertion style — without being told each rule explicitly.</div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">Page Object reference</div>
+      <div class="v2-tool-mode">If applicable</div>
+    </div>
+    <div class="v2-card-body">If your project uses Page Objects, paste the relevant PO class (or use <code>#file:</code> in Copilot Chat) so AI uses your existing methods rather than duplicating selector logic in the test file.</div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">Expected URLs / messages</div>
+      <div class="v2-tool-mode">Required for assertions</div>
+    </div>
+    <div class="v2-card-body">Tell AI the exact URL a successful action redirects to, the exact text of error messages, the exact element that confirms success. These are assertions — wrong values mean tests that pass when they shouldn't.</div>
+  </div>
+</div>
+
+<h3>The prompt structure</h3>
+
+<div class="v2-code-wrap" custom-style="code-block">
+  <button class="v2-copy-btn">copy</button>
+  <div class="code-block"><pre>Using Playwright and TypeScript, write tests for the following test cases:
+[PASTE YOUR APPROVED TEST CASE LIST]
+
+Project context:
+- Page URL: /checkout
+- Selectors: #quantity-input, #promo-code, button[data-testid="place-order"], div.order-confirmation
+- On success: redirects to /order-confirmation?id=xxx with "Order placed" heading
+- On invalid promo code: shows span.promo-error with text "Invalid code"
+
+Here is an example test from my project — match this exact style:
+[PASTE ONE EXISTING TEST]
+
+Write each test case as a separate test() block inside one test.describe("Checkout"). No shared beforeEach — each test must set up its own state.</pre></div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The Style-Matching Technique">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Style-Matching <em>Technique</em></h2>
+      <p class="v2-section-sub">The single most effective thing you can do to get usable AI-generated tests: show it what you already have.</p>
+    </div>
+    <p>When you paste an existing test and say "match this style," AI infers dozens of rules it would otherwise have to guess: your import paths, whether you use POM methods or raw <code>page.fill()</code>, how you name <code>test.describe</code> blocks, which assertion style you prefer. This is the fastest path to code you don't have to rewrite.</p>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col bad">
+    <div class="v2-col-label">Without style example</div>
+    <ul>
+      <li>AI picks an import style at random</li>
+      <li>May use <code>page.locator()</code> when you use <code>page.fill()</code></li>
+      <li>Invents a beforeEach when your project doesn't use one</li>
+      <li>Names describes inconsistently with your suite</li>
+      <li>Requires rewriting before it fits the project</li>
+    </ul>
+  </div>
+  <div class="v2-col good">
+    <div class="v2-col-label">With style example (one pasted test)</div>
+    <ul>
+      <li>Replicates your exact import structure</li>
+      <li>Uses the same method style you already use</li>
+      <li>Follows your naming conventions automatically</li>
+      <li>Matches your POM usage patterns</li>
+      <li>Ready to drop into your test suite with minor edits</li>
+    </ul>
+  </div>
+</div>
+
+<h3>In Copilot Chat — use <code>#file:</code> instead of pasting</h3>
+<p>In Copilot Chat you don't have to paste the example test. Reference it directly:</p>
+
+<div class="v2-code-wrap" custom-style="code-block">
+  <button class="v2-copy-btn">copy</button>
+  <div class="code-block"><pre>#file:tests/auth/login.spec.ts Write new tests for the checkout flow. Match the style of the existing tests in this file. [paste your test case list here]</pre></div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p>This technique works in any AI tool — ChatGPT, Claude, Copilot Chat. It works because "match this existing code" is a far more precise instruction than any set of abstract rules you could write.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Building a Full Suite">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Building <em>a Full Test Suite</em></h2>
+      <p class="v2-section-sub">How to use AI to generate tests systematically across a feature — not just one file at a time.</p>
+    </div>
+    <p>Once you have the workflow working for one feature, applying it to a full suite is a matter of repeating the three steps for each area of coverage. Here's how to keep it organised.</p>
+
+<h3>One AC section → one test file</h3>
+<p>Structure your prompts the same way you structure your test files. If your suite has <code>auth/login.spec.ts</code>, <code>checkout/order.spec.ts</code>, <code>checkout/payment.spec.ts</code>, generate each file as a separate prompt with its own context. Don't ask AI to generate everything in one go — the output gets unwieldy and harder to review.</p>
+
+<h3>The context card approach</h3>
+<p>Before generating each file, list the context cards AI needs for that feature:</p>
+
+<div class="v2-context-grid" custom-style="context-ref-card-list">
+  <div class="v2-context-card" custom-style="context-ref-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">FILE</span>
+      <span class="v2-context-title">An existing test (style reference)</span>
+    </div>
+    <div class="v2-context-desc">Paste one test or use <code>#file:</code>. Provides import style, assertion patterns, naming.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Required</span>
+      <span class="v2-context-val">Every prompt</span>
+    </div>
+  </div>
+  <div class="v2-context-card" custom-style="context-ref-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">DOM</span>
+      <span class="v2-context-title">Selectors for the feature page</span>
+    </div>
+    <div class="v2-context-desc">data-testid values, IDs, or CSS selectors for elements the tests interact with.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Required</span>
+      <span class="v2-context-val">Every prompt</span>
+    </div>
+  </div>
+  <div class="v2-context-card" custom-style="context-ref-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">POM</span>
+      <span class="v2-context-title">Relevant Page Object</span>
+    </div>
+    <div class="v2-context-desc">If a Page Object exists for this feature, include it so AI uses your existing methods.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">If applicable</span>
+      <span class="v2-context-val">When PO exists</span>
+    </div>
+  </div>
+  <div class="v2-context-card" custom-style="context-ref-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">TEXT</span>
+      <span class="v2-context-title">Exact error messages &amp; URLs</span>
+    </div>
+    <div class="v2-context-desc">Copy the exact strings the UI shows on success/error — AI will use these in assertions.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Required</span>
+      <span class="v2-context-val">For assertion accuracy</span>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Step 3 — Reviewing AI Tests">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Step 3 — <em>Reviewing What AI Wrote</em></h2>
+      <p class="v2-section-sub">Four things to check on every AI-generated test before it goes into your suite.</p>
+    </div>
+    <p>AI makes predictable mistakes when generating tests. Knowing them in advance makes review fast — you're looking for a known set of issues, not reading every line for correctness.</p>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">1</div>
+    <div>
+      <div class="v2-step-title">Selectors — are they real?</div>
+      <div class="v2-step-body">Check every selector against your actual DOM. AI commonly invents plausible-sounding IDs like <code>#submit-btn</code> when your button is actually <code>button[data-testid="place-order"]</code>. If you didn't provide selectors, assume all of them are wrong.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">2</div>
+    <div>
+      <div class="v2-step-title">Assertions — do they actually test something?</div>
+      <div class="v2-step-body">Check that each assertion would fail if the feature broke. <code>expect(page).toHaveURL('/dashboard')</code> is real. <code>expect(response.status()).toBe(200)</code> on a page navigation is not testing what you think. Weak assertions are worse than no assertions — they give false confidence.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">3</div>
+    <div>
+      <div class="v2-step-title">Test isolation — can it run independently?</div>
+      <div class="v2-step-body">Each test should work in any order and with no prior state. If a test depends on a previous test having logged in, or assumes items are in a cart from a previous test, it will fail intermittently. AI often generates tests that share state unless you explicitly said not to.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">4</div>
+    <div>
+      <div class="v2-step-title">Waiting patterns — no arbitrary timeouts</div>
+      <div class="v2-step-body">Flag any <code>page.waitForTimeout(2000)</code> calls. AI reaches for these when it doesn't know the right condition to wait for. Replace them with <code>expect(locator).toBeVisible()</code> or <code>page.waitForURL()</code> — Playwright's built-in retry makes these reliable; arbitrary timeouts make tests flaky.</div>
+    </div>
+  </div>
+</div>
+
+<div class="v2-callout danger" custom-style="callout-danger">
+  <p><strong>Common mistake:</strong> Committing AI-generated tests without running them first. Always run the full generated spec and check that each test fails for the right reason before adding it to CI. A test that passes without doing anything isn't protecting you.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Prompt Patterns">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Prompt Patterns <em>— Test Writing</em></h2>
+      <p class="v2-section-sub">Three copy-ready patterns for the most common test generation scenarios.</p>
+    </div>
+
+<div class="v2-pattern-card" custom-style="pattern-card">
+  <div class="v2-pattern-num">Pattern 01</div>
+  <div class="v2-pattern-title">Generate test cases from AC</div>
+  <div class="v2-pattern-section">
+    <div class="v2-pattern-section-label">Prompt</div>
+    <div class="v2-code-wrap" custom-style="code-block">
+      <button class="v2-copy-btn">copy</button>
+      <div class="code-block"><pre>Act as a QA engineer. Given this acceptance criteria: [paste AC]. Generate a list of test cases covering happy path, error states, boundary values, and edge cases. Use Given/When/Then format. Flag any ambiguities in the AC.</pre></div>
+    </div>
+  </div>
+</div>
+
+<div class="v2-pattern-card" custom-style="pattern-card">
+  <div class="v2-pattern-num">Pattern 02</div>
+  <div class="v2-pattern-title">Generate Playwright tests (style-matched)</div>
+  <div class="v2-pattern-section">
+    <div class="v2-pattern-section-label">Prompt</div>
+    <div class="v2-code-wrap" custom-style="code-block">
+      <button class="v2-copy-btn">copy</button>
+      <div class="code-block"><pre>Using Playwright TypeScript, write tests for these cases: [list]. Selectors: [list]. On success: [URL/message]. Match the style of this existing test exactly: [paste test]. No shared beforeEach — each test self-contained. No waitForTimeout — use expect assertions for waiting.</pre></div>
+    </div>
+  </div>
+</div>
+
+<div class="v2-pattern-card" custom-style="pattern-card">
+  <div class="v2-pattern-num">Pattern 03</div>
+  <div class="v2-pattern-title">Generate a Page Object for a new feature</div>
+  <div class="v2-pattern-section">
+    <div class="v2-pattern-section-label">Prompt</div>
+    <div class="v2-code-wrap" custom-style="code-block">
+      <button class="v2-copy-btn">copy</button>
+      <div class="code-block"><pre>Write a Playwright Page Object class for [page name]. Selectors: [list]. Methods needed: [list actions — e.g. fillForm(), submitOrder(), getErrorMessage()]. Here is an existing PO from my project for style reference: [paste PO]. Export as default class. No test() blocks in this file.</pre></div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Try This">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Try This — <em>Your First AI-Generated Suite</em></h2>
+      <p class="v2-section-sub">Apply the three-step workflow to a real feature from your current project.</p>
+    </div>
+
+<div class="v2-try-this" custom-style="try-this">
+  <div class="v2-try-label">Try This — 20 minutes</div>
+  <p>Pick one feature in your current project that either has no automated tests or has tests you're not satisfied with. Work through all three steps:</p>
+  <p><strong>Step 1 (5 min):</strong> Paste the acceptance criteria (or write a plain-English description of what the feature does) into Copilot Chat or Claude. Use Pattern 01 to generate a test case list. Review it — keep what you'd actually test, remove what you wouldn't.</p>
+  <p><strong>Step 2 (10 min):</strong> Use Pattern 02 with your approved list, your real selectors, and one existing test pasted as a style reference. Generate the Playwright code.</p>
+  <p><strong>Step 3 (5 min):</strong> Run the generated tests locally. Check selectors, assertions, and waiting patterns using the four-point review checklist. Note what needed fixing.</p>
+  <p>The goal is not perfect tests first time. It's understanding where in the workflow AI helps most and where you need to add the most context.</p>
+</div>
+
+<span class="v2-progressive-marker" custom-style="progress-marker">▲ Builds on Session 03 Prompt Framework &amp; Session 06 Agent Mode</span>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I can do this" — before moving to Session 08.</p>
+    </div>
+<div class="v2-self-check" custom-style="self-assessment">
+  <div class="v2-self-check-title">Session 07 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I can do this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain the three-step AI test workflow and why you generate test cases before code</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know what context to provide when asking AI to write Playwright tests (selectors, style example, expected outcomes)</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I have used the style-matching technique — pasting or referencing an existing test — and seen it produce better results</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can name the four things to check when reviewing AI-generated tests</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know what a weak assertion looks like and why it's worse than no assertion</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I have run at least one AI-generated test against a real feature and reviewed what needed fixing</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-08/" style="color:var(--accent);">Session 08 — Debugging Tests with AI: Stop Guessing, Start Asking →</a></p>
+  </div>
+</div>
