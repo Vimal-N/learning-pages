@@ -420,6 +420,113 @@ body.presenter-mode .nav-btn:hover:not(:disabled) {
 
 body.presenter-mode .slide-counter { color: #6a6090; }
 
+/* ─── Slide content helpers ─── */
+.title-slide { text-align: center; }
+.title-slide h1 { font-size: 2.4rem; margin-bottom: 16px; line-height: 1.2; }
+.title-sub { color: var(--text-secondary); font-size: 1rem; max-width: 520px; margin: 0 auto 28px; line-height: 1.7; }
+.title-stats { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; }
+.title-stat { text-align: center; }
+.title-stat-val { font-family: 'Source Serif 4', serif; font-size: 1.4rem; font-weight: 700; }
+.title-stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); margin-top: 3px; }
+
+.slide-sub { color: var(--text-secondary); margin-bottom: 14px; font-size: 0.9rem; }
+.slide-img { width: 100%; display: block; margin: 10px auto 8px; border-radius: 12px; }
+.slide-svg { width: 100%; display: block; border-radius: 10px; }
+.slide-section-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 12px 0 6px; }
+
+/* prompt element highlights */
+.prompt-context  { background: rgba(176,112,32,0.15);  border-radius: 3px; padding: 1px 3px; }
+.prompt-task     { background: rgba(94,194,105,0.15);  border-radius: 3px; padding: 1px 3px; }
+.prompt-format   { background: rgba(111,163,247,0.15); border-radius: 3px; padding: 1px 3px; }
+.prompt-constraint { background: rgba(176,140,245,0.15); border-radius: 3px; padding: 1px 3px; }
+
+/* ─── V2 Component System ─── */
+.v2-callout {
+  padding: 12px 16px; border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  margin: 10px 0; font-size: 0.87rem; line-height: 1.65; color: var(--text-secondary);
+}
+.v2-callout p { margin: 0; font-size: 0.87rem; }
+.v2-callout p + p { margin-top: 6px; }
+.v2-callout.info    { background: var(--blue-soft);   border-left: 3px solid var(--blue); }
+.v2-callout.warning { background: var(--accent-soft); border-left: 3px solid var(--accent); }
+.v2-callout.danger  { background: var(--red-soft);    border-left: 3px solid var(--red); }
+.v2-callout.success { background: var(--green-soft);  border-left: 3px solid var(--green); }
+
+.v2-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+.v2-col { padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border); }
+.v2-col.good    { background: var(--green-soft); border-color: rgba(94,194,105,0.2); }
+.v2-col.bad     { background: var(--red-soft);   border-color: rgba(232,92,92,0.15); }
+.v2-col.neutral { background: var(--bg-elevated); }
+.v2-col.info    { background: var(--blue-soft);  border-color: rgba(111,163,247,0.2); }
+.v2-col-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 9px;
+}
+.v2-col.good .v2-col-label    { color: var(--green); }
+.v2-col.bad .v2-col-label     { color: var(--red); }
+.v2-col.neutral .v2-col-label { color: var(--accent); }
+.v2-col.info .v2-col-label    { color: var(--blue); }
+.v2-col ul, .v2-col ol { list-style: none; padding: 0; margin: 6px 0; display: grid; gap: 5px; }
+.v2-col li { font-size: 0.86rem; color: var(--text-secondary); display: flex; gap: 7px; line-height: 1.5; }
+.v2-col li::before { content: '–'; color: var(--text-dim); flex-shrink: 0; }
+
+.v2-step-list { display: grid; gap: 6px; margin: 10px 0; }
+.v2-step {
+  display: grid; grid-template-columns: 32px 1fr; gap: 10px;
+  padding: 10px 14px; background: var(--bg-elevated);
+  border-radius: 6px; border: 1px solid var(--border);
+}
+.v2-step-num {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+  font-weight: 700; color: var(--accent); padding-top: 1px;
+}
+.v2-step-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; color: var(--text-primary); }
+.v2-step-body { font-size: 0.84rem; color: var(--text-secondary); }
+
+.v2-card-list { display: grid; gap: 8px; margin: 10px 0; }
+.v2-row-card {
+  display: grid; grid-template-columns: 100px 1fr; gap: 14px;
+  padding: 12px 16px; border-radius: 8px; align-items: center;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+}
+.v2-era-badge {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; font-weight: 700;
+  color: var(--text-muted); background: var(--bg-secondary);
+  padding: 2px 7px; border-radius: 4px; border: 1px solid var(--border-subtle);
+  display: inline-block;
+}
+.v2-era-name { font-size: 0.8rem; font-weight: 700; color: #b07020; margin-top: 6px; }
+.v2-era-date { font-size: 0.74rem; color: var(--text-dim); margin-top: 2px; }
+.v2-card-body { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6; }
+
+.v2-pattern-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 14px 18px; margin: 8px 0;
+}
+.v2-pattern-num {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 4px;
+}
+.v2-pattern-title { font-size: 0.92rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+.v2-pattern-section { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-subtle); }
+.v2-pattern-section-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.57rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); margin-bottom: 5px;
+}
+.v2-code-wrap { display: flex; flex-direction: column; margin: 6px 0; }
+.v2-code-wrap .code-block { margin: 0; }
+.v2-code-wrap pre { white-space: pre-wrap; word-break: break-word; overflow-wrap: break-word; }
+.v2-copy-btn {
+  align-self: flex-end; margin-bottom: 4px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  padding: 3px 8px; border-radius: 4px; cursor: pointer; transition: all 0.2s;
+}
+.v2-copy-btn:hover  { color: var(--accent); border-color: var(--accent); }
+.v2-copy-btn.copied { color: var(--green);  border-color: var(--green); }
+
 /* ─── Session-specific styles ─── */
 {{ sessionStyles | safe }}
 

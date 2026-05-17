@@ -1,0 +1,241 @@
+---
+layout: guide.njk
+title: "Session 14 Full Guide — Comparing Your AI Toolkit"
+sessionNumber: "14"
+sessionTitle: "Comparing Your AI Toolkit"
+phase: "Phase 4: Terminal Agents & Agentic Tools"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Comparing Your <em>AI Toolkit</em></h2>
+      <p class="v2-section-sub">A decision framework for every tool on the spectrum — when to use inline completions, chat, agent mode, or a terminal agent. With real QA scenarios.</p>
+    </div>
+
+<div class="v2-version-stamp" custom-style="version-stamp">Session 14 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools &nbsp;·&nbsp; Intermediate</div>
+
+<div class="v2-quickstart" custom-style="quick-start">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 14 you will have a clear decision framework for choosing between your AI tools on any given task, understand the cost and capability trade-offs, and be able to explain your tool choice to a colleague.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>From Sessions 10–13:</strong> You've now used all the tools on the spectrum. This session steps back and maps them against each other — so instead of defaulting to one tool for everything, you're reaching for the right one for each task.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The Full Spectrum">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Full <em>Spectrum</em></h2>
+      <p class="v2-section-sub">Five tools, five different trade-offs. Each one optimised for a different task type.</p>
+    </div>
+
+<div class="v2-card-list" custom-style="info-card-list">
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">Inline Completions</div>
+      <div class="v2-tool-mode">Ghost text as you type</div>
+    </div>
+    <div class="v2-card-body"><strong>Best for:</strong> code you're already writing — completing a function you started, suggesting the next assertion, filling in boilerplate. <strong>Not for:</strong> anything requiring project understanding or multi-step tasks. Speed: instant. Oversight needed: minimal (you see it before accepting).</div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">Chat (Copilot Chat / Claude / ChatGPT)</div>
+      <div class="v2-tool-mode">Conversational, one turn</div>
+    </div>
+    <div class="v2-card-body"><strong>Best for:</strong> questions, explanations, drafting a prompt, understanding unfamiliar code, getting a first version of something to review. <strong>Not for:</strong> tasks requiring file writes or running code. Speed: seconds. Oversight needed: read before using.</div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">Copilot Agent Mode</div>
+      <div class="v2-tool-mode">Editor-scoped autonomy</div>
+    </div>
+    <div class="v2-card-body"><strong>Best for:</strong> tasks within your VS Code workspace — adding a feature, editing multiple related files, small refactors. Shows proposed changes before applying. <strong>Not for:</strong> large multi-directory tasks. Speed: minutes. Oversight needed: review diffs per step.</div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">Claude Code / Opencode</div>
+      <div class="v2-tool-mode">Terminal — full autonomy</div>
+    </div>
+    <div class="v2-card-body"><strong>Best for:</strong> larger tasks — building a full test suite, major refactors, investigating a complex failure across many files, generating documentation. <strong>Not for:</strong> tiny tasks where overhead isn't worth it. Speed: minutes to tens of minutes. Oversight needed: <code>git diff</code> review at the end.</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Decision Framework">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Decision <em>Framework</em></h2>
+      <p class="v2-section-sub">Use this grid to decide which tool to reach for on any QA task.</p>
+    </div>
+
+<div class="v2-decision-grid" custom-style="decision-grid">
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">I'm typing code and want suggestions as I go</div>
+    <div class="v2-decision-use">Inline completions (Copilot ghost text)</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">I need to understand something — what a function does, why a test is failing</div>
+    <div class="v2-decision-use">Chat (Copilot Chat, Claude, ChatGPT)</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">I want a first draft of something to review and edit</div>
+    <div class="v2-decision-use">Chat — paste result and refine it yourself</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">I want AI to write and apply a change in my editor, within one project</div>
+    <div class="v2-decision-use">Copilot Agent Mode</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">I need to add tests for one feature — about 1 new spec file</div>
+    <div class="v2-decision-use">Copilot Agent Mode or Claude Code — either works</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">I need to build or refactor tests across many files or features</div>
+    <div class="v2-decision-use">Claude Code or Opencode (terminal agent)</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">I need to run commands, read error output, and iterate automatically</div>
+    <div class="v2-decision-use">Terminal agent — agents can close the loop themselves</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">I'm on a machine or CI where I can't use VS Code</div>
+    <div class="v2-decision-use">Terminal agent — headless, runs anywhere Node is available</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="QA Scenarios — Which Tool?">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">QA Scenarios — <em>Which Tool?</em></h2>
+      <p class="v2-section-sub">Real situations from QA work — and which tool fits each one best.</p>
+    </div>
+
+<div class="v2-card-list" custom-style="era-card-list">
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">SCENARIO</span>
+      <span class="v2-era-name">A test is failing with a confusing error</span>
+    </div>
+    <div class="v2-card-body">You need to understand the error before deciding how to fix it.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Best tool</div>
+      <div class="v2-example-text"><strong>Chat.</strong> Paste the error + test code into Copilot Chat or Claude. Ask for a diagnosis. Read the answer, verify it makes sense, then apply the fix yourself (or ask Agent Mode to apply it). Don't open a terminal agent just to diagnose — it's slower and the extra overhead isn't needed for a single file fix.</div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">SCENARIO</span>
+      <span class="v2-era-name">A new feature has 20 acceptance criteria and needs full test coverage</span>
+    </div>
+    <div class="v2-card-body">Large scope — multiple test files, multiple scenarios, needs to match existing project style.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Best tool</div>
+      <div class="v2-example-text"><strong>Terminal agent (Claude Code / Opencode) with GCSV task prompts.</strong> Break the AC into 3–4 task chunks (one feature area at a time), run each task separately, review the diff and run tests between each. This is exactly the use case terminal agents are designed for — large multi-file tasks that would take an hour by hand.</div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">SCENARIO</span>
+      <span class="v2-era-name">You're writing a Page Object and want suggestions for each method</span>
+    </div>
+    <div class="v2-card-body">You're actively typing — you want AI to complete what you start, not take over.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Best tool</div>
+      <div class="v2-example-text"><strong>Inline completions.</strong> Start typing the method signature — <code>async fillLoginForm(</code> — and let Copilot ghost text suggest the implementation. Tab to accept, tweak if needed. No prompt, no chat window — just Tab. Fastest for code you're already writing.</div>
+    </div>
+  </div>
+
+  <div class="v2-era-card" custom-style="era-card">
+    <div class="v2-era-card-header">
+      <span class="v2-era-badge">SCENARIO</span>
+      <span class="v2-era-name">You want to refactor 3 test files to use a new shared fixture</span>
+    </div>
+    <div class="v2-card-body">A focused change across a small number of files — bounded scope.</div>
+    <div class="v2-example-box">
+      <div class="v2-example-label">Best tool</div>
+      <div class="v2-example-text"><strong>Copilot Agent Mode.</strong> Open the 3 files in VS Code. Use Agent Mode with a clear scope statement. It shows you the proposed changes before applying. For 3 files, the step-by-step approval model of Agent Mode is appropriate — you don't need the full terminal agent overhead.</div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Cost and Capability Trade-offs">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Cost and Capability <em>Trade-offs</em></h2>
+      <p class="v2-section-sub">More capability costs more — in tokens, in time, and in oversight effort.</p>
+    </div>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col good">
+    <div class="v2-col-label">Lower cost — lower capability</div>
+    <ul>
+      <li><strong>Inline completions:</strong> included in Copilot subscription, instant, zero setup</li>
+      <li><strong>Chat:</strong> low token cost per turn, no file access, you control what's shared</li>
+      <li><strong>Best for:</strong> small, contained tasks — understanding, drafting, single-file edits</li>
+    </ul>
+  </div>
+  <div class="v2-col neutral">
+    <div class="v2-col-label">Higher cost — higher capability</div>
+    <ul>
+      <li><strong>Agent Mode:</strong> more tokens per session (reads multiple files), Copilot subscription or per-token</li>
+      <li><strong>Terminal agents:</strong> highest token usage — reads entire project context, long loops</li>
+      <li><strong>Best for:</strong> large tasks that justify the investment</li>
+    </ul>
+  </div>
+</div>
+
+<h3>The cost-to-value question</h3>
+<p>Before opening a terminal agent, ask: would this task take me more than 30 minutes by hand? If yes, the agent session is worth the token cost. If it would take 5 minutes, open a chat window instead — faster, cheaper, and less to review.</p>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>Claude Max and Copilot Enterprise users:</strong> If you're on a flat-rate subscription (Claude Max or GitHub Copilot Enterprise), the per-token cost calculus changes — you've already paid. In that case, the main cost is your review time. Still decompose tasks into reviewable chunks — not because of billing, but because smaller tasks are easier to verify and recover from.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I can do this" — before moving to Session 15.</p>
+    </div>
+<div class="v2-self-check" custom-style="self-assessment">
+  <div class="v2-self-check-title">Session 14 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I can do this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can match any QA task to the right tool — and explain why that tool fits</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know when inline completions are the right choice and when they're not enough</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain the difference in oversight model between chat, agent mode, and terminal agent</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know when a task is big enough to justify a terminal agent session</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I understand the cost trade-offs and can explain them in terms of tokens and review time</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I have used at least three different tools from the spectrum on real tasks this week</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-15/" style="color:var(--accent);">Session 15 — Opencode with GitHub Copilot: Terminal Agent, Copilot-Powered →</a></p>
+  </div>
+</div>

@@ -1,0 +1,290 @@
+---
+layout: guide.njk
+title: "Session 15 Full Guide — Opencode with GitHub Copilot: Terminal Agent, Copilot-Powered"
+sessionNumber: "15"
+sessionTitle: "Opencode with GitHub Copilot — Terminal Agent, Copilot-Powered"
+phase: "Phase 4: Terminal Agents & Agentic Tools"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Opencode with GitHub Copilot — <em>Terminal Agent, Copilot-Powered</em></h2>
+      <p class="v2-section-sub">How to connect Opencode to your existing GitHub Copilot subscription and run a terminal agent without any additional billing.</p>
+    </div>
+
+<div class="v2-version-stamp" custom-style="version-stamp">Session 15 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools &nbsp;·&nbsp; Intermediate</div>
+
+<div class="v2-quickstart" custom-style="quick-start">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 15 you will have Opencode installed and connected to your GitHub Copilot subscription, understand the model options available, and have run your first Copilot-powered terminal agent task.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>From Session 10:</strong> You know the difference between Claude Code and Opencode. This session focusses on Opencode specifically — its installation, Copilot backend configuration, model selection, and practical use for QA tasks.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Why Opencode with Copilot?">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Why Opencode <em>with Copilot?</em></h2>
+      <p class="v2-section-sub">If your organisation already pays for GitHub Copilot, you can run a terminal agent at no extra cost.</p>
+    </div>
+    <p>GitHub Copilot Enterprise and Copilot Individual subscriptions give you access to the same underlying models that power Copilot Chat. Opencode can use these models as its backend — meaning you get terminal agent capability using your existing licence, no Anthropic API key or separate billing required.</p>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col neutral">
+    <div class="v2-col-label">Claude Code</div>
+    <ul>
+      <li>Requires an Anthropic API key or Claude Max subscription</li>
+      <li>Pay per token (or flat rate with Max)</li>
+      <li>Uses Claude Sonnet / Opus models — excellent for code</li>
+      <li>Best option if you have Anthropic billing</li>
+    </ul>
+  </div>
+  <div class="v2-col good">
+    <div class="v2-col-label">Opencode with Copilot backend</div>
+    <ul>
+      <li>Uses your existing GitHub Copilot subscription</li>
+      <li>No separate API billing for Copilot Enterprise users</li>
+      <li>Open source — configurable, extensible</li>
+      <li>Best option if your org already has Copilot Enterprise</li>
+    </ul>
+  </div>
+</div>
+
+<div class="v2-callout warning" custom-style="callout-warning">
+  <p><strong>Check your licence first:</strong> Opencode using the Copilot backend works with GitHub Copilot Enterprise and GitHub Copilot Individual. If your organisation manages Copilot through a corporate licence with usage controls, check whether API usage via Opencode is permitted under your organisation's policy before using it.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Installation & Setup">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Installation <em>&amp; Setup</em></h2>
+      <p class="v2-section-sub">Install Opencode and connect it to your GitHub Copilot account.</p>
+    </div>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">1</div>
+    <div>
+      <div class="v2-step-title">Install Opencode</div>
+      <div class="v2-step-body">Run: <code>npm install -g opencode-ai</code>. Requires Node.js 18+. Verify with <code>opencode --version</code>.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">2</div>
+    <div>
+      <div class="v2-step-title">Authenticate with GitHub Copilot</div>
+      <div class="v2-step-body">Run <code>opencode auth</code> and select GitHub Copilot as your provider. Opencode will open a browser window for OAuth authentication. Log in with the GitHub account that has your Copilot subscription.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">3</div>
+    <div>
+      <div class="v2-step-title">Select a model</div>
+      <div class="v2-step-body">Run <code>opencode models</code> to list the models available under your Copilot subscription. For QA automation tasks, <code>gpt-4o</code> or <code>claude-3.5-sonnet</code> (if available to your licence) are strong choices. Set your default: <code>opencode config set model gpt-4o</code>.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">4</div>
+    <div>
+      <div class="v2-step-title">Navigate to your project and start</div>
+      <div class="v2-step-body"><code>cd my-playwright-project</code> then <code>opencode</code>. The interface is similar to Claude Code — an interactive prompt where you type tasks.</div>
+    </div>
+  </div>
+</div>
+
+<div class="v2-code-wrap" custom-style="code-block">
+  <div class="code-block"><pre># Install
+npm install -g opencode-ai
+
+# Authenticate with GitHub Copilot
+opencode auth
+
+# Check available models
+opencode models
+
+# Set default model
+opencode config set model gpt-4o
+
+# Start a session
+cd my-playwright-project
+opencode</pre></div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Model Selection">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Model Selection — <em>Picking the Right One</em></h2>
+      <p class="v2-section-sub">Opencode supports multiple models via the Copilot backend. Here's what to choose for QA work.</p>
+    </div>
+    <p>The models available to you depend on your GitHub Copilot subscription tier. The key choice is between GPT-4 class models and Claude models — both are available through Copilot Enterprise.</p>
+
+<div class="v2-card-list" custom-style="info-card-list">
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">gpt-4o</div>
+      <div class="v2-tool-mode">OpenAI — strong all-rounder</div>
+    </div>
+    <div class="v2-card-body">Good at code generation and debugging. Widely available on Copilot subscriptions. Faster response times than larger models. <strong>Good default</strong> for most QA automation tasks.</div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">claude-3.5-sonnet</div>
+      <div class="v2-tool-mode">Anthropic — via Copilot Enterprise</div>
+    </div>
+    <div class="v2-card-body">Available on Copilot Enterprise. Strong at long-context reasoning and multi-file tasks. If your licence includes it, this is often the best choice for complex test refactors or large suite generation.</div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">o1 / o3-mini</div>
+      <div class="v2-tool-mode">OpenAI — reasoning models</div>
+    </div>
+    <div class="v2-card-body">Slower but stronger at complex multi-step reasoning. Best for architecture decisions or designing a test strategy, not routine test generation where speed matters more.</div>
+  </div>
+</div>
+
+<div class="v2-decision-grid" custom-style="decision-grid">
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Routine test generation or debugging</div>
+    <div class="v2-decision-use">gpt-4o — fast and accurate enough</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Large multi-file refactor or complex test suite</div>
+    <div class="v2-decision-use">claude-3.5-sonnet if available — better long-context reasoning</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Designing a test strategy or reviewing architecture</div>
+    <div class="v2-decision-use">o1 or o3-mini — worth the slower response time</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Context Files with Opencode">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Context Files <em>with Opencode</em></h2>
+      <p class="v2-section-sub">Which context file Opencode reads — and how to configure it.</p>
+    </div>
+    <p>Opencode reads context files based on the backend you're using. When using the Copilot backend, it reads <code>.github/copilot-instructions.md</code>. When using the Anthropic backend, it reads <code>CLAUDE.md</code>.</p>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">Copilot backend</strong> — Opencode reads <code>.github/copilot-instructions.md</code>. This is the same file Copilot Agent Mode reads in VS Code, so if you already have one, Opencode picks it up automatically.</div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">Anthropic backend</strong> — Opencode reads <code>CLAUDE.md</code> from your project root, same as Claude Code.</div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">Both in one project</strong> — If your project might be used with both Claude Code and Opencode/Copilot, maintain both files. The content can be identical — just copied with different filenames.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>Tip:</strong> If you already have a good <code>.github/copilot-instructions.md</code> from using Copilot Agent Mode, Opencode will pick it up immediately — no extra setup needed. The same project rules that help Copilot Agent Mode in VS Code help Opencode in the terminal.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Opencode vs Claude Code">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Opencode vs Claude Code — <em>Practical Differences</em></h2>
+      <p class="v2-section-sub">Both follow the same agentic loop. The practical differences come down to model access and UI.</p>
+    </div>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col neutral">
+    <div class="v2-col-label">Claude Code</div>
+    <ul>
+      <li>Official Anthropic tool — tightly integrated with Claude models</li>
+      <li>Requires Anthropic API key or Claude Max</li>
+      <li>Permission model: prompts before running commands</li>
+      <li>Excellent at long context — handles large codebases well</li>
+      <li>More established, more community resources</li>
+    </ul>
+  </div>
+  <div class="v2-col good">
+    <div class="v2-col-label">Opencode</div>
+    <ul>
+      <li>Open source — community-maintained and customisable</li>
+      <li>Multi-backend: Copilot, Anthropic, OpenAI, Gemini</li>
+      <li>Uses existing Copilot licence — potentially no extra billing</li>
+      <li>Slightly different UI — terminal TUI with session management</li>
+      <li>Growing community; docs and examples are expanding</li>
+    </ul>
+  </div>
+</div>
+
+<h3>Day-to-day: they're interchangeable for most tasks</h3>
+<p>For routine QA tasks — generating tests, debugging failures, refactoring — the choice of Claude Code vs Opencode is mostly a billing and preference decision. The agent loop, the GCSV prompt structure, and the git diff review workflow are identical. What you learned in Sessions 10–13 applies to both tools without modification.</p>
+  </div>
+</div>
+
+<div class="slide" data-title="Try This">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Try This — <em>Your First Opencode Session</em></h2>
+      <p class="v2-section-sub">Install Opencode with the Copilot backend and run a scoped task on your project.</p>
+    </div>
+
+<div class="v2-try-this" custom-style="try-this">
+  <div class="v2-try-label">Try This — 20 minutes</div>
+  <p><strong>Setup (5 min):</strong> If you haven't already, install Opencode and authenticate with your GitHub account. Run <code>opencode models</code> to confirm you can see the available models. Navigate to your project directory.</p>
+  <p><strong>First task (10 min):</strong> Run the same task you tried in Session 10 with Claude Code — or a similar scoped task. Write a GCSV prompt (from Session 13) before you start. Send it to Opencode and observe the session.</p>
+  <p><strong>Compare (5 min):</strong> If you've used both Claude Code and Opencode, compare the experience. Did one produce better output for this task? Was the interaction style different? The answer will inform which tool you reach for by default in your workflow.</p>
+  <p>If you only have access to one tool, that's fine — this session is about understanding the option exists and knowing how to use it if your organisation's licence makes it the better choice.</p>
+</div>
+
+<span class="v2-progressive-marker" custom-style="progress-marker">▲ Builds on Session 10 Terminal Agent Intro &amp; Session 13 GCSV Task Prompts</span>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I can do this" — before moving to Phase 5.</p>
+    </div>
+<div class="v2-self-check" custom-style="self-assessment">
+  <div class="v2-self-check-title">Session 15 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I can do this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know why someone would choose Opencode over Claude Code — and when each makes sense</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can install Opencode and authenticate it with a GitHub Copilot account</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know which models are available via the Copilot backend and which to choose for QA tasks</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know which context file Opencode reads when using the Copilot vs Anthropic backend</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I understand that GCSV prompting and git diff review apply identically to both Claude Code and Opencode</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I have run at least one Opencode session (or know clearly why Claude Code is the right choice for my setup)</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-16/" style="color:var(--accent);">Session 16 — What Is MCP? Understanding the Model Context Protocol →</a></p>
+  </div>
+</div>

@@ -1,0 +1,207 @@
+---
+layout: guide.njk
+title: "Session 11 Full Guide — The Agent Evolution: From Inline Suggestion to Autonomous Agent"
+sessionNumber: "11"
+sessionTitle: "The Agent Evolution — From Inline Suggestion to Autonomous Agent"
+phase: "Phase 4: Terminal Agents & Agentic Tools"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Agent Evolution — <em>Inline to Autonomous</em></h2>
+      <p class="v2-section-sub">The four stages of AI tooling, what changes at each step, and the three mental shifts that make you effective with agents rather than just frustrated by them.</p>
+    </div>
+
+<div class="v2-version-stamp" custom-style="version-stamp">Session 11 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools &nbsp;·&nbsp; Intermediate</div>
+
+<div class="v2-quickstart" custom-style="quick-start">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 11 you will be able to describe the four stages of AI tool interaction, name the three mental shifts required for effective agent use, and apply the right oversight model for each tool on the spectrum.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>From Session 02:</strong> You already know the five eras of AI tools historically. This session goes deeper on the practical transition from chat/completions to terminal agents — specifically what changes in how you work, not just what the tool can do.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Four Interaction Stages">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Four Stages of <em>AI Interaction</em></h2>
+      <p class="v2-section-sub">Each stage changes what you do and what the AI does. Understanding the difference prevents you from using a Stage 4 tool with Stage 1 habits.</p>
+    </div>
+
+<div class="v2-card-list" custom-style="row-card-list">
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">STAGE 1</div>
+      <div class="v2-era-name">Inline Completions</div>
+      <div class="v2-era-date">Ghost text</div>
+    </div>
+    <div class="v2-card-body"><strong>You type, AI suggests the next tokens.</strong> You accept or dismiss with a keypress. Zero autonomy — the AI never initiates, never reads your project. Your oversight model: glance at the suggestion before pressing Tab.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">STAGE 2</div>
+      <div class="v2-era-name">Conversational Chat</div>
+      <div class="v2-era-date">One turn at a time</div>
+    </div>
+    <div class="v2-card-body"><strong>You ask, AI answers.</strong> You copy code manually. One turn at a time — each response is complete and self-contained. Your oversight model: read the output before using it.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">STAGE 3</div>
+      <div class="v2-era-name">Agent Mode (Editor)</div>
+      <div class="v2-era-date">Scoped autonomy</div>
+    </div>
+    <div class="v2-card-body"><strong>AI reads files, proposes changes, you approve.</strong> Multi-step task in a loop. Scoped to your VS Code workspace. Your oversight model: review proposed diffs and terminal commands before each is applied.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">STAGE 4</div>
+      <div class="v2-era-name">Terminal Agent</div>
+      <div class="v2-era-date">Full autonomy</div>
+    </div>
+    <div class="v2-card-body"><strong>AI reads, writes, runs, and iterates autonomously.</strong> Full filesystem access. Loop runs to completion. Your oversight model: review <code>git diff</code> at the end — not each individual step.</div>
+  </div>
+</div>
+
+<div class="v2-callout warning" custom-style="callout-warning">
+  <p><strong>Common failure mode:</strong> Using Stage 4 tools with Stage 2 habits. Treating the agent's output summary as a full code review, rather than running <code>git diff</code> to see what actually changed. The oversight model has to match the stage of the tool.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Three Mental Shifts">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Three Mental Shifts <em>for Agent Work</em></h2>
+      <p class="v2-section-sub">Moving from chat habits to agent habits isn't automatic. These three shifts are where most people get stuck.</p>
+    </div>
+
+<div class="v2-era-card" custom-style="era-card">
+  <div class="v2-era-card-header">
+    <span class="v2-era-badge">SHIFT 1</span>
+    <span class="v2-era-name">From prompting to tasking</span>
+  </div>
+  <div class="v2-card-body">In chat, you write a detailed prompt that shapes every aspect of the output — format, tone, constraints, examples. In agent mode, you write a <strong>task</strong>: the goal, the constraints on scope, and how you'll verify it's done. The agent figures out the steps. Overly detailed step-by-step instructions interfere with the agent's ability to plan — you're doing its job for it.</div>
+  <div class="v2-example-box">
+    <div class="v2-example-label">Example</div>
+    <div class="v2-example-text"><strong>Chat habit (too procedural):</strong> <em>"First read the login spec, then look at the POM, then write a test for forgot-password that uses page.fill() and has three test cases and uses the existing LoginPage class…"</em><br><strong>Agent habit (goal + constraints):</strong> <em>"Add tests for the forgot-password flow. Match the existing test style. Don't modify any existing files — create a new spec file only."</em></div>
+  </div>
+</div>
+
+<div class="v2-era-card" custom-style="era-card">
+  <div class="v2-era-card-header">
+    <span class="v2-era-badge">SHIFT 2</span>
+    <span class="v2-era-name">From reviewing text to reviewing actions</span>
+  </div>
+  <div class="v2-card-body">In chat, you review a text response. In agent mode, you review <strong>what the agent did to your project</strong> — file writes, file deletes, commands run, packages installed. The agent's summary is not your review. <code>git diff</code> is your review.</div>
+  <div class="v2-example-box">
+    <div class="v2-example-label">Example</div>
+    <div class="v2-example-text">Agent says: <em>"Done — I added 3 tests and updated the Page Object."</em> You run <code>git diff</code> and see it also modified <code>playwright.config.ts</code> to add a new project. That change is fine — but you wouldn't have known without the diff.</div>
+  </div>
+</div>
+
+<div class="v2-era-card" custom-style="era-card">
+  <div class="v2-era-card-header">
+    <span class="v2-era-badge">SHIFT 3</span>
+    <span class="v2-era-name">From one-shot to iterative tasking</span>
+  </div>
+  <div class="v2-card-body">Chat works best when you get everything into one long prompt. Agents work best when you break tasks into <strong>independently verifiable chunks</strong> and run them sequentially. Each task should have a clear completion condition you can check before moving on.</div>
+  <div class="v2-example-box">
+    <div class="v2-example-label">Example</div>
+    <div class="v2-example-text"><strong>Too big (one shot):</strong> <em>"Refactor the entire test suite to use Page Objects, fix the flaky tests, add coverage for the checkout flow, and update the README."</em><br><strong>Better (chunked):</strong><br>Task 1: <em>"Extract a CheckoutPage object from checkout.spec.ts."</em> → review diff<br>Task 2: <em>"Update checkout tests to use the new CheckoutPage."</em> → run tests → review diff<br>Task 3: <em>"Add tests for the payment failure scenario."</em> → run tests → review diff</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The Oversight Model">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Right <em>Oversight Model</em></h2>
+      <p class="v2-section-sub">What to review, when to review it, and what to do when the agent goes wrong.</p>
+    </div>
+    <p>Oversight doesn't disappear with agents — it changes shape. You're reviewing less "is this code correct?" and more "is this what I asked for and is it safe to commit?"</p>
+
+<h3>The end-of-session review checklist</h3>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">Run <code>git diff</code></strong> — See every change. Check that nothing outside your intended scope was modified.</div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">Run your tests</strong> — The agent ran them during its session, but run them again yourself. Tests pass in the agent's environment doesn't mean they pass in CI with your full suite.</div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">Read the new test logic</strong> — Not every line, but understand what each new test is checking. A test that's structurally correct but asserts the wrong thing is worse than no test.</div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">→</div>
+    <div class="v2-step-body"><strong class="v2-step-title">Check for scope creep</strong> — Did the agent modify shared utilities, config files, or package.json unexpectedly? These need extra scrutiny — changes here affect every test, not just the ones you asked about.</div>
+  </div>
+</div>
+
+<h3>When to intervene mid-session</h3>
+
+<div class="v2-decision-grid" custom-style="decision-grid">
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Agent asks to run a command you don't recognise</div>
+    <div class="v2-decision-use">Read the command carefully before approving — ask the agent to explain it</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Agent loops on the same error 3+ times</div>
+    <div class="v2-decision-use">Interrupt with Ctrl+C, re-task with more specific context</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Agent proposes editing a file you didn't mention</div>
+    <div class="v2-decision-use">Read its reasoning — it may be correct, or it may have misunderstood scope</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Agent seems confused about project structure</div>
+    <div class="v2-decision-use">Add a CLAUDE.md to help it understand your conventions (Session 12)</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I understand this" — before moving to Session 12.</p>
+    </div>
+<div class="v2-self-check" custom-style="self-assessment">
+  <div class="v2-self-check-title">Session 11 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I understand this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can describe the four interaction stages and what changes at each step</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I understand why using Stage 4 tools with Stage 2 habits causes problems</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain the difference between prompting (chat) and tasking (agent) with a concrete example</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know why <code>git diff</code> is my real review — not the agent's summary</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can describe what "independently verifiable chunks" means and why agents work better with them</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know when to intervene mid-session and what to do when the agent loops on an error</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-12/" style="color:var(--accent);">Session 12 — Context Files: CLAUDE.md, copilot-instructions.md &amp; AGENTS.md →</a></p>
+  </div>
+</div>
