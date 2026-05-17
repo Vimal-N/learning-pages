@@ -1,0 +1,1291 @@
+---
+layout: guide.njk
+title: Phase 2 Slides — GitHub Copilot Mastery
+sessionNumber: "04"
+sessionTitle: "Phase 2 — GitHub Copilot Mastery"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+---
+
+<!-- ─── SLIDE 01 — Title ─── -->
+<div
+  class="slide"
+  data-title="Phase 2 Overview"
+  data-notes="Welcome to Phase 2. Phase 1 was context and theory — important groundwork. From here, every session is hands-on with a real tool. Phase 2 is entirely about GitHub Copilot: what it is, how to set it up, how to use it every day, and where it starts to become something more than autocomplete. Ask the team to have VS Code open if they can."
+>
+  <div class="v2-slide-wrap title-slide">
+    <div class="session-badge">Phase 2 &nbsp;·&nbsp; AI in Practice</div>
+    <h1><em>GitHub Copilot</em> Mastery</h1>
+    <p class="title-sub">
+      Setup, daily workflow patterns, and your first taste of autonomous AI —
+      everything you need to make Copilot genuinely useful in QA work.
+    </p>
+    <div class="title-stats">
+      <div class="title-stat">
+        <div class="title-stat-val">3 Sessions</div>
+        <div class="title-stat-label">Covered</div>
+      </div>
+      <div class="title-stat">
+        <div class="title-stat-val">Beginner</div>
+        <div class="title-stat-label">Level</div>
+      </div>
+      <div class="title-stat">
+        <div class="title-stat-val">VS Code</div>
+        <div class="title-stat-label">Required</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 02 — Agenda ─── -->
+<div
+  class="slide"
+  data-title="What We're Covering"
+  data-notes="Walk the agenda quickly — no need to read every item. Signal the arc: we start with what Copilot actually is and get it installed, then move into daily workflow patterns, then finish with Agent Mode which is where Copilot starts behaving less like autocomplete and more like a colleague working alongside you. Roughly 5–7 minutes per section."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Today's Agenda</div>
+    <h2>What we're covering</h2>
+    <div class="v2-step-list" custom-style="step-list">
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">01</div>
+        <div>
+          <div class="v2-step-title">
+            What GitHub Copilot is — and how it actually works
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">02</div>
+        <div>
+          <div class="v2-step-title">Two modes: Completions and Chat</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">03</div>
+        <div>
+          <div class="v2-step-title">
+            Setup: install, sign in, first completion
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">04</div>
+        <div>
+          <div class="v2-step-title">What Copilot can and cannot do</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">05</div>
+        <div>
+          <div class="v2-step-title">Privacy and code sharing rules</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">06</div>
+        <div>
+          <div class="v2-step-title">
+            8 daily workflow patterns for QA engineers
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">07</div>
+        <div>
+          <div class="v2-step-title">
+            Agent Mode — autonomous AI in your editor
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">08</div>
+        <div>
+          <div class="v2-step-title">
+            When to use each mode and common mistakes
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 03 — What Is GitHub Copilot? ─── -->
+<div
+  class="slide"
+  data-title="What Is GitHub Copilot?"
+  data-notes="Keep this simple — no jargon. Copilot is an AI coding assistant built by GitHub (Microsoft) powered by OpenAI models. The key differentiator from a general LLM like ChatGPT: it was trained on billions of lines of public GitHub code, which makes it dramatically better at code-specific tasks. It watches what you type and suggests what comes next. It can also answer questions about your code in a chat interface."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Concept 1</div>
+    <h2>What is GitHub Copilot?</h2>
+    <div class="v2-callout info" custom-style="callout-info">
+      <p>
+        An AI coding assistant built into your editor. It watches what you type
+        and suggests what comes next — and it can answer questions about your
+        code. It was trained on billions of lines of public GitHub code, which
+        makes it far more useful for coding tasks than a general-purpose
+        chatbot.
+      </p>
+    </div>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Built by</div>
+        <ul>
+          <li>GitHub (owned by Microsoft)</li>
+          <li>Powered by OpenAI models</li>
+          <li>Available in VS Code, JetBrains, Neovim</li>
+        </ul>
+      </div>
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Trained on</div>
+        <ul>
+          <li>Billions of lines of public GitHub code</li>
+          <li>Knows Playwright, Jest, Cypress patterns</li>
+          <li>Understands TypeScript, Python, Java and more</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 04 — Two Modes ─── -->
+<div
+  class="slide"
+  data-title="Completions &amp; Chat"
+  data-notes="This distinction matters — many people discover one mode and miss the other entirely. Completions are passive: Copilot watches what you type and suggests what comes next in grey ghost text. You press Tab to accept or Escape to dismiss. Chat is active: you open a panel, ask a question or give an instruction, and Copilot responds. For QA work, Chat is more useful for complex tasks; Completions are faster for repetitive test patterns."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Concept 2</div>
+    <h2>Two modes — know both</h2>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Inline Completions</div>
+        <ul>
+          <li><strong>Passive</strong> — Copilot watches and suggests</li>
+          <li>Ghost text appears as you type</li>
+          <li>Tab to accept &nbsp;·&nbsp; Escape to dismiss</li>
+          <li>Best for: repetitive patterns, boilerplate</li>
+        </ul>
+        <div class="v2-code-wrap" custom-style="code-block">
+          <div class="code-block">
+            <pre><span style="color:var(--text-muted)">// Test: user submits the login form</span>
+<span style="color:var(--text-dim)">test('user submits the login form', async ({ page }) => {
+  await page.goto('/login');
+  await page.getByLabel('Email').fill('user@example.com');
+});</span></pre>
+          </div>
+        </div>
+      </div>
+      <div class="v2-col info">
+        <div class="v2-col-label">Copilot Chat</div>
+        <ul>
+          <li><strong>Active</strong> — you ask, Copilot responds</li>
+          <li>Opens in a sidebar panel</li>
+          <li>Has access to your open file and selection</li>
+          <li>Best for: debugging, explaining, refactoring</li>
+        </ul>
+        <div
+          class="v2-callout info"
+          custom-style="callout-info"
+          style="margin-top: 10px"
+        >
+          <p>
+            <strong>Slash commands:</strong> /explain &nbsp; /fix &nbsp; /tests
+            &nbsp; /doc
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 05 — Setup ─── -->
+<div
+  class="slide"
+  data-title="Setup"
+  data-notes="Walk through this live if possible. Open VS Code Extensions panel (Ctrl+Shift+X / Cmd+Shift+X) and search for 'GitHub Copilot'. Install both extensions: GitHub Copilot (completions) and GitHub Copilot Chat. After installing, VS Code prompts a GitHub sign-in via browser OAuth — just click Authorize. Common issue: people with both personal and work GitHub accounts sign into the wrong one. Make sure they sign into the account that has the Copilot licence. Once active, ask everyone to open a test file, write a comment, and watch the grey suggestion appear."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Setup</div>
+    <h2>Get Copilot running in 3 steps</h2>
+    <div class="v2-step-list" custom-style="step-list">
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">1</div>
+        <div>
+          <div class="v2-step-title">Install the extensions</div>
+          <div class="v2-step-body">
+            VS Code Extensions panel → search <strong>GitHub Copilot</strong>.
+            Install both: <em>GitHub Copilot</em> (completions) and
+            <em>GitHub Copilot Chat</em>. JetBrains users: same plugin available
+            in JetBrains Marketplace.
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">2</div>
+        <div>
+          <div class="v2-step-title">Sign in to GitHub</div>
+          <div class="v2-step-body">
+            Click the Copilot icon in the status bar → sign in via browser OAuth
+            → click Authorize. Sign into the account that has your Copilot
+            licence (Individual, Business, or Enterprise).
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">3</div>
+        <div>
+          <div class="v2-step-title">Your first completion</div>
+          <div class="v2-step-body">
+            Open a <code>.ts</code> test file. Write a comment:
+            <code>// Test: user logs in successfully</code>. Pause — watch the
+            grey suggestion. Press <strong>Tab</strong> to accept. Copilot is
+            active.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="v2-callout warning" custom-style="callout-warning">
+      <p>
+        <strong>Plans:</strong> Free tier (limited), Individual ~$10/month,
+        Business ~$19/seat. Check with your manager before signing up
+        individually.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 06 — How Completions Work ─── -->
+<div
+  class="slide"
+  data-title="How Completions Work"
+  data-notes="The key concept: Copilot uses a window of surrounding code — the lines above and around your cursor — to understand what you're building. It doesn't read your whole project. It reads what's nearby. Practical implication: the better your context (meaningful names, comments, existing patterns), the better the suggestions. Copilot is reading the same code a human reviewer would. Better code = better Copilot."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Concept 3</div>
+    <h2>How Copilot reads your code</h2>
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-info-card" custom-style="info-card">
+        <div><div class="v2-tool-name">Reads surrounding context</div></div>
+        <div class="v2-card-body">
+          Lines above and around your cursor — your imports, variable names,
+          existing functions, and comments. Not your whole project.
+        </div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div><div class="v2-tool-name">Matches your patterns</div></div>
+        <div class="v2-card-body">
+          If you use <code>getByRole</code> for selectors in your existing
+          tests, Copilot will too. It replicates what it sees — good patterns
+          <em>and</em> bad patterns.
+        </div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div><div class="v2-tool-name">Better context = better suggestions</div></div>
+        <div class="v2-card-body">
+          Descriptive comments, meaningful variable names, and well-structured
+          existing code all improve what Copilot generates.
+        </div>
+      </div>
+    </div>
+    <div class="v2-callout info" custom-style="callout-info">
+      <p>
+        Copilot Chat has access to your <strong>open file</strong> and any
+        <strong>selected code</strong> — you don't need to paste it in. Use
+        <code>#file</code> to reference other files explicitly.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 07 — Context References ─── -->
+<div
+  class="slide"
+  data-title="Power of @ and #"
+  data-notes="This is one of the most underused features. Most people just type their question into Chat — but Copilot has explicit syntax for controlling exactly what it sees. The @ prefix invokes a chat participant — a specialised mode with a different focus. The # prefix attaches a specific piece of context to your message. Knowing these means you stop guessing whether Copilot can see the right thing and start telling it explicitly.&#10;&#10;For QA engineers: @workspace is the most powerful — use it to ask questions that span your whole test suite. 'Find all tests that cover the checkout flow' or 'Are there any tests for the error states on this API?' Without @workspace, Copilot only sees your open file.&#10;&#10;#file is your precision tool — reference a specific page object, a helper file, or a config without opening it. #selection is instant — select a failing assertion in your test, ask 'Why would this fail in CI but not locally?' and Copilot has exactly what it needs.&#10;&#10;@vscode is underrated — most people Google VS Code questions. Instead: '@vscode How do I run only the tests in this file?' or '@vscode What setting controls test retries?'"
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Copilot Chat</div>
+    <h2>Controlling what Copilot sees</h2>
+    <p class="slide-sub">
+      Use <code>@</code> to choose a chat participant. Use <code>#</code> to
+      attach specific context. Both give you precision — instead of hoping
+      Copilot finds the right thing.
+    </p>
+    <h3 class="slide-section-label">
+      @ Chat Participants — choose a specialised mode
+    </h3>
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="cmd-badge">@workspace</div>
+          <div class="v2-era-name">Searches your whole project</div>
+        </div>
+        <div class="v2-card-body">
+          Indexes and searches across all files in the workspace. Use for: "Find
+          all tests covering the checkout flow", "Are there any tests for the
+          404 error state?", "Which page objects exist in this project?"
+        </div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="cmd-badge">@vscode</div>
+          <div class="v2-era-name">VS Code features &amp; settings</div>
+        </div>
+        <div class="v2-card-body">
+          Answers questions about the editor itself. Use for: "How do I run only
+          the tests in this file?", "What setting controls test retries?", "How
+          do I configure Playwright in launch.json?"
+        </div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="cmd-badge">@terminal</div>
+          <div class="v2-era-name">Terminal commands &amp; shell</div>
+        </div>
+        <div class="v2-card-body">
+          Explains and generates shell commands in context. Use for: "What
+          command runs only my smoke tests?", "How do I filter Playwright test
+          results by tag?"
+        </div>
+      </div>
+    </div>
+    <h3 class="slide-section-label">
+      # Context Variables — attach exactly what Copilot needs
+    </h3>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col neutral">
+        <div class="v2-col-label">File &amp; code references</div>
+        <ul>
+          <li><code>#file</code> — attach a specific file by name</li>
+          <li><code>#selection</code> — attach your currently selected code</li>
+          <li>
+            <code>#editor</code> — attach the full content of the active file
+          </li>
+          <li>
+            <code>#codebase</code> — broad search across all files (like
+            @workspace)
+          </li>
+        </ul>
+      </div>
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Terminal references</div>
+        <ul>
+          <li><code>#terminalLastCommand</code> — the last command you ran</li>
+          <li>
+            <code>#terminalSelection</code> — selected text in the terminal
+          </li>
+        </ul>
+        <div class="v2-col-label" style="margin-top: 12px">QA examples</div>
+        <ul>
+          <li>"Fix this failing assertion <code>#selection</code>"</li>
+          <li>
+            "Does <code>#file:login.spec.ts</code> cover the lockout case?"
+          </li>
+          <li>"Why did this fail? <code>#terminalLastCommand</code>"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 08 — Use # References ─── -->
+<div
+  class="slide"
+  data-title="Use # References"
+  data-notes="This is a practical slide — walk through each example live if you can. Most people have never used # variables because they're not obvious from looking at the Chat input box. The key thing to demo: type # in the Chat panel and watch the dropdown appear. Then pick from the list or keep typing to filter. Everything else follows from that.&#10;&#10;The drag-and-drop trick for #file is the fastest way to show people — literally drag a file from the Explorer panel into the Chat input. It instantly attaches it as a reference. Audience reaction to this is usually 'I had no idea you could do that.'&#10;&#10;The mental model callout is the most important takeaway on this slide. Without #, Copilot is working with limited context and making educated guesses. With #, you are handing it exactly the right material — like the difference between asking a colleague to debug something versus handing them the error, the code, and the file."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">How To</div>
+    <h2>Using # references in practice</h2>
+    <h3 class="slide-section-label">
+      Type # in the Chat input — a picker appears
+    </h3>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col neutral">
+        <div class="v2-col-label">#selection — fastest way</div>
+        <div
+          class="v2-step-list"
+          custom-style="step-list"
+          style="margin: 6px 0"
+        >
+          <div class="v2-step" custom-style="step" style="padding: 7px 12px">
+            <div class="v2-step-num" style="font-size: 0.65rem">1</div>
+            <div>
+              <div class="v2-step-body">
+                Highlight a failing assertion in your test file
+              </div>
+            </div>
+          </div>
+          <div class="v2-step" custom-style="step" style="padding: 7px 12px">
+            <div class="v2-step-num" style="font-size: 0.65rem">2</div>
+            <div><div class="v2-step-body">Open Copilot Chat</div></div>
+          </div>
+          <div class="v2-step" custom-style="step" style="padding: 7px 12px">
+            <div class="v2-step-num" style="font-size: 0.65rem">3</div>
+            <div>
+              <div class="v2-step-body">
+                Type: <code>Why would this fail in CI? #selection</code>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 6px">
+          No copy-paste. Copilot sees your question and your highlighted code
+          together.
+        </p>
+      </div>
+      <div class="v2-col neutral">
+        <div class="v2-col-label">#file — three ways to attach</div>
+        <ul>
+          <li>
+            <strong>Type and pick:</strong> type <code>#file</code> → file
+            picker opens
+          </li>
+          <li>
+            <strong>Drag and drop:</strong> drag any file from Explorer into the
+            Chat input — it attaches instantly
+          </li>
+          <li>
+            <strong>Inline name:</strong>
+            <code>#file:login.spec.ts</code> directly in your message
+          </li>
+        </ul>
+      </div>
+    </div>
+    <h3 class="slide-section-label">QA examples — copy these patterns</h3>
+    <div class="v2-code-wrap" custom-style="code-block">
+      <div class="code-block">
+        <pre><span style="color:var(--accent)"># Diagnose a failure from the test runner</span>
+Fix this  <span style="color:#673ab7;font-weight:700;">#testFailure</span>
+
+<span style="color:var(--accent)"># Find coverage gaps in your PR</span>
+What test coverage is missing for  <span style="color:#673ab7;font-weight:700;">#changes</span>
+
+<span style="color:var(--accent)"># Explain a terminal error without copy-pasting</span>
+What went wrong?  <span style="color:#673ab7;font-weight:700;">#terminalLastCommand</span>
+
+<span style="color:var(--accent)"># Reference another test file without opening it</span>
+Does  <span style="color:#673ab7;font-weight:700;">#file:checkout.spec.ts</span>  cover the empty cart edge case?
+
+<span style="color:var(--accent)"># Fix everything in the Problems panel at once</span>
+Write tests that would catch these errors  <span style="color:#673ab7;font-weight:700;">#problems</span></pre>
+      </div>
+    </div>
+    <div class="v2-callout info" custom-style="callout-info">
+      <p>
+        <strong>Key mental model:</strong> Without <code>#</code> — Copilot only
+        sees your open file and your message text, and fills in the rest with
+        educated guesses. With <code>#</code> — you hand it exactly the right
+        material. Like the difference between asking a colleague "my test is
+        broken" versus handing them the error, the test code, and the file it
+        lives in.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 09 — Can & Can't Do ─── -->
+<div
+  class="slide"
+  data-title="What Copilot Can &amp; Can't Do"
+  data-notes="Set accurate expectations now so there's no disappointment later. The most dangerous assumption: that Copilot knows your app. It doesn't. It can guess at selectors but those guesses are based on patterns, not your actual DOM. For QA work specifically: Copilot can write tests that LOOK correct but assert the wrong things, use outdated APIs, or have selectors that don't match your UI. Always verify output. Never commit Copilot-generated test code without running it first."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Concept 4</div>
+    <h2>Honest expectations</h2>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col good">
+        <div class="v2-col-label">Copilot is great at</div>
+        <ul>
+          <li>Writing test boilerplate from a comment</li>
+          <li>Adding tests that match your existing patterns</li>
+          <li>Explaining unfamiliar code in plain English</li>
+          <li>First-pass debugging of failing tests</li>
+          <li>Generating test data and edge case variations</li>
+          <li>Refactoring repetitive test code</li>
+        </ul>
+      </div>
+      <div class="v2-col bad">
+        <div class="v2-col-label">Copilot cannot</div>
+        <ul>
+          <li>Know your actual app's DOM or selectors</li>
+          <li>Run or execute code to verify it works</li>
+          <li>Know your team's naming conventions</li>
+          <li>Be certain about current library API versions</li>
+        </ul>
+      </div>
+    </div>
+    <div class="v2-callout danger" custom-style="callout-danger">
+      <p>
+        Copilot can write a test that passes but asserts the wrong thing. A test
+        that always passes regardless of app behaviour is worse than no test at
+        all.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 10 — Privacy ─── -->
+<div
+  class="slide"
+  data-title="Privacy &amp; Code Sharing"
+  data-notes="This is usually the first question legal or security teams ask. The answer varies by plan. On Individual plan, code snippets may be used to improve the model (can be opted out in settings). On Business/Enterprise plan, code is NOT used for training by default. Recommendation: check your organisation's AI usage policy before using Copilot with production code or customer data. General rule that applies everywhere: never paste credentials, secrets, personal data, or production database queries into any AI tool."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Concept 5</div>
+    <h2>Privacy and code sharing</h2>
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">Individual</div>
+          <div class="v2-era-name">Code may be used for training</div>
+        </div>
+        <div class="v2-card-body">
+          Code snippets sent to Copilot may be used to improve the model. Can be
+          opted out in GitHub settings under Copilot preferences.
+        </div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">Business / Enterprise</div>
+          <div class="v2-era-name">Code is NOT used for training</div>
+        </div>
+        <div class="v2-card-body">
+          By default, your code is not used to train Copilot models. Additional
+          security and policy controls available at Enterprise tier.
+        </div>
+      </div>
+    </div>
+    <div class="v2-callout danger" custom-style="callout-danger">
+      <p>
+        <strong>Three rules that apply everywhere:</strong> Never paste API keys
+        or passwords. Never paste customer data or PII. Always check your
+        organisation's AI usage policy first.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 11 — The Right Mindset ─── -->
+<div
+  class="slide"
+  data-title="The Right Mindset"
+  data-notes="Before the workflow patterns, set the mental model. The biggest mistake: treating Copilot as smarter autocomplete. Autocomplete finishes words. Copilot understands intent and generates meaningful code from a brief description. The right analogy: Copilot is a pair programmer who types faster than you, knows every API, but has never seen your specific app. Your job is to steer. Their job is to execute. You are still the engineer — Copilot is the tool."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Mindset Shift</div>
+    <h2>How to think about Copilot</h2>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col bad">
+        <div class="v2-col-label">Wrong mental model</div>
+        <ul>
+          <li>Fancy autocomplete that guesses next words</li>
+          <li>Produces code you can use without reading</li>
+          <li>Knows your app and conventions</li>
+          <li>A replacement for thinking through the test</li>
+        </ul>
+      </div>
+      <div class="v2-col good">
+        <div class="v2-col-label">Right mental model</div>
+        <ul>
+          <li>A pair programmer who types fast and knows every API</li>
+          <li>Produces a first draft you review and verify</li>
+          <li>Knows patterns — not your specific app</li>
+          <li>A tool that amplifies your QA expertise</li>
+        </ul>
+      </div>
+    </div>
+    <div class="v2-callout info" custom-style="callout-info">
+      <p>
+        Your job is to steer. Copilot's job is to execute. You are still the
+        engineer.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 12 — 8 Patterns Overview ─── -->
+<div
+  class="slide"
+  data-title="8 Workflow Patterns"
+  data-notes="These eight patterns come from real QA workflows. We'll go through each one with an example. Spend about 3–5 minutes per pattern. Tell the team: you don't need to use all of these. Pick two or three that map to your actual daily work and make them habits. The rest will follow naturally."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Workflow Patterns</div>
+    <h2>8 patterns for your daily work</h2>
+
+    <h3 class="slide-section-label">Writing &amp; Generating</h3>
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Write a Test from Scratch</div>
+          <div class="v2-tool-mode">P1</div>
+        </div>
+        <div class="v2-card-body">
+          Start with a comment describing what the test should do. Copilot
+          generates the skeleton — you fix selectors, add assertions, verify
+          before keeping.
+        </div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Add to an Existing Suite</div>
+          <div class="v2-tool-mode">P2</div>
+        </div>
+        <div class="v2-card-body">
+          Open a test file that already has tests. Copilot reads your patterns
+          and matches your style — selectors, assertion approach, imports —
+          automatically.
+        </div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Generate Test Data</div>
+          <div class="v2-tool-mode">P3</div>
+        </div>
+        <div class="v2-card-body">
+          Ask Chat for test users, boundary values, invalid inputs, or edge case
+          strings. What takes 20 minutes manually takes 10 seconds.
+        </div>
+      </div>
+    </div>
+
+    <h3 class="slide-section-label">Understanding &amp; Fixing</h3>
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Understand Unfamiliar Code</div>
+          <div class="v2-tool-mode">P4</div>
+        </div>
+        <div class="v2-card-body">
+          Select any function → right-click → Copilot: Explain. Plain-English
+          breakdown in 30 seconds. Invaluable when onboarding or reviewing a PR.
+        </div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Debug a Failing Test</div>
+          <div class="v2-tool-mode">P5</div>
+        </div>
+        <div class="v2-card-body">
+          Paste the full error message and the failing test. Ask for ranked
+          hypotheses. Copilot narrows the cause — you verify by running the
+          test.
+        </div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Refactor Repetitive Patterns</div>
+          <div class="v2-tool-mode">P6</div>
+        </div>
+        <div class="v2-card-body">
+          Select copy-pasted setup code across tests. Ask Copilot to extract it
+          into a shared helper or page object. Review the result before
+          applying.
+        </div>
+      </div>
+    </div>
+
+    <h3 class="slide-section-label">Getting the Most from Copilot</h3>
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Completions Best Practices</div>
+          <div class="v2-tool-mode">P7</div>
+        </div>
+        <div class="v2-card-body">
+          Write a descriptive comment above a function — that's your brief to
+          Copilot. Use <code>Alt+]</code> to cycle alternatives. Accept
+          word-by-word with <code>Ctrl+→</code>.
+        </div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Chat vs Completions</div>
+          <div class="v2-tool-mode">P8</div>
+        </div>
+        <div class="v2-card-body">
+          Quick and repetitive → Completions. Complex, multi-step, or needs
+          reasoning → Chat. After a few weeks this becomes instinct.
+        </div>
+      </div>
+    </div>
+
+    <h3 class="slide-section-label">The Rule Across All 8</h3>
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Run the test first</div>
+          <div class="v2-tool-mode">Always</div>
+        </div>
+        <div class="v2-card-body">
+          Never commit Copilot-generated test code without running it. A test
+          that fails to run is obvious. A test that passes but asserts the wrong
+          thing is dangerous.
+        </div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Verify selectors and assertions</div>
+          <div class="v2-tool-mode">Always</div>
+        </div>
+        <div class="v2-card-body">
+          Check selectors against the real UI. Confirm assertions test actual
+          app behaviour — not just that an element exists on the page.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 13 — P1 & P2: Writing Tests ─── -->
+<div
+  class="slide"
+  data-title="Writing Tests"
+  data-notes="P1 — Writing from scratch: the key habit is to start with a comment that describes what the test should do. Copilot reads that comment and generates a skeleton. You then refine — fix selectors, add assertions, check the flow. Live demo idea: open a new test file, write the comment, wait for suggestion, Tab to accept, then discuss what to verify before keeping.&#10;&#10;P2 — Adding to an existing suite: this is where Copilot really shines. When you're in a file that already has tests, Copilot reads the existing patterns and matches your style automatically. Selector strategy, assertion style, import structure — it picks all of that up. Practical tip: make sure existing tests are well-written. Copilot will replicate whatever it sees."
+>
+  <div class="v2-slide-wrap">
+    <h3 class="slide-section-label">P1 · Write a test from scratch</h3>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col bad">
+        <div class="v2-col-label">Without Copilot</div>
+        <p>
+          Open blank file, look up API, write boilerplate, check docs for
+          selectors, repeat.
+        </p>
+      </div>
+      <div class="v2-col good">
+        <div class="v2-col-label">With Copilot</div>
+        <p>
+          Write a comment describing the test. Pause. Tab to accept the
+          skeleton. Fix selectors and verify assertions.
+        </p>
+      </div>
+    </div>
+    <div class="v2-code-wrap" custom-style="code-block">
+      <div class="code-block">
+        <pre><span style="color:var(--accent)">// Test: user fills the checkout form and sees order confirmation</span>
+test('user fills the checkout form and sees order confirmation', async ({ page }) => {
+  await page.goto('/checkout');
+  await page.getByLabel('Full name').fill('Jane Smith');
+  await page.getByLabel('Card number').fill('4111111111111111');
+  await page.getByRole('button', { name: 'Place order' }).click();
+  await expect(page.getByText('Order confirmed')).toBeVisible();
+});</pre>
+      </div>
+    </div>
+    <h3 class="slide-section-label">P2 · Add to an existing suite</h3>
+    <div class="v2-callout info" custom-style="callout-info">
+      <p>
+        Copilot reads your existing tests and replicates your style — selector
+        strategy, assertion patterns, import structure. The better your existing
+        tests, the better the new ones.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 14 — P3 & P4 ─── -->
+<div
+  class="slide"
+  data-title="Test Data &amp; Understanding Code"
+  data-notes="P3 — Test data: generating test data is one of the most tedious parts of QA. Need 20 user records? 50 email addresses? Boundary values? Copilot does this in seconds via Chat. Use Chat for large sets, Completions for small inline arrays. Generated data should still be reviewed — Copilot might include data that passes validation but isn't meaningful for the scenario.&#10;&#10;P4 — Understanding code: this is the hidden gem most people discover after a few weeks. Select any code → right-click → Copilot: Explain. In 30 seconds you understand what it does. Most useful when: debugging a test someone else wrote, onboarding to a new project, reviewing a PR with an approach you don't understand."
+>
+  <div class="v2-slide-wrap">
+    <h3 class="slide-section-label">P3 · Generate test data</h3>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Chat prompt</div>
+        <div class="v2-code-wrap" custom-style="code-block">
+          <div class="code-block">
+            <pre>
+Generate 10 test users as a TypeScript array.
+Each needs: name, email, role (admin/viewer),
+and an invalid password that fails our
+validation (min 8 chars, 1 number required).</pre
+            >
+          </div>
+        </div>
+      </div>
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Also useful for</div>
+        <ul>
+          <li>Boundary values for numeric inputs</li>
+          <li>Invalid email formats for negative tests</li>
+          <li>Edge case strings (empty, very long, special chars)</li>
+          <li>Date ranges and timezone edge cases</li>
+        </ul>
+      </div>
+    </div>
+    <h3 class="slide-section-label">P4 · Understand unfamiliar code</h3>
+    <div class="v2-callout info" custom-style="callout-info">
+      <p>
+        Select any code → right-click → <strong>Copilot: Explain</strong>. Or
+        open Chat and ask "What does this function do and when would it fail?"
+        Instant explanation in plain English.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 15 — P5: Debug Failing Tests ─── -->
+<div
+  class="slide"
+  data-title="Debugging a Failing Test"
+  data-notes="This is where Copilot saves the most time for QA engineers. Walk through the exact workflow. Key: always paste the full error message, not a description of it. The error message is the primary signal Copilot uses to reason about what went wrong. Remind the team: Copilot gives you hypotheses, not guaranteed fixes. It didn't run the test — you still need to verify each suggestion by actually running the test."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Pattern 5</div>
+    <h2>Debugging a failing test</h2>
+    <div class="v2-step-list" custom-style="step-list">
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">1</div>
+        <div>
+          <div class="v2-step-title">Copy the full error message</div>
+          <div class="v2-step-body">
+            Don't describe it — paste it. The exact wording is the signal
+            Copilot uses to reason about the cause.
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">2</div>
+        <div>
+          <div class="v2-step-title">Paste the failing test code</div>
+          <div class="v2-step-body">
+            Select the test → open Chat → paste both the error and the test. Add
+            context: "passes locally, fails in CI on GitHub Actions."
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">3</div>
+        <div>
+          <div class="v2-step-title">Ask for ranked hypotheses</div>
+          <div class="v2-step-body">
+            "What are the most likely causes? List them ranked by probability."
+            You get a shortlist to investigate, not a single guess.
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">4</div>
+        <div>
+          <div class="v2-step-title">Verify each fix by running the test</div>
+          <div class="v2-step-body">
+            Copilot gives hypotheses — not guaranteed fixes. It didn't run the
+            test. Always verify before moving on.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 16 — P6, P7, P8 ─── -->
+<div
+  class="slide"
+  data-title="Refactor, Tips &amp; Mode Choice"
+  data-notes="P6 — Refactoring: select repetitive code → ask Copilot to extract into a helper or page object. Review carefully — Copilot's refactors are usually good but may not perfectly match your project structure.&#10;&#10;P7 — Completions tips: write a descriptive comment above a function — that's a brief to Copilot. Use Alt+]/Option+] to cycle through alternative suggestions. Accept word-by-word with Ctrl+Right/Cmd+Right instead of Tab to take just part of a suggestion.&#10;&#10;P8 — Chat vs Completions: the rule of thumb is quick and repetitive = Completions. Complex, multi-step, or needs explanation = Chat."
+>
+  <div class="v2-slide-wrap">
+    <h3 class="slide-section-label">P6 · Refactor repetitive patterns</h3>
+    <div class="v2-callout info" custom-style="callout-info">
+      <p>
+        Select repeated code across tests → open Chat → "Extract this into a
+        reusable helper. Match the style of the existing test file." Review the
+        result before applying.
+      </p>
+    </div>
+    <h3 class="slide-section-label">P7 · Inline completions tips</h3>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Habits that help</div>
+        <ul>
+          <li>Write a comment above what you're building</li>
+          <li>
+            <code>Alt+]</code> / <code>Option+]</code> cycles alternatives
+          </li>
+          <li><code>Ctrl+→</code> accepts one word at a time</li>
+        </ul>
+      </div>
+      <div class="v2-col neutral">
+        <div class="v2-col-label">P8 · Chat vs Completions</div>
+        <ul>
+          <li><strong>Completions</strong> — quick, repetitive, inline</li>
+          <li><strong>Chat</strong> — complex, multi-file, needs reasoning</li>
+          <li>After a few weeks this becomes instinct</li>
+        </ul>
+      </div>
+    </div>
+    <div class="v2-callout warning" custom-style="callout-warning">
+      <p>
+        <strong>The rule across all 7 patterns presented:</strong> Run the test
+        before committing. Check selectors against the real UI. Verify
+        assertions are testing the right behaviour.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 17 — Agent Mode: What Changed ─── -->
+<div
+  class="slide"
+  data-title="Agent Mode: What Changed"
+  data-notes="This is the session where things get more exciting. Up to now, Copilot has been responding to you — you ask, it answers. Agent Mode flips that. You give it a goal and it figures out the steps. Copilot Chat in normal mode is reactive. Agent Mode is proactive — it can read your project, decide what files need changing, make those changes, run commands to verify, then loop back if something failed. Analogy: Copilot Chat is like a taxi — you direct every turn. Agent Mode is like a rideshare app — you give the destination and it navigates."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Agent Mode</div>
+    <h2>P8 - What changed — and why it matters</h2>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Copilot Chat (normal mode)</div>
+        <ul>
+          <li>You ask → it answers one response</li>
+          <li>Generates text and code suggestions</li>
+          <li>You apply changes manually</li>
+          <li>No access to terminal or file system</li>
+          <li>One round trip per message</li>
+        </ul>
+      </div>
+      <div class="v2-col info">
+        <div class="v2-col-label">Copilot Agent Mode</div>
+        <ul>
+          <li>You give a goal → it figures out the steps</li>
+          <li>Reads project files, plans, edits, verifies</li>
+          <li>Applies changes itself (with your approval)</li>
+          <li>Can run terminal commands and check output</li>
+          <li>Multi-step autonomous execution</li>
+        </ul>
+      </div>
+    </div>
+    <div class="v2-callout info" custom-style="callout-info">
+      <p>
+        Enable via VS Code Copilot Chat → mode dropdown →
+        <strong>Agent</strong>. Requires Individual, Business, or Enterprise
+        plan — not available on the free tier.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 18 — What Agent Mode Can Do ─── -->
+<div
+  class="slide"
+  data-title="What Agent Mode Can &amp; Can't Do"
+  data-notes="The exciting list: Agent Mode has real tools it can use — not just text generation. It can read files, write files, run terminal commands, and check results. This is why it feels fundamentally different. Pause and ask: what's a task you do regularly that involves multiple files or steps? That's a candidate for Agent Mode.&#10;&#10;The limits: Agent Mode isn't magic. It can write tests that look correct but have logic errors. Watch out — if your prompt is vague, it might refactor code you didn't ask it to touch. Be specific about scope."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Agent Mode</div>
+    <h2>Capabilities and limits</h2>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col good">
+        <div class="v2-col-label">What Agent Mode can do</div>
+        <ul>
+          <li>Read your existing codebase for context</li>
+          <li>Edit multiple files in one run</li>
+          <li>Run terminal commands and check results</li>
+          <li>Self-correct when a command fails</li>
+          <li>Show its plan before making changes</li>
+          <li>Build a full test file from a one-sentence goal</li>
+        </ul>
+      </div>
+      <div class="v2-col bad">
+        <div class="v2-col-label">Agent Mode cannot</div>
+        <ul>
+          <li>Guarantee tests are logically correct</li>
+          <li>Know your business rules or domain logic</li>
+          <li>Stay within scope without clear constraints</li>
+          <li>Understand what your app actually does at runtime</li>
+        </ul>
+      </div>
+    </div>
+    <div class="v2-callout warning" custom-style="callout-warning">
+      <p>
+        A vague prompt can cause Agent Mode to edit files you didn't intend.
+        <strong>Always scope your prompt clearly</strong> — tell it exactly what
+        files or folders it should touch.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 19 — Approval Workflow ─── -->
+<div
+  class="slide"
+  data-title="The Approval Workflow"
+  data-notes="This slide is reassuring for people nervous about the AI making changes they didn't ask for. Agent Mode shows a diff for every file change before applying it. You can reject individual changes. You can stop the whole run at any time. Think of it like a pull request from the AI — you review, you approve, it applies. You never lose control.&#10;&#10;For QA engineers specifically: treat each generated test file like code you'd review in a PR. Does it test the right thing? Are the selectors real? Do the assertions verify behaviour — not just that elements are present?"
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Agent Mode</div>
+    <h2>You always stay in control</h2>
+    <div class="v2-step-list" custom-style="step-list">
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">1</div>
+        <div>
+          <div class="v2-step-title">Agent shows its plan</div>
+          <div class="v2-step-body">
+            Before doing anything, it lists the steps it intends to take. You
+            can redirect or stop here.
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">2</div>
+        <div>
+          <div class="v2-step-title">Diffs before every file change</div>
+          <div class="v2-step-body">
+            Every edit shows as a diff. You approve or reject each change
+            individually — nothing is applied without your say-so.
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">3</div>
+        <div>
+          <div class="v2-step-title">Runs verification commands</div>
+          <div class="v2-step-body">
+            After applying changes, it runs commands (like your test runner) to
+            verify its work. If something fails, it tries to fix it.
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">4</div>
+        <div>
+          <div class="v2-step-title">Stop any time</div>
+          <div class="v2-step-body">
+            Hit the stop button at any point in the run. No partial changes are
+            applied unless you approved them step by step.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 20 — When to Use Agent Mode + Good Prompts ─── -->
+<div
+  class="slide"
+  data-title="When to Use Agent Mode"
+  data-notes="Not every task needs Agent Mode. It has overhead — it reads files, plans, waits for approvals. For a 3-line fix, it's overkill. For building out a whole test suite from scratch, it's exactly the right tool.&#10;&#10;Agent prompts are different from chat prompts. In Chat you can be conversational and refine. In Agent Mode, a vague prompt means the agent might go in a completely different direction. By the time you notice, it's already made a dozen changes. The formula: Goal + Context + Constraints + Verification step."
+>
+  <div class="v2-slide-wrap">
+    <h3 class="slide-section-label">When to use Agent Mode</h3>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col good">
+        <div class="v2-col-label">Good candidates</div>
+        <ul>
+          <li>Build a test suite for a new feature from scratch</li>
+          <li>Refactor repetitive tests across multiple files</li>
+          <li>Add page objects to an existing suite</li>
+          <li>Generate data fixtures and test helpers</li>
+        </ul>
+      </div>
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Stick with Chat or Completions</div>
+        <ul>
+          <li>Single-file changes or small fixes</li>
+          <li>Quick explanations or one-off questions</li>
+          <li>Adding one test to an existing file</li>
+        </ul>
+      </div>
+    </div>
+    <h3 class="slide-section-label">Writing a good Agent prompt</h3>
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col bad">
+        <div class="v2-col-label">Too vague</div>
+        <p>"Write tests for the checkout flow."</p>
+      </div>
+      <div class="v2-col good">
+        <div class="v2-col-label">Structured and clear</div>
+        <p>
+          "<span class="prompt-context">In /tests/checkout/,</span>
+          <span class="prompt-task"
+            >write Playwright TypeScript tests for the 3-step checkout
+            flow.</span
+          >
+          <span class="prompt-constraint"
+            >Match the patterns in /tests/auth/login.spec.ts. Don't touch any
+            files outside /tests/checkout/.</span
+          >
+          <span class="prompt-format">Run the tests after creating them.</span>"
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 21 — Common Mistakes ─── -->
+<div
+  class="slide"
+  data-title="Common Mistakes"
+  data-notes="Quick fire round. Go through each one. If the team has started experimenting with Copilot or Agent Mode, some of these will resonate immediately. The most common mistake across all of Copilot (not just Agent Mode) is accepting suggestions without reviewing them. The second most common: trusting that a passing test means the test is correct."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Watch Out For</div>
+    <h2>Common mistakes to avoid</h2>
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">Mistake 1</div>
+          <div class="v2-era-name">Accepting without reviewing</div>
+        </div>
+        <div class="v2-card-body">
+          Tab on every suggestion without checking. Copilot replicates patterns
+          — it will also replicate your bad habits and may generate selectors
+          that don't exist in your UI.
+        </div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">Mistake 2</div>
+          <div class="v2-era-name">Trusting a passing test</div>
+        </div>
+        <div class="v2-card-body">
+          A Copilot-generated test can pass but assert the wrong thing. Always
+          verify that the test is checking real app behaviour — not just that an
+          element is present.
+        </div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">Mistake 3</div>
+          <div class="v2-era-name">Vague Agent Mode prompts</div>
+        </div>
+        <div class="v2-card-body">
+          A vague goal can cause Agent Mode to edit files across your project
+          that you didn't intend to change. Always define scope with folder
+          paths and explicit constraints.
+        </div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">Mistake 4</div>
+          <div class="v2-era-name">Pasting secrets into prompts</div>
+        </div>
+        <div class="v2-card-body">
+          Never paste API keys, passwords, or customer data into Copilot Chat or
+          any AI tool — regardless of your plan's privacy policy.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 22 — Key Takeaways ─── -->
+<div
+  class="slide"
+  data-title="Key Takeaways"
+  data-notes="Read these out slowly — one per beat. After the last one, ask: 'Which of the 8 workflow patterns do you want to try first? What would you use Agent Mode for?' Give it 10 seconds of silence — people are processing. Before the next phase, encourage everyone to use Copilot on at least one real test this week."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Key Takeaways</div>
+    <h2>What to leave with today</h2>
+    <div class="v2-step-list" custom-style="step-list">
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">1</div>
+        <div>
+          <div class="v2-step-body">
+            Copilot has two modes: Completions (passive, watches and suggests)
+            and Chat (active, you ask). Both are useful — learn when to reach
+            for each.
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">2</div>
+        <div>
+          <div class="v2-step-body">
+            Better context = better suggestions. Descriptive comments,
+            meaningful names, and well-structured existing tests all improve
+            what Copilot generates.
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">3</div>
+        <div>
+          <div class="v2-step-body">
+            Copilot doesn't know your app. It knows patterns. Always verify
+            selectors against the real UI and run every generated test before
+            committing it.
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">4</div>
+        <div>
+          <div class="v2-step-body">
+            Agent Mode is Copilot with tools: it can read files, edit multiple
+            files, run commands, and self-correct. Use it for multi-step tasks.
+            Always define scope clearly in your prompt.
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">5</div>
+        <div>
+          <div class="v2-step-body">
+            You stay in control. Every Agent Mode change shows as a diff before
+            being applied. Review it like a PR. Reject anything you didn't
+            intend.
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">6</div>
+        <div>
+          <div class="v2-step-body">
+            A passing test is not a correct test. Copilot can generate tests
+            that always pass but assert the wrong thing. Verify that each test
+            actually checks real app behaviour.
+          </div>
+        </div>
+      </div>
+    </div>
+    <a
+      href="/topics/ai-in-practice/session-04/notes/"
+      target="_blank"
+      class="ref-bridge-btn"
+      >Reference Notes for Phase 2</a
+    >
+  </div>
+</div>
+
+<script>
+  (function () {
+    if (!new URLSearchParams(location.search).has("presenter")) return;
+
+    var slides = Array.from(document.querySelectorAll(".slide"));
+    var notes = slides.map(function (s, i) {
+      return {
+        num: i + 1,
+        title: s.dataset.title || "Slide " + (i + 1),
+        notes: s.dataset.notes || "",
+      };
+    });
+
+    document.body.innerHTML = "";
+    document.body.style.cssText =
+      "margin:0;padding:40px;background:#111;color:#e8e8e8;font-family:system-ui,sans-serif;max-width:860px;margin-left:auto;margin-right:auto;";
+
+    notes.forEach(function (s) {
+      if (!s.notes) return;
+      var box = document.createElement("div");
+      box.style.cssText =
+        "border:1px solid #333;border-radius:6px;padding:20px 24px;margin-bottom:20px;";
+      box.innerHTML =
+        '<div style="font-size:0.68rem;color:#888;font-family:monospace;margin-bottom:8px;letter-spacing:1px;">SLIDE ' +
+        s.num +
+        " — " +
+        s.title +
+        "</div>" +
+        '<div style="line-height:1.75;font-size:0.93rem;">' +
+        s.notes +
+        "</div>";
+      document.body.appendChild(box);
+    });
+  })();
+</script>

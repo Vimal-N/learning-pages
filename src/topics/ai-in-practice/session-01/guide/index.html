@@ -1,0 +1,357 @@
+---
+layout: guide.njk
+title: "Session 01 Full Guide — What Is AI and Why Is Everyone Talking About It?"
+sessionNumber: "01"
+sessionTitle: "What Is AI and Why Is Everyone Talking About It?"
+phase: "Phase 1: AI Foundations"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+slidesUrl: "/topics/ai-in-practice/session-01/slides/"
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">What Is AI and <em>Why Is Everyone Talking About It?</em></h2>
+      <p class="v2-section-sub">Core vocabulary, how LLMs actually work, what prompting means, and why QA engineers are better placed than most to use these tools.</p>
+    </div>
+
+<div class="v2-version-stamp">Session 01 &nbsp;·&nbsp; Phase 1: AI Foundations &nbsp;·&nbsp; Beginner</div>
+
+<div class="v2-quickstart">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 01 you will be able to explain what an LLM is, why it sometimes gets things wrong, what "prompting" means, and why your QA instincts make you a better AI user than most developers.</div>
+  </div>
+</div>
+
+<div class="v2-callout info">
+  <p><strong>No prerequisites.</strong> This session starts from zero — no coding experience required, no maths, no prior AI knowledge. If you've used ChatGPT or Copilot once and thought "this is just autocomplete", this session is for you.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Why AI, Why Now?">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Why AI, <em>Why Now?</em></h2>
+      <p class="v2-section-sub">Three things changed at once in 2022–2023, and that's why AI is suddenly everywhere.</p>
+    </div>
+    <p>AI itself is not new. Spell-check, spam filters, face recognition, and recommendation algorithms are all AI. What changed recently isn't AI in general — it's one specific type of AI called <strong>Large Language Models (LLMs)</strong>, which became dramatically more capable in a very short time.</p>
+
+<div class="v2-two-col">
+  <div class="v2-col neutral">
+    <div class="v2-col-label">What changed</div>
+    <ul style="font-size:0.86rem;color:var(--text-secondary);margin:0;padding-left:16px;line-height:1.9;">
+      <li><strong>Scale:</strong> Models trained on essentially the entire internet, not curated datasets</li>
+      <li><strong>Architecture:</strong> The Transformer (2017) unlocked a new kind of pattern recognition</li>
+      <li><strong>RLHF:</strong> Reinforcement Learning from Human Feedback made outputs safe enough to ship</li>
+    </ul>
+  </div>
+  <div class="v2-col neutral">
+    <div class="v2-col-label">What stayed the same</div>
+    <ul style="font-size:0.86rem;color:var(--text-secondary);margin:0;padding-left:16px;line-height:1.9;">
+      <li>AI cannot "think". It predicts tokens.</li>
+      <li>It has no memory between conversations (by default)</li>
+      <li>It can be confidently wrong — and it won't always tell you</li>
+      <li>Garbage in, garbage out — the quality of your prompt matters</li>
+    </ul>
+  </div>
+</div>
+
+<div class="v2-callout info">
+  <p><strong>The honest version:</strong> GPT-4, Claude, and Gemini are all "just" very large autocomplete systems trained on huge amounts of human text. They are genuinely impressive at text generation — but they are not thinking. That distinction matters for how you use them safely.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="How LLMs Work">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">How LLMs Actually Work <em>(No Maths)</em></h2>
+      <p class="v2-section-sub">Tokens, prediction, and why "hallucination" is a feature of the mechanism, not a bug in the software.</p>
+    </div>
+    <p>An LLM receives your text as a sequence of <strong>tokens</strong> (roughly: words and word-parts), then predicts what token should come next — over and over until it stops. That's the whole thing. The magic is in how good it is at that prediction, because it was trained on an enormous sample of human writing.</p>
+
+<svg viewBox="0 0 680 170" style="width:100%;display:block;margin:14px 0 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+  <rect width="680" height="170" fill="#f5f5f5" rx="10"/>
+  <rect x="12" y="20" width="145" height="130" rx="7" fill="#6fa3f7" fill-opacity="0.1" stroke="#6fa3f7" stroke-width="1.5"/>
+  <text x="84" y="42" text-anchor="middle" fill="#6fa3f7" font-size="12" font-weight="700">Your prompt</text>
+  <text x="84" y="62" text-anchor="middle" fill="#555" font-size="10">"Write a test that checks</text>
+  <text x="84" y="76" text-anchor="middle" fill="#555" font-size="10">login fails with wrong</text>
+  <text x="84" y="90" text-anchor="middle" fill="#555" font-size="10">password"</text>
+  <text x="84" y="116" text-anchor="middle" fill="#888" font-size="9">Split into tokens</text>
+  <text x="84" y="130" text-anchor="middle" fill="#6fa3f7" font-size="9">~1 word ≈ 1-2 tokens</text>
+  <line x1="161" y1="85" x2="200" y2="85" stroke="#999" stroke-width="1.5" marker-end="url(#arr01)"/>
+  <rect x="204" y="20" width="178" height="130" rx="7" fill="#b08cf5" fill-opacity="0.1" stroke="#b08cf5" stroke-width="1.5"/>
+  <text x="293" y="42" text-anchor="middle" fill="#b08cf5" font-size="12" font-weight="700">LLM (next token predictor)</text>
+  <text x="293" y="62" text-anchor="middle" fill="#555" font-size="10">Trained on billions of tokens</text>
+  <text x="293" y="78" text-anchor="middle" fill="#555" font-size="10">of human text and code</text>
+  <text x="293" y="100" text-anchor="middle" fill="#888" font-size="9">Predicts: "test" is likely next,</text>
+  <text x="293" y="114" text-anchor="middle" fill="#888" font-size="9">then "it", then "('wrong pass",</text>
+  <text x="293" y="128" text-anchor="middle" fill="#888" font-size="9">then "word")..." and so on.</text>
+  <line x1="386" y1="85" x2="425" y2="85" stroke="#999" stroke-width="1.5" marker-end="url(#arr01)"/>
+  <rect x="429" y="20" width="238" height="130" rx="7" fill="#5ec269" fill-opacity="0.1" stroke="#5ec269" stroke-width="1.5"/>
+  <text x="548" y="42" text-anchor="middle" fill="#5ec269" font-size="12" font-weight="700">Generated output</text>
+  <text x="548" y="62" text-anchor="middle" fill="#555" font-size="10">Token by token, until it</text>
+  <text x="548" y="76" text-anchor="middle" fill="#555" font-size="10">predicts "stop generating"</text>
+  <text x="548" y="98" text-anchor="middle" fill="#e85c5c" font-size="9">⚠ No lookup, no facts database</text>
+  <text x="548" y="112" text-anchor="middle" fill="#e85c5c" font-size="9">It predicts what sounds right</text>
+  <text x="548" y="126" text-anchor="middle" fill="#888" font-size="9">= sometimes confidently wrong</text>
+  <defs>
+    <marker id="arr01" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <polygon points="0,0 7,3.5 0,7" fill="#999"/>
+    </marker>
+  </defs>
+</svg>
+
+<p>The reason LLMs sometimes make up facts — called <strong>hallucination</strong> — is not a bug that gets patched. It's the mechanism. The model predicts what text sounds plausible, and sometimes plausible text is factually wrong. This is why you review what it generates rather than copying it blindly.</p>
+
+<div class="v2-callout warning">
+  <p><strong>The key insight:</strong> An LLM doesn't know what's true. It knows what patterns of text have appeared together across billions of documents. For code, that's powerful. For facts (API names, library versions, specific URLs), always verify.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Tokens &amp; Context Window">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Tokens <em>&amp; the Context Window</em></h2>
+      <p class="v2-section-sub">Why longer isn't always better, and why the AI "forgets" at the start of long conversations.</p>
+    </div>
+    <p>Everything the LLM processes — your message, its previous responses, any attached files — must fit inside a <strong>context window</strong>, measured in tokens. Think of it as a limited-length piece of paper the model can "see" at any moment.</p>
+
+<div style="display:grid;gap:10px;margin:14px 0;">
+  <div style="display:grid;grid-template-columns:120px 1fr;gap:14px;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-size:0.82rem;font-weight:700;color:var(--accent);">~1 token</div>
+    <div style="font-size:0.84rem;color:var(--text-secondary);">≈ 1 short word, or half a long word. "test" = 1 token. "authentication" = 3 tokens.</div>
+  </div>
+  <div style="display:grid;grid-template-columns:120px 1fr;gap:14px;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-size:0.82rem;font-weight:700;color:var(--accent);">4K tokens</div>
+    <div style="font-size:0.84rem;color:var(--text-secondary);">≈ 3,000 words (this entire session guide). Early GPT-3.5 limit.</div>
+  </div>
+  <div style="display:grid;grid-template-columns:120px 1fr;gap:14px;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-size:0.82rem;font-weight:700;color:var(--accent);">200K tokens</div>
+    <div style="font-size:0.84rem;color:var(--text-secondary);">≈ a large novel (Claude). Modern models have dramatically larger windows.</div>
+  </div>
+</div>
+
+<p>When the conversation fills the context window, the model either truncates early messages or summarises them — it doesn't have selective memory like a person. In practice this means: <strong>a new chat for a new task</strong> is often better than one very long conversation.</p>
+
+<div class="v2-callout info">
+  <p><strong>For Copilot Chat in VS Code:</strong> Each new Chat panel starts fresh. The model doesn't remember what you asked yesterday, or even earlier in a different tab. This is why context references like <code>@workspace</code> and <code>#file:</code> exist — they re-inject what the model needs to know.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="What AI Is Good At">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">What AI <em>Is Good At</em></h2>
+      <p class="v2-section-sub">The patterns it genuinely accelerates — and why QA work maps onto them well.</p>
+    </div>
+
+<div class="v2-two-col">
+  <div class="v2-col good">
+    <div class="v2-col-label">AI excels here</div>
+    <ul style="font-size:0.85rem;color:var(--text-secondary);margin:0;padding-left:16px;line-height:1.9;">
+      <li><strong>Pattern completion:</strong> If it's seen thousands of examples, it can generate a new one confidently</li>
+      <li><strong>Boilerplate:</strong> Page Object classes, test fixtures, data factories</li>
+      <li><strong>Translation:</strong> "Convert this manual test script into a Playwright test"</li>
+      <li><strong>Explanation:</strong> "Why is this Playwright selector fragile?" — great answers</li>
+      <li><strong>Naming and refactoring:</strong> "Rename this function and update all call sites"</li>
+      <li><strong>First draft generation:</strong> Starting from a blank file is the hardest part</li>
+      <li><strong>Error messages:</strong> "I got this error — what does it mean?"</li>
+    </ul>
+  </div>
+  <div class="v2-col bad">
+    <div class="v2-col-label">AI struggles here</div>
+    <ul style="font-size:0.85rem;color:var(--text-secondary);margin:0;padding-left:16px;line-height:1.9;">
+      <li><strong>Your specific app:</strong> It doesn't know your selectors, your URLs, your business logic</li>
+      <li><strong>Latest library versions:</strong> Training data has a cutoff; docs change</li>
+      <li><strong>Novel problems:</strong> Things that don't follow known patterns</li>
+      <li><strong>Long sequential reasoning:</strong> Complex multi-step logic it hasn't seen before</li>
+      <li><strong>Definitive facts:</strong> Always verify API names, version numbers, config keys</li>
+    </ul>
+  </div>
+</div>
+
+<div class="v2-try-this">
+  <div class="v2-try-label">Try This — 3 minutes</div>
+  <p>Open ChatGPT, Claude, or any AI chat tool. Ask: <em>"Explain what a Playwright locator is and give me three examples of robust locators for a login form."</em> Then ask: <em>"What's the exact CSS selector for the login button on the NHS website?"</em> Notice the difference in how confident (or appropriately cautious) the response is. That contrast shows you exactly where AI knowledge is reliable vs. guessed.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Why QA Engineers Benefit">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Why QA Engineers <em>Are Well-Placed</em></h2>
+      <p class="v2-section-sub">The skills you already have are exactly what makes someone good at working with AI.</p>
+    </div>
+    <p>There's a common assumption that "AI is for developers". It's wrong. QA engineers are often better at extracting value from AI tools — not despite their role, but because of it. Here's why:</p>
+
+<div style="display:grid;gap:10px;margin:14px 0;">
+  <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700;">1</div>
+    <div>
+      <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;">You already think in test cases</div>
+      <div style="font-size:0.84rem;color:var(--text-secondary);">Writing precise instructions with expected outcomes is exactly how you prompt an AI. "Given X, when Y, then Z" is both a test case format and an excellent prompt structure.</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700;">2</div>
+    <div>
+      <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;">You know how to verify outputs</div>
+      <div style="font-size:0.84rem;color:var(--text-secondary);">Your natural instinct is to check things. That instinct is exactly the right response to AI-generated code. Most people accept outputs; you'll review them.</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700;">3</div>
+    <div>
+      <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;">You understand edge cases</div>
+      <div style="font-size:0.84rem;color:var(--text-secondary);">When you ask AI to generate tests, you'll spot what it missed. "What about empty fields? What about session expiry?" — these are QA instincts developers often don't have.</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;padding:14px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700;">4</div>
+    <div>
+      <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;">You're used to ambiguous requirements</div>
+      <div style="font-size:0.84rem;color:var(--text-secondary);">Working with unclear specs — asking clarifying questions, making assumptions explicit — is exactly how you get good AI outputs. You've been practising this for years.</div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="What Prompting Is">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">What Prompting <em>Actually Is</em></h2>
+      <p class="v2-section-sub">Not magic words. Not a trick. Just good communication — with a machine that's very literal.</p>
+    </div>
+    <p><strong>Prompting</strong> is the practice of writing instructions that reliably get you the output you want from an AI. The word sounds technical but the skill is not: it's about being precise, providing enough context, and specifying what you actually need.</p>
+
+<p>The gap between a poor prompt and a good one is almost never about knowing secret tricks. It's about not assuming the AI knows things it can't know:</p>
+
+<div style="display:grid;gap:10px;margin:14px 0;">
+  <div style="padding:13px 16px;background:rgba(232,92,92,0.06);border-radius:8px;border-left:3px solid var(--danger);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--danger);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;">Weak prompt</div>
+    <code style="font-size:0.86rem;color:var(--text-primary);">"Write a test for the login page."</code>
+    <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;">The AI has no idea what your login page looks like. It will guess. The output will be structurally correct but use imaginary selectors and your URL.</div>
+  </div>
+  <div style="padding:13px 16px;background:rgba(94,194,105,0.06);border-radius:8px;border-left:3px solid var(--success);">
+    <div style="font-size:0.74rem;font-weight:700;color:var(--success);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;">Strong prompt</div>
+    <code style="font-size:0.86rem;color:var(--text-primary);">"Using Playwright and TypeScript, write a test that navigates to https://example.com/login, enters 'user@test.com' in #email and 'wrongpassword' in #password, clicks button[type=submit], and asserts the error message 'Invalid credentials' is visible."</code>
+    <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;">Specific selectors, specific URL, specific assertion. The AI can now generate code you can actually run.</div>
+  </div>
+</div>
+
+<div class="v2-callout info">
+  <p><strong>Session 03</strong> covers a complete four-element prompt framework with QA-specific templates. This slide is the foundation: understand that prompting is just precise communication, and Session 03 gives you the structure to do it consistently.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Common Misconceptions">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Common Misconceptions <em>— Cleared Up</em></h2>
+      <p class="v2-section-sub">Things people believe about AI that get in the way of using it well.</p>
+    </div>
+
+<div style="display:grid;gap:10px;margin:10px 0;">
+  <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;color:var(--danger);">❌ "AI will replace QA engineers"</div>
+    <div style="font-size:0.84rem;color:var(--text-secondary);">AI generates code. It does not understand your product, your users, your risk tolerance, or your release process. It is a power tool, not a replacement. QA engineers who use AI well become significantly more productive — they are not eliminated.</div>
+  </div>
+  <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;color:var(--danger);">❌ "AI is always right if it sounds confident"</div>
+    <div style="font-size:0.84rem;color:var(--text-secondary);">Confidence is a function of how the output was generated, not of accuracy. LLMs produce text that sounds authoritative even when the content is wrong. Review everything, especially specific claims about APIs, version numbers, or security.</div>
+  </div>
+  <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;color:var(--danger);">❌ "You need to be a developer to use AI tools"</div>
+    <div style="font-size:0.84rem;color:var(--text-secondary);">Natural language is the interface. You can ask AI to explain code, generate documentation, convert requirements to test cases, or spot problems — without writing a single line of code yourself.</div>
+  </div>
+  <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-size:0.9rem;font-weight:600;margin-bottom:4px;color:var(--danger);">❌ "The AI remembers what I told it before"</div>
+    <div style="font-size:0.84rem;color:var(--text-secondary);">It doesn't — not between sessions, and in some tools not even between conversations. Always provide the context it needs, every time. This is why tools like Copilot's <code>@workspace</code> exist.</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="AI in the QA Workflow">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">AI in the <em>QA Workflow</em></h2>
+      <p class="v2-section-sub">Where these tools slot in — and where they don't.</p>
+    </div>
+    <p>AI tools fit into QA work at several points in the workflow. Understanding where they help (and where you still own the judgement call) is the difference between using AI well and using it dangerously.</p>
+
+<div class="v2-two-col">
+  <div class="v2-col good">
+    <div class="v2-col-label">AI assists with</div>
+    <ul style="font-size:0.85rem;color:var(--text-secondary);margin:0;padding-left:16px;line-height:1.9;">
+      <li>Converting acceptance criteria into test cases</li>
+      <li>Generating Playwright test code from descriptions</li>
+      <li>Explaining why a test is failing</li>
+      <li>Refactoring repetitive test code</li>
+      <li>Generating test data variations</li>
+      <li>Reviewing test coverage gaps</li>
+      <li>Writing documentation from code</li>
+    </ul>
+  </div>
+  <div class="v2-col neutral">
+    <div class="v2-col-label">You still own</div>
+    <ul style="font-size:0.85rem;color:var(--text-secondary);margin:0;padding-left:16px;line-height:1.9;">
+      <li>Deciding what to test and what risk to accept</li>
+      <li>Verifying that generated tests actually test what you intend</li>
+      <li>Catch the "always-passing test" trap (a test that can never fail)</li>
+      <li>Understanding your specific app behaviour</li>
+      <li>Release sign-off and quality judgement</li>
+    </ul>
+  </div>
+</div>
+
+<div class="v2-callout warning">
+  <p><strong>The "always-passing test" trap:</strong> AI can generate a test that passes every time — because it asserts something that's always true or never actually reaches the failing condition. Your instinct as a QA engineer — "does this test actually prove anything?" — is your defence against this. Session 07 covers it in detail.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I understand this" — before moving to Session 02.</p>
+    </div>
+<div class="v2-self-check">
+  <div class="v2-self-check-title">Session 01 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I understand this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain what an LLM is in one sentence — without using the word "AI"</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I understand why LLMs sometimes produce confident but wrong answers (hallucination)</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know what a "context window" is and why it matters for long conversations</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can name three things AI is genuinely good at in a QA context</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can name two things AI cannot reliably do — and explain why</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I understand why prompting is about precision and context, not secret tricks</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can identify at least one place in my current QA work where AI might save me time</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-02/" style="color:var(--accent);">Session 02 — The Evolution: From Chatbot to Coding Partner to Agent →</a></p>
+  </div>
+</div>

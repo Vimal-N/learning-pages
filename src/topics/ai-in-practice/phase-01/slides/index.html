@@ -1,0 +1,592 @@
+---
+layout: guide.njk
+title: Phase 1 Slides — AI Foundations
+sessionNumber: "01"
+sessionTitle: "Phase 1 — AI Foundations"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+---
+
+  <!-- ─── SLIDE 01 — Title ─── -->
+  <div class="slide" data-title="Session Overview" data-notes="Welcome everyone. This is Phase 1 of the AI in Practice series — and we're doing it as one session today. By the end, you'll know what AI actually is, how it evolved into the tools you're hearing about, and how to start using it in your QA work right away. There are no dumb questions here. If you've felt confused or behind on all the AI noise — that's exactly the right starting point.">
+    <div class="v2-slide-wrap title-slide">
+      <div class="session-badge">Phase 1 &nbsp;·&nbsp; AI in Practice</div>
+      <h1><em>AI</em> Foundations</h1>
+      <p class="title-sub">What AI actually is, how it evolved, and how to use it effectively in your work as a QA engineer — all in one session.</p>
+      <div class="title-stats">
+        <div class="title-stat"><div class="title-stat-val">Beginner</div><div class="title-stat-label">Level</div></div>
+        <div class="title-stat"><div class="title-stat-val">None</div><div class="title-stat-label">Prerequisites</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 02 — Opening Hook ─── -->
+  <div class="slide" data-title="Opening Hook" data-notes="Start by asking: 'Raise your hand if you've heard at least one of these phrases in the last week.' Pause and look around. Almost every hand should go up. That's the point — AI is EVERYWHERE in conversation, and most people nodding along don't actually know what it means. And that's completely normal. The space moved incredibly fast.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: It's like when 'the cloud' became a term — everyone used it, few could explain it. That's exactly where AI is right now.&lt;/div&gt;">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Opening Hook</div>
+      <h2>Sound familiar?</h2>
+      <p class="slide-sub">Phrases you've probably heard recently — and maybe nodded along to:</p>
+      <div class="v2-two-col" custom-style="comparison-card">
+        <div class="v2-col neutral"><p>"We need to add AI to the product."</p></div>
+        <div class="v2-col neutral"><p>"Just use AI to write your tests."</p></div>
+        <div class="v2-col neutral"><p>"AI is going to change everything."</p></div>
+        <div class="v2-col neutral"><p>"Did you try asking ChatGPT?"</p></div>
+      </div>
+      <div class="v2-callout warning" custom-style="callout-warning">
+        <p>By the end of today — you'll actually know what these mean.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 03 — Agenda ─── -->
+  <div class="slide" data-title="Today's Agenda" data-notes="Walk through the agenda at a high level — don't read every item. Signal the shape: 'We start with what AI actually is and how it works. Then we trace how it evolved from chatbots all the way to agents. Then we connect all of it to your work, and end with practical prompting patterns you can use today.' Keep this under 90 seconds.">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Today's Agenda</div>
+      <h2>What we're covering</h2>
+      <div class="v2-step-list" custom-style="step-list">
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">01</div><div><div class="v2-step-title">What AI actually means — not the sci-fi version</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">02</div><div><div class="v2-step-title">AI vs Machine Learning vs LLMs — the hierarchy</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">03</div><div><div class="v2-step-title">How we got here — the four eras of AI</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">04</div><div><div class="v2-step-title">How LLMs work and what training really means</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">05</div><div><div class="v2-step-title">Agents — where the tools are heading right now</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">06</div><div><div class="v2-step-title">Common misconceptions — cleared up for good</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">07</div><div><div class="v2-step-title">Your role as AI gets more capable</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">08</div><div><div class="v2-step-title">How to write prompts that actually work</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">09</div><div><div class="v2-step-title">Three QA prompting patterns you can use today</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 04 — What AI Actually Means ─── -->
+  <div class="slide" data-title="What AI Actually Means" data-notes="This is where you strip away the baggage. Ask: 'When you hear AI, what image comes to mind?' Someone will say a robot. Acknowledge it with a laugh, then redirect.&lt;br&gt;&lt;br&gt;The real definition: any computer system that can do something that would normally require human intelligence. That's it. No robots required.&lt;br&gt;&lt;br&gt;&lt;div class='warning-note'&gt;️ Common misconception: Many people think 'AI' means one specific technology. It's actually an umbrella term for a huge category of techniques.&lt;/div&gt;">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Concept 1</div>
+      <h2>What AI actually means</h2>
+      <div class="v2-two-col" custom-style="comparison-card">
+        <div class="v2-col bad">
+          <div class="v2-col-label">What people imagine</div>
+          <ul>
+            <li>Robots with human-like consciousness</li>
+            <li>A digital brain that "thinks" like us</li>
+            <li>Skynet from the movies</li>
+            <li>Magic that just "knows" things</li>
+          </ul>
+        </div>
+        <div class="v2-col good">
+          <div class="v2-col-label">What it actually is</div>
+          <ul>
+            <li>Software trained to recognise patterns</li>
+            <li>Very good at tasks humans find tedious</li>
+            <li>A tool — powerful but with real limits</li>
+            <li>Learned from human-generated data</li>
+          </ul>
+        </div>
+      </div>
+      <div class="v2-callout warning" custom-style="callout-warning">
+        <p><strong>Simple definition:</strong> A computer system designed to do tasks that would normally require human intelligence — like reading, writing, recognising images, or understanding language.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 05 — AI vs ML vs LLM ─── -->
+  <div class="slide" data-title="AI vs ML vs LLM" data-notes="This slide clears up the most common confusion. These three terms get used interchangeably in tech news — they shouldn't be. Spend a minute on this.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: AI is like 'vehicles'. Machine Learning is like 'cars'. LLMs are like 'electric cars'. All LLMs are ML, all ML is AI — but not all AI is an LLM.&lt;/div&gt;">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Concept 2</div>
+      <h2>AI vs ML vs LLM</h2>
+      <img src="/images/ai-in-practice/session1-slide5.svg" alt="AI vs ML vs LLM concentric circles diagram" class="slide-img"/>
+      <p class="slide-sub">These three terms get used interchangeably. They shouldn't be.</p>
+      <div class="v2-step-list" custom-style="step-list">
+        <div class="v2-step" custom-style="step" style="border-left: 3px solid var(--purple);">
+          <div class="v2-step-num" style="color:var(--purple);">AI</div>
+          <div><div class="v2-step-title">Artificial Intelligence</div><div class="v2-step-body">The broad umbrella. Any system doing tasks that normally need human intelligence. Includes AI from the 1950s onwards. Your spam filter is AI.</div></div>
+        </div>
+        <div class="v2-step" custom-style="step" style="border-left: 3px solid var(--blue);">
+          <div class="v2-step-num" style="color:var(--blue);">ML</div>
+          <div><div class="v2-step-title">Machine Learning</div><div class="v2-step-body">A type of AI where the system <em>learns from data</em> rather than following hand-written rules. Netflix recommendations are ML.</div></div>
+        </div>
+        <div class="v2-step" custom-style="step" style="border-left: 3px solid var(--accent);">
+          <div class="v2-step-num">LLM</div>
+          <div><div class="v2-step-title">Large Language Model</div><div class="v2-step-body">A specific type of ML model trained on massive amounts of text. ChatGPT, Claude, Gemini — these are all LLMs. <strong>This is what we focus on.</strong></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 06 — The Four Eras ─── -->
+  <div class="slide" data-title="The Four Eras of AI" data-notes="Tell this as a story: 'AI researchers have been working on this for 70 years. For most of that time, it was academic papers and research labs. Then something changed.' Pause. Let them lean in.&lt;br&gt;&lt;br&gt;Walk through the four eras briefly — the key arc is: we went from hand-written rules → NLP patterns → generative AI → agents that take action autonomously. Each era broke the ceiling of the previous one.&lt;br&gt;&lt;br&gt;The ChatGPT moment (Era 3) was not a technology breakthrough — it was an accessibility breakthrough. The technology had existed. What changed is anyone could use it with plain English.&lt;br&gt;&lt;br&gt;Era 4 (Agents) is where we are right now — and where the tools your team will be using live.">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Concept 3</div>
+      <h2>How we got here — the four eras</h2>
+      <div class="v2-card-list" custom-style="row-card-list">
+        <div class="v2-row-card" custom-style="row-card">
+          <div><div class="v2-era-badge">Era 1</div><div class="v2-era-name">Rule-Based Chatbots</div><div class="v2-era-date">1960s – 2010s</div></div>
+          <div class="v2-card-body">Hand-written rules and pattern matching. ELIZA, IVR bots, FAQ bots. Type the wrong thing and the system breaks instantly.</div>
+        </div>
+        <div class="v2-row-card" custom-style="row-card">
+          <div><div class="v2-era-badge">Era 2</div><div class="v2-era-name">Voice Assistants &amp; NLP</div><div class="v2-era-date">2011 – 2022</div></div>
+          <div class="v2-card-body">Siri, Alexa, Google Assistant. Natural phrasing worked better — but still domain-locked. Anything outside a known intent: "I can't help with that."</div>
+        </div>
+        <div class="v2-row-card" custom-style="row-card">
+          <div><div class="v2-era-badge">Era 3</div><div class="v2-era-name">Generative AI</div><div class="v2-era-date">2020 – present</div></div>
+          <div class="v2-card-body">GPT-3 → GitHub Copilot → ChatGPT (Nov 2022). Responses generated fresh. Handles novel questions. 100M users in 2 months.</div>
+        </div>
+        <div class="v2-row-card" custom-style="row-card">
+          <div><div class="v2-era-badge">Era 4</div><div class="v2-era-name">Agents</div><div class="v2-era-date">2024 – now</div></div>
+          <div class="v2-card-body">AI that doesn't just answer — it acts. Reads files, runs commands, writes code, checks its own work. Claude Code, Copilot Agent Mode.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 07 — The ChatGPT Moment ─── -->
+  <div class="slide" data-title="The ChatGPT Moment" data-notes="Ask: 'Did anyone try ChatGPT when it first came out? What was your reaction?'&lt;br&gt;&lt;br&gt;Key insight: it wasn't that AI got smarter overnight. For the first time, you could talk to it in plain English and get useful output back — no code, no complex interface, no special syntax.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: It's like the iPhone moment for AI. Smartphones existed before 2007, but the iPhone made them accessible to everyone. ChatGPT did the same thing for AI.&lt;/div&gt;">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Concept 4</div>
+      <h2>November 2022</h2>
+      <p class="slide-sub">Why ChatGPT changed everything — and why it felt different</p>
+      <div class="v2-two-col" custom-style="comparison-card">
+        <div class="v2-col neutral">
+          <div class="v2-col-label">What existed before</div>
+          <ul>
+            <li>AI tools required technical expertise</li>
+            <li>APIs, code, and configuration needed</li>
+            <li>Output was narrow and specialised</li>
+          </ul>
+        </div>
+        <div class="v2-col info">
+          <div class="v2-col-label">What ChatGPT did</div>
+          <ul>
+            <li>You just... type in plain English</li>
+            <li>No setup, no code, no expertise needed</li>
+            <li><strong>100 million users in 2 months</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="v2-callout info" custom-style="callout-info">
+        <p>The technology wasn't brand new. The <strong>accessibility</strong> was. That's what changed everything.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 08 — How LLMs Work ─── -->
+  <div class="slide" data-title="How LLMs Work" data-notes="This is the conceptual heart of the session. Take your time. The mental model: an LLM is not looking things up in a database. It learned patterns from enormous amounts of text, and uses those patterns to predict what should come next — one word at a time.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: Think about how you can finish someone's sentence. You don't look up the answer — you pattern-match from everything you've ever read and heard. An LLM does this at a massive scale.&lt;/div&gt;&lt;br&gt;The SVG shows this token-by-token loop. The key insight: the LLM never 'looks up' an answer. It generates one — word by word — using patterns from training.&lt;br&gt;&lt;br&gt;&lt;div class='warning-note'&gt;️ Don't use the words 'transformer' or 'attention mechanism'. Stick to the mental model.&lt;/div&gt;">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Concept 5</div>
+      <h2>What is an LLM — and how does it generate a response?</h2>
+      <div class="v2-step-list" custom-style="step-list">
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">1</div>
+          <div><div class="v2-step-title">Read almost everything humans have ever written</div><div class="v2-step-body">Books, websites, code, articles, forums — billions of documents. This is called <strong>training</strong>.</div></div>
+        </div>
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">2</div>
+          <div><div class="v2-step-title">Learn patterns in language</div><div class="v2-step-body">Not memorising text — learning which words and ideas tend to appear together. Like learning grammar by reading, not by memorising rules.</div></div>
+        </div>
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">3</div>
+          <div><div class="v2-step-title">Predict what should come next — one token at a time</div><div class="v2-step-body">When you send a message, the LLM uses those patterns to predict the most likely next word. Then the next. Then the next. That's a response.</div></div>
+        </div>
+      </div>
+      <svg viewBox="0 0 700 160" class="slide-svg" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+        <rect width="700" height="160" rx="12" fill="#13111d"/>
+        <rect x="40" y="50" width="108" height="60" rx="8" fill="#6fa3f7" fill-opacity="0.15" stroke="#6fa3f7" stroke-width="1.8"/>
+        <text x="94" y="72" text-anchor="middle" fill="#6fa3f7" font-size="11" font-weight="700">Your prompt</text>
+        <text x="94" y="89" text-anchor="middle" fill="#6fa3f7" font-size="9" opacity="0.85">Write Playwright</text>
+        <text x="94" y="102" text-anchor="middle" fill="#6fa3f7" font-size="9" opacity="0.85">test for login</text>
+        <line x1="148" y1="80" x2="166" y2="80" stroke="#6fa3f7" stroke-width="1.5"/>
+        <polygon points="166,76 174,80 166,84" fill="#6fa3f7"/>
+        <rect x="168" y="50" width="108" height="60" rx="8" fill="#b08cf5" fill-opacity="0.15" stroke="#b08cf5" stroke-width="1.8"/>
+        <text x="222" y="72" text-anchor="middle" fill="#b08cf5" font-size="11" font-weight="700">Tokenised</text>
+        <text x="222" y="89" text-anchor="middle" fill="#b08cf5" font-size="9" opacity="0.85">Split into</text>
+        <text x="222" y="102" text-anchor="middle" fill="#b08cf5" font-size="9" opacity="0.85">word pieces</text>
+        <line x1="276" y1="80" x2="294" y2="80" stroke="#b08cf5" stroke-width="1.5"/>
+        <polygon points="294,76 302,80 294,84" fill="#b08cf5"/>
+        <rect x="296" y="50" width="108" height="60" rx="8" fill="#e8a848" fill-opacity="0.15" stroke="#e8a848" stroke-width="1.8"/>
+        <text x="350" y="72" text-anchor="middle" fill="#e8a848" font-size="11" font-weight="700">Model predicts</text>
+        <text x="350" y="89" text-anchor="middle" fill="#e8a848" font-size="9" opacity="0.85">Next token</text>
+        <text x="350" y="102" text-anchor="middle" fill="#e8a848" font-size="9" opacity="0.85">probability</text>
+        <line x1="404" y1="80" x2="422" y2="80" stroke="#e8a848" stroke-width="1.5"/>
+        <polygon points="422,76 430,80 422,84" fill="#e8a848"/>
+        <rect x="424" y="50" width="108" height="60" rx="8" fill="#5ec269" fill-opacity="0.15" stroke="#5ec269" stroke-width="1.8"/>
+        <text x="478" y="72" text-anchor="middle" fill="#5ec269" font-size="11" font-weight="700">Token chosen</text>
+        <text x="478" y="89" text-anchor="middle" fill="#5ec269" font-size="9" opacity="0.85">'import' picked</text>
+        <text x="478" y="102" text-anchor="middle" fill="#5ec269" font-size="9" opacity="0.85">(highest prob)</text>
+        <line x1="532" y1="80" x2="550" y2="80" stroke="#5ec269" stroke-width="1.5"/>
+        <polygon points="550,76 558,80 550,84" fill="#5ec269"/>
+        <rect x="552" y="50" width="108" height="60" rx="8" fill="#4ecdc4" fill-opacity="0.15" stroke="#4ecdc4" stroke-width="1.8"/>
+        <text x="606" y="72" text-anchor="middle" fill="#4ecdc4" font-size="11" font-weight="700">Appended</text>
+        <text x="606" y="89" text-anchor="middle" fill="#4ecdc4" font-size="9" opacity="0.85">Output grows</text>
+        <text x="606" y="102" text-anchor="middle" fill="#4ecdc4" font-size="9" opacity="0.85">by one token</text>
+        <path d="M606,50 L606,22 L350,22 L350,50" fill="none" stroke="#4ecdc4" stroke-width="1.5" stroke-dasharray="5 3"/>
+        <polygon points="346,50 350,42 354,50" fill="#4ecdc4"/>
+        <text x="478" y="14" text-anchor="middle" fill="#4ecdc4" font-size="10" opacity="0.85">Repeats until response is complete</text>
+        <text x="350" y="142" text-anchor="middle" fill="#a0a0b0" font-size="11">LLMs do not 'think' — they predict the most likely next word, one token at a time.</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 09 — What Training Means ─── -->
+  <div class="slide" data-title="What Training Means" data-notes="The training data concept explains two things: why LLMs are so broad (they've read everything), and why they have a knowledge cutoff date.&lt;br&gt;&lt;br&gt;Key to normalise: 'The model isn't reading the internet right now when you ask it something. It already read the internet. What it knows is baked in.'&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: Think of a very well-read person who graduated a couple of years ago. They know an enormous amount — but they haven't read everything published since their last exam. That's the knowledge cutoff.&lt;/div&gt;">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Concept 6</div>
+      <h2>What "training" means</h2>
+      <div class="v2-step-list" custom-style="step-list">
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">→</div>
+          <div><div class="v2-step-title">Training data</div><div class="v2-step-body">The text an LLM learned from. Books, websites, code, Wikipedia, GitHub repos, forums. Hundreds of billions of words.</div></div>
+        </div>
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">→</div>
+          <div><div class="v2-step-title">Knowledge cutoff</div><div class="v2-step-body">Training stops at a point in time. The model doesn't know about events after that date, unless you tell it.</div></div>
+        </div>
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">→</div>
+          <div><div class="v2-step-title">Not a search engine</div><div class="v2-step-body">By default, LLMs don't browse the internet. They work from what they already learned. (Some tools add search on top — more on that later.)</div></div>
+        </div>
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">→</div>
+          <div><div class="v2-step-title">Not your data</div><div class="v2-step-body">The model was not trained on your company's private files. It only learned from public text.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10 — Era 4: Agents ─── -->
+  <div class="slide" data-title="Era 4: Agents" data-notes="This is where we are right now. An agent is an AI system that doesn't just answer questions — it takes actions to complete a goal. It can use tools, read files, write code, run tests, and loop back on its own output.&lt;br&gt;&lt;br&gt;Examples to mention: Claude Code (what powers this training portal!), GitHub Copilot Agent Mode, Cursor. These tools can be given a task and work autonomously for minutes — completing things that would take a human an hour.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: A chatbot is like asking a colleague a question and getting an answer. An agent is like handing a colleague a task and coming back an hour later to find it done.&lt;/div&gt;">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Era 4 &nbsp;·&nbsp; 2024 – present</div>
+      <h2>Agents — AI that takes action</h2>
+      <div class="v2-step-list" custom-style="step-list">
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">→</div>
+          <div><div class="v2-step-title">Chatbot / Assistant</div><div class="v2-step-body">You ask → it answers. One exchange at a time. No persistent action.</div></div>
+        </div>
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">→</div>
+          <div><div class="v2-step-title">Coding Assistant (Copilot)</div><div class="v2-step-body">You type → it suggests. Real-time help inside your editor. Still one suggestion at a time.</div></div>
+        </div>
+        <div class="v2-step" custom-style="step" style="border-left: 3px solid var(--accent);">
+          <div class="v2-step-num">→</div>
+          <div><div class="v2-step-title" style="color:var(--accent);">Agent (Claude Code, Copilot Agent Mode)</div><div class="v2-step-body">You describe a goal → it plans, uses tools, reads files, writes code, runs tests, iterates. Autonomous multi-step execution.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11 — The Agentic Loop ─── -->
+  <div class="slide" data-title="How Agents Work" data-notes="Walk through this loop step by step. Agents aren't just calling an LLM once — they're in a loop. The LLM produces a plan, the agent executes one step, observes what happened, feeds that back to the LLM, which plans the next step. This repeats until the goal is done.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: Think about how a QA engineer approaches debugging a flaky test. You don't know the answer upfront — you form a hypothesis, run the test, observe the result, revise your hypothesis, repeat. Agents do exactly this, automatically.&lt;/div&gt;">
+    <div class="v2-slide-wrap">
+      <h2>The agentic loop</h2>
+      <img src="/images/ai-in-practice/session2-slide11.svg" alt="The agentic loop diagram" class="slide-img"/>
+      <div class="v2-two-col" custom-style="comparison-card">
+        <div class="v2-col neutral" style="text-align:center;">
+          <div class="v2-col-label">Step 1 — Receive goal</div>
+          <p>User describes what they want done</p>
+        </div>
+        <div class="v2-col neutral" style="text-align:center;">
+          <div class="v2-col-label">Step 2 — Plan</div>
+          <p>LLM decides which steps to take</p>
+        </div>
+        <div class="v2-col neutral" style="text-align:center;">
+          <div class="v2-col-label">Step 3 — Act &amp; observe</div>
+          <p>Runs a tool, reads output, adjusts</p>
+        </div>
+        <div class="v2-col neutral" style="text-align:center;">
+          <div class="v2-col-label">Step 4 — Repeat or finish</div>
+          <p>Loops until goal is achieved</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12 — Common Misconceptions ─── -->
+  <div class="slide" data-title="Common Misconceptions" data-notes="Take these at a relaxed pace — invite the team to share myths they've heard before revealing the reality. Good chance for a laugh and an honest conversation.&lt;br&gt;&lt;br&gt;Sentience: LLMs mimic human writing patterns — 'I think...' is not an opinion, it's a pattern match. Always right: AI hallucinates confidently — never ship generated test code without running it. Context: it only sees what you type — no access to your codebase unless you paste it. Replacement: AI is automating tedious tasks, not roles.">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Clearing the Air</div>
+      <h2>Four myths — and what's actually true</h2>
+      <div class="v2-two-col" custom-style="comparison-card">
+        <div class="v2-col bad">
+          <div class="v2-col-label">Myth</div>
+          <p><strong>"AI is sentient — it thinks and feels."</strong></p>
+          <div class="v2-callout success" custom-style="callout-success" style="margin-top:8px;">
+            <p>LLMs predict text. There are no thoughts or feelings. "I think..." is a trained writing pattern, not a view.</p>
+          </div>
+        </div>
+        <div class="v2-col bad">
+          <div class="v2-col-label">Myth</div>
+          <p><strong>"If it sounds confident, it must be right."</strong></p>
+          <div class="v2-callout success" custom-style="callout-success" style="margin-top:8px;">
+            <p>LLMs hallucinate — inventing methods and logic errors with full confidence. Always verify output.</p>
+          </div>
+        </div>
+        <div class="v2-col bad">
+          <div class="v2-col-label">Myth</div>
+          <p><strong>"It knows my project and conventions."</strong></p>
+          <div class="v2-callout success" custom-style="callout-success" style="margin-top:8px;">
+            <p>It only sees what you type in the current conversation. No codebase access unless you paste it in.</p>
+          </div>
+        </div>
+        <div class="v2-col bad">
+          <div class="v2-col-label">Myth</div>
+          <p><strong>"AI will replace QA engineers."</strong></p>
+          <div class="v2-callout success" custom-style="callout-success" style="margin-top:8px;">
+            <p>AI automates tasks — the tedious, repetitive ones. Judgment and strategy remain yours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 13 — Your Role Doesn't Disappear ─── -->
+  <div class="slide" data-title="Your Role Doesn't Disappear — It Shifts" data-notes="This is an important grounding slide. Amid all this change, some fundamentals are exactly the same. Your expertise as a QA engineer — knowing what to test, how to think about edge cases, how to structure a test suite — that's MORE valuable now, not less.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: A GPS is dramatically faster at route-planning than paper maps. But you still need to know your destination, recognise when the GPS is sending you the wrong way, and understand the road rules.&lt;/div&gt;">
+    <div class="v2-slide-wrap">
+      <h2>Your role doesn't disappear — it shifts</h2>
+      <div class="v2-two-col" custom-style="comparison-card">
+        <div class="v2-col good">
+          <div class="v2-col-label">Still your job</div>
+          <ul>
+            <li>Deciding what to test and why</li>
+            <li>Identifying edge cases and risk areas</li>
+            <li>Verifying AI-generated code is correct</li>
+            <li>Understanding the system under test</li>
+            <li>Interpreting results with business context</li>
+          </ul>
+        </div>
+        <div class="v2-col neutral">
+          <div class="v2-col-label">AI handles more of</div>
+          <ul>
+            <li>Writing the boilerplate test code</li>
+            <li>First-pass debugging of failures</li>
+            <li>Explaining unfamiliar code</li>
+            <li>Generating repetitive variations</li>
+            <li>Documentation and comments</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 14 — What Is a Prompt? ─── -->
+  <div class="slide" data-title="What Is a Prompt?" data-notes="Keep this simple. A prompt is everything you send to the LLM. That includes the question, the context you provide, any examples you give it, and the format you request. The LLM has ONLY what you put in the prompt.&lt;br&gt;&lt;br&gt;&lt;div class='analogy-note'&gt;Analogy: A prompt is your briefing to a very capable new colleague. The more clearly you brief them, the better they can help. If you hand them a vague request and expect magic — you'll be disappointed.&lt;/div&gt;">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Prompting Skills</div>
+      <h2>What is a prompt?</h2>
+      <div class="v2-callout info" custom-style="callout-info">
+        <p>A prompt is <strong>everything you send to an LLM</strong> — the question, the context you provide, examples, constraints, and the format you want back. The LLM reasons only from what's in the prompt. Nothing else.</p>
+      </div>
+      <div class="v2-two-col" custom-style="comparison-card">
+        <div class="v2-col good">
+          <div class="v2-col-label">The LLM knows</div>
+          <ul>
+            <li>Everything you wrote in this prompt</li>
+            <li>Everything it learned during training</li>
+            <li>The conversation history (same session)</li>
+          </ul>
+        </div>
+        <div class="v2-col bad">
+          <div class="v2-col-label">The LLM does not know</div>
+          <ul>
+            <li>Your codebase or project</li>
+            <li>Your team's conventions or standards</li>
+            <li>Previous conversations (new session)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 15 — The Four Elements ─── -->
+  <div class="slide" data-title="The 4 Elements of a Good Prompt" data-notes="Introduce the four-part framework. Not every prompt needs all four — but every prompt BENEFITS from thinking about all four. The more of these you include, the more useful the response will be.&lt;br&gt;&lt;br&gt;Tell the team: 'We're going to look at each of these in detail next. Then we'll see them working together in a real example.'">
+    <div class="v2-slide-wrap">
+      <h2>The four elements of a strong prompt</h2>
+      <img src="/images/ai-in-practice/session3-slide5.svg" alt="The four elements of a strong prompt: Context, Task, Format, Constraints" class="slide-img"/>
+      <div class="v2-step-list" custom-style="step-list">
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">1</div>
+          <div><div class="v2-step-title">Context</div><div class="v2-step-body">What situation are you in? What tool, language, framework, or codebase is involved?</div></div>
+        </div>
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">2</div>
+          <div><div class="v2-step-title">Task</div><div class="v2-step-body">What specifically do you want the AI to do? "Write a test" is not a task. "Write a Playwright test that verifies X" is.</div></div>
+        </div>
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">3</div>
+          <div><div class="v2-step-title">Format</div><div class="v2-step-body">How do you want the response? Code only? With explanation? A numbered list? Short or detailed?</div></div>
+        </div>
+        <div class="v2-step" custom-style="step">
+          <div class="v2-step-num">4</div>
+          <div><div class="v2-step-title">Constraints</div><div class="v2-step-body">What should it NOT do? "Don't use third-party libraries." "Keep it under 20 lines." "No async/await."</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 16 — Context + Task ─── -->
+  <div class="slide" data-title="Elements 1 &amp; 2: Context + Task" data-notes="Context is the most commonly missing piece — people ask vague questions and get vague answers. More specific context = more targeted response.&lt;br&gt;&lt;br&gt;Good context for QA work: the testing framework (Playwright, Cypress, Jest), the language (TypeScript, JS), the page or feature being tested, the error message if debugging.&lt;br&gt;&lt;br&gt;Vague tasks produce vague responses. The key question: 'Could this request be answered in ten completely different ways?' If yes, make it more specific.">
+    <div class="v2-slide-wrap">
+      <h3 class="slide-section-label">1 · Context — give it your situation</h3>
+      <div class="v2-two-col" custom-style="comparison-card">
+        <div class="v2-col bad">
+          <div class="v2-col-label">Missing context</div>
+          <div class="v2-code-wrap" custom-style="code-block"><div class="code-block"><pre>"My test is failing. How do I fix it?"</pre></div></div>
+          <p>The AI has to guess the framework, language, and error. Answer will be generic.</p>
+        </div>
+        <div class="v2-col good">
+          <div class="v2-col-label">Rich context</div>
+          <div class="v2-code-wrap" custom-style="code-block"><div class="code-block"><pre>"I'm using Playwright 1.40 with TypeScript. My test clicks #submit-btn on the login page but times out in CI. Passes locally on macOS. Here's the test and error..."</pre></div></div>
+          <p>Framework, environment, symptom, code — targeted answer possible.</p>
+        </div>
+      </div>
+      <h3 class="slide-section-label">2 · Task — be specific about what you want</h3>
+      <div class="v2-two-col" custom-style="comparison-card">
+        <div class="v2-col bad">
+          <div class="v2-col-label">Too vague</div>
+          <p>"Write a test"</p>
+        </div>
+        <div class="v2-col good">
+          <div class="v2-col-label">Specific</div>
+          <p>"Write a Playwright TypeScript test that navigates to /checkout, fills the address form, clicks Submit, and asserts the confirmation URL contains /order-confirmed"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 17 — Format + Constraints ─── -->
+  <div class="slide" data-title="Elements 3 &amp; 4: Format + Constraints" data-notes="Format is the most overlooked element. By default, LLMs give a verbose explanation with code. Sometimes that's what you want. Other times you just want the code, or a bullet list, or a one-line answer.&lt;br&gt;&lt;br&gt;Constraints stop the AI from going in directions you don't want. Without them, an AI will make decisions on your behalf — which framework to use, how long the answer should be.&lt;br&gt;&lt;br&gt;For QA teams, common constraints: stick to the existing framework, don't add new dependencies, match the existing file naming convention.">
+    <div class="v2-slide-wrap">
+      <h3 class="slide-section-label">3 · Format — tell it how to respond</h3>
+      <div class="v2-two-col" custom-style="comparison-card">
+        <div class="v2-col neutral">
+          <div class="v2-col-label">Useful format instructions</div>
+          <ul>
+            <li>"Give me only the code, no explanation"</li>
+            <li>"Explain in simple terms, no jargon"</li>
+            <li>"List the options as bullet points"</li>
+            <li>"Give me a one-sentence answer"</li>
+          </ul>
+        </div>
+        <div class="v2-col neutral">
+          <div class="v2-col-label">Choose based on your goal</div>
+          <ul>
+            <li><strong>Just need the code?</strong> Ask for code only</li>
+            <li><strong>Learning something?</strong> Ask for explanation + code</li>
+            <li><strong>Need options?</strong> Ask for a comparison list</li>
+          </ul>
+        </div>
+      </div>
+      <h3 class="slide-section-label">4 · Constraints — tell it what NOT to do</h3>
+      <div class="v2-callout danger" custom-style="callout-danger">
+        <p>Without: "Write a test for the API response" → AI picks whatever library it prefers, possibly one you don't use</p>
+      </div>
+      <div class="v2-callout success" custom-style="callout-success">
+        <p>With: "Write a test using Jest and supertest only — no other libraries. Keep it under 25 lines."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 18 — Putting It All Together ─── -->
+  <div class="slide" data-title="Putting It All Together" data-notes="Walk through this example carefully. Show how each part of the prompt maps to one of the four elements. Then point out: this isn't a novel — it's still one short paragraph. It doesn't take long to write a good prompt once you know the pattern.&lt;br&gt;&lt;br&gt;Ask the team: 'Can you spot the context, task, format, and constraints?' Let them find each part.">
+    <div class="v2-slide-wrap">
+      <h2>A complete prompt — all four elements</h2>
+      <div class="v2-code-wrap" custom-style="code-block">
+        <div class="code-block"><pre><span class="prompt-context">I'm writing Playwright TypeScript tests for an e-commerce checkout flow.</span> <span class="prompt-task">Write a test that adds a product to the cart, goes through checkout, and asserts the order confirmation number is visible on the success page.</span> <span class="prompt-format">Return only the test code with inline comments explaining each step.</span> <span class="prompt-constraint">Do not use any helpers or utilities not already in Playwright — no third-party packages.</span></pre></div>
+      </div>
+      <div class="v2-two-col" custom-style="comparison-card">
+        <div class="v2-col neutral"><div class="v2-col-label" style="color:var(--accent);">Context</div><p>Playwright TypeScript, e-commerce checkout</p></div>
+        <div class="v2-col neutral"><div class="v2-col-label" style="color:var(--green);">Task</div><p>Cart → checkout → assert confirmation</p></div>
+        <div class="v2-col neutral"><div class="v2-col-label" style="color:var(--blue);">Format</div><p>Code only, inline comments per step</p></div>
+        <div class="v2-col neutral"><div class="v2-col-label" style="color:var(--purple);">Constraints</div><p>Playwright built-ins only</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 19 — QA Patterns ─── -->
+  <div class="slide" data-title="Three QA Prompting Patterns" data-notes="These three templates are what your team should leave with today. Walk through each one. Point out: you always give it the URL or component, the user action, and the expected outcome — the AI does the selector guessing, you verify.&lt;br&gt;&lt;br&gt;Pattern 2 (debugging): Always paste the actual error message. Don't describe it — paste it. Then paste the relevant test code.&lt;br&gt;&lt;br&gt;Pattern 3 (code review): AI is very good at spotting missing assertions, brittle selectors, missing edge cases. Use it before submitting a PR.">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Three QA Patterns to Use Today</div>
+      <h2>Prompting templates for your daily work</h2>
+      <div class="v2-pattern-card" custom-style="pattern-card">
+        <div class="v2-pattern-num">Pattern 01</div>
+        <div class="v2-pattern-title">Writing Tests</div>
+        <div class="v2-pattern-section">
+          <div class="v2-code-wrap" custom-style="code-block">
+            <div class="code-block"><pre>I'm writing Playwright TypeScript tests.
+Page: [URL or component name] | User action: [what the user does]
+Expected result: [what should happen]
+Write a test. Use getByRole/getByLabel for selectors. Return code only.</pre></div>
+          </div>
+        </div>
+      </div>
+      <div class="v2-pattern-card" custom-style="pattern-card">
+        <div class="v2-pattern-num">Pattern 02</div>
+        <div class="v2-pattern-title">Debugging a Failing Test</div>
+        <div class="v2-pattern-section">
+          <div class="v2-code-wrap" custom-style="code-block">
+            <div class="code-block"><pre>My Playwright test is failing with this error:
+[paste full error message]
+Here is the failing test: [paste test code]
+The test passes locally but fails in CI (GitHub Actions).
+What are the most likely causes? List them ranked by probability.</pre></div>
+          </div>
+        </div>
+      </div>
+      <div class="v2-pattern-card" custom-style="pattern-card">
+        <div class="v2-pattern-num">Pattern 03</div>
+        <div class="v2-pattern-title">Reviewing Your Own Tests</div>
+        <div class="v2-pattern-section">
+          <div class="v2-code-wrap" custom-style="code-block">
+            <div class="code-block"><pre>Review this Playwright test and flag any issues.
+Look for: brittle selectors, missing assertions, missing edge cases,
+anti-patterns, and anything that would make this test flaky in CI.
+[paste your test code]
+Return a numbered list of issues with severity. Also suggest any missing test cases.</pre></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 20 — Key Takeaways ─── -->
+  <div class="slide" data-title="Key Takeaways" data-notes="Read these out slowly — one per beat. Let each one land. This is the summary the team should leave with today.&lt;br&gt;&lt;br&gt;After reading them, ask: 'Any of these feel surprising? Any questions before we close?' Give it a full 10 seconds of silence — people are processing.&lt;br&gt;&lt;br&gt;Before next session, encourage them to write at least one real prompt using the four-element structure.">
+    <div class="v2-slide-wrap">
+      <div class="session-badge">Key Takeaways</div>
+      <h2>What to leave with today</h2>
+      <div class="v2-step-list" custom-style="step-list">
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">1</div><div><div class="v2-step-body">AI is a broad category. LLMs (ChatGPT, Claude, Gemini) are the specific type we care about — trained on text, generating text, predicting one token at a time.</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">2</div><div><div class="v2-step-body">We went from rule-based chatbots → voice assistants → generative AI → agents. We're now in the agent era — AI that takes action, not just answers.</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">3</div><div><div class="v2-step-body">LLMs don't think or understand — they predict patterns. They can be confidently wrong. Always verify output before using it in real work.</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">4</div><div><div class="v2-step-body">Your QA expertise is more valuable, not less. AI handles boilerplate — you still decide what to test, identify edge cases, and verify results.</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">5</div><div><div class="v2-step-body">A good prompt has four elements: Context, Task, Format, Constraints. Specificity is the single biggest lever — vague in, vague out.</div></div></div>
+        <div class="v2-step" custom-style="step"><div class="v2-step-num">6</div><div><div class="v2-step-body">Three QA patterns to try today: writing tests, debugging failures, reviewing your own test code before submitting a PR.</div></div></div>
+      </div>
+      <a href="/topics/ai-in-practice/session-01/notes/" target="_blank" class="ref-bridge-btn"> Reference Notes for this session</a>
+    </div>
+  </div>
+
+<script>
+(function () {
+  if (!new URLSearchParams(location.search).has('presenter')) return;
+
+  var slides = Array.from(document.querySelectorAll('.slide'));
+  var notes = slides.map(function (s, i) {
+    return {
+      num: i + 1,
+      title: s.dataset.title || ('Slide ' + (i + 1)),
+      notes: s.dataset.notes || ''
+    };
+  });
+
+  document.body.innerHTML = '';
+  document.body.style.cssText = 'margin:0;padding:40px;background:#111;color:#e8e8e8;font-family:system-ui,sans-serif;max-width:860px;margin-left:auto;margin-right:auto;';
+
+  notes.forEach(function (s) {
+    if (!s.notes) return;
+    var box = document.createElement('div');
+    box.style.cssText = 'border:1px solid #333;border-radius:6px;padding:20px 24px;margin-bottom:20px;';
+    box.innerHTML =
+      '<div style="font-size:0.68rem;color:#888;font-family:monospace;margin-bottom:8px;letter-spacing:1px;">SLIDE ' + s.num + ' — ' + s.title + '</div>' +
+      '<div style="line-height:1.75;font-size:0.93rem;">' + s.notes + '</div>';
+    document.body.appendChild(box);
+  });
+})();
+</script>

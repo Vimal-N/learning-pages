@@ -1,0 +1,346 @@
+---
+layout: guide.njk
+title: "Session 08 Full Guide — Debugging Tests with AI: Stop Guessing, Start Asking"
+sessionNumber: "08"
+sessionTitle: "Debugging Tests with AI — Stop Guessing, Start Asking"
+phase: "Phase 3: AI for Test Automation & Debugging"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Debugging Tests with AI — <em>Stop Guessing, Start Asking</em></h2>
+      <p class="v2-section-sub">How to use AI to diagnose test failures faster — by feeding it the right information and asking the right questions.</p>
+    </div>
+
+<div class="v2-version-stamp" custom-style="version-stamp">Session 08 &nbsp;·&nbsp; Phase 3: AI for Test Automation &amp; Debugging &nbsp;·&nbsp; Intermediate</div>
+
+<div class="v2-quickstart" custom-style="quick-start">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 08 you will know how to structure a debugging prompt that gets a useful diagnosis, understand the four failure categories AI recognises reliably, and have a decision tree for when to use AI versus investigate manually.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>From Sessions 01–07:</strong> You've written tests with AI. Now you'll use it to fix them when they break. The same prompt quality rules apply — but debugging prompts have a different structure from generation prompts.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Why AI Debugging Works">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Why AI Debugging <em>Works</em></h2>
+      <p class="v2-section-sub">AI has seen thousands of Playwright failures. It pattern-matches faster than you can Google.</p>
+    </div>
+    <p>When a test fails, the error message points at a symptom — not the cause. Finding the cause requires knowing which common failure patterns to check. AI has been trained on enormous amounts of test code, error messages, and debugging discussions. It recognises patterns you'd have to spend 20 minutes searching for.</p>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col neutral">
+    <div class="v2-col-label">Old approach (guessing)</div>
+    <ul>
+      <li>Read error. Guess it's a timing issue. Add <code>waitForTimeout</code>. Still fails.</li>
+      <li>Guess it's a selector problem. Change selector. Still fails.</li>
+      <li>Google the error message. Find a 2-year-old Stack Overflow thread.</li>
+      <li>Try the top answer. Slightly different problem. 20 minutes lost.</li>
+    </ul>
+  </div>
+  <div class="v2-col good">
+    <div class="v2-col-label">AI-assisted debugging</div>
+    <ul>
+      <li>Paste error + test code + context.</li>
+      <li>Ask AI to categorise the failure type and suggest the most likely fix.</li>
+      <li>AI explains the likely root cause and gives a targeted fix.</li>
+      <li>Try it. If it doesn't work, feed AI the new error — it iterates.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="v2-callout warning" custom-style="callout-warning">
+  <p><strong>Limitation to know:</strong> AI can't run your app, inspect your DOM, or watch your test execute. It works from what you paste. The better your context, the better the diagnosis. A vague "my test is failing" gets a vague answer.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The Debugging Prompt">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Debugging <em>Prompt Structure</em></h2>
+      <p class="v2-section-sub">Four pieces of information. All four are required. Missing any one of them makes the diagnosis less reliable.</p>
+    </div>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">1</div>
+    <div>
+      <div class="v2-step-title">The error message — verbatim</div>
+      <div class="v2-step-body">Paste the full error output from your terminal or CI log. Don't paraphrase it. The exact wording, stack trace lines, and error type are all signals AI uses. "It says something about a timeout" is much less useful than the actual message.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">2</div>
+    <div>
+      <div class="v2-step-title">The test code</div>
+      <div class="v2-step-body">Paste the complete failing test. Not just the line it fails on — the whole <code>test()</code> block. AI needs to see how the test is structured, what actions precede the failure, and what assertion is being made.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">3</div>
+    <div>
+      <div class="v2-step-title">What the test is supposed to do</div>
+      <div class="v2-step-body">One sentence: "This test should fill the login form, submit it, and verify the user lands on /dashboard." AI needs to know the intended behaviour to tell you whether the test logic is correct or just the implementation.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">4</div>
+    <div>
+      <div class="v2-step-title">What you already tried</div>
+      <div class="v2-step-body">If you've already ruled something out, say so. "I checked and the selector is correct" or "this test was passing yesterday and nothing in the test changed" — these rule out whole categories of failure and point AI toward less obvious causes.</div>
+    </div>
+  </div>
+</div>
+
+<h3>Full debugging prompt template</h3>
+
+<div class="v2-code-wrap" custom-style="code-block">
+  <div class="code-block"><pre>This Playwright test is failing. Please diagnose it.
+
+ERROR:
+[paste full error output here]
+
+TEST CODE:
+[paste full test() block here]
+
+WHAT IT SHOULD DO:
+[one sentence describing expected behaviour]
+
+WHAT I'VE ALREADY TRIED:
+[list anything you've ruled out, or "nothing yet"]
+
+Tell me: (1) what type of failure this is, (2) the most likely root cause, (3) the fix to try first.</pre></div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Four Failure Categories">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Four Failure <em>Categories AI Spots Fast</em></h2>
+      <p class="v2-section-sub">Most Playwright failures fall into one of four categories. Knowing them helps you read AI's diagnosis and verify it's correct.</p>
+    </div>
+
+<div class="v2-card-list" custom-style="row-card-list">
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">TYPE 1</div>
+      <div class="v2-era-name">Selector Failure</div>
+      <div class="v2-era-date">Most common</div>
+    </div>
+    <div class="v2-card-body"><strong>Symptom:</strong> <code>TimeoutError: Locator … not found</code> or <code>strict mode violation</code>. <strong>Cause:</strong> selector is wrong, changed, or matches multiple elements. <strong>Fix:</strong> inspect the live DOM, update the selector, use <code>data-testid</code> attributes where possible.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">TYPE 2</div>
+      <div class="v2-era-name">Timing Failure</div>
+      <div class="v2-era-date">Very common</div>
+    </div>
+    <div class="v2-card-body"><strong>Symptom:</strong> Test passes locally, fails in CI — or fails intermittently. <strong>Cause:</strong> test acts before the element is ready or a navigation hasn't resolved. <strong>Fix:</strong> replace <code>waitForTimeout</code> with <code>expect(locator).toBeVisible()</code> or <code>page.waitForURL()</code>.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">TYPE 3</div>
+      <div class="v2-era-name">State Contamination</div>
+      <div class="v2-era-date">Common in suites</div>
+    </div>
+    <div class="v2-card-body"><strong>Symptom:</strong> Test passes alone, fails when run with others. <strong>Cause:</strong> test depends on state left by a previous test (logged-in session, cart contents, database record). <strong>Fix:</strong> make the test self-contained — set up and tear down its own state.</div>
+  </div>
+  <div class="v2-row-card" custom-style="row-card">
+    <div>
+      <div class="v2-era-badge">TYPE 4</div>
+      <div class="v2-era-name">Wrong Assertion</div>
+      <div class="v2-era-date">Trickiest to spot</div>
+    </div>
+    <div class="v2-card-body"><strong>Symptom:</strong> Test fails with an assertion error but the feature looks correct in the browser. <strong>Cause:</strong> assertion checks the wrong thing (wrong text, wrong URL format, wrong element). <strong>Fix:</strong> clarify what "success" actually looks like and update the assertion to match reality.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>Ask AI to classify before it fixes:</strong> Add "Tell me which of these four categories this is before suggesting a fix" to your debugging prompt. If AI's classification matches your intuition, the fix will likely be correct. If it doesn't match, investigate further before applying it.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Flaky Test Diagnosis">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Diagnosing <em>Flaky Tests</em></h2>
+      <p class="v2-section-sub">Flaky tests are the hardest category. AI can help you find timing assumptions you didn't know you made.</p>
+    </div>
+    <p>A flaky test is a test that sometimes passes and sometimes fails with no code change. The root cause is almost always an assumption about timing or state that holds in fast environments and breaks in slow ones (CI, parallel runs, slower machines).</p>
+
+<h3>What to give AI for flaky test diagnosis</h3>
+
+<div class="v2-code-wrap" custom-style="code-block">
+  <div class="code-block"><pre>This test passes locally about 80% of the time and fails in CI about 30% of the time.
+It always fails at the same assertion.
+
+TEST CODE:
+[paste test]
+
+ERROR (from a failing run):
+[paste error output]
+
+It was passing reliably until [describe any recent change — new feature, dependency update, parallel test addition].
+
+Diagnose what timing assumption this test is making and how to make it deterministic.</pre></div>
+</div>
+
+<h3>Common AI-identified timing fixes</h3>
+
+<div class="v2-decision-grid" custom-style="decision-grid">
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Test acts on element before it's visible</div>
+    <div class="v2-decision-use">Add <code>expect(locator).toBeVisible()</code> before the action</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Test asserts URL before navigation completes</div>
+    <div class="v2-decision-use">Use <code>await page.waitForURL('/target')</code> then assert</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">API call hasn't resolved before assertion</div>
+    <div class="v2-decision-use">Wait for a visible UI response to the API (loading indicator gone, data rendered)</div>
+  </div>
+  <div class="v2-decision-row" custom-style="decision-row">
+    <div class="v2-decision-when">Intermittent on CI only — different base URL or env</div>
+    <div class="v2-decision-use">Check <code>playwright.config.ts</code> baseURL and environment variable handling</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="When Not to Use AI">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">When <em>Not</em> to Use AI for Debugging</h2>
+      <p class="v2-section-sub">AI is fast at pattern-matching known failure types. It's slow and unreliable for failures that require live investigation.</p>
+    </div>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col good">
+    <div class="v2-col-label">AI debugs well</div>
+    <ul>
+      <li>Error message is clear and specific</li>
+      <li>Failure is consistent and reproducible</li>
+      <li>Test code is the likely problem</li>
+      <li>You can describe what the feature is supposed to do</li>
+      <li>Failure matches a known category (selector, timing, assertion, state)</li>
+    </ul>
+  </div>
+  <div class="v2-col bad">
+    <div class="v2-col-label">Investigate manually instead</div>
+    <ul>
+      <li>Error is in a 3rd-party library with no clear message</li>
+      <li>Failure only happens with specific data in your real database</li>
+      <li>Test is correct but the feature itself is broken</li>
+      <li>Failure requires watching the browser to understand what's happening</li>
+      <li>Environment issue (network, proxy, auth token) unrelated to test logic</li>
+    </ul>
+  </div>
+</div>
+
+<h3>The 10-minute rule</h3>
+<p>Spend no more than 10 minutes on AI debugging before switching to manual investigation. If three AI-suggested fixes don't work, the failure is probably in a category AI can't diagnose from text alone. Open Playwright's <code>--debug</code> mode or use the trace viewer and watch what actually happens.</p>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>Playwright Trace Viewer:</strong> Run <code>npx playwright test --trace on</code> and then <code>npx playwright show-trace trace.zip</code>. You get a timeline of every action, screenshot at every step, and network request log. Once you can see what happened, feed the key observation to AI: "The test clicked submit but the form didn't send a network request — here's the error…"</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Iterating with AI">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Iterating — <em>When the First Fix Doesn't Work</em></h2>
+      <p class="v2-section-sub">AI debugging is rarely one shot. Feed it the new error and it continues the investigation.</p>
+    </div>
+    <p>When an AI-suggested fix doesn't resolve the failure, don't start a new chat. Continue the conversation — AI has context about what it already tried. Give it the new error and it will rule out the previous theory and suggest the next most likely cause.</p>
+
+<div class="v2-transcript" custom-style="transcript-card">
+  <div class="v2-transcript-header">Debugging Conversation — Playwright Selector Failure</div>
+  <div class="v2-turn" custom-style="transcript-turn">
+    <div class="v2-turn-role user">You</div>
+    <div class="v2-turn-text">[Paste failing test + error: TimeoutError: Locator '#submit-btn' not found]</div>
+  </div>
+  <div class="v2-turn" custom-style="transcript-turn">
+    <div class="v2-turn-role agent">AI</div>
+    <div class="v2-turn-text">This is a Type 1 selector failure. The selector <code>#submit-btn</code> isn't matching any element. Most likely cause: the button uses a different ID or has a data-testid instead. Try updating the selector to <code>button[type="submit"]</code> as a starting point.</div>
+  </div>
+  <div class="v2-turn" custom-style="transcript-turn">
+    <div class="v2-turn-role user">You</div>
+    <div class="v2-turn-text">Tried that — still failing. New error: TimeoutError: Locator 'button[type="submit"]' not found after 30000ms.</div>
+  </div>
+  <div class="v2-turn" custom-style="transcript-turn">
+    <div class="v2-turn-role agent">AI</div>
+    <div class="v2-turn-text">Ruling out selector mismatch — the button exists but Playwright isn't finding it in the expected state. This suggests a timing issue: the page may not have fully rendered before the locator is checked. Add <code>await page.waitForLoadState('networkidle')</code> before the click, or check if the form is inside an iframe. Also verify your <code>baseURL</code> in config — if the test is navigating to the wrong page, no selectors will match.</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Try This">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Try This — <em>Debug a Real Failure</em></h2>
+      <p class="v2-section-sub">Apply the debugging prompt to a test that's currently failing or flaky in your project.</p>
+    </div>
+
+<div class="v2-try-this" custom-style="try-this">
+  <div class="v2-try-label">Try This — 15 minutes</div>
+  <p>Find a failing or flaky test in your project — or deliberately break a passing test by changing a selector to something wrong. Then:</p>
+  <p><strong>Part 1 (5 min):</strong> Assemble the four pieces of the debugging prompt: the full error output, the complete test code, one sentence describing what the test should do, and anything you've already tried. Don't try to diagnose it yourself first — let AI go first.</p>
+  <p><strong>Part 2 (5 min):</strong> Send the prompt to Copilot Chat or Claude. Check: does AI correctly classify which of the four failure types this is? Does its root cause theory match your intuition?</p>
+  <p><strong>Part 3 (5 min):</strong> Apply the fix. If it works, note what type of failure it was. If it doesn't, continue the conversation with the new error. Track how many iterations it took to resolve.</p>
+  <p>After 3 sessions of this, you'll have a clear picture of which failure types AI is reliable for and which require manual investigation in your specific project.</p>
+</div>
+
+<span class="v2-progressive-marker" custom-style="progress-marker">▲ Builds on Session 07 AI Test Writing Workflow</span>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I can do this" — before moving to Session 09.</p>
+    </div>
+<div class="v2-self-check" custom-style="self-assessment">
+  <div class="v2-self-check-title">Session 08 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I can do this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know the four pieces of information a debugging prompt needs and why each one matters</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can name the four failure categories and describe what symptoms identify each one</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I understand why flaky tests fail intermittently and what timing assumption usually causes them</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know which failure types AI debugs reliably and which require manual investigation</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know how to continue an AI debugging conversation when the first fix doesn't work</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I have used Playwright's trace viewer (or know how to) to get visual evidence of a failure</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-09/" style="color:var(--accent);">Session 09 — Refactoring &amp; Reviewing Your Test Suite with AI →</a></p>
+  </div>
+</div>

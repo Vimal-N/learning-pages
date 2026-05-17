@@ -1,0 +1,499 @@
+---
+layout: guide.njk
+title: "Session 04 Full Guide — Setting Up GitHub Copilot & Understanding What It Can Do"
+sessionNumber: "04"
+sessionTitle: "Setting Up GitHub Copilot & Understanding What It Can Do"
+phase: "Phase 2: GitHub Copilot Mastery"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Setting Up <em>GitHub Copilot</em></h2>
+      <p class="v2-section-sub">Complete setup walkthrough, the full context reference system, Inline Chat, keyboard shortcuts, and settings worth configuring.</p>
+    </div>
+
+<div class="v2-version-stamp">Last verified: May 2026 &nbsp;·&nbsp; GitHub Copilot Extension v1.290+ &nbsp;·&nbsp; VS Code 1.90+</div>
+
+<div class="v2-quickstart">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">Quick Start</div>
+    <div class="v2-qs-text">Open VS Code → <kbd class="kbd">Ctrl+Shift+X</kbd> (Win/Linux) or <kbd class="kbd">Cmd+Shift+X</kbd> (Mac) → search <strong>GitHub Copilot</strong> → install both extensions → sign in → open any <code>.ts</code> file → type a comment describing a test and pause. You just used Copilot.</div>
+  </div>
+</div>
+
+<div class="v2-callout info">
+  <p><strong>From Session 01–03:</strong> You already know how LLMs work (token prediction) and the four-element prompt framework (Role, Context, Task, Constraints). Everything you learned about prompting applies directly to Copilot Chat — it's the same model type, just embedded in your editor. <a href="/topics/ai-in-practice-v2/guides/session-03/" class="v2-cross-link">Session 03 Prompt Framework →</a></p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="What is Copilot?">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">What is GitHub Copilot?</h2>
+      <p class="v2-section-sub">Inline completions and Chat — the two things Copilot does for you in VS Code.</p>
+    </div>
+    <p>GitHub Copilot is an AI coding assistant built into VS Code (and JetBrains, GitHub.com). It watches what you type and offers two things: <strong>inline completions</strong> that appear as grey "ghost text" while you write, and a <strong>Chat interface</strong> where you hold a proper conversation about your code.</p>
+
+<p>It was trained on billions of lines of public code from GitHub, which is why it understands Playwright, TypeScript, and testing frameworks so well — far better than a general-purpose AI like ChatGPT, because it's seen how real test suites are structured.</p>
+
+<div class="v2-two-col">
+  <div class="v2-col neutral">
+    <div class="v2-col-label">Mode 1 — Inline Completions</div>
+    <p style="font-size:0.86rem;margin:0;color:var(--text-secondary);">Passive. Copilot watches what you type and suggests what comes next — shown in grey, right in your file. <kbd class="kbd">Tab</kbd> to accept, <kbd class="kbd">Esc</kbd> to dismiss.</p>
+    <p style="font-size:0.82rem;margin:10px 0 0;color:var(--text-muted);">Best for: boilerplate, repetitive patterns, completing a test you've started.</p>
+  </div>
+  <div class="v2-col neutral">
+    <div class="v2-col-label">Mode 2 — Copilot Chat</div>
+    <p style="font-size:0.86rem;margin:0;color:var(--text-secondary);">Active. Open a chat panel (<kbd class="kbd">Ctrl+Alt+I</kbd>) and have a conversation. Ask questions, request test generation, get explanations, debug failures.</p>
+    <p style="font-size:0.82rem;margin:10px 0 0;color:var(--text-muted);">Best for: complex generation, debugging, understanding unfamiliar code.</p>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Getting Set Up">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Setting Up: <em>Installation</em></h2>
+      <p class="v2-section-sub">Install both extensions, sign in to GitHub, and confirm it's working.</p>
+    </div>
+    <p>There are two separate extensions. Both are required — they're not bundled together.</p>
+
+<div style="display:grid;gap:10px;margin:14px 0;">
+  <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700;">1</div>
+    <div>
+      <div style="font-size:0.9rem;font-weight:600;margin-bottom:3px;">Open Extensions panel</div>
+      <div style="font-size:0.84rem;color:var(--text-secondary);">Press <kbd class="kbd">Ctrl+Shift+X</kbd> (Windows/Linux) or <kbd class="kbd">Cmd+Shift+X</kbd> (Mac).</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700;">2</div>
+    <div>
+      <div style="font-size:0.9rem;font-weight:600;margin-bottom:6px;">Search and install both:</div>
+      <div style="display:grid;gap:5px;">
+        <code style="font-size:0.83rem;padding:5px 10px;background:var(--code-bg);border-radius:4px;display:block;">GitHub Copilot</code>
+        <code style="font-size:0.83rem;padding:5px 10px;background:var(--code-bg);border-radius:4px;display:block;">GitHub Copilot Chat</code>
+      </div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700;">3</div>
+    <div>
+      <div style="font-size:0.9rem;font-weight:600;margin-bottom:3px;">Sign in to GitHub</div>
+      <div style="font-size:0.84rem;color:var(--text-secondary);">VS Code prompts you to sign in. Click "Sign in to GitHub" → authorise in the browser → return to VS Code. Sign in to the account that has your Copilot licence — not a personal one if your team uses a Business licence.</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700;">4</div>
+    <div>
+      <div style="font-size:0.9rem;font-weight:600;margin-bottom:3px;">Confirm it's working</div>
+      <div style="font-size:0.84rem;color:var(--text-secondary);">Open any <code>.ts</code> file. Type: <code>// Test: user submits login form with wrong password</code> then press <kbd class="kbd">Enter</kbd> and pause. A grey suggestion should appear. Hit <kbd class="kbd">Tab</kbd> to accept it. If nothing appears, check the Copilot icon in the bottom-right status bar — it should be active (not crossed out).</div>
+    </div>
+  </div>
+</div>
+
+<div class="v2-callout danger">
+  <p><strong>Common setup issue:</strong> The Copilot icon shows an exclamation mark or is crossed out. This almost always means your GitHub account doesn't have a licence assigned. Check with your GitHub admin or visit github.com → Settings → Copilot to verify your access level.</p>
+</div>
+
+<div class="v2-try-this">
+  <div class="v2-try-label">Try This — 2 minutes</div>
+  <p>Do this right now. Press <kbd class="kbd">Ctrl+Shift+X</kbd> (Windows) or <kbd class="kbd">Cmd+Shift+X</kbd> (Mac). Search "GitHub Copilot". Are both extensions installed? If not, install them now. This is the only setup step in the course that you must do before the next session.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="How It Works">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">How Inline Completions Work</h2>
+      <p class="v2-section-sub">What Copilot reads, how it predicts, and why descriptive names matter.</p>
+    </div>
+    <p>Copilot reads a window of context around your cursor — the current file, your imports, recent variable names, and any open files VS Code has used recently. It predicts what tokens (code) are most likely to come next based on patterns in its training data, then shows that prediction as grey ghost text.</p>
+
+<svg viewBox="0 0 680 200" style="width:100%;display:block;margin:14px 0 8px;" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+  <rect width="680" height="200" fill="#f5f5f5" rx="10"/>
+  <rect x="12" y="12" width="178" height="152" rx="7" fill="#6fa3f7" fill-opacity="0.1" stroke="#6fa3f7" stroke-width="1.5"/>
+  <text x="101" y="36" text-anchor="middle" fill="#6fa3f7" font-size="13" font-weight="700">Your code context</text>
+  <text x="101" y="56" text-anchor="middle" fill="#555" font-size="11">Open file content</text>
+  <text x="101" y="72" text-anchor="middle" fill="#555" font-size="11">Cursor position</text>
+  <text x="101" y="88" text-anchor="middle" fill="#555" font-size="11">Imports (framework signal)</text>
+  <text x="101" y="104" text-anchor="middle" fill="#555" font-size="11">Comments above cursor</text>
+  <text x="101" y="120" text-anchor="middle" fill="#555" font-size="11">Variable/function names</text>
+  <text x="101" y="140" text-anchor="middle" fill="#888" font-size="10">→ better names = better output</text>
+  <line x1="194" y1="88" x2="238" y2="88" stroke="#999" stroke-width="1.5" marker-end="url(#arr04)"/>
+  <rect x="242" y="12" width="178" height="152" rx="7" fill="#b08cf5" fill-opacity="0.1" stroke="#b08cf5" stroke-width="1.5"/>
+  <text x="331" y="36" text-anchor="middle" fill="#b08cf5" font-size="13" font-weight="700">Copilot model</text>
+  <text x="331" y="56" text-anchor="middle" fill="#555" font-size="11">Processes token sequence</text>
+  <text x="331" y="72" text-anchor="middle" fill="#555" font-size="11">Predicts next tokens</text>
+  <text x="331" y="88" text-anchor="middle" fill="#555" font-size="11">Trained on millions of repos</text>
+  <text x="331" y="108" text-anchor="middle" fill="#888" font-size="10">Playwright? TypeScript?</text>
+  <text x="331" y="122" text-anchor="middle" fill="#888" font-size="10">It recognises the pattern.</text>
+  <line x1="424" y1="88" x2="468" y2="88" stroke="#999" stroke-width="1.5" marker-end="url(#arr04)"/>
+  <rect x="472" y="12" width="196" height="152" rx="7" fill="#5ec269" fill-opacity="0.1" stroke="#5ec269" stroke-width="1.5"/>
+  <text x="570" y="36" text-anchor="middle" fill="#5ec269" font-size="13" font-weight="700">Ghost text</text>
+  <text x="570" y="56" text-anchor="middle" fill="#555" font-size="11">Shown inline, dimmed grey</text>
+  <text x="570" y="78" text-anchor="middle" fill="#5ec269" font-size="12" font-weight="700">Tab → accept all</text>
+  <text x="570" y="96" text-anchor="middle" fill="#e85c5c" font-size="12" font-weight="700">Esc → dismiss</text>
+  <text x="570" y="114" text-anchor="middle" fill="#888" font-size="11">Ctrl+→ → accept word</text>
+  <text x="570" y="130" text-anchor="middle" fill="#888" font-size="11">Alt+] → next suggestion</text>
+  <defs>
+    <marker id="arr04" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <polygon points="0,0 7,3.5 0,7" fill="#999"/>
+    </marker>
+  </defs>
+</svg>
+
+<p>The practical implication: descriptive names produce better suggestions. A test named <code>loginWithInvalidPassword</code> tells Copilot far more than <code>test1</code>. A comment like <code>// Test: verify rate limiting blocks after 5 failed attempts</code> above a blank test function will generate a much more targeted suggestion than no comment at all.</p>
+  </div>
+</div>
+
+<div class="slide" data-title="Project &amp; Editor Context">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Context Reference System <em>— @workspace &amp; @vscode</em></h2>
+      <p class="v2-section-sub">Search your entire project and query VS Code's editor settings.</p>
+    </div>
+    <p>Copilot Chat has a set of <strong>@-mentions</strong> and <strong>#-references</strong> that let you explicitly add context to your messages. This is the difference between "write me a test" and "write me a test that matches my actual project".</p>
+
+<div class="v2-context-grid">
+
+  <div class="v2-context-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">@workspace</span>
+      <span class="v2-context-title">Search your entire project</span>
+    </div>
+    <div class="v2-context-desc">Tells Copilot to search across all files in your VS Code workspace. It can find where things are defined, what patterns exist, and how your project is structured — without you having to reference specific files.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">Finding patterns, understanding project structure, questions that span multiple files</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>"@workspace Where do we define our Page Objects and what pattern do they follow?"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Slower than asking about a specific file. Use @workspace for discovery, #file: when you know which file matters.</span>
+    </div>
+  </div>
+
+  <div class="v2-context-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">@vscode</span>
+      <span class="v2-context-title">VS Code settings &amp; config</span>
+    </div>
+    <div class="v2-context-desc">Gives Copilot access to your VS Code workspace settings, installed extensions, and editor configuration. Use it when your question is about the editor itself, not your code.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">VS Code settings, workspace config, extension behaviour, editor keybindings</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>"@vscode How do I configure the Playwright test timeout in this workspace's settings?"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Don't confuse with @workspace. @vscode is for editor config; @workspace is for your project's code.</span>
+    </div>
+  </div>
+
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Terminal &amp; File Context">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Context References <em>— @terminal &amp; #file:</em></h2>
+      <p class="v2-section-sub">Debug from terminal output and ground Copilot in your actual project files.</p>
+    </div>
+    <div class="v2-context-grid">
+
+  <div class="v2-context-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">@terminal</span>
+      <span class="v2-context-title">Active terminal output</span>
+    </div>
+    <div class="v2-context-desc">Reads the output currently visible in your VS Code terminal. Indispensable when you have a test failure on screen and want Copilot to explain or diagnose it — you don't have to copy and paste the error.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">Test failures, build errors, command output you want explained</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>Run your tests. Watch them fail. Open Chat → "@terminal Explain this test failure and suggest a fix."</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Copilot sees the terminal snapshot, not a live stream. If the terminal has scrolled past the error, it may miss it — scroll up first.</span>
+    </div>
+  </div>
+
+  <div class="v2-context-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">#file:path/to/file.ts</span>
+      <span class="v2-context-title">Include a specific file as context</span>
+    </div>
+    <div class="v2-context-desc">Attaches a specific file's contents to your message. This is the most important reference for QA work — referencing your existing Page Object or spec file ensures Copilot generates code that matches your actual patterns, not invented ones.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">Pattern matching, generating code consistent with an existing file, adding to a test suite</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>"Write tests for the user profile page using the same style as #file:tests/auth/login.spec.ts"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Large files slow responses. Reference the smallest file that contains the pattern you want to match.</span>
+    </div>
+  </div>
+
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Selection &amp; Codebase">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Context References <em>— #selection &amp; #codebase</em></h2>
+      <p class="v2-section-sub">Ask about highlighted code and run semantic search across your entire test suite.</p>
+    </div>
+    <div class="v2-context-grid">
+
+  <div class="v2-context-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">#selection</span>
+      <span class="v2-context-title">Your currently selected code</span>
+    </div>
+    <div class="v2-context-desc">Includes whatever code you've highlighted in the editor. Useful when you want to ask about a specific function or block without naming the file — just select it and ask.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">Questions about a specific highlighted function, explaining or reviewing a specific block</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>Select a beforeEach hook → open Chat → "What does #selection do and under what conditions could it fail?"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">If nothing is selected, #selection sends an empty context. You'll get a generic response. Always select first.</span>
+    </div>
+  </div>
+
+  <div class="v2-context-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">#codebase</span>
+      <span class="v2-context-title">Semantic search across all files</span>
+    </div>
+    <div class="v2-context-desc">A more powerful version of @workspace. Performs semantic search across your indexed codebase. Good for finding usage patterns, deprecated APIs, or anti-patterns across your entire test suite.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">Finding patterns or anti-patterns, deprecated API usage, coverage gaps across the suite</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>"#codebase Find all tests that use page.waitForSelector() — we're migrating to page.locator()"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Slower than targeted searches. Use when you genuinely don't know which file to look in.</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="v2-callout warning">
+  <p><strong>The most valuable combination for QA:</strong> <code>#file:tests/pages/loginPage.ts</code> + a clear task description. This gives Copilot your real selectors and your real pattern, so what it generates is immediately usable rather than a generic template.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Inline Chat">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Inline Chat <em>(Ctrl+I / Cmd+I)</em></h2>
+      <p class="v2-section-sub">A mini prompt that opens right in your editor — four scenarios you'll use every week.</p>
+    </div>
+    <p>While the Chat panel is a separate window, <strong>Inline Chat</strong> opens a mini prompt directly in your editor at the cursor position. You type your request, Copilot shows the diff inline, and you accept or discard without leaving your code. It's faster for targeted in-file work.</p>
+
+<h3>Four Inline Chat scenarios you'll use every week</h3>
+
+<h4>Scenario 1 — Explain a specific assertion</h4>
+<p>Select an assertion you don't recognise → press <kbd class="kbd">Ctrl+I</kbd> → type: <em>"Explain exactly what this assertion is checking and when it would fail"</em></p>
+<p>Why this beats Chat: you don't have to copy-paste the code. The context is exact — just the lines you selected.</p>
+
+<h4>Scenario 2 — Generate a test body at the cursor</h4>
+<p>Write a <code>test('user cannot log in with expired password', async ({ page }) => {</code> then position your cursor inside the empty function body → <kbd class="kbd">Ctrl+I</kbd> → type: <em>"Implement this test. Login page is at /login. Use page.locator() not page.waitForSelector()."</em></p>
+<p>Copilot generates the implementation inline. Review it before accepting — check the selectors and assertions.</p>
+
+<h4>Scenario 3 — Fix a failing assertion</h4>
+<p>Select a failing line → <kbd class="kbd">Ctrl+I</kbd> → type: <em>"This assertion is failing with: [paste error]. Fix it."</em></p>
+<p>The fix appears as a diff. Accept if it looks right, reject and redirect if it doesn't.</p>
+
+<h4>Scenario 4 — Add JSDoc to a Page Object method</h4>
+<p>Position cursor on a Page Object method → <kbd class="kbd">Ctrl+I</kbd> → type: <em>"Add a brief JSDoc comment to this method describing what it does and what it returns."</em></p>
+<p>The doc block appears above the function. Faster than writing it manually.</p>
+
+<div class="v2-try-this">
+  <div class="v2-try-label">Try This — 2 minutes</div>
+  <p>Open any test file. Select a complete test function. Press <kbd class="kbd">Ctrl+I</kbd> (Windows/Linux) or <kbd class="kbd">Cmd+I</kbd> (Mac). Type: <em>"Add a comment above this test explaining what user behaviour it verifies."</em> See the diff, accept it. That's Inline Chat.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Slash Commands">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Slash Commands Reference</h2>
+      <p class="v2-section-sub">Five shortcuts for the most common tasks — type / in the Chat panel to see them.</p>
+    </div>
+    <p>In the Chat panel, type <kbd class="kbd">/</kbd> to see available slash commands. These are shortcuts for common tasks:</p>
+
+<table>
+  <thead><tr><th>Command</th><th>What it does</th><th>Best used on</th></tr></thead>
+  <tbody>
+    <tr><td><code>/explain</code></td><td>Plain-English explanation of selected or referenced code</td><td>Unfamiliar code, inherited test suites, complex helpers</td></tr>
+    <tr><td><code>/fix</code></td><td>Suggests a fix for broken or failing code</td><td>Selected failing test or error-producing function</td></tr>
+    <tr><td><code>/tests</code></td><td>Generates tests for the selected code or referenced file</td><td>Source functions you want to add test coverage for</td></tr>
+    <tr><td><code>/doc</code></td><td>Writes documentation (JSDoc/TSDoc) for selected code</td><td>Page Object methods, utility functions</td></tr>
+    <tr><td><code>/new</code></td><td>Scaffolds a new file matching a pattern</td><td>Creating a new spec file or Page Object from scratch</td></tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+<div class="slide" data-title="Keyboard Shortcuts">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Keyboard Shortcuts Reference</h2>
+      <p class="v2-section-sub">The seven shortcuts worth memorising before anything else.</p>
+    </div>
+    <table>
+  <thead><tr><th>Action</th><th>Windows / Linux</th><th>Mac</th></tr></thead>
+  <tbody>
+    <tr><td>Accept inline suggestion</td><td><kbd class="kbd">Tab</kbd></td><td><kbd class="kbd">Tab</kbd></td></tr>
+    <tr><td>Dismiss inline suggestion</td><td><kbd class="kbd">Esc</kbd></td><td><kbd class="kbd">Esc</kbd></td></tr>
+    <tr><td>Next suggestion</td><td><kbd class="kbd">Alt+]</kbd></td><td><kbd class="kbd">Option+]</kbd></td></tr>
+    <tr><td>Previous suggestion</td><td><kbd class="kbd">Alt+[</kbd></td><td><kbd class="kbd">Option+[</kbd></td></tr>
+    <tr><td>Accept word by word</td><td><kbd class="kbd">Ctrl+→</kbd></td><td><kbd class="kbd">Cmd+→</kbd></td></tr>
+    <tr><td>Open Chat panel</td><td><kbd class="kbd">Ctrl+Alt+I</kbd></td><td><kbd class="kbd">Cmd+Shift+I</kbd></td></tr>
+    <tr><td>Inline Chat at cursor</td><td><kbd class="kbd">Ctrl+I</kbd></td><td><kbd class="kbd">Cmd+I</kbd></td></tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+<div class="slide" data-title="Useful Settings">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Settings Worth Configuring</h2>
+      <p class="v2-section-sub">Four settings to review once — then you can stop thinking about them.</p>
+    </div>
+    <p>Open VS Code Settings (<kbd class="kbd">Ctrl+,</kbd> / <kbd class="kbd">Cmd+,</kbd>) and search "GitHub Copilot" for all options. These four are worth reviewing now:</p>
+
+<div style="display:grid;gap:10px;margin:14px 0;">
+  <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);margin-bottom:5px;">INLINE SUGGESTIONS: ENABLE</div>
+    <div style="font-size:0.85rem;color:var(--text-secondary);">Global on/off toggle. Leave on. If you want to disable for a specific project, use the per-workspace setting instead.</div>
+  </div>
+  <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);margin-bottom:5px;">INLINE SUGGESTIONS: LANGUAGES</div>
+    <div style="font-size:0.85rem;color:var(--text-secondary);">Enable or disable Copilot per language. Useful if you want completions in TypeScript/JavaScript but not in Markdown or JSON. Defaults to enabled for most languages.</div>
+  </div>
+  <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);margin-bottom:5px;">CHAT: PREFERRED MODEL</div>
+    <div style="font-size:0.85rem;color:var(--text-secondary);">You can choose which model backs Copilot Chat (GPT-4o, Claude Sonnet, etc. — depending on your plan). For complex test generation, a more capable model produces better results. Check what's available on your plan.</div>
+  </div>
+  <div style="padding:13px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);margin-bottom:5px;">ADVANCED: TELEMETRY</div>
+    <div style="font-size:0.85rem;color:var(--text-secondary);">On Individual plan, usage data may be sent to GitHub for model improvement. You can opt out here. On Business/Enterprise plans, this is disabled by default — your code is not used for training.</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Capabilities &amp; Limits">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">What Copilot Can <em>&amp; Cannot Do</em></h2>
+      <p class="v2-section-sub">Set the right expectations — knowing the limits is as important as knowing the capabilities.</p>
+    </div>
+    <div class="v2-two-col">
+  <div class="v2-col good">
+    <div class="v2-col-label">Copilot can</div>
+    <ul>
+      <li>Write test boilerplate from a comment or description</li>
+      <li>Generate test data (valid, invalid, boundary values)</li>
+      <li>Explain what a piece of code does in plain English</li>
+      <li>Suggest fixes for failing tests given the error and code</li>
+      <li>Refactor repetitive test patterns into Page Objects</li>
+      <li>Answer questions about Playwright, Jest, TypeScript APIs</li>
+      <li>Complete code patterns you've already established in a file</li>
+    </ul>
+  </div>
+  <div class="v2-col bad">
+    <div class="v2-col-label">Copilot cannot</div>
+    <ul>
+      <li>Know your actual application (selectors, URLs, data are guesses)</li>
+      <li>Run code or verify its own output — you must run the tests</li>
+      <li>Remember previous conversations (each session starts fresh)</li>
+      <li>Know your team's conventions unless you tell it or it infers from files</li>
+      <li>Be reliable about very recent library versions (has a training cutoff)</li>
+      <li>Access the internet or your live application</li>
+    </ul>
+  </div>
+</div>
+
+<div class="v2-callout danger">
+  <p><strong>The most dangerous assumption:</strong> that Copilot knows your app. It doesn't. Selectors like <code>#submit-btn</code>, URLs like <code>/checkout/payment</code>, and API responses are all educated guesses based on patterns in training data. Always run generated tests and verify selectors against your actual DOM before committing anything.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Privacy">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Privacy <em>&amp; Code Sharing</em></h2>
+      <p class="v2-section-sub">What happens to your code and what you should never share with Copilot.</p>
+    </div>
+    <p>When you use Copilot, code snippets are sent to GitHub's servers to generate suggestions. The key facts for your team's setup:</p>
+
+<div style="display:grid;gap:8px;margin:12px 0;">
+  <div style="display:grid;grid-template-columns:130px 1fr;gap:12px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;padding-top:1px;">Individual</div>
+    <div style="font-size:0.84rem;color:var(--text-secondary);">Code may be used for model improvement. You can opt out of telemetry in settings (search "Copilot telemetry").</div>
+  </div>
+  <div style="display:grid;grid-template-columns:130px 1fr;gap:12px;padding:12px 16px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);font-weight:700;padding-top:1px;">Business / Enterprise</div>
+    <div style="font-size:0.84rem;color:var(--text-secondary);">Code is <strong>not</strong> used for training by default. Prompts and suggestions are not retained beyond the session. Enterprise adds additional security controls.</div>
+  </div>
+</div>
+
+<div class="v2-callout danger">
+  <p><strong>Always applies:</strong> Never paste API keys, passwords, or credentials into Copilot Chat. Never paste production customer data or PII. When in doubt, check with your manager or security team before using Copilot on sensitive codebases.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I can do this" — before moving to Session 05.</p>
+    </div>
+<div class="v2-self-check">
+  <div class="v2-self-check-title">Session 04 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I can do this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I have both the GitHub Copilot and GitHub Copilot Chat extensions installed and active in VS Code</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can explain the difference between inline completions and Copilot Chat to a colleague in one sentence</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know when to use @workspace, #file:, @terminal, and #selection in a Chat message</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I've used Inline Chat (<kbd class="kbd">Ctrl+I</kbd> / <kbd class="kbd">Cmd+I</kbd>) at least once on a real file</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know the three most important keyboard shortcuts: <kbd class="kbd">Tab</kbd> (accept), <kbd class="kbd">Esc</kbd> (dismiss), <kbd class="kbd">Ctrl+Alt+I</kbd> (open Chat)</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I understand that Copilot cannot know my actual app — selectors and URLs it generates are educated guesses that need verification</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-05/" style="color:var(--accent);">Session 05 — Copilot in Your Daily Workflow →</a></p>
+  </div>
+</div>

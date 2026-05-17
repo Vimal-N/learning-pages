@@ -1,0 +1,278 @@
+---
+layout: guide.njk
+title: "Session 12 Full Guide — Context Files: CLAUDE.md, copilot-instructions.md & AGENTS.md"
+sessionNumber: "12"
+sessionTitle: "Context Files — CLAUDE.md, copilot-instructions.md & AGENTS.md"
+phase: "Phase 4: Terminal Agents & Agentic Tools"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+
+---
+
+<div class="slide" data-title="Welcome">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Context Files — <em>CLAUDE.md, copilot-instructions &amp; AGENTS.md</em></h2>
+      <p class="v2-section-sub">How to write a context file that makes your AI agent understand your project without being told the same things every session.</p>
+    </div>
+
+<div class="v2-version-stamp" custom-style="version-stamp">Session 12 &nbsp;·&nbsp; Phase 4: Terminal Agents &amp; Agentic Tools &nbsp;·&nbsp; Intermediate</div>
+
+<div class="v2-quickstart" custom-style="quick-start">
+  <div class="v2-qs-icon">⚡</div>
+  <div>
+    <div class="v2-qs-label">What you'll get from this session</div>
+    <div class="v2-qs-text">By the end of Session 12 you will have a working CLAUDE.md for your Playwright project, understand the equivalent files for Copilot and OpenAI agents, and know what to put in a context file versus what to leave out.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>From Sessions 10–11:</strong> You know agents read your project before acting. Context files are how you <em>direct</em> that reading — telling the agent what matters about your project, your conventions, and what it should never do.</p>
+</div>
+
+<div class="v2-scroll-hint">↓ scroll to begin</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Why Context Files Exist">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Why Context Files <em>Exist</em></h2>
+      <p class="v2-section-sub">Every time you start a new agent session, it has no memory of your previous sessions. Context files are the solution.</p>
+    </div>
+    <p>A terminal agent starts each session with no knowledge of your project conventions, your team rules, or your preferences. Without a context file, you either explain these things in every prompt (tedious), or the agent makes decisions that don't match your project (frustrating).</p>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col bad">
+    <div class="v2-col-label">Without a context file</div>
+    <ul>
+      <li>Agent uses <code>page.locator()</code> when your project uses <code>page.fill()</code></li>
+      <li>Agent creates a <code>beforeEach</code> when your tests are self-contained</li>
+      <li>Agent invents selector naming conventions instead of using data-testid</li>
+      <li>Agent modifies files in <code>src/</code> when it should only touch <code>tests/</code></li>
+      <li>You re-explain the same rules every session</li>
+    </ul>
+  </div>
+  <div class="v2-col good">
+    <div class="v2-col-label">With a good context file</div>
+    <ul>
+      <li>Agent knows your test structure before reading a single test file</li>
+      <li>Agent follows your conventions automatically</li>
+      <li>Agent knows which directories are off-limits</li>
+      <li>Agent knows your framework, runner, and assertion style</li>
+      <li>Every session starts with the same baseline understanding</li>
+    </ul>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="The Three Context Files">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">The Three <em>Context Files</em></h2>
+      <p class="v2-section-sub">Each AI tool reads a different file. The content is similar — the filename and location differ.</p>
+    </div>
+
+<div class="v2-card-list" custom-style="info-card-list">
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">CLAUDE.md</div>
+      <div class="v2-tool-mode">Claude Code</div>
+    </div>
+    <div class="v2-card-body">Placed at the root of your project (or in any subdirectory for scoped rules). Claude Code reads it automatically at the start of every session. Also read by Opencode when using Anthropic as the backend. Plain markdown — no special syntax required.</div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">copilot-instructions.md</div>
+      <div class="v2-tool-mode">GitHub Copilot</div>
+    </div>
+    <div class="v2-card-body">Placed at <code>.github/copilot-instructions.md</code>. Read by Copilot Chat and Copilot Agent Mode in VS Code. Also picked up by Opencode when using the Copilot backend. The same conventions you'd put in CLAUDE.md go here.</div>
+  </div>
+  <div class="v2-info-card" custom-style="info-card">
+    <div>
+      <div class="v2-tool-name">AGENTS.md</div>
+      <div class="v2-tool-mode">OpenAI Codex / multi-agent</div>
+    </div>
+    <div class="v2-card-body">Used by OpenAI's Codex agent and some multi-agent frameworks. Same concept — project context, conventions, constraints. If you're using multiple agent tools on one project, you may have all three files. They can share the same content, just with different filenames.</div>
+  </div>
+</div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>One project, one set of rules:</strong> If your project might be used with multiple AI tools, write your context once and maintain a simple copy under each filename. The content is identical — the agent tool just looks for its specific file.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="What to Put In a Context File">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">What to Put <em>In a Context File</em></h2>
+      <p class="v2-section-sub">Six sections that cover what every agent needs to know about a QA project.</p>
+    </div>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">1</div>
+    <div>
+      <div class="v2-step-title">Project overview — one paragraph</div>
+      <div class="v2-step-body">What the project is, what technology stack it uses, and what the AI's role is in this project. "This is a Playwright TypeScript E2E test suite for an e-commerce application. AI assistance is used for test writing, debugging, and refactoring."</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">2</div>
+    <div>
+      <div class="v2-step-title">Run commands</div>
+      <div class="v2-step-body">How to run the tests, what the most common commands are. Without this, the agent guesses — and sometimes runs the wrong command. Include: test command, lint, build if applicable.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">3</div>
+    <div>
+      <div class="v2-step-title">Code conventions</div>
+      <div class="v2-step-body">Your selector strategy (data-testid, IDs, etc.), whether tests use Page Objects, assertion style, how test files are named, whether beforeEach is used. These are the rules the agent would otherwise have to infer.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">4</div>
+    <div>
+      <div class="v2-step-title">Directory structure — what's where</div>
+      <div class="v2-step-body">Which directory contains tests, which contains Page Objects, which contains fixtures and helpers. The agent will explore your project regardless — this just makes it faster and less likely to look in the wrong place.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">5</div>
+    <div>
+      <div class="v2-step-title">Hard constraints — what NOT to do</div>
+      <div class="v2-step-body">Files or directories the agent must never modify. Common examples: never edit <code>src/</code> (application code), never modify <code>package.json</code> without asking, never delete test files. These prevent the most damaging mistakes.</div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">6</div>
+    <div>
+      <div class="v2-step-title">Known gotchas</div>
+      <div class="v2-step-body">Things that caught the agent out before: a known flaky test that should be ignored, a selector pattern that looks fragile but is intentional, an environment variable needed for tests to run. Write these down when you discover them.</div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Annotated CLAUDE.md Example">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Annotated <em>CLAUDE.md Example</em></h2>
+      <p class="v2-section-sub">A complete CLAUDE.md for a Playwright project — copy and adapt this for your own project.</p>
+    </div>
+
+<div class="v2-code-wrap" custom-style="code-block">
+  <div class="code-block"><pre># Project Overview
+Playwright TypeScript E2E test suite for an e-commerce web application.
+Tests cover: auth, checkout, product catalogue, and user account flows.
+AI assistance is used for test writing, debugging, and refactoring.
+
+## Run Commands
+- Run all tests: `npx playwright test`
+- Run one spec: `npx playwright test tests/auth/login.spec.ts`
+- Run with UI: `npx playwright test --ui`
+- Lint: `npm run lint`
+- Type check: `npx tsc --noEmit`
+
+## Project Structure
+- `tests/` — all spec files, organised by feature
+- `tests/pages/` — Page Object classes (one per page)
+- `tests/fixtures/` — shared test fixtures and helpers
+- `tests/data/` — test data factories
+- `playwright.config.ts` — framework config
+- `src/` — application code — DO NOT MODIFY
+
+## Code Conventions
+- Selectors: always use `data-testid` attributes. Never use class names or XPath.
+- Page Objects: one class per page. Selectors are private readonly. Methods return void.
+- Test isolation: each test must be self-contained. No shared beforeEach that sets up state.
+- Assertions: use Playwright's `expect()` API. Never use `page.waitForTimeout()`.
+- Imports: use relative paths. PO files import from `./pages/`.
+- Test naming: `test.describe('Feature name')` > `test('should [do thing]')`
+
+## Hard Constraints
+- NEVER modify files in `src/` — this is application code
+- NEVER modify `package.json` or `package-lock.json`
+- NEVER delete spec files — ask before removing anything
+- NEVER commit or push — only the human commits
+
+## Known Gotchas
+- The `products/catalogue.spec.ts` test is intentionally skipped (`test.skip`) — the
+  feature is in development. Do not unskip it.
+- Tests require `BASE_URL` env var to be set. For local: `BASE_URL=http://localhost:3000`
+- The checkout flow requires a logged-in user. Use the `loggedInUser` fixture from
+  `tests/fixtures/auth.fixture.ts` — don't write a manual login in checkout tests.</pre></div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Before and After">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Before and After — <em>Context File Impact</em></h2>
+      <p class="v2-section-sub">The same task prompt, with and without a CLAUDE.md. What changes.</p>
+    </div>
+    <p>Task given to the agent: <em>"Add tests for the product search feature."</em></p>
+
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col bad">
+    <div class="v2-col-label">Without CLAUDE.md</div>
+    <ul>
+      <li>Uses <code>page.locator('.search-input')</code> — class selector, fragile</li>
+      <li>Creates a <code>beforeEach</code> that logs in — duplicating fixture logic</li>
+      <li>Adds <code>page.waitForTimeout(500)</code> for the search results</li>
+      <li>Creates the spec in the project root, not in <code>tests/</code></li>
+      <li>Uses <code>toContain</code> assertion on a list that could be empty</li>
+    </ul>
+  </div>
+  <div class="v2-col good">
+    <div class="v2-col-label">With CLAUDE.md</div>
+    <ul>
+      <li>Uses <code>data-testid="search-input"</code> — correct selector strategy</li>
+      <li>Uses the <code>loggedInUser</code> fixture — no duplicate login logic</li>
+      <li>Uses <code>expect(results).toHaveCount(greaterThan(0))</code> — no arbitrary wait</li>
+      <li>Creates spec at <code>tests/search/search.spec.ts</code> — correct location</li>
+      <li>Follows naming convention: <code>test.describe('Product Search')</code></li>
+    </ul>
+  </div>
+</div>
+
+<div class="v2-try-this" custom-style="try-this">
+  <div class="v2-try-label">Try This — 10 minutes</div>
+  <p>Create a CLAUDE.md (or copilot-instructions.md) for your current project. Start with sections 1–5 from the "What to Put In" slide. Don't try to make it perfect — a rough first version that covers your selector strategy and hard constraints is already 80% of the value. Add gotchas as you discover them over the next few agent sessions.</p>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Self-Assessment">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Self-Assessment <em>Checkpoint</em></h2>
+      <p class="v2-section-sub">Tick each one when you can genuinely say "yes, I can do this" — before moving to Session 13.</p>
+    </div>
+<div class="v2-self-check" custom-style="self-assessment">
+  <div class="v2-self-check-title">Session 12 — Knowledge Check</div>
+  <div class="v2-self-check-sub">Tick each one when you can genuinely say "yes, I can do this"</div>
+  <ul class="v2-check-list">
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know which context file each AI tool reads (CLAUDE.md / copilot-instructions.md / AGENTS.md)</div></li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I can describe the six sections a context file should contain for a test project</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know why hard constraints are the most important section — and I've written at least one</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I have created a context file for my own project (even a draft)</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I ran the same task with and without a context file and noticed the difference in quality</li>
+    <li class="v2-check-item"><div class="v2-checkbox"></div>I know to update the context file when I discover a new gotcha the agent got wrong</li>
+  </ul>
+</div>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-13/" style="color:var(--accent);">Session 13 — Working Effectively with Terminal Agents →</a></p>
+  </div>
+</div>
