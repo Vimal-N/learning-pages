@@ -28,7 +28,7 @@ topicUrl: "/topics/ai-in-practice/"
 </div>
 
 <div class="v2-callout info">
-  <p><strong>From Session 01–03:</strong> You already know how LLMs work (token prediction) and the four-element prompt framework (Role, Context, Task, Constraints). Everything you learned about prompting applies directly to Copilot Chat — it's the same model type, just embedded in your editor. <a href="/topics/ai-in-practice-v2/guides/session-03/" class="v2-cross-link">Session 03 Prompt Framework →</a></p>
+  <p><strong>From Session 01–03:</strong> You already know how LLMs work (token prediction) and the four-element prompt framework (Role, Context, Task, Constraints). Everything you learned about prompting applies directly to Copilot Chat — it's the same model type, just embedded in your editor. <a href="/topics/ai-in-practice/session-03/guide/" class="v2-cross-link">Session 03 Prompt Framework →</a></p>
 </div>
 
 <div class="v2-scroll-hint">↓ scroll to begin</div>
@@ -204,6 +204,22 @@ topicUrl: "/topics/ai-in-practice/"
     </div>
   </div>
 
+  <div class="v2-context-card" custom-style="context-ref-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">@github</span>
+      <span class="v2-context-title">GitHub.com — issues &amp; pull requests</span>
+    </div>
+    <div class="v2-context-desc">Accesses GitHub repositories, issues, and pull requests on github.com. Unlike the other participants, @github only works in the Copilot Chat panel on the GitHub website — it is not available inside the VS Code editor extension. If you are working in VS Code and want to search across your project, use @workspace instead.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">Searching open issues by label, finding PRs by description, reviewing recent issue activity — from the GitHub website chat panel</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>"@github find open issues labeled 'flaky test' in this repo"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Does not work inside VS Code. Typing @github in the VS Code Chat panel will not invoke a special participant mode — use @workspace for in-editor project search.</span>
+    </div>
+  </div>
+
 </div>
   </div>
 </div>
@@ -302,6 +318,118 @@ topicUrl: "/topics/ai-in-practice/"
   </div>
 </div>
 
+<div class="slide" data-title="More # Variables">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">More # Context Variables <em>— Terminal, Git &amp; Editor</em></h2>
+      <p class="v2-section-sub">The complete # variable set — covering the full editor file, terminal output, git history, live documentation, and the Problems panel.</p>
+    </div>
+    <div class="v2-context-grid" custom-style="context-ref-card-list">
+
+  <div class="v2-context-card" custom-style="context-ref-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">#editor</span>
+      <span class="v2-context-title">Full content of the active editor tab</span>
+    </div>
+    <div class="v2-context-desc">Attaches the entire content of your currently active editor file — not just your selection, and not the whole workspace. More precise than @workspace but broader than #selection. Useful when you want Copilot to consider the whole file without switching to project-wide scope.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">Questions about the whole open file when @workspace scope is too broad and #selection is too narrow</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>"Look at #editor — what error-state assertions are we missing?"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Very large files with hundreds of tests may hit context limits. If the file is extensive, prefer #selection or #file.</span>
+    </div>
+  </div>
+
+  <div class="v2-context-card" custom-style="context-ref-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">#terminalLastCommand</span>
+      <span class="v2-context-title">Output of the last terminal command</span>
+    </div>
+    <div class="v2-context-desc">Attaches the output of the most recent command you ran in the integrated terminal. The fastest way to get a diagnosis from a test failure — no copy-pasting a stack trace. Pair with @terminal for full context.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">Diagnosing a test failure immediately after running your test runner — instant access to the actual error output</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>"@terminal #terminalLastCommand — explain this failure and what's causing it"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Only captures the very last command's output. If your run had multiple steps and the failure was from an earlier command, use #terminal instead.</span>
+    </div>
+  </div>
+
+  <div class="v2-context-card" custom-style="context-ref-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">#terminal</span>
+      <span class="v2-context-title">Full terminal buffer</span>
+    </div>
+    <div class="v2-context-desc">Attaches everything currently visible in the integrated terminal panel — not just the last command but the full scrollable buffer. Useful when the failure context spans multiple commands or a multi-step build process.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">When the failure context spans multiple commands — the full buffer shows the setup steps that may have caused the test failure</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>"Based on #terminal, which tests are failing and what do they share?"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Can be very verbose. If you only need the last failure, prefer #terminalLastCommand — it's faster and more targeted.</span>
+    </div>
+  </div>
+
+  <div class="v2-context-card" custom-style="context-ref-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">#git</span>
+      <span class="v2-context-title">Recent git history</span>
+    </div>
+    <div class="v2-context-desc">Attaches recent git history — commit messages, diffs, and changed files. Useful for generating meaningful commit messages from actual diffs, or understanding what changed before a test regression appeared.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">Writing commit messages grounded in actual changes, understanding what was modified before a regression</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>"Based on #git, write a clear commit message for these changes"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Shows recent history — not the complete project history. For deep history searches, use git log in the terminal directly.</span>
+    </div>
+  </div>
+
+  <div class="v2-context-card" custom-style="context-ref-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">#fetch</span>
+      <span class="v2-context-title">Fetch content from a URL &nbsp;<em style="font-size:0.8em;color:var(--text-muted);">(evolving)</em></span>
+    </div>
+    <div class="v2-context-desc">Fetches content from a URL and attaches it inline to your message. Useful for referencing live documentation or API specs without leaving Chat. Availability varies by Copilot version — type # in Chat to check if it appears in the picker.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">Referencing official Playwright docs, an API spec, or any live resource during a Chat session without copy-pasting</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>"#fetch https://playwright.dev/docs/api — how do I fix this locator?"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Evolving feature — not always available. Check the autocomplete picker by typing # in Chat. The picker is the authoritative source.</span>
+    </div>
+  </div>
+
+  <div class="v2-context-card" custom-style="context-ref-card">
+    <div class="v2-context-header">
+      <span class="v2-context-tag">#problems</span>
+      <span class="v2-context-title">VS Code Problems panel &nbsp;<em style="font-size:0.8em;color:var(--text-muted);">(evolving)</em></span>
+    </div>
+    <div class="v2-context-desc">Attaches all current problems from the VS Code Problems panel — lint errors, type errors, and diagnostics. Lets you ask Copilot to address all visible errors in one pass rather than fixing them individually.</div>
+    <div class="v2-context-meta">
+      <span class="v2-context-key">Best for</span>
+      <span class="v2-context-val">Addressing all lint or type errors visible in the Problems panel in one go</span>
+      <span class="v2-context-key">QA Example</span>
+      <span class="v2-context-val"><em>"Write tests that would catch the issues shown in #problems"</em></span>
+      <span class="v2-context-key">Watch out</span>
+      <span class="v2-context-val">Evolving feature — check if it appears in your Chat autocomplete. May not be available in all extension versions.</span>
+    </div>
+  </div>
+
+    </div>
+    <div class="v2-callout info" custom-style="callout-info">
+      <p><strong>Always type <code>#</code> in the Chat input to see the full current list</strong> — the autocomplete picker is the authoritative source, as new variables are added with each extension update.</p>
+    </div>
+  </div>
+</div>
+
 <div class="slide" data-title="Inline Chat">
   <div class="v2-slide-wrap">
     <div class="v2-section-hd">
@@ -345,6 +473,10 @@ topicUrl: "/topics/ai-in-practice/"
     </div>
     <p>In the Chat panel, type <kbd class="kbd">/</kbd> to see available slash commands. These are shortcuts for common tasks:</p>
 
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong>Mental model:</strong> Slash commands are <strong>unambiguous shortcuts</strong>. Instead of writing "can you look at this and write some tests for edge cases", type <code>/tests</code> — Copilot knows exactly what output to produce. Combine them with <code>#</code> variables to scope exactly what gets generated.</p>
+</div>
+
 <table>
   <thead><tr><th>Command</th><th>What it does</th><th>Best used on</th></tr></thead>
   <tbody>
@@ -355,6 +487,99 @@ topicUrl: "/topics/ai-in-practice/"
     <tr><td><code>/new</code></td><td>Scaffolds a new file matching a pattern</td><td>Creating a new spec file or Page Object from scratch</td></tr>
   </tbody>
 </table>
+
+<h3>Combine with # variables for targeted output</h3>
+<div class="v2-two-col" custom-style="comparison-card">
+  <div class="v2-col neutral">
+    <div class="v2-col-label">Generate tests scoped to one file</div>
+    <div class="v2-code-wrap" custom-style="code-block"><div class="code-block"><pre>/tests #file checkoutFlow.ts
+— include null inputs and network timeout cases</pre></div></div>
+  </div>
+  <div class="v2-col neutral">
+    <div class="v2-col-label">Fix a failure shown in terminal</div>
+    <div class="v2-code-wrap" custom-style="code-block"><div class="code-block"><pre>/fix #terminalLastCommand
+— suggest what changed and why this broke</pre></div></div>
+  </div>
+</div>
+<div class="v2-two-col" custom-style="comparison-card" style="margin-top:10px;">
+  <div class="v2-col neutral">
+    <div class="v2-col-label">Explain only the highlighted lines</div>
+    <div class="v2-code-wrap" custom-style="code-block"><div class="code-block"><pre>/explain #selection
+— focus on why this assertion might always pass</pre></div></div>
+  </div>
+  <div class="v2-col neutral">
+    <div class="v2-col-label">Document the whole active file</div>
+    <div class="v2-code-wrap" custom-style="code-block"><div class="code-block"><pre>/doc #editor
+— add JSDoc to every exported function</pre></div></div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="slide" data-title="Power Combinations">
+  <div class="v2-slide-wrap">
+    <div class="v2-section-hd">
+      <span class="v2-section-num"></span>
+      <h2 class="v2-section-title">Power Combinations <em>— @, #, and / Together</em></h2>
+      <p class="v2-section-sub">Real QA scenarios showing how participants, variables, and commands layer together for maximum precision.</p>
+    </div>
+
+<div class="v2-callout info" custom-style="callout-info">
+  <p><strong><code>@participant</code></strong> — who Copilot acts as &nbsp;&nbsp;&nbsp; <strong><code>#variable</code></strong> — what it can see &nbsp;&nbsp;&nbsp; <strong><code>/command</code></strong> — what task to perform</p>
+</div>
+
+<div class="v2-step-list" custom-style="step-list">
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">1</div>
+    <div>
+      <div class="v2-step-title">Diagnose a failing test without copy-pasting</div>
+      <div class="v2-step-body">
+        <div class="v2-code-wrap" custom-style="code-block"><div class="code-block"><pre>@terminal #terminalLastCommand — explain why this test failed and what the stack trace is pointing to</pre></div></div>
+        <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:6px;"><strong>@terminal</strong> gives Copilot terminal context. <strong>#terminalLastCommand</strong> attaches the actual test runner output. Together: targeted diagnosis grounded in your real error, not a generic answer.</p>
+      </div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">2</div>
+    <div>
+      <div class="v2-step-title">Find test coverage gaps across the whole project</div>
+      <div class="v2-step-body">
+        <div class="v2-code-wrap" custom-style="code-block"><div class="code-block"><pre>@workspace — which Playwright tests are missing assertions on the error state or loading state?</pre></div></div>
+        <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:6px;"><strong>@workspace</strong> searches every test file in the indexed project — not just the open tab. You get a real cross-file gap analysis.</p>
+      </div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">3</div>
+    <div>
+      <div class="v2-step-title">Generate tests that match your project's actual patterns</div>
+      <div class="v2-step-body">
+        <div class="v2-code-wrap" custom-style="code-block"><div class="code-block"><pre>/tests #file checkoutFlow.ts — focus on async state changes and network error handling</pre></div></div>
+        <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:6px;"><strong>/tests</strong> sets the task unambiguously. <strong>#file</strong> grounds the output in your actual code — selectors, import style, assertion patterns — so the result fits your suite rather than producing generic boilerplate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">4</div>
+    <div>
+      <div class="v2-step-title">Explain a specific selector you inherited</div>
+      <div class="v2-step-body">
+        <div class="v2-code-wrap" custom-style="code-block"><div class="code-block"><pre>/explain #selection — tell me why this locator might fail after a DOM update</pre></div></div>
+        <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:6px;"><strong>/explain</strong> requests an explanation. <strong>#selection</strong> pins it to exactly the highlighted lines — not the whole file. Copilot explains the fragility of the specific selector strategy you're looking at.</p>
+      </div>
+    </div>
+  </div>
+  <div class="v2-step" custom-style="step">
+    <div class="v2-step-num">5</div>
+    <div>
+      <div class="v2-step-title">Find how mocks are set up without reading every file</div>
+      <div class="v2-step-body">
+        <div class="v2-code-wrap" custom-style="code-block"><div class="code-block"><pre>@workspace — where do we set up API mocks before tests? Show me the pattern we use</pre></div></div>
+        <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:6px;"><strong>@workspace</strong> returns the actual patterns in your codebase — real file paths, real method calls. When you then ask Copilot to generate new test setup, it replicates your team's existing convention rather than inventing one.</p>
+      </div>
+    </div>
+  </div>
+</div>
   </div>
 </div>
 
@@ -494,6 +719,6 @@ topicUrl: "/topics/ai-in-practice/"
     <li class="v2-check-item"><div class="v2-checkbox"></div>I understand that Copilot cannot know my actual app — selectors and URLs it generates are educated guesses that need verification</li>
   </ul>
 </div>
-<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice-v2/guides/session-05/" style="color:var(--accent);">Session 05 — Copilot in Your Daily Workflow →</a></p>
+<p style="font-size:0.82rem;color:var(--text-muted);margin-top:16px;">Next: <a href="/topics/ai-in-practice/session-05/guide/" style="color:var(--accent);">Session 05 — Copilot in Your Daily Workflow →</a></p>
   </div>
 </div>

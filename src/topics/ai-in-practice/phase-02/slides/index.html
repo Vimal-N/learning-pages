@@ -1,7 +1,6 @@
 ---
 layout: guide.njk
 title: Phase 2 Slides — GitHub Copilot Mastery
-sessionNumber: "04"
 sessionTitle: "Phase 2 — GitHub Copilot Mastery"
 topicName: "AI in Practice"
 topicUrl: "/topics/ai-in-practice/"
@@ -349,6 +348,18 @@ topicUrl: "/topics/ai-in-practice/"
           results by tag?"
         </div>
       </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="cmd-badge">@github</div>
+          <div class="v2-era-name">GitHub.com only &mdash; issues &amp; PRs</div>
+        </div>
+        <div class="v2-card-body">
+          Accesses GitHub repositories, issues, and pull requests &mdash; but
+          <strong>only in the Copilot Chat panel on github.com</strong>, not
+          inside the VS Code extension. Use for: "Find open issues labeled
+          'flaky test'."
+        </div>
+      </div>
     </div>
     <h3 class="slide-section-label">
       # Context Variables — attach exactly what Copilot needs
@@ -369,12 +380,11 @@ topicUrl: "/topics/ai-in-practice/"
         </ul>
       </div>
       <div class="v2-col neutral">
-        <div class="v2-col-label">Terminal references</div>
+        <div class="v2-col-label">Terminal &amp; other references</div>
         <ul>
-          <li><code>#terminalLastCommand</code> — the last command you ran</li>
-          <li>
-            <code>#terminalSelection</code> — selected text in the terminal
-          </li>
+          <li><code>#terminalLastCommand</code> — output of the last command (no copy-paste needed for test failures)</li>
+          <li><code>#terminal</code> — full terminal buffer (when failure spans multiple commands)</li>
+          <li><code>#git</code> — recent git history (great for writing commit messages)</li>
         </ul>
         <div class="v2-col-label" style="margin-top: 12px">QA examples</div>
         <ul>
@@ -481,6 +491,151 @@ Write tests that would catch these errors  <span style="color:#673ab7;font-weigh
         broken" versus handing them the error, the test code, and the file it
         lives in.
       </p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 09a — Slash Commands ─── -->
+<div
+  class="slide"
+  data-title="/ Slash Commands"
+  data-notes="Slash commands are one of the most underused Copilot features. Most people just type their question conversationally — but /tests, /explain, /fix set the task unambiguously so Copilot always produces the right output type without any guesswork. Live demo: open Chat, type /, watch the list appear. Then show how /tests #file:myFile.ts produces much better output than just asking 'write some tests for this' — the combination is the real insight here."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Copilot Chat</div>
+    <h2>/ Slash Commands — unambiguous shortcuts</h2>
+    <div class="v2-callout info" custom-style="callout-info">
+      <p>
+        Instead of <em>"can you look at this and write some tests for edge
+        cases"</em>, type <code>/tests</code> — Copilot knows exactly what
+        output to produce. Combine with <code>#</code> to scope what it acts
+        on.
+      </p>
+    </div>
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="cmd-badge">/explain</div>
+          <div class="v2-era-name">Plain-English breakdown</div>
+        </div>
+        <div class="v2-card-body">
+          Explains how code works. Best for inherited selectors, complex regex,
+          unfamiliar helpers. &nbsp;
+          <em>QA: <code>/explain #selection — why might this selector break after a DOM update?</code></em>
+        </div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="cmd-badge">/fix</div>
+          <div class="v2-era-name">Diagnose &amp; propose a fix</div>
+        </div>
+        <div class="v2-card-body">
+          Diagnoses errors and proposes fixes. Always review the diagnosis
+          before applying. &nbsp;
+          <em>QA: <code>/fix #terminalLastCommand — what changed and why did this break?</code></em>
+        </div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="cmd-badge">/tests</div>
+          <div class="v2-era-name">Generate test cases</div>
+        </div>
+        <div class="v2-card-body">
+          Generates tests for selected code or a referenced file. The more
+          specific the context, the better the output. &nbsp;
+          <em>QA: <code>/tests #file checkoutFlow.ts — cover async state and network errors</code></em>
+        </div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="cmd-badge">/doc</div>
+          <div class="v2-era-name">Generate documentation</div>
+        </div>
+        <div class="v2-card-body">
+          Writes JSDoc / TSDoc for selected code. Useful before a PR review.
+          &nbsp;
+          <em>QA: <code>/doc #editor — add JSDoc to every exported function</code></em>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 09b — Power Combinations ─── -->
+<div
+  class="slide"
+  data-title="Power Combinations"
+  data-notes="This is the payoff slide for the whole @/#// system. Most people use one symbol at a time. The real power is layering them together. Walk through scenario 1 live if you can — run a test, watch it fail, then open Chat and type the exact prompt. The diagnosis will be much more accurate than what you'd get by just describing the error in words. Emphasise that these are real patterns that save real time, not hypotheticals."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Putting It Together</div>
+    <h2>Combining @, #, and / together</h2>
+    <p class="slide-sub">
+      <code>@participant</code> — who Copilot acts as &nbsp;·&nbsp;
+      <code>#variable</code> — what it can see &nbsp;·&nbsp;
+      <code>/command</code> — what task to perform
+    </p>
+    <div class="v2-step-list" custom-style="step-list">
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">1</div>
+        <div>
+          <div class="v2-step-title">
+            Diagnose a test failure without copy-pasting
+          </div>
+          <div class="v2-step-body">
+            <code>@terminal #terminalLastCommand — explain why this test
+            failed and what the stack trace is pointing to</code>
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">2</div>
+        <div>
+          <div class="v2-step-title">
+            Find coverage gaps across the whole project
+          </div>
+          <div class="v2-step-body">
+            <code>@workspace — which Playwright tests are missing assertions
+            on the error state or loading state?</code>
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">3</div>
+        <div>
+          <div class="v2-step-title">
+            Generate tests that match your project's actual patterns
+          </div>
+          <div class="v2-step-body">
+            <code>/tests #file checkoutFlow.ts — focus on async state changes
+            and network error handling</code>
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">4</div>
+        <div>
+          <div class="v2-step-title">
+            Explain a selector you inherited
+          </div>
+          <div class="v2-step-body">
+            <code>/explain #selection — tell me why this locator might fail
+            after a DOM update</code>
+          </div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">5</div>
+        <div>
+          <div class="v2-step-title">
+            Find how mocks are set up without reading every file
+          </div>
+          <div class="v2-step-body">
+            <code>@workspace — where do we set up API mocks before tests?
+            Show me the pattern we use</code>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

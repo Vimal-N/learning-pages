@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@ Chat Participants — GitHub Copilot Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:           #F5F4F0;
+    --surface:      #FFFFFF;
+    --border:       #E2E0D8;
+    --border-dark:  #C8C5BB;
+    --text-primary: #1C1B18;
+    --text-secondary:#5A5850;
+    --text-muted:   #94918A;
+
+    --at-bg:        #E8F2FD;
+    --at-text:      #1459A8;
+    --at-badge:     #1A6FCC;
+    --at-border:    #B8D4F5;
+
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sora', sans-serif;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    background: var(--text-primary);
+    color: #fff;
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .page-header .symbol-badge {
+    width: 52px; height: 52px;
+    background: var(--at-badge);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 26px; font-weight: 500;
+    color: #fff;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .page-header h1 {
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 5px;
+  }
+  .page-header .subtitle {
+    font-size: 13px;
+    color: #A8A49E;
+    font-weight: 400;
+  }
+  .breadcrumb {
+    font-size: 11px;
+    color: #6E6B65;
+    margin-bottom: 6px;
+    font-family: var(--mono);
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Main layout ── */
+  .page-body {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 36px 40px 48px;
+  }
+
+  /* ── Mental model callout ── */
+  .mental-model {
+    background: var(--at-bg);
+    border: 1px solid var(--at-border);
+    border-left: 3px solid var(--at-badge);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+  }
+  .mental-model .mm-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--at-badge);
+    font-family: var(--mono);
+    margin-bottom: 7px;
+  }
+  .mental-model p {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+  .mental-model strong { color: var(--text-primary); font-weight: 600; }
+
+  /* ── Cards grid ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .ref-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--at-bg);
+    color: var(--at-text);
+    border: 1px solid var(--at-border);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    width: fit-content;
+  }
+  .card-tag .pill {
+    font-size: 10px;
+    background: #fff;
+    border: 1px solid var(--border-dark);
+    color: var(--text-muted);
+    border-radius: 99px;
+    padding: 1px 7px;
+    font-family: var(--sans);
+    font-weight: 500;
+  }
+
+  .card-def {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .card-example {
+    background: #F5F4F0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 13px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-top: auto;
+  }
+  .card-example .kw { color: var(--at-text); font-weight: 500; }
+
+  /* ── When to use table ── */
+  .usage-section h2 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    margin-bottom: 14px;
+  }
+
+  .usage-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .usage-table thead th {
+    background: #EFEDE7;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: var(--mono);
+  }
+  .usage-table thead th:first-child { border-radius: 6px 0 0 6px; }
+  .usage-table thead th:last-child  { border-radius: 0 6px 6px 0; }
+  .usage-table tbody tr { border-bottom: 1px solid var(--border); }
+  .usage-table tbody tr:last-child { border-bottom: none; }
+  .usage-table tbody td { padding: 11px 14px; vertical-align: top; line-height: 1.55; color: var(--text-secondary); }
+  .usage-table tbody td:first-child {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--at-text);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* ── Footer note ── */
+  .footer-note {
+    margin-top: 32px;
+    background: #F0EDE6;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .footer-note .icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Page nav ── */
+  .page-nav {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 14px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .page-nav a {
+    color: var(--at-badge);
+    text-decoration: none;
+    font-weight: 500;
+    font-family: var(--mono);
+  }
+  .page-indicator {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--at-bg);
+    color: var(--at-text);
+    border: 1px solid var(--at-border);
+    padding: 3px 10px;
+    border-radius: 99px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="symbol-badge">@</div>
+  <div>
+    <div class="breadcrumb">Phase 2 · Session 05 · GitHub Copilot Chat Reference</div>
+    <h1>@ Chat Participants</h1>
+    <div class="subtitle">Domain specialists — controls who Copilot acts as when you ask a question</div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="mental-model">
+    <div class="mm-label">Mental Model</div>
+    <p>When you type <strong>@participant</strong>, you are switching Copilot into a specialised mode. Without an <code style="font-family:var(--mono);font-size:12px;background:#d8eafc;padding:1px 5px;border-radius:3px;">@</code>, Copilot only looks at your open file. With one, it gains access to a broader domain — your whole workspace, VS Code's settings system, or your terminal session.</p>
+  </div>
+
+  <div class="cards-grid">
+
+    <div class="ref-card">
+      <div class="card-tag">@workspace</div>
+      <div class="card-def">Indexes and searches across <strong>all files in your open project</strong>. Best participant for project-wide questions — finding patterns, locating utilities, understanding test coverage across the whole codebase.</div>
+      <div class="card-example"><span class="kw">@workspace</span> where do we mock API calls in this project?</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="card-tag">@vscode</div>
+      <div class="card-def">Knows about the <strong>VS Code editor itself</strong> — settings, keybindings, commands, launch configs, and extension features. Use this when your question is about the tool, not the code inside it.</div>
+      <div class="card-example"><span class="kw">@vscode</span> how do I configure the Playwright test runner in launch.json?</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="card-tag">@terminal</div>
+      <div class="card-def">Knows about the <strong>integrated terminal</strong> — its shell, command history, and buffer output. Pairs perfectly with <code style="font-family:var(--mono);font-size:11px;">#terminalLastCommand</code> to diagnose failures without copy-pasting.</div>
+      <div class="card-example"><span class="kw">@terminal</span> explain the error from the last command I ran</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="card-tag">@github <span class="pill">github.com only</span></div>
+      <div class="card-def">Accesses <strong>GitHub repositories, issues, and pull requests</strong> on github.com. Not available inside VS Code — only works in the Copilot Chat panel on the GitHub website.</div>
+      <div class="card-example"><span class="kw">@github</span> find open issues labeled "flaky test" in this repo</div>
+    </div>
+
+  </div>
+
+  <div class="usage-section">
+    <h2>When to use each participant</h2>
+    <table class="usage-table">
+      <thead>
+        <tr>
+          <th>Participant</th>
+          <th>Reach for it when you want to…</th>
+          <th>QA example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>@workspace</td>
+          <td>Find something across the whole project — page objects, mock setup, existing helpers</td>
+          <td>"Do we already have a helper that generates test users?"</td>
+        </tr>
+        <tr>
+          <td>@vscode</td>
+          <td>Configure the editor, understand settings, or learn a VS Code shortcut</td>
+          <td>"What setting controls test retries in the test explorer?"</td>
+        </tr>
+        <tr>
+          <td>@terminal</td>
+          <td>Diagnose a terminal error or understand a shell command without leaving VS Code</td>
+          <td>"Why did my npm test script fail? What does this exit code mean?"</td>
+        </tr>
+        <tr>
+          <td>@github</td>
+          <td>Search issues and PRs from the GitHub website chat panel</td>
+          <td>"Which open issues in this sprint are about broken selectors?"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer-note">
+    <span class="icon">💡</span>
+    <span><strong>Pro tip:</strong> You can combine a participant with a <code style="font-family:var(--mono);font-size:11px;">#</code> variable in the same message. For example: <code style="font-family:var(--mono);font-size:11px;">@workspace</code> which tests cover the changes in <code style="font-family:var(--mono);font-size:11px;">#file</code> — Copilot searches the whole project, but focuses its answer around the file you attached.</span>
+  </div>
+
+</div>
+
+<div class="page-nav">
+  <span>1 of 4 — @ Participants</span>
+  <span class="page-indicator">Session 05 · Phase 2</span>
+  <a href="copilot-ref-hash-variables.html">Next: # Variables →</a>
+</div>
+
+</body>
+</html>

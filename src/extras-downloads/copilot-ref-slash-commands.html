@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/ Slash Commands — GitHub Copilot Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:            #F5F4F0;
+    --surface:       #FFFFFF;
+    --border:        #E2E0D8;
+    --border-dark:   #C8C5BB;
+    --text-primary:  #1C1B18;
+    --text-secondary:#5A5850;
+    --text-muted:    #94918A;
+
+    --sl-bg:         #FEF3E2;
+    --sl-text:       #8B4A08;
+    --sl-badge:      #B05E0D;
+    --sl-border:     #F5D49A;
+
+    --hash-text:     #2D6B12;
+    --at-text:       #1459A8;
+
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sora', sans-serif;
+  }
+
+  body { font-family: var(--sans); background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+
+  .page-header {
+    background: var(--text-primary); color: #fff;
+    padding: 28px 40px 24px;
+    display: flex; align-items: flex-start; gap: 20px;
+  }
+  .symbol-badge {
+    width: 52px; height: 52px; background: var(--sl-badge);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 26px; font-weight: 500;
+    color: #fff; flex-shrink: 0; margin-top: 2px;
+  }
+  .page-header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 5px; }
+  .page-header .subtitle { font-size: 13px; color: #A8A49E; }
+  .breadcrumb { font-size: 11px; color: #6E6B65; margin-bottom: 6px; font-family: var(--mono); letter-spacing: 0.3px; }
+
+  .page-body { max-width: 960px; margin: 0 auto; padding: 36px 40px 48px; }
+
+  .mental-model {
+    background: var(--sl-bg); border: 1px solid var(--sl-border);
+    border-left: 3px solid var(--sl-badge); border-radius: 8px;
+    padding: 16px 20px; margin-bottom: 32px;
+  }
+  .mental-model .mm-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--sl-badge);
+    font-family: var(--mono); margin-bottom: 7px;
+  }
+  .mental-model p { font-size: 13.5px; line-height: 1.65; color: var(--text-secondary); }
+  .mental-model strong { color: var(--text-primary); font-weight: 600; }
+  code { font-family: var(--mono); font-size: 12px; background: #fce4b5; padding: 1px 5px; border-radius: 3px; }
+
+  /* Main command rows */
+  .cmd-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+
+  .cmd-row {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 22px;
+    display: grid; grid-template-columns: 180px 1fr 1fr;
+    gap: 20px; align-items: start;
+  }
+  .cmd-row:hover { border-color: var(--sl-border); }
+
+  .cmd-tag {
+    display: inline-flex; align-items: center;
+    background: var(--sl-bg); color: var(--sl-text);
+    border: 1px solid var(--sl-border); border-radius: 6px;
+    padding: 6px 13px; font-family: var(--mono); font-size: 14px;
+    font-weight: 500; width: fit-content; letter-spacing: 0.2px;
+  }
+
+  .cmd-def { font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
+  .cmd-def strong { color: var(--text-primary); font-weight: 600; }
+
+  .cmd-example {
+    background: #F5F4F0; border: 1px solid var(--border); border-radius: 6px;
+    padding: 10px 13px; font-family: var(--mono); font-size: 11.5px;
+    line-height: 1.7; color: var(--text-secondary);
+  }
+  .cmd-example .sl { color: var(--sl-text); font-weight: 500; }
+  .cmd-example .hs { color: var(--hash-text); font-weight: 500; }
+  .cmd-example .at { color: var(--at-text); font-weight: 500; }
+  .cmd-example .label {
+    font-size: 10px; color: var(--text-muted); font-family: var(--sans);
+    text-transform: uppercase; letter-spacing: 0.5px; display: block;
+    margin-bottom: 5px; font-weight: 600;
+  }
+
+  /* Combine section */
+  .combine-section h2 {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--text-muted);
+    font-family: var(--mono); margin-bottom: 12px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+  .combine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .combine-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+  }
+  .combine-card .c-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+    text-transform: uppercase; color: var(--text-muted);
+    font-family: var(--mono); margin-bottom: 8px;
+  }
+  .combine-card .c-code {
+    font-family: var(--mono); font-size: 11.5px;
+    line-height: 1.65; color: var(--text-secondary);
+  }
+  .combine-card .c-code .sl  { color: var(--sl-text);   font-weight: 500; }
+  .combine-card .c-code .hs  { color: var(--hash-text); font-weight: 500; }
+  .combine-card .c-code .at  { color: var(--at-text);   font-weight: 500; }
+
+  .page-nav {
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 14px 40px; display: flex; justify-content: space-between;
+    align-items: center; font-size: 12px; color: var(--text-muted);
+    max-width: 960px; margin: 0 auto;
+  }
+  .page-nav a { color: var(--sl-badge); text-decoration: none; font-weight: 500; font-family: var(--mono); }
+  .page-indicator {
+    font-family: var(--mono); font-size: 11px; background: var(--sl-bg);
+    color: var(--sl-text); border: 1px solid var(--sl-border);
+    padding: 3px 10px; border-radius: 99px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="symbol-badge">/</div>
+  <div>
+    <div class="breadcrumb">Phase 2 · Session 05 · GitHub Copilot Chat Reference</div>
+    <h1>/ Slash Commands</h1>
+    <div class="subtitle">Task shortcuts — precise instructions without writing out the full request every time</div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="mental-model">
+    <div class="mm-label">Mental Model</div>
+    <p>Slash commands are <strong>unambiguous shortcuts</strong>. Instead of writing "can you look at this function and generate unit tests for it covering edge cases", you write <code>/tests</code> and Copilot knows exactly what you want. They remove ambiguity and consistently produce the right output type. Combine them with <code>#</code> variables to scope exactly what gets generated.</p>
+  </div>
+
+  <div class="cmd-list">
+
+    <div class="cmd-row">
+      <div class="cmd-tag">/explain</div>
+      <div class="cmd-def"><strong>Explains how selected code works</strong> in plain English. Invaluable for inherited Playwright selectors, complex regex patterns, or unfamiliar utility functions you didn't write.</div>
+      <div class="cmd-example">
+        <span class="label">QA use</span>
+        <span class="sl">/explain</span> <span class="hs">#selection</span> — why might this selector break after a DOM update?
+      </div>
+    </div>
+
+    <div class="cmd-row">
+      <div class="cmd-tag">/fix</div>
+      <div class="cmd-def"><strong>Diagnoses an error and proposes a fix</strong>. Works on selected code or the full active file. Best practice: let it explain the diagnosis first, then evaluate whether the fix makes sense before applying.</div>
+      <div class="cmd-example">
+        <span class="label">QA use</span>
+        <span class="sl">/fix</span> — this assertion fails because the modal loads asynchronously
+      </div>
+    </div>
+
+    <div class="cmd-row">
+      <div class="cmd-tag">/tests</div>
+      <div class="cmd-def"><strong>Generates test cases</strong> for the selected function or active file. Add context with <code style="background:#fce4b5;">#file</code> or a description of what edge cases to cover — the more specific, the better the output.</div>
+      <div class="cmd-example">
+        <span class="label">QA use</span>
+        <span class="sl">/tests</span> <span class="hs">#file</span> — cover async state changes and network error handling
+      </div>
+    </div>
+
+    <div class="cmd-row">
+      <div class="cmd-tag">/doc</div>
+      <div class="cmd-def"><strong>Generates inline documentation</strong> — JSDoc comments, Python docstrings, or TypeScript descriptions — for the selected function or class. Useful before a PR review.</div>
+      <div class="cmd-example">
+        <span class="label">QA use</span>
+        <span class="sl">/doc</span> this test helper so teammates know what parameters it expects
+      </div>
+    </div>
+
+    <div class="cmd-row">
+      <div class="cmd-tag">/new</div>
+      <div class="cmd-def"><strong>Scaffolds a new project or file structure</strong>. Describe what you want to create and Copilot generates the folder layout, config files, and boilerplate.</div>
+      <div class="cmd-example">
+        <span class="label">QA use</span>
+        <span class="sl">/new</span> Playwright project with Page Object Model structure and global auth setup
+      </div>
+    </div>
+
+  </div>
+
+  <div class="combine-section">
+    <h2>Combine commands with # variables</h2>
+    <div class="combine-grid">
+
+      <div class="combine-card">
+        <div class="c-label">Generate tests scoped to one file</div>
+        <div class="c-code"><span class="sl">/tests</span> <span class="hs">#file</span> checkoutFlow.ts<br>— include null inputs and network timeout cases</div>
+      </div>
+
+      <div class="combine-card">
+        <div class="c-label">Fix a failure shown in terminal</div>
+        <div class="c-code"><span class="sl">/fix</span> <span class="hs">#terminalLastCommand</span><br>— suggest what changed and why this broke</div>
+      </div>
+
+      <div class="combine-card">
+        <div class="c-label">Explain just the highlighted code</div>
+        <div class="c-code"><span class="sl">/explain</span> <span class="hs">#selection</span><br>— focus on why this assertion might always pass</div>
+      </div>
+
+      <div class="combine-card">
+        <div class="c-label">Document a helper across a file</div>
+        <div class="c-code"><span class="sl">/doc</span> <span class="hs">#editor</span><br>— add JSDoc to every exported function</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="page-nav">
+  <a href="copilot-ref-hash-variables.html">← # Variables</a>
+  <span class="page-indicator">3 of 4 — / Commands</span>
+  <a href="copilot-ref-power-combos.html">Next: Power Combos →</a>
+</div>
+
+</body>
+</html>

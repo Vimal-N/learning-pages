@@ -25,6 +25,35 @@ topicUrl: "/topics/ai-in-practice/"
 | **Inline completions** | Just type — suggestions appear automatically | Completing code mid-flow, generating boilerplate, small snippets |
 | **Copilot Chat** | `Ctrl+Alt+I` / `⌃⌥I` or click the chat icon in sidebar | Asking questions, generating longer blocks, explaining code, debugging |
 
+### @ Chat Participants
+
+| Participant | Scope | VS Code? | Best for |
+|---|---|---|---|
+| `@workspace` | All files in the open project | ✓ Yes | Finding patterns, cross-file questions, understanding project structure |
+| `@vscode` | VS Code editor settings and config | ✓ Yes | Settings, keybindings, extension behaviour, launch config |
+| `@terminal` | Integrated terminal output | ✓ Yes | Diagnosing shell errors and test runner failures |
+| `@github` | GitHub repos, issues, PRs | ✗ github.com only | Searching issues and PRs — from the GitHub website panel only |
+
+**Mental model:** When you type `@participant`, you switch Copilot into a specialised mode. Without `@`, Copilot only looks at your open file.
+
+### # Context Variables
+
+| Variable | Attaches | Best for |
+|---|---|---|
+| `#file` | Specific file (picker opens) | Pattern matching, generating code consistent with an existing file |
+| `#selection` | Your currently highlighted code | Questions scoped to exactly the lines you selected |
+| `#editor` | Full active editor tab | Whole-file questions without going to workspace scope |
+| `#codebase` | Semantic search across all files | Finding patterns or anti-patterns across the whole suite |
+| `#terminalLastCommand` | Last command's output | Diagnosing a test failure immediately after running — no copy-paste |
+| `#terminal` | Full terminal buffer | When failure context spans multiple commands |
+| `#git` | Recent git history | Writing commit messages, understanding recent changes |
+| `#fetch` | Content from a URL *(evolving)* | Referencing live documentation or API specs in Chat |
+| `#problems` | VS Code Problems panel *(evolving)* | Addressing all lint/type errors at once |
+
+**Mental model:** Without `#`, Copilot sees your open file and guesses the rest. With `#`, you hand it exactly the right material — like giving a colleague the error, the code, and the file rather than just describing the problem.
+
+**Always type `#` in Chat** to see the full current list — the autocomplete picker is the authoritative source.
+
 ### Keyboard shortcuts
 
 | Action | Windows/Linux | Mac |
@@ -91,15 +120,60 @@ Chat is a conversation interface built into VS Code. You type a message, Copilot
 
 **Chat slash commands** — type `/` in the chat box to see available commands:
 
-| Command | What it does |
-|---|---|
-| `/explain` | Explains the selected code in plain English |
-| `/fix` | Suggests a fix for selected broken code |
-| `/tests` | Generates tests for selected code |
-| `/doc` | Writes documentation for selected code |
-| `/new` | Scaffolds a new file or component |
+Slash commands are unambiguous shortcuts. Instead of "can you write some tests for this?", type `/tests` — Copilot knows exactly what output type to produce. Combine with `#` to scope what it acts on.
+
+| Command | What it does | QA example |
+| --- | --- | --- |
+| `/explain` | Explains selected code in plain English | `/explain #selection — why might this selector break after a DOM update?` |
+| `/fix` | Suggests a fix for broken or failing code | `/fix #terminalLastCommand — suggest what changed and why this broke` |
+| `/tests` | Generates tests for selected code or a referenced file | `/tests #file checkoutFlow.ts — cover async state changes and network errors` |
+| `/doc` | Writes JSDoc / TSDoc for selected code | `/doc #editor — add JSDoc to every exported function` |
+| `/new` | Scaffolds a new file or project structure | `/new Playwright project with Page Object Model structure and global auth setup` |
 
 **Referencing files in Chat:** Type `#` to reference a specific file. `#file:tests/pages/loginPage.ts` includes that file's content in your message as context. This is crucial for getting output that matches your code style.
+
+## @ Chat Participants — full reference
+
+When you prefix a participant name with `@`, Copilot switches into a specialised mode with access to a broader domain. Without `@`, it only sees your open file.
+
+| Participant | What it accesses | When to use |
+| --- | --- | --- |
+| `@workspace` | All files in the open VS Code project | Finding where things are defined, cross-file pattern questions, coverage gap analysis |
+| `@vscode` | VS Code settings, keybindings, extensions, launch config | Questions about the editor itself — not your code |
+| `@terminal` | Integrated terminal shell and output buffer | Diagnosing terminal errors and test runner failures |
+| `@github` | GitHub repos, issues, and PRs on github.com | Searching issues and PRs — **github.com only, not available in VS Code** |
+
+**Combining `@` with `#`:** You can use both in the same message. `@workspace` which tests cover the changes in `#file` — Copilot searches the whole project but focuses its answer on the file you attached.
+
+## # Chat Variables — full reference
+
+`#` variables attach specific content to your message. Without them, Copilot guesses what's relevant. With them, you hand it exactly the right material.
+
+### Code and file references
+
+| Variable | Attaches | Notes |
+| --- | --- | --- |
+| `#file` | Specific file (picker opens when you type it) | Most important for QA — attach your existing test file so Copilot matches your patterns |
+| `#selection` | Whatever you have highlighted in the editor | Most precise — scopes to exactly the lines you selected, nothing more |
+| `#editor` | Full content of the active editor tab | Broader than `#selection`, narrower than `@workspace` |
+| `#codebase` | Semantic search across all files | Like `@workspace` but used inline in a message rather than switching participant mode |
+
+### Terminal references
+
+| Variable | Attaches | Notes |
+| --- | --- | --- |
+| `#terminalLastCommand` | Output of the last command in the integrated terminal | Fastest way to diagnose a test failure — no copy-paste needed |
+| `#terminal` | Full terminal buffer (everything visible in the panel) | Use when the failure context spans multiple commands |
+
+### Source control and other
+
+| Variable | Attaches | Notes |
+| --- | --- | --- |
+| `#git` | Recent git history — diffs and commit messages | Great for writing commit messages grounded in actual changes |
+| `#fetch` | Content fetched from a URL *(evolving)* | Reference live docs or API specs inline |
+| `#problems` | VS Code Problems panel — lint/type errors *(evolving)* | Address all visible errors in one pass |
+
+**Note on evolving variables:** Some `#` variables like `#fetch` and `#problems` are not fully documented yet. Always type `#` in Chat to see the full list available in your installed version — the autocomplete picker is the authoritative source.
 
 ## What Copilot does and doesn't know
 
@@ -119,6 +193,20 @@ This is why giving context in your prompts matters — Copilot's "knowledge" of 
 When you use Copilot, your code is sent to GitHub's servers to generate a response. For enterprise licences, GitHub provides controls over data handling and commitments not to use your code for model training. For individual or business licences, terms differ — your organisation's IT or security team should have guidance on what's acceptable to share.
 
 **A practical rule:** Don't paste anything into Copilot Chat that you wouldn't put in a public GitHub repository. Production secrets, customer data, internal system credentials — none of these should go into a Copilot prompt.
+
+## Power Combinations — @, #, and / together
+
+Layering all three symbols gives you precision that no single symbol provides alone. These are the patterns that save the most time for QA engineers.
+
+| Scenario | Prompt | Why it works |
+| --- | --- | --- |
+| Diagnose a failing test | `@terminal #terminalLastCommand — explain why this test failed and what the stack trace is pointing to` | `@terminal` sets terminal context; `#terminalLastCommand` attaches the actual output — no copy-pasting needed |
+| Find coverage gaps project-wide | `@workspace — which Playwright tests are missing assertions on the error state or loading state?` | `@workspace` searches every test file in the indexed project, not just the open tab |
+| Generate tests matching your patterns | `/tests #file checkoutFlow.ts — focus on async state changes and network error handling` | `/tests` sets the task; `#file` grounds output in your actual selectors, imports, and assertion style |
+| Explain an inherited selector | `/explain #selection — tell me why this locator might fail after a DOM update` | `/explain` sets intent; `#selection` pins it to exactly the highlighted lines, not the whole file |
+| Find mocking patterns without reading every file | `@workspace — where do we set up API mocks before tests? Show me the pattern we use` | Returns real file paths and real method calls from your codebase so the next prompt replicates your team's convention |
+
+**The rule:** More precision = better output. An `@participant` alone is good. `@participant` + `#variable` + a specific question is much better. Adding `/command` removes all ambiguity about what output type you want.
 
 ## FAQ
 

@@ -1,0 +1,882 @@
+---
+layout: guide.njk
+title: Phase 3 Slides — AI for Test Automation & Debugging
+sessionTitle: "Phase 3 — AI for Test Automation & Debugging"
+topicName: "AI in Practice"
+topicUrl: "/topics/ai-in-practice/"
+---
+
+<!-- ─── SLIDE 01 — Title ─── -->
+<div
+  class="slide"
+  data-title="Phase 3 Overview"
+  data-notes="Welcome to Phase 3. This is where the course shifts from 'how does AI work' to 'how do I use it every day on real test work.' Three sessions, all hands-on. Sessions 07, 08, and 09 cover the three core activities of a QA engineer: writing tests, debugging tests, and improving tests. You'll be switching to VS Code during this deck — let people know upfront. Ask if everyone has their project open."
+>
+  <div class="v2-slide-wrap title-slide">
+    <div class="session-badge">Phase 3 &nbsp;·&nbsp; AI in Practice</div>
+    <h1><em>AI for Test Automation</em> &amp; Debugging</h1>
+    <p class="title-sub">
+      Write tests faster, debug failures without guessing, and use AI to
+      review and refactor your existing test suite — all with Playwright and TypeScript.
+    </p>
+    <div class="title-stats">
+      <div class="title-stat">
+        <div class="title-stat-val">3 Sessions</div>
+        <div class="title-stat-label">Covered</div>
+      </div>
+      <div class="title-stat">
+        <div class="title-stat-val">Intermediate</div>
+        <div class="title-stat-label">Level</div>
+      </div>
+      <div class="title-stat">
+        <div class="title-stat-val">Playwright</div>
+        <div class="title-stat-label">+ TypeScript</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 02 — Agenda ─── -->
+<div
+  class="slide"
+  data-title="What We're Covering"
+  data-notes="Walk the three blocks quickly. Block 1 is about writing new tests from scratch — the three-step workflow. Block 2 is about fixing tests when they break — structure of a debugging prompt, the four failure types AI recognises, flaky tests. Block 3 is about improving what you already have — AI as reviewer, Page Object extraction, coverage gaps. We'll do walkthroughs in VS Code for the most hands-on parts."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Today's Agenda</div>
+    <h2>What we're covering</h2>
+    <div class="v2-step-list" custom-style="step-list">
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">07</div>
+        <div>
+          <div class="v2-step-title">Writing Tests with AI — From Scratch to Suite</div>
+          <div class="v2-step-body">Three-step workflow · AC to test cases · generating Playwright code · style-matching · review checklist</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">08</div>
+        <div>
+          <div class="v2-step-title">Debugging Tests with AI — Stop Guessing, Start Asking</div>
+          <div class="v2-step-body">Why AI debugging works · four-piece debugging prompt · four failure categories · flaky tests · 10-minute rule</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">09</div>
+        <div>
+          <div class="v2-step-title">Refactoring &amp; Reviewing Your Test Suite with AI</div>
+          <div class="v2-step-body">AI as reviewer · four quality checks · POM extraction · coverage gaps · reducing duplication</div>
+        </div>
+      </div>
+    </div>
+    <div class="v2-callout info" custom-style="callout-info">
+      <p><strong>How this session runs:</strong> We alternate between slides and live VS Code walkthroughs. When you see a <strong>Try This</strong> prompt, that's your cue to switch tabs and try it on your own project.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SESSION 07 BLOCK ═══════════════════════════════════════ -->
+
+<!-- ─── SLIDE 03 — The Three-Step Workflow ─── -->
+<div
+  class="slide"
+  data-title="The Three-Step Workflow"
+  data-notes="This is the foundation for Session 07. The key insight: don't ask AI to write code first. The most common mistake is going straight from a feature description to 'write me some tests.' That skips the step where YOU decide what to test. Walk through each step slowly. Emphasise step 1 — AI generates test cases, you review and trim. Your decisions, AI's execution."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 07</div>
+    <h2>The Three-Step <em>AI Test Workflow</em></h2>
+    <p>The most common mistake: going straight from a feature description to "write me some tests." That skips the decision about what to test — which is your job, not AI's.</p>
+    <div class="v2-step-list" custom-style="step-list">
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">1</div>
+        <div>
+          <div class="v2-step-title">AC → Test Cases</div>
+          <div class="v2-step-body">Use AI to turn your acceptance criteria into a structured list of scenarios — happy path, errors, boundaries, edge cases. <strong>You review and trim this list.</strong> This decision is still yours.</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">2</div>
+        <div>
+          <div class="v2-step-title">Test Cases → Code</div>
+          <div class="v2-step-body">Feed AI your approved list plus context about your project — selectors, existing test style, Page Object. It writes the Playwright code. You review before committing anything.</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">3</div>
+        <div>
+          <div class="v2-step-title">Verify, Run, and Fix</div>
+          <div class="v2-step-body">Run the generated tests. Check the four most common AI mistakes — selectors, assertions, test isolation, waiting patterns. Fix before the tests go into your suite.</div>
+        </div>
+      </div>
+    </div>
+    <div class="v2-callout warning" custom-style="callout-warning">
+      <p><strong>Mindset shift:</strong> AI writes the code. You decide what to test. Never hand over coverage decisions to the model — it doesn't know your product, your risk areas, or your users.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 04 — AC to Test Cases Prompt ─── -->
+<div
+  class="slide"
+  data-title="Step 1 — AC to Test Cases"
+  data-notes="LIVE WALKTHROUGH. Open Copilot Chat or Claude. Take a real feature from your project — or use the checkout example. Paste the AC into the prompt template shown. Walk through what comes back: does it find error states you'd forgotten? Does it flag ambiguities in the AC? That last part is gold — it turns into questions for your dev or PO before the sprint ends. Demo live, then let the room try it."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 07 · Step 1</div>
+    <h2>AC → Test Cases <em>Prompt</em></h2>
+    <p>Paste your acceptance criteria. Ask AI to enumerate what to test. Review the list — <em>then</em> write a single line of code.</p>
+
+    <div class="v2-callout info" custom-style="callout-info">
+      <p><strong>Try this live →</strong> Open Copilot Chat. Take an AC from your current sprint. Paste the prompt below with your AC in the placeholder.</p>
+    </div>
+
+    <div class="v2-code-wrap" custom-style="code-block">
+      <div class="code-block"><pre>Act as a senior QA engineer.
+
+Here is the acceptance criteria for a checkout feature:
+[PASTE YOUR AC HERE]
+
+Generate a complete list of test cases covering:
+1. Happy path (all valid inputs, expected success)
+2. Error states (invalid input, payment failure, network error)
+3. Boundary values (minimum/maximum quantities, character limits)
+4. Edge cases (empty cart, session expiry mid-checkout, duplicate submission)
+
+Format each test case as: Given [state] / When [action] / Then [expected result].
+Flag any ambiguities in the AC that I should clarify before testing.</pre></div>
+    </div>
+
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col good">
+        <div class="v2-col-label">What AI does well here</div>
+        <ul>
+          <li>Finds error states and boundary values you missed</li>
+          <li>Flags AC ambiguities — questions for your dev or PO</li>
+          <li>Produces a reviewable list before any code is written</li>
+        </ul>
+      </div>
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Your job after</div>
+        <ul>
+          <li>Remove tests that aren't worth automating</li>
+          <li>Add anything AI missed from your product knowledge</li>
+          <li>The approved list becomes the brief for code generation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 05 — Test Cases to Code ─── -->
+<div
+  class="slide"
+  data-title="Step 2 — Context for Code Generation"
+  data-notes="This slide is about what context to give AI when generating code. The most important point: selectors are required. AI cannot inspect your app — if you don't provide selectors, it invents them and every test fails immediately. Walk through each context card. Then show the code-generation prompt. Emphasise: paste one existing test and say 'match this style' — that single instruction replaces ten abstract rules about your project conventions."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 07 · Step 2</div>
+    <h2>Test Cases → Code <em>Context Cards</em></h2>
+    <p>Give AI your approved test list plus these four pieces of context. Missing any one of them produces code you'll have to rewrite.</p>
+
+    <div class="v2-card-list" custom-style="info-card-list">
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Selectors</div>
+          <div class="v2-tool-mode">Required</div>
+        </div>
+        <div class="v2-card-body">List the actual element IDs, <code>data-testid</code> values, or CSS selectors for your feature. AI can't inspect your app — without these, it invents selectors and every test fails immediately.</div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Existing test example</div>
+          <div class="v2-tool-mode">Strongly recommended</div>
+        </div>
+        <div class="v2-card-body">Paste one complete test from your project and say "match this style." AI replicates your naming conventions, import structure, POM patterns, and assertion style — without being told each rule explicitly.</div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Page Object reference</div>
+          <div class="v2-tool-mode">If applicable</div>
+        </div>
+        <div class="v2-card-body">If your project uses Page Objects, paste the relevant PO class (or use <code>#file:</code> in Copilot Chat) so AI uses your existing methods rather than duplicating selector logic.</div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Expected URLs &amp; error messages</div>
+          <div class="v2-tool-mode">Required for assertions</div>
+        </div>
+        <div class="v2-card-body">Tell AI the exact URL a success redirects to, the exact text of error messages, the exact element that confirms success. Wrong values create assertions that pass when they shouldn't.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 06 — Style-Matching Technique ─── -->
+<div
+  class="slide"
+  data-title="The Style-Matching Technique"
+  data-notes="LIVE WALKTHROUGH. Open VS Code. Pick a real test file from your project. Copy one test block — the full thing, not just a line. In Copilot Chat type: #file:tests/your-file.spec.ts Write new tests for [feature]. Match the exact style of the tests in this file. [paste your test case list]. Show the output. Point out how it matched your imports, your describe block naming, your assertion style. This is the slide where people go from 'meh' to 'wow that actually works.'"
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 07 · Technique</div>
+    <h2>The Style-Matching <em>Technique</em></h2>
+    <p>The single most effective thing you can do to get usable AI-generated tests: show it what you already have. One pasted example replaces ten abstract rules.</p>
+
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col bad">
+        <div class="v2-col-label">Without a style example</div>
+        <ul>
+          <li>AI picks an import style at random</li>
+          <li>May invent a <code>beforeEach</code> your project doesn't use</li>
+          <li>Names describes inconsistently with your suite</li>
+          <li>Uses <code>page.locator()</code> when you prefer <code>page.getByLabel()</code></li>
+          <li>Requires rewriting before it fits the project</li>
+        </ul>
+      </div>
+      <div class="v2-col good">
+        <div class="v2-col-label">With one pasted test</div>
+        <ul>
+          <li>Replicates your exact import structure</li>
+          <li>Uses the same method style you already use</li>
+          <li>Follows your naming conventions automatically</li>
+          <li>Matches your POM usage patterns</li>
+          <li>Ready to drop in with minor edits</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="v2-callout info" custom-style="callout-info">
+      <p><strong>Try this live →</strong> In Copilot Chat, type the prompt below — don't paste the test file, reference it directly with <code>#file:</code>.</p>
+    </div>
+
+    <div class="v2-code-wrap" custom-style="code-block">
+      <div class="code-block"><pre>#file:tests/auth/login.spec.ts
+Write new tests for the checkout flow. Match the exact style of the tests in this file.
+
+[paste your approved test case list here]</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 07 — Review Checklist ─── -->
+<div
+  class="slide"
+  data-title="Reviewing AI-Generated Tests"
+  data-notes="This is the QA engineer's most important habit. AI makes predictable mistakes — knowing them in advance makes review fast. You're looking for a known set of four issues, not reading every line for correctness. Walk through each check. Emphasise check 2: weak assertions are worse than no assertions — they give false confidence. And then the danger callout: always run the tests before committing. A test that passes without doing anything is not protecting you."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 07 · Step 3</div>
+    <h2>Reviewing What AI Wrote — <em>4-Point Checklist</em></h2>
+    <p>AI makes predictable mistakes. Knowing them in advance makes review fast — you're looking for a known set of issues, not reading every line cold.</p>
+
+    <div class="v2-step-list" custom-style="step-list">
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">1</div>
+        <div>
+          <div class="v2-step-title">Selectors — are they real?</div>
+          <div class="v2-step-body">Check every selector against your actual DOM. AI commonly invents plausible-sounding IDs like <code>#submit-btn</code> when your button is actually <code>button[data-testid="place-order"]</code>. If you didn't provide selectors, assume all of them need checking.</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">2</div>
+        <div>
+          <div class="v2-step-title">Assertions — do they actually test something?</div>
+          <div class="v2-step-body">Check that each assertion would <em>fail</em> if the feature broke. <code>expect(page).toHaveURL('/dashboard')</code> is real. A status-code check on a page navigation is not. Weak assertions give false confidence — worse than no assertion.</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">3</div>
+        <div>
+          <div class="v2-step-title">Test isolation — can it run independently?</div>
+          <div class="v2-step-body">Each test should work in any order with no prior state. If a test assumes items are already in a cart from a previous test, it will fail intermittently. AI often generates tests that share state unless you explicitly said not to.</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">4</div>
+        <div>
+          <div class="v2-step-title">Waiting patterns — no arbitrary timeouts</div>
+          <div class="v2-step-body">Flag any <code>page.waitForTimeout(2000)</code> calls. AI reaches for these when it doesn't know the right condition to wait for. Replace with <code>expect(locator).toBeVisible()</code> or <code>page.waitForURL()</code>.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="v2-callout danger" custom-style="callout-danger">
+      <p><strong>Always run the tests before committing.</strong> A test that passes without doing anything isn't protecting you. Run the full generated spec, check each test fails for the right reason first.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SESSION 08 BLOCK ═══════════════════════════════════════ -->
+
+<!-- ─── SLIDE 08 — Why AI Debugging Works ─── -->
+<div
+  class="slide"
+  data-title="Why AI Debugging Works"
+  data-notes="Transition to Session 08. The key framing: when a test fails, the error message points at a symptom, not the cause. Finding the cause means knowing which common failure patterns to check. AI has been trained on enormous amounts of test code, error messages, and debugging discussions — it pattern-matches in seconds what would take you 20 minutes of Googling. But: it can't run your app. It works from what you paste. Garbage in, garbage out."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 08</div>
+    <h2>Why AI Debugging <em>Works</em></h2>
+    <p>AI has seen thousands of Playwright failures. It pattern-matches faster than you can Google. But it only works from what you paste — vague input gets a vague answer.</p>
+
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col neutral">
+        <div class="v2-col-label">Old approach (guessing)</div>
+        <ul>
+          <li>Read error. Guess it's timing. Add <code>waitForTimeout</code>. Still fails.</li>
+          <li>Guess it's a selector. Change it. Still fails.</li>
+          <li>Google the error message. Find a 2-year-old Stack Overflow thread.</li>
+          <li>Try the top answer. Slightly different problem. 20 minutes gone.</li>
+        </ul>
+      </div>
+      <div class="v2-col good">
+        <div class="v2-col-label">AI-assisted debugging</div>
+        <ul>
+          <li>Paste error + test code + context.</li>
+          <li>Ask AI to categorise the failure type and suggest the first fix.</li>
+          <li>AI explains the likely root cause with a targeted fix.</li>
+          <li>If it doesn't work — feed AI the new error and continue.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="v2-callout warning" custom-style="callout-warning">
+      <p><strong>Limitation to know:</strong> AI can't run your app, inspect your DOM, or watch your test execute. It works from what you paste. The better your context, the better the diagnosis.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 09 — The Debugging Prompt ─── -->
+<div
+  class="slide"
+  data-title="The Debugging Prompt"
+  data-notes="LIVE WALKTHROUGH. This is the most hands-on slide in the deck. Take a real failing test — or deliberately break one by changing a selector. Assemble the four pieces live. Show how each one changes the quality of the diagnosis. Then paste the full template into Copilot Chat. Walk through what comes back. Key question to ask the audience: does AI correctly classify which failure type this is? Does its root cause theory match your intuition?"
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 08 · Prompt</div>
+    <h2>The Debugging <em>Prompt Template</em></h2>
+    <p>Four pieces of information. All four are required. Missing any one makes the diagnosis less reliable.</p>
+
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">1</div>
+          <div class="v2-era-name">Full error output</div>
+        </div>
+        <div class="v2-card-body">Paste verbatim from your terminal or CI log. Don't paraphrase — the exact wording, stack trace, and error type are all signals AI uses.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">2</div>
+          <div class="v2-era-name">Complete test code</div>
+        </div>
+        <div class="v2-card-body">Paste the full <code>test()</code> block — not just the failing line. AI needs to see how the test is structured and what actions precede the failure.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">3</div>
+          <div class="v2-era-name">Intended behaviour</div>
+        </div>
+        <div class="v2-card-body">One sentence: "This test should fill the login form and verify the user lands on /dashboard." AI needs the intended behaviour to separate test logic errors from implementation errors.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">4</div>
+          <div class="v2-era-name">What you've already tried</div>
+        </div>
+        <div class="v2-card-body">Rules out whole failure categories. "The selector is correct" or "this was passing yesterday with no test changes" point AI toward less obvious causes.</div>
+      </div>
+    </div>
+
+    <div class="v2-callout info" custom-style="callout-info">
+      <p><strong>Try this live →</strong> Take a failing test from your project. Assemble the four pieces. Paste the template below into Copilot Chat.</p>
+    </div>
+
+    <div class="v2-code-wrap" custom-style="code-block">
+      <div class="code-block"><pre>This Playwright test is failing. Please diagnose it.
+
+ERROR:
+[paste full error output here]
+
+TEST CODE:
+[paste full test() block here]
+
+WHAT IT SHOULD DO:
+[one sentence describing expected behaviour]
+
+WHAT I'VE ALREADY TRIED:
+[list anything you've ruled out, or "nothing yet"]
+
+Tell me: (1) what type of failure this is, (2) the most likely root cause, (3) the fix to try first.</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 10 — Four Failure Categories ─── -->
+<div
+  class="slide"
+  data-title="Four Failure Categories"
+  data-notes="Walk through each category slowly. The goal: learners should be able to name all four and describe the symptoms. After this slide they have a mental model that makes reading AI's diagnosis much faster — they can verify whether AI's classification matches their intuition. The most important category to dwell on: Type 3, State Contamination — it's the one people don't recognise as a test problem, they think it's a feature bug."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 08 · Failure Types</div>
+    <h2>Four Failure Categories <em>AI Spots Fast</em></h2>
+    <p>Most Playwright failures fall into one of four categories. Know them so you can verify AI's diagnosis — and catch it when it's wrong.</p>
+
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">TYPE 1</div>
+          <div class="v2-era-name">Selector Failure</div>
+          <div class="v2-era-date">Most common</div>
+        </div>
+        <div class="v2-card-body"><strong>Symptom:</strong> <code>TimeoutError: Locator … not found</code> or <code>strict mode violation</code>. <strong>Cause:</strong> selector is wrong, changed, or matches multiple elements. <strong>Fix:</strong> inspect the live DOM, update the selector, prefer <code>data-testid</code> attributes.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">TYPE 2</div>
+          <div class="v2-era-name">Timing Failure</div>
+          <div class="v2-era-date">Very common</div>
+        </div>
+        <div class="v2-card-body"><strong>Symptom:</strong> Passes locally, fails in CI — or fails intermittently. <strong>Cause:</strong> test acts before element is ready or navigation hasn't resolved. <strong>Fix:</strong> replace <code>waitForTimeout</code> with <code>expect(locator).toBeVisible()</code> or <code>page.waitForURL()</code>.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">TYPE 3</div>
+          <div class="v2-era-name">State Contamination</div>
+          <div class="v2-era-date">Common in suites</div>
+        </div>
+        <div class="v2-card-body"><strong>Symptom:</strong> Passes alone, fails when run with other tests. <strong>Cause:</strong> test depends on state left by a previous test (logged-in session, cart contents, database record). <strong>Fix:</strong> make the test self-contained — set up and tear down its own state.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">TYPE 4</div>
+          <div class="v2-era-name">Wrong Assertion</div>
+          <div class="v2-era-date">Trickiest to spot</div>
+        </div>
+        <div class="v2-card-body"><strong>Symptom:</strong> Assertion fails but the feature looks correct in the browser. <strong>Cause:</strong> assertion checks the wrong thing — wrong text, wrong URL format, wrong element. <strong>Fix:</strong> clarify what "success" actually looks like and update the assertion to match reality.</div>
+      </div>
+    </div>
+
+    <div class="v2-callout info" custom-style="callout-info">
+      <p><strong>Ask AI to classify first:</strong> Add "Tell me which of these four categories this is before suggesting a fix" to your debugging prompt. If AI's classification matches your intuition, the fix will likely be correct.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 11 — Flaky Test Diagnosis ─── -->
+<div
+  class="slide"
+  data-title="Flaky Tests"
+  data-notes="Flaky tests are the hardest category and the most demoralising. The root cause is almost always a timing assumption that holds in fast local environments and breaks in slower CI or parallel runs. Walk through the decision grid — each row is something AI commonly identifies. Then show the flaky test prompt. Key point: 'It was passing reliably until [describe any recent change]' — that sentence narrows the search space dramatically."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 08 · Flaky Tests</div>
+    <h2>Diagnosing <em>Flaky Tests</em></h2>
+    <p>A flaky test sometimes passes and sometimes fails with no code change. The root cause is almost always a timing assumption that holds locally and breaks in CI or parallel runs.</p>
+
+    <div class="v2-callout info" custom-style="callout-info">
+      <p><strong>Try this live →</strong> Find a test that's been failing intermittently. Use the flaky test prompt below in Copilot Chat.</p>
+    </div>
+
+    <div class="v2-code-wrap" custom-style="code-block">
+      <div class="code-block"><pre>This test passes locally about 80% of the time and fails in CI about 30% of the time.
+It always fails at the same assertion.
+
+TEST CODE:
+[paste test]
+
+ERROR (from a failing run):
+[paste error output]
+
+It was passing reliably until [describe any recent change — new feature, dependency update, parallel test addition].
+
+Diagnose what timing assumption this test is making and how to make it deterministic.</pre></div>
+    </div>
+
+    <h3>Common AI-identified timing fixes</h3>
+
+    <div class="v2-decision-grid" custom-style="decision-grid">
+      <div class="v2-decision-row" custom-style="decision-row">
+        <div class="v2-decision-when">Test acts on element before it's visible</div>
+        <div class="v2-decision-use">Add <code>expect(locator).toBeVisible()</code> before the action</div>
+      </div>
+      <div class="v2-decision-row" custom-style="decision-row">
+        <div class="v2-decision-when">Test asserts URL before navigation completes</div>
+        <div class="v2-decision-use">Use <code>await page.waitForURL('/target')</code> then assert</div>
+      </div>
+      <div class="v2-decision-row" custom-style="decision-row">
+        <div class="v2-decision-when">API call hasn't resolved before assertion</div>
+        <div class="v2-decision-use">Wait for a visible UI response to the API (loading indicator gone, data rendered)</div>
+      </div>
+      <div class="v2-decision-row" custom-style="decision-row">
+        <div class="v2-decision-when">Intermittent on CI only — different base URL or env</div>
+        <div class="v2-decision-use">Check <code>playwright.config.ts</code> baseURL and environment variable handling</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 12 — When Not to Use AI + 10-Minute Rule ─── -->
+<div
+  class="slide"
+  data-title="When Not to Use AI"
+  data-notes="This slide is as important as all the others. The 10-minute rule is the practical takeaway — if three AI fixes haven't worked, you're in a failure category that requires live investigation. Playwright's debug mode and trace viewer are the tools for that. Show the trace viewer command. Open a trace zip live if you have one. Once you can see what actually happened, you feed that specific observation back to AI — 'The form didn't send a network request. Here's the error…'"
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 08 · Limits</div>
+    <h2>When <em>Not</em> to Use AI for Debugging</h2>
+    <p>AI is fast at pattern-matching known failure types. It's unreliable for failures that require live investigation — watching the browser, inspecting real data, or reading 3rd-party library internals.</p>
+
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col good">
+        <div class="v2-col-label">AI debugs well</div>
+        <ul>
+          <li>Error message is clear and specific</li>
+          <li>Failure is consistent and reproducible</li>
+          <li>Test code is the likely problem</li>
+          <li>Failure matches a known category (selector, timing, assertion, state)</li>
+          <li>You can describe what the feature is supposed to do</li>
+        </ul>
+      </div>
+      <div class="v2-col bad">
+        <div class="v2-col-label">Investigate manually instead</div>
+        <ul>
+          <li>Error is in a 3rd-party library with no clear message</li>
+          <li>Failure only happens with specific data in your real database</li>
+          <li>Test is correct but the <em>feature</em> is broken</li>
+          <li>Failure requires watching the browser to understand what's happening</li>
+          <li>Environment issue (network, proxy, auth token) unrelated to test logic</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="v2-callout warning" custom-style="callout-warning">
+      <p><strong>The 10-minute rule:</strong> If three AI-suggested fixes don't work, switch to manual investigation. Open Playwright's debug mode or use the trace viewer — <code>npx playwright test --trace on</code> then <code>npx playwright show-trace trace.zip</code>. Once you can see what happened, feed that specific observation back to AI.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SESSION 09 BLOCK ═══════════════════════════════════════ -->
+
+<!-- ─── SLIDE 13 — AI as Test Reviewer ─── -->
+<div
+  class="slide"
+  data-title="AI as Test Reviewer"
+  data-notes="Transition to Session 09. Framing: AI is an effective code reviewer for tests — faster than a human review and available any time. But there's an important limit: it finds structural problems, not business logic problems. It doesn't know whether your tests cover the right scenarios — that judgement is still yours. Walk through each of the four checks. Then show the review prompt. Consider doing this live: take a test from your project, paste it into Copilot Chat with the review prompt, show what comes back."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 09</div>
+    <h2>AI as <em>Test Reviewer</em></h2>
+    <p>When you ask AI to review a test, it checks for known patterns of weakness. It finds structural problems fast — but it doesn't know whether your tests cover the right <em>business scenarios</em>. That judgement is still yours.</p>
+
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">CHECK 1</div>
+          <div class="v2-era-name">Fragile selectors</div>
+        </div>
+        <div class="v2-card-body">Positional selectors (<code>nth-child</code>), text-content selectors on labels that change, XPath that traverses multiple levels. AI flags these and suggests <code>data-testid</code> alternatives.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">CHECK 2</div>
+          <div class="v2-era-name">Weak or missing assertions</div>
+        </div>
+        <div class="v2-card-body">Tests that check the wrong thing, tests with no meaningful assertion, tests where the assertion could pass even if the feature is broken. AI identifies: "this assertion doesn't actually prove what you think."</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">CHECK 3</div>
+          <div class="v2-era-name">Anti-patterns</div>
+        </div>
+        <div class="v2-card-body"><code>page.waitForTimeout()</code>, hardcoded sleeps, duplicate selector definitions, missing <code>await</code> on async operations, <code>page.evaluate()</code> for things Playwright can do natively.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-badge">CHECK 4</div>
+          <div class="v2-era-name">State leakage risk</div>
+        </div>
+        <div class="v2-card-body">Tests that create database records, send emails, or modify shared state without cleanup. AI flags these as risks for contaminating other tests, especially in parallel runs.</div>
+      </div>
+    </div>
+
+    <div class="v2-code-wrap" custom-style="code-block">
+      <div class="code-block"><pre>Review this Playwright test for quality issues:
+[paste test]
+
+Check for: fragile selectors, weak or missing assertions, tests that could pass even when the feature is broken, waitForTimeout usage, state leakage, and any Playwright anti-patterns.
+
+List each issue with: severity (high / medium / low), what the problem is, and the fix.</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 14 — POM Extraction ─── -->
+<div
+  class="slide"
+  data-title="POM Extraction"
+  data-notes="LIVE WALKTHROUGH. Page Objects are the most concrete refactor AI can do for you. Take two or three test files from your project that hit the same page. Show the duplicated selectors. Then use the POM extraction prompt live. Walk through what comes back: one class per page, selectors as private locators, methods for each user action, no assertions in the PO. This is the slide where you demonstrate real productivity gain — extracting a POM by hand takes 30 minutes; AI does it in 30 seconds."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 09 · POM</div>
+    <h2>Extracting <em>Page Objects</em></h2>
+    <p>When the same selectors appear in multiple tests, AI can extract them into a Page Object faster than doing it by hand. One DOM change then only needs to be fixed in one place.</p>
+
+    <h3>When to extract</h3>
+
+    <div class="v2-decision-grid" custom-style="decision-grid">
+      <div class="v2-decision-row" custom-style="decision-row">
+        <div class="v2-decision-when">Same selector appears in 3+ test files</div>
+        <div class="v2-decision-use">Extract to a Page Object now</div>
+      </div>
+      <div class="v2-decision-row" custom-style="decision-row">
+        <div class="v2-decision-when">Same sequence of actions repeated across tests</div>
+        <div class="v2-decision-use">Extract action into a Page Object method</div>
+      </div>
+      <div class="v2-decision-row" custom-style="decision-row">
+        <div class="v2-decision-when">Only 1–2 tests use a page</div>
+        <div class="v2-decision-use">Keep inline — Page Object adds overhead, not value yet</div>
+      </div>
+      <div class="v2-decision-row" custom-style="decision-row">
+        <div class="v2-decision-when">Selector changes regularly (fast-moving UI)</div>
+        <div class="v2-decision-use">Prioritise extraction — maintenance cost is high without it</div>
+      </div>
+    </div>
+
+    <div class="v2-callout info" custom-style="callout-info">
+      <p><strong>Try this live →</strong> Paste 2–3 test files that hit the same page. Use the prompt below.</p>
+    </div>
+
+    <div class="v2-code-wrap" custom-style="code-block">
+      <div class="code-block"><pre>Extract a Page Object from these test files:
+[paste 2–3 test files or relevant test blocks]
+
+Rules:
+- Create one class per page (e.g. LoginPage, CheckoutPage)
+- Move all selectors into the class as private readonly locators
+- Create methods for each distinct user action
+- Do NOT put assertions in the Page Object — keep those in test files
+- Export each class as default
+- Return the Page Object class and the refactored test code separately
+
+Here is an existing Page Object from my project for style reference:
+[paste existing PO, or say "no existing PO — create in standard Playwright POM style"]</pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 15 — Coverage Gaps ─── -->
+<div
+  class="slide"
+  data-title="Finding Coverage Gaps"
+  data-notes="Coverage gaps are the failures that reach production. AI looks at your test list through a different lens than you do — it doesn't have your familiarity with the feature, which is actually an advantage here. It asks 'what if the user does X?' without assuming X is unlikely. Important caveat: AI sees your test names, not your test logic. If a test is named correctly but the assertion is wrong, AI counts it as coverage. Provide full test code, not just names."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 09 · Coverage</div>
+    <h2>Finding <em>Coverage Gaps</em></h2>
+    <p>AI can compare your existing tests against your acceptance criteria and tell you what you haven't tested. These are exactly the failure modes that reach production.</p>
+
+    <div class="v2-callout info" custom-style="callout-info">
+      <p><strong>Try this live →</strong> Take a feature you think is well-covered. Run the prompt below against it. You'll almost always find at least one P1 gap you didn't know about.</p>
+    </div>
+
+    <div class="v2-code-wrap" custom-style="code-block">
+      <div class="code-block"><pre>Here is a list of my existing test cases for the [feature name] feature:
+[paste test names or test.describe / test() structure]
+
+Here is the acceptance criteria for this feature:
+[paste AC]
+
+What test scenarios are missing? Focus on:
+- Error paths (what happens when things go wrong)
+- Boundary values (min/max, empty, maximum length)
+- Concurrent actions (what if two users do this at the same time)
+- Session and authentication edge cases
+- Scenarios where the feature could silently fail (wrong data saved, no error shown)
+
+Return a prioritised list: P1 (likely to find bugs), P2 (worth having), P3 (low value).</pre></div>
+    </div>
+
+    <div class="v2-callout warning" custom-style="callout-warning">
+      <p><strong>Provide full test code, not just test names.</strong> If a test is named "user can submit order" but the assertion only checks that a button was clicked, AI won't flag the gap — it sees the test name as coverage. Full code gives full picture.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 16 — Reducing Duplication ─── -->
+<div
+  class="slide"
+  data-title="Reducing Duplication"
+  data-notes="Three refactoring patterns AI does well, one it does poorly. Walk through each. The key distinction at the bottom: structural refactors AI handles reliably — it knows the rules for parametrize, fixtures, POM. Deciding which tests to delete requires product knowledge AI doesn't have. Never ask AI 'which of these tests should I remove' — it doesn't know your risk areas or your users."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Session 09 · Refactoring</div>
+    <h2>Reducing <em>Test Duplication</em></h2>
+    <p>Three patterns AI can refactor for you — and one category it's bad at.</p>
+
+    <div class="v2-step-list" custom-style="step-list">
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">→</div>
+        <div>
+          <div class="v2-step-title">Parametrize repeated tests</div>
+          <div class="v2-step-body">10 nearly-identical tests that differ only in input data → one data-driven test. Prompt: "Convert these to a parametrized test that loops over a test data array."</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">→</div>
+        <div>
+          <div class="v2-step-title">Extract shared setup into fixtures</div>
+          <div class="v2-step-body">Multiple test files needing the same setup (logged-in user, seeded database record) → Playwright fixture. Paste your repeated <code>beforeEach</code> blocks and ask for a fixture extraction.</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">→</div>
+        <div>
+          <div class="v2-step-title">Consolidate selector definitions</div>
+          <div class="v2-step-body">Same selectors defined across multiple test files → AI identifies the duplication and shows which should move to a shared Page Object or constants file.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="v2-two-col" custom-style="comparison-card">
+      <div class="v2-col good">
+        <div class="v2-col-label">AI refactors well</div>
+        <ul>
+          <li>Structural refactors with clear rules (PO extraction, parametrize, fixtures)</li>
+          <li>Renaming for consistency (matching your naming convention)</li>
+          <li>Adding missing assertions to existing test structure</li>
+        </ul>
+      </div>
+      <div class="v2-col bad">
+        <div class="v2-col-label">AI refactors poorly</div>
+        <ul>
+          <li>Deciding <em>which</em> tests to delete (requires product knowledge)</li>
+          <li>Reorganising test file structure (needs knowledge of your CI/reporting setup)</li>
+          <li>Any refactor that requires knowing your app's domain logic</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ CLOSE ═══════════════════════════════════════ -->
+
+<!-- ─── SLIDE 17 — Common Mistakes ─── -->
+<div
+  class="slide"
+  data-title="Common Mistakes"
+  data-notes="Consolidation slide. These are mistakes people make after the course, when the novelty wears off and shortcuts creep in. Walk through each one — they all have a quick 'but instead…' fix. Mistake 5 is the most important: AI does not know what your product is supposed to do. If you hand it the coverage decisions, you get tests that look good but miss the risky scenarios that matter to your users."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Watch Out</div>
+    <h2>Common Mistakes — <em>And How to Avoid Them</em></h2>
+
+    <div class="v2-card-list" custom-style="row-card-list">
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-name">Skipping step 1</div>
+        </div>
+        <div class="v2-card-body">Going straight from feature description to "write me some tests." This hands coverage decisions to AI. Instead: always generate test cases first and review the list before generating code.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-name">Omitting selectors in generation prompts</div>
+        </div>
+        <div class="v2-card-body">If you don't provide real selectors, AI invents plausible-sounding ones. Every test will fail immediately. Selectors are required context — always paste them or reference your POM.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-name">Committing AI tests without running them</div>
+        </div>
+        <div class="v2-card-body">A test that passes without doing anything isn't protecting you. Always run the full generated spec and confirm each test fails for the right reason before adding to CI.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-name">Spending more than 10 minutes on AI debugging</div>
+        </div>
+        <div class="v2-card-body">Three fixes that haven't worked means you're in a failure category AI can't diagnose from text. Switch to Playwright's trace viewer — watch what actually happens, then feed that specific observation back to AI.</div>
+      </div>
+      <div class="v2-row-card" custom-style="row-card">
+        <div>
+          <div class="v2-era-name">Asking AI what to test</div>
+        </div>
+        <div class="v2-card-body">AI doesn't know your product, your risk areas, or your users. You decide what to test. AI writes the code and generates the case list. Keep those roles separate.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SLIDE 18 — Key Takeaways ─── -->
+<div
+  class="slide"
+  data-title="Key Takeaways"
+  data-notes="Close the phase. Walk through each takeaway slowly — don't rush this slide. Pause after each point and ask: 'does this match what you experienced today?' The session links at the bottom are the most important resource to leave people with — the full guides have all the prompts copy-ready. Remind them: the prompts in the guides are the same prompts on these slides. They don't need to recreate them."
+>
+  <div class="v2-slide-wrap">
+    <div class="session-badge">Key Takeaways</div>
+    <h2>Phase 3 <em>Takeaways</em></h2>
+
+    <div class="v2-step-list" custom-style="step-list">
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">1</div>
+        <div>
+          <div class="v2-step-title">Generate test cases before code</div>
+          <div class="v2-step-body">Always run step 1 — AC to test cases — and review the list. You decide what to test. AI writes the code.</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">2</div>
+        <div>
+          <div class="v2-step-title">Context is everything — for both generation and debugging</div>
+          <div class="v2-step-body">Paste your real selectors. Paste one existing test for style. Paste the full error. Paste the full test code. More context = better output every time.</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">3</div>
+        <div>
+          <div class="v2-step-title">Know the four failure categories</div>
+          <div class="v2-step-body">Selector · Timing · State Contamination · Wrong Assertion. They cover the vast majority of Playwright failures. Recognising them makes AI's diagnosis verifiable.</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">4</div>
+        <div>
+          <div class="v2-step-title">Use AI to review your existing tests</div>
+          <div class="v2-step-body">AI is a fast, available-any-time reviewer for structural quality: fragile selectors, weak assertions, anti-patterns, state leakage. Run it on any test file you haven't looked at in a while.</div>
+        </div>
+      </div>
+      <div class="v2-step" custom-style="step">
+        <div class="v2-step-num">5</div>
+        <div>
+          <div class="v2-step-title">10 minutes on AI, then switch to manual</div>
+          <div class="v2-step-body">AI is fast for known failure types. For anything requiring live investigation — use the trace viewer, watch the browser, then feed your specific observation back to AI.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="v2-card-list" custom-style="info-card-list" style="margin-top: 20px;">
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Session 07</div>
+          <div class="v2-tool-mode">Full Guide</div>
+        </div>
+        <div class="v2-card-body"><a href="/topics/ai-in-practice/session-07/guide/">Writing Tests with AI — From Scratch to Suite →</a></div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Session 08</div>
+          <div class="v2-tool-mode">Full Guide</div>
+        </div>
+        <div class="v2-card-body"><a href="/topics/ai-in-practice/session-08/guide/">Debugging Tests with AI — Stop Guessing, Start Asking →</a></div>
+      </div>
+      <div class="v2-info-card" custom-style="info-card">
+        <div>
+          <div class="v2-tool-name">Session 09</div>
+          <div class="v2-tool-mode">Full Guide</div>
+        </div>
+        <div class="v2-card-body"><a href="/topics/ai-in-practice/session-09/guide/">Refactoring &amp; Reviewing Your Test Suite with AI →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
