@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presenter Notes</title>
+  <style>
+    :root {
+      --bg:         #0d0f18;
+      --card-bg:    #161926;
+      --card-hd:    #1e2235;
+      --border:     #252840;
+      --accent:     #f0a030;
+      --text:       #dde0ee;
+      --muted:      #6a6e8a;
+      --analogy-bg: #1a2035;
+      --analogy-bd: #3050a0;
+      --warning-bg: #251a10;
+      --warning-bd: #a05020;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Sticky header ── */
+    .pn-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 13px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .pn-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+    .pn-status {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* ── Card grid ── */
+    .pn-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .note-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .note-card-header {
+      background: var(--card-hd);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .slide-num {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--muted);
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+      letter-spacing: 0.04em;
+    }
+    .slide-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .note-card-body {
+      padding: 12px 16px 14px;
+    }
+
+    /* ── Bullet list ── */
+    .note-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .note-list li {
+      display: flex;
+      gap: 10px;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .note-list li::before {
+      content: '›';
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1rem;
+      flex-shrink: 0;
+      line-height: 1.55;
+    }
+    .note-list li.is-lead {
+      background: rgba(240, 160, 48, 0.1);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 7px 12px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #f5c070;
+    }
+    .note-list li.is-lead::before { content: none; }
+    .note-list li.is-analogy {
+      background: var(--analogy-bg);
+      border-left: 3px solid var(--analogy-bd);
+      border-radius: 4px;
+      padding: 5px 10px;
+      margin-top: 3px;
+    }
+    .note-list li.is-analogy::before { color: #6080d0; }
+    .note-list li.is-warning {
+      background: var(--warning-bg);
+      border-left: 3px solid var(--warning-bd);
+      border-radius: 4px;
+      padding: 5px 10px;
+      margin-top: 3px;
+    }
+    .note-list li.is-warning::before { color: #c07040; }
+
+    .no-notes {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── States ── */
+    .pn-loading, .pn-error {
+      padding: 32px 24px;
+      font-size: 0.9rem;
+    }
+    .pn-loading { color: var(--muted); }
+    .pn-error   { color: #e05050; }
+  </style>
+</head>
+<body>
+  <header class="pn-header">
+    <div class="pn-title" id="pn-title">Presenter Notes</div>
+    <div class="pn-status" id="pn-status">Loading…</div>
+  </header>
+  <main class="pn-body" id="pn-body">
+    <div class="pn-loading">Fetching slides…</div>
+  </main>
+
+  <script>
+  (function () {
+    var titleEl  = document.getElementById('pn-title');
+    var statusEl = document.getElementById('pn-status');
+    var bodyEl   = document.getElementById('pn-body');
+
+    fetch('../slides/')
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(function (html) {
+        var parser = new DOMParser();
+        var doc    = parser.parseFromString(html, 'text/html');
+        var slides = Array.from(doc.querySelectorAll('.slide'));
+
+        var rawTitle = (doc.querySelector('title') || {}).textContent || '';
+        var pageTitle = rawTitle.trim();
+        if (pageTitle) {
+          document.title  = 'Presenter Notes — ' + pageTitle;
+          titleEl.textContent = 'Presenter Notes — ' + pageTitle;
+        }
+        statusEl.textContent = slides.length + ' slides';
+        bodyEl.innerHTML = '';
+
+        slides.forEach(function (slide, i) {
+          var title    = slide.dataset.title || ('Slide ' + (i + 1));
+          var rawNotes = slide.dataset.notes || '';
+          var segments = parseNotes(rawNotes);
+
+          var card = document.createElement('div');
+          card.className = 'note-card';
+
+          var hd = document.createElement('div');
+          hd.className = 'note-card-header';
+          hd.innerHTML =
+            '<span class="slide-num">' + String(i + 1).padStart(2, '0') + '</span>' +
+            '<span class="slide-title">' + esc(title) + '</span>';
+
+          var bd = document.createElement('div');
+          bd.className = 'note-card-body';
+
+          if (segments.length === 0) {
+            var p = document.createElement('p');
+            p.className = 'no-notes';
+            p.textContent = 'No notes.';
+            bd.appendChild(p);
+          } else {
+            var ul = document.createElement('ul');
+            ul.className = 'note-list';
+            segments.forEach(function (seg, j) {
+              var li = document.createElement('li');
+              if (j === 0 && seg.type === 'plain') {
+                li.className = 'is-lead';
+              } else if (seg.type === 'analogy') {
+                li.className = 'is-analogy';
+              } else if (seg.type === 'warning') {
+                li.className = 'is-warning';
+              }
+              li.appendChild(document.createTextNode(seg.text));
+              ul.appendChild(li);
+            });
+            bd.appendChild(ul);
+          }
+
+          card.appendChild(hd);
+          card.appendChild(bd);
+          bodyEl.appendChild(card);
+        });
+      })
+      .catch(function (err) {
+        bodyEl.innerHTML =
+          '<p class="pn-error">Could not load slides — ' + esc(err.message) +
+          '. Make sure the dev server is running and this page is opened from the same origin as the slides.</p>';
+        statusEl.textContent = 'Error';
+      });
+
+    /* ── Parse data-notes HTML into typed segments ── */
+    function parseNotes(raw) {
+      if (!raw.trim()) return [];
+
+      var tmp = document.createElement('div');
+      tmp.innerHTML = raw;
+
+      var segments = [];
+
+      /* Walk top-level nodes: text/br runs become plain bullets,
+         analogy-note / warning-note divs become typed bullets. */
+      var pending = [];
+
+      function flushPending() {
+        var joined = pending.join(' ').replace(/\s+/g, ' ').trim();
+        if (joined.length > 2) segments.push({ type: 'plain', text: joined });
+        pending = [];
+      }
+
+      Array.from(tmp.childNodes).forEach(function (node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          var t = node.textContent.replace(/\s+/g, ' ').trim();
+          if (t) pending.push(t);
+        } else if (node.nodeName === 'BR') {
+          flushPending();
+        } else if (node.nodeName === 'DIV') {
+          flushPending();
+          var cls  = node.className || '';
+          var text = (node.innerText || node.textContent || '').replace(/\s+/g, ' ').trim();
+          if (!text) return;
+          var type = cls.indexOf('analogy') !== -1 ? 'analogy'
+                   : cls.indexOf('warning') !== -1 ? 'warning'
+                   : 'plain';
+          segments.push({ type: type, text: text });
+        } else {
+          /* inline elements — treat as text */
+          var t2 = (node.innerText || node.textContent || '').replace(/\s+/g, ' ').trim();
+          if (t2) pending.push(t2);
+        }
+      });
+
+      flushPending();
+      return segments;
+    }
+
+    function esc(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  })();
+  </script>
+</body>
+</html>
