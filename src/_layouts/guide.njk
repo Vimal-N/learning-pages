@@ -718,8 +718,8 @@ a.v2-cross-link:hover { border-bottom-style: solid; }
     <a href="{{ topicUrl | default('/topics/ai-in-practice-v2/') }}" class="guide-back">← {{ topicName | default('AI in Practice V2') }}</a>
     <span class="topbar-sep">/</span>
     <div class="guide-topbar-title">{{ sessionTitle | default(title) }}</div>
-    <div class="guide-topbar-num">Session {{ sessionNumber | default('—') }}</div>
-    <div class="guide-type-badge">Full Guide</div>
+    {% if sessionNumber %}<div class="guide-topbar-num">Session {{ sessionNumber }}</div>{% endif %}
+    {% if sessionNumber %}<div class="guide-type-badge">Full Guide</div>{% endif %}
     <button class="sidebar-toggle-btn" onclick="toggleSidebar()">☰ Sections</button>
   </div>
 

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power Combinations — GitHub Copilot Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:            #F5F4F0;
+    --surface:       #FFFFFF;
+    --border:        #E2E0D8;
+    --border-dark:   #C8C5BB;
+    --text-primary:  #1C1B18;
+    --text-secondary:#5A5850;
+    --text-muted:    #94918A;
+
+    /* combo accent — warm neutral */
+    --combo-bg:      #EFEEE8;
+    --combo-badge:   #3D3C38;
+    --combo-border:  #D3D1C7;
+
+    /* syntax colors */
+    --at-text:       #1459A8;
+    --at-bg:         #E8F2FD;
+    --at-border:     #B8D4F5;
+
+    --hash-text:     #2D6B12;
+    --hash-bg:       #EAF5E2;
+    --hash-border:   #BCDFA8;
+
+    --sl-text:       #8B4A08;
+    --sl-bg:         #FEF3E2;
+    --sl-border:     #F5D49A;
+
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sora', sans-serif;
+  }
+
+  body { font-family: var(--sans); background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+
+  .page-header {
+    background: var(--text-primary); color: #fff;
+    padding: 28px 40px 24px;
+    display: flex; align-items: flex-start; gap: 20px;
+  }
+  .symbol-badge {
+    width: 52px; height: 52px; background: var(--combo-badge);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; color: #fff; flex-shrink: 0; margin-top: 2px;
+  }
+  .page-header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 5px; }
+  .page-header .subtitle { font-size: 13px; color: #A8A49E; }
+  .breadcrumb { font-size: 11px; color: #6E6B65; margin-bottom: 6px; font-family: var(--mono); letter-spacing: 0.3px; }
+
+  .page-body { max-width: 960px; margin: 0 auto; padding: 36px 40px 48px; }
+
+  /* Legend */
+  .legend {
+    display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-family: var(--mono);
+  }
+  .legend-badge {
+    padding: 2px 9px; border-radius: 5px;
+    font-size: 12px; font-weight: 500;
+  }
+  .leg-at    { background: var(--at-bg);   color: var(--at-text);   border: 1px solid var(--at-border);   }
+  .leg-hash  { background: var(--hash-bg); color: var(--hash-text); border: 1px solid var(--hash-border); }
+  .leg-slash { background: var(--sl-bg);   color: var(--sl-text);   border: 1px solid var(--sl-border);   }
+
+  /* Combo cards */
+  .combo-list { display: flex; flex-direction: column; gap: 16px; }
+
+  .combo-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+
+  .combo-header {
+    padding: 14px 20px; background: var(--combo-bg);
+    border-bottom: 1px solid var(--combo-border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .scenario-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--combo-badge); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; font-family: var(--mono);
+    flex-shrink: 0;
+  }
+  .combo-header .scenario-title {
+    font-size: 13.5px; font-weight: 600; color: var(--text-primary);
+  }
+
+  .combo-body {
+    padding: 18px 20px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .combo-side h4 {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--text-muted);
+    font-family: var(--mono); margin-bottom: 8px;
+  }
+
+  .code-block {
+    background: #F5F4F0; border: 1px solid var(--border);
+    border-radius: 7px; padding: 12px 14px;
+    font-family: var(--mono); font-size: 12px; line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .code-block .at    { color: var(--at-text);   font-weight: 500; }
+  .code-block .hs    { color: var(--hash-text); font-weight: 500; }
+  .code-block .sl    { color: var(--sl-text);   font-weight: 500; }
+  .code-block .plain { color: var(--text-secondary); }
+
+  .result-block {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 7px; padding: 12px 14px;
+    font-size: 13px; line-height: 1.6; color: var(--text-secondary);
+  }
+  .result-block .arrow {
+    font-size: 11px; font-weight: 600;
+    color: var(--text-muted); margin-right: 4px;
+  }
+  .result-block strong { color: var(--text-primary); font-weight: 600; }
+
+  /* Cheat sheet quick ref */
+  .quick-ref { margin-top: 36px; }
+  .quick-ref h2 {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--text-muted);
+    font-family: var(--mono); margin-bottom: 14px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+  .quick-table {
+    width: 100%; border-collapse: collapse; font-size: 12.5px;
+  }
+  .quick-table thead th {
+    background: #EFEDE7; padding: 9px 13px; text-align: left;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+    text-transform: uppercase; color: var(--text-muted); font-family: var(--mono);
+  }
+  .quick-table thead th:first-child { border-radius: 6px 0 0 6px; }
+  .quick-table thead th:last-child  { border-radius: 0 6px 6px 0; }
+  .quick-table tbody tr { border-bottom: 1px solid var(--border); }
+  .quick-table tbody tr:last-child { border-bottom: none; }
+  .quick-table tbody td { padding: 10px 13px; vertical-align: top; line-height: 1.55; color: var(--text-secondary); }
+  .quick-table .mono-cell {
+    font-family: var(--mono); font-size: 11.5px; color: var(--text-primary);
+  }
+  .quick-table .mono-cell .at    { color: var(--at-text); }
+  .quick-table .mono-cell .hs    { color: var(--hash-text); }
+  .quick-table .mono-cell .sl    { color: var(--sl-text); }
+
+  .page-nav {
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 14px 40px; display: flex; justify-content: space-between;
+    align-items: center; font-size: 12px; color: var(--text-muted);
+    max-width: 960px; margin: 0 auto;
+  }
+  .page-nav a { color: var(--combo-badge); text-decoration: none; font-weight: 500; font-family: var(--mono); }
+  .page-indicator {
+    font-family: var(--mono); font-size: 11px; background: var(--combo-bg);
+    color: var(--text-secondary); border: 1px solid var(--combo-border);
+    padding: 3px 10px; border-radius: 99px;
+  }
+  .done-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 11px;
+    background: #EAF5E2; color: #2D6B12;
+    border: 1px solid #BCDFA8; padding: 3px 10px; border-radius: 99px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="symbol-badge">⚡</div>
+  <div>
+    <div class="breadcrumb">Phase 2 · Session 05 · GitHub Copilot Chat Reference</div>
+    <h1>Power Combinations</h1>
+    <div class="subtitle">Real QA scenarios using @, #, and / together — the patterns that save the most time</div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-badge leg-at">@participant</span> Who Copilot acts as</span>
+    <span class="legend-item"><span class="legend-badge leg-hash">#variable</span> What Copilot can see</span>
+    <span class="legend-item"><span class="legend-badge leg-slash">/command</span> What task to perform</span>
+  </div>
+
+  <div class="combo-list">
+
+    <!-- 1 -->
+    <div class="combo-card">
+      <div class="combo-header">
+        <div class="scenario-num">1</div>
+        <div class="scenario-title">Diagnose a failing test in CI without copy-pasting</div>
+      </div>
+      <div class="combo-body">
+        <div class="combo-side">
+          <h4>Prompt</h4>
+          <div class="code-block"><span class="at">@terminal</span> <span class="hs">#terminalLastCommand</span> explain why this test failed and what the stack trace is pointing to</div>
+        </div>
+        <div class="combo-side">
+          <h4>Why it works</h4>
+          <div class="result-block"><span class="arrow">→</span> <strong>@terminal</strong> gives Copilot terminal context. <strong>#terminalLastCommand</strong> attaches the actual test runner output. Together they give a targeted diagnosis grounded in your real error — not a generic "check your selectors" response.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="combo-card">
+      <div class="combo-header">
+        <div class="scenario-num">2</div>
+        <div class="scenario-title">Find test coverage gaps across the whole project</div>
+      </div>
+      <div class="combo-body">
+        <div class="combo-side">
+          <h4>Prompt</h4>
+          <div class="code-block"><span class="at">@workspace</span> which Playwright tests are missing assertions on the error state or loading state?</div>
+        </div>
+        <div class="combo-side">
+          <h4>Why it works</h4>
+          <div class="result-block"><span class="arrow">→</span> <strong>@workspace</strong> searches every test file in the indexed project — not just the open tab. You get an actual cross-file gap analysis rather than a per-file answer.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="combo-card">
+      <div class="combo-header">
+        <div class="scenario-num">3</div>
+        <div class="scenario-title">Generate tests that match your project's actual patterns</div>
+      </div>
+      <div class="combo-body">
+        <div class="combo-side">
+          <h4>Prompt</h4>
+          <div class="code-block"><span class="sl">/tests</span> <span class="hs">#file</span> checkoutFlow.ts — focus on async state changes and network error handling</div>
+        </div>
+        <div class="combo-side">
+          <h4>Why it works</h4>
+          <div class="result-block"><span class="arrow">→</span> <strong>/tests</strong> sets the task unambiguously. <strong>#file</strong> grounds the output in your actual code — selectors, import style, assertion patterns — so Copilot generates tests that fit your suite rather than generic boilerplate.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="combo-card">
+      <div class="combo-header">
+        <div class="scenario-num">4</div>
+        <div class="scenario-title">Understand a complex selector you inherited</div>
+      </div>
+      <div class="combo-body">
+        <div class="combo-side">
+          <h4>Prompt</h4>
+          <div class="code-block"><span class="sl">/explain</span> <span class="hs">#selection</span> — tell me why this locator might fail after a DOM update</div>
+        </div>
+        <div class="combo-side">
+          <h4>Why it works</h4>
+          <div class="result-block"><span class="arrow">→</span> <strong>/explain</strong> requests an explanation. <strong>#selection</strong> pins it to exactly the highlighted lines — not the whole file. Copilot explains the fragility of the specific selector strategy you're looking at.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="combo-card">
+      <div class="combo-header">
+        <div class="scenario-num">5</div>
+        <div class="scenario-title">Find how mocks are set up without reading every file</div>
+      </div>
+      <div class="combo-body">
+        <div class="combo-side">
+          <h4>Prompt</h4>
+          <div class="code-block"><span class="at">@workspace</span> where do we set up API mocks before tests? Show me the pattern we use</div>
+        </div>
+        <div class="combo-side">
+          <h4>Why it works</h4>
+          <div class="result-block"><span class="arrow">→</span> Returns the <strong>actual patterns in your codebase</strong> — real file paths, real method calls. When you then ask Copilot to generate new test setup, it replicates your team's existing convention rather than inventing one.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Quick cheat sheet -->
+  <div class="quick-ref">
+    <h2>Quick reference — all symbols in one place</h2>
+    <table class="quick-table">
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Syntax</th>
+          <th>What it does</th>
+          <th>Best for</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>@</strong></td>
+          <td class="mono-cell"><span class="at">@workspace</span> &nbsp;<span class="at">@terminal</span> &nbsp;<span class="at">@vscode</span></td>
+          <td>Switches Copilot into a specialised participant mode</td>
+          <td>Project-wide questions, VS Code settings, terminal errors</td>
+        </tr>
+        <tr>
+          <td><strong>#</strong></td>
+          <td class="mono-cell"><span class="hs">#file</span> &nbsp;<span class="hs">#selection</span> &nbsp;<span class="hs">#terminalLastCommand</span></td>
+          <td>Attaches specific content to your message as context</td>
+          <td>Scoping answers to a file, selection, or terminal output</td>
+        </tr>
+        <tr>
+          <td><strong>/</strong></td>
+          <td class="mono-cell"><span class="sl">/tests</span> &nbsp;<span class="sl">/explain</span> &nbsp;<span class="sl">/fix</span> &nbsp;<span class="sl">/doc</span></td>
+          <td>Issues an unambiguous task instruction</td>
+          <td>Generating tests, explaining code, fixing errors, adding docs</td>
+        </tr>
+        <tr>
+          <td><strong>Inline text</strong></td>
+          <td class="mono-cell">focus on async errors, ignore happy path</td>
+          <td>Natural language guidance appended after the symbols</td>
+          <td>Narrowing what gets generated or explained</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="page-nav">
+  <a href="copilot-ref-slash-commands.html">← / Commands</a>
+  <span class="page-indicator">4 of 4 — Power Combos</span>
+  <span class="done-badge">✓ Series complete</span>
+</div>
+
+</body>
+</html>

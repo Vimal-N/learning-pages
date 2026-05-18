@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title># Chat Variables — GitHub Copilot Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:           #F5F4F0;
+    --surface:      #FFFFFF;
+    --border:       #E2E0D8;
+    --border-dark:  #C8C5BB;
+    --text-primary: #1C1B18;
+    --text-secondary:#5A5850;
+    --text-muted:   #94918A;
+
+    --hash-bg:      #EAF5E2;
+    --hash-text:    #2D6B12;
+    --hash-badge:   #3A8016;
+    --hash-border:  #BCDFA8;
+
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sora', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+
+  .page-header {
+    background: var(--text-primary); color: #fff;
+    padding: 28px 40px 24px;
+    display: flex; align-items: flex-start; gap: 20px;
+  }
+  .symbol-badge {
+    width: 52px; height: 52px;
+    background: var(--hash-badge);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 26px; font-weight: 500;
+    color: #fff; flex-shrink: 0; margin-top: 2px;
+  }
+  .page-header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 5px; }
+  .page-header .subtitle { font-size: 13px; color: #A8A49E; }
+  .breadcrumb { font-size: 11px; color: #6E6B65; margin-bottom: 6px; font-family: var(--mono); letter-spacing: 0.3px; }
+
+  .page-body { max-width: 960px; margin: 0 auto; padding: 36px 40px 48px; }
+
+  .mental-model {
+    background: var(--hash-bg); border: 1px solid var(--hash-border);
+    border-left: 3px solid var(--hash-badge); border-radius: 8px;
+    padding: 16px 20px; margin-bottom: 32px;
+  }
+  .mental-model .mm-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--hash-badge);
+    font-family: var(--mono); margin-bottom: 7px;
+  }
+  .mental-model p { font-size: 13.5px; line-height: 1.65; color: var(--text-secondary); }
+  .mental-model strong { color: var(--text-primary); font-weight: 600; }
+  code { font-family: var(--mono); font-size: 12px; background: #d6f0c8; padding: 1px 5px; border-radius: 3px; }
+
+  /* group heading */
+  .group-heading {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--text-muted);
+    font-family: var(--mono); margin: 24px 0 12px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+
+  .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 8px; }
+  .cards-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 8px; }
+
+  .ref-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px;
+    display: flex; flex-direction: column; gap: 9px;
+  }
+  .card-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--hash-bg); color: var(--hash-text);
+    border: 1px solid var(--hash-border); border-radius: 6px;
+    padding: 5px 12px; font-family: var(--mono); font-size: 13px;
+    font-weight: 500; width: fit-content;
+  }
+  .card-tag .pill {
+    font-size: 10px; background: #fff; border: 1px solid var(--border-dark);
+    color: var(--text-muted); border-radius: 99px; padding: 1px 7px;
+    font-family: var(--sans); font-weight: 500;
+  }
+  .card-def { font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
+  .card-def strong { color: var(--text-primary); font-weight: 600; }
+  .card-example {
+    background: #F5F4F0; border: 1px solid var(--border); border-radius: 6px;
+    padding: 9px 12px; font-family: var(--mono); font-size: 11.5px;
+    line-height: 1.6; color: var(--text-secondary); margin-top: auto;
+  }
+  .card-example .kw { color: var(--hash-text); font-weight: 500; }
+
+  .footer-note {
+    margin-top: 28px; background: #F0EDE6; border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 18px; font-size: 12px;
+    color: var(--text-muted); line-height: 1.6;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .footer-note code { background: #e2dfd7; font-size: 11px; }
+
+  .page-nav {
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 14px 40px; display: flex; justify-content: space-between;
+    align-items: center; font-size: 12px; color: var(--text-muted);
+    max-width: 960px; margin: 0 auto;
+  }
+  .page-nav a { color: var(--hash-badge); text-decoration: none; font-weight: 500; font-family: var(--mono); }
+  .page-indicator {
+    font-family: var(--mono); font-size: 11px; background: var(--hash-bg);
+    color: var(--hash-text); border: 1px solid var(--hash-border);
+    padding: 3px 10px; border-radius: 99px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="symbol-badge">#</div>
+  <div>
+    <div class="breadcrumb">Phase 2 · Session 05 · GitHub Copilot Chat Reference</div>
+    <h1># Chat Variables</h1>
+    <div class="subtitle">Context attachments — controls exactly what content Copilot can see in your message</div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="mental-model">
+    <div class="mm-label">Mental Model</div>
+    <p>Without <code>#</code>, Copilot sees your open file and guesses the rest. With <code>#variable</code>, you hand it exactly the right material — a specific file, your highlighted code, or the terminal output — so its answer is grounded in <strong>your actual context</strong>, not a generic approximation. Think of it as the difference between telling a colleague "my test is broken" versus handing them the error, the test file, and the failing assertion together.</p>
+  </div>
+
+  <div class="group-heading">Code &amp; File References</div>
+  <div class="cards-grid">
+
+    <div class="ref-card">
+      <div class="card-tag">#file</div>
+      <div class="card-def">Attaches the <strong>full content of a specific file</strong>. Type <code>#file</code> and a picker lets you choose from your workspace. The file doesn't need to be open.</div>
+      <div class="card-example">Review the patterns in <span class="kw">#file</span> and suggest the missing edge cases</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="card-tag">#selection</div>
+      <div class="card-def">Attaches <strong>whatever you have highlighted</strong> in the editor. Most precise variable — scopes to exactly the lines you selected, nothing more.</div>
+      <div class="card-example">Why does <span class="kw">#selection</span> throw a timeout in CI but pass locally?</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="card-tag">#editor</div>
+      <div class="card-def">Attaches the <strong>entire active editor tab</strong>. Useful when you want Copilot to consider the full file, not just a selection, without using @workspace scope.</div>
+      <div class="card-example">Look at <span class="kw">#editor</span> — what error-state assertions are we missing?</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="card-tag">#codebase</div>
+      <div class="card-def">Broad <strong>search across your whole codebase</strong>. Similar to @workspace but used inline in a message rather than switching participant mode entirely.</div>
+      <div class="card-example">Does <span class="kw">#codebase</span> already have a helper for generating test fixtures?</div>
+    </div>
+
+  </div>
+
+  <div class="group-heading">Terminal References</div>
+  <div class="cards-grid">
+
+    <div class="ref-card">
+      <div class="card-tag">#terminalLastCommand</div>
+      <div class="card-def">Attaches the <strong>output of the last command</strong> you ran in the integrated terminal. The fastest way to get a diagnosis from a test failure — no copy-pasting a stack trace.</div>
+      <div class="card-example"><span class="kw">@terminal</span> <span class="kw">#terminalLastCommand</span> — explain this failure and what's causing it</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="card-tag">#terminal</div>
+      <div class="card-def">Attaches the <strong>full terminal buffer</strong> — everything currently visible in the terminal panel, not just the last command. Useful when the failure spans multiple commands.</div>
+      <div class="card-example">Based on <span class="kw">#terminal</span>, which tests are failing and what do they share?</div>
+    </div>
+
+  </div>
+
+  <div class="group-heading">Source Control &amp; Other</div>
+  <div class="cards-grid-3">
+
+    <div class="ref-card">
+      <div class="card-tag">#git</div>
+      <div class="card-def">Attaches <strong>recent git history</strong> — useful for understanding what changed and generating meaningful commit messages from actual diffs.</div>
+      <div class="card-example">Based on <span class="kw">#git</span>, write a clear commit message for these changes</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="card-tag">#fetch <span class="pill">evolving</span></div>
+      <div class="card-def">Fetches content <strong>from a URL</strong> and attaches it inline. Reference live documentation or API specs without leaving the chat.</div>
+      <div class="card-example"><span class="kw">#fetch</span> https://playwright.dev/docs/api how do I fix this locator?</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="card-tag">#problems <span class="pill">evolving</span></div>
+      <div class="card-def">Attaches <strong>problems from the VS Code Problems panel</strong> — lint errors, type errors, and diagnostics all at once.</div>
+      <div class="card-example">Write tests that would catch <span class="kw">#problems</span></div>
+    </div>
+
+  </div>
+
+  <div class="footer-note">
+    <span>💡</span>
+    <span>GitHub confirmed as of May 2025 that some <code>#</code> variables like <code>#fetch</code>, <code>#new</code>, and <code>#problems</code> exist but are not fully documented yet. Always type <code>#</code> in VS Code to see the full current list available in your installed version — the autocomplete picker is the authoritative source.</span>
+  </div>
+
+</div>
+
+<div class="page-nav">
+  <a href="copilot-ref-at-participants.html">← @ Participants</a>
+  <span class="page-indicator">2 of 4 — # Variables</span>
+  <a href="copilot-ref-slash-commands.html">Next: / Commands →</a>
+</div>
+
+</body>
+</html>
